@@ -1,0 +1,231 @@
+---
+title: "Loudoun Demography"
+author: "Leonard-Allen"
+Last Update: 6/7/2022
+output:
+  html_document:
+    toc: yes
+    toc_depth: 4
+    toc_float:
+      collapsed: yes
+    theme: readable
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+colorlinks: yes
+urlcolor: blue
+linkcolor: blue
+citecolor: blue
+anchorcolor: blue
+toccolor: blue
+fontsize: 12pt
+---
+
+```{r setup, message = FALSE }
+knitr::opts_chunk$set(echo = TRUE)
+#I load my packages as I use them so you can see what 
+#they are used with.
+library(tidycensus)
+library(leaflet)
+library(dplyr)
+library(ggplot2)
+library(tigris)
+library(viridis)
+
+```
+
+
+I want to set he working directory on my computer
+```{r}
+#Set your working directory to where you want to save your xlsx files
+# Remember the path
+#setwd("C:/Users/Leo Allen/Desktop/DSPG/Maps in R/")
+```
+
+Census API
+```{r set_up_API, }
+readRenviron("~/.Renviron") #read in Census API key
+Sys.getenv("census_api_key") #confirm you have read in your Census API key
+```
+
+```{r}
+#R-studio blocks code:
+
+blocks <- c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 3, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia","Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
+
+```
+
+```{r}
+va20_S <- get_acs(geography = "block group",
+                variables = c(medincome = "B19013_001"),
+                state = "VA",
+                year = 2020,
+                geometry = TRUE) %>%
+filter(NAME %in% blocks)
+```
+
+
+```{r}
+blocks_CDP<-c("Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia","Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
+
+va_20_CDP <- va20_S %>% filter (NAME %in% blocks_CDP)
+```
+
+
+```{r}
+ggplot(data = va20_S, aes(fill = estimate)) + geom_sf()+ scale_fill_distiller(palette = "RdPu", direction = 1) + labs(title = "  Median Household Income, 2020",
+       caption = "Data source: 2020 5-year ACS, US Census Bureau",
+       fill = "ACS estimate") + 
+  theme_void()  #Better plot
+
+```
+
+
+Getting for Loudoun
+```{r}
+#library(tidycensus)
+# Set a year of interest
+this.year = 2020
+
+# This looks at the 5 year estimates
+# You can also do "acs1"
+vars <- load_variables(year = 2020,
+                      dataset = "acs5",
+                      cache = TRUE)
+
+# There are 22711 possible variables 
+dim(vars)
+```
+For Loudoun
+```{r}
+## Names for variable types
+# Gives five year estimates
+# To get Goochland County you will need to change Powhatan to Goochland
+VA_income <- get_acs(geography = "tract", year=this.year,
+                  state = "VA", county = "Loudoun", geometry = TRUE,
+                  variables = c(median.household.income ="B19013_001"))
+```
+
+
+
+```{r}
+ggplot(data = VA_income, aes(fill = estimate)) + geom_sf() + scale_fill_distiller(palette = "RdPu", direction = 1) + labs(title = "  Median Household Income, 2020",
+       caption = "Data source: 2019 5-year ACS, US Census Bureau",
+       fill = "ACS estimate") + 
+  theme_void()  #Better plot
+
+```
+
+
+
+Put on a State boundary
+One Map
+```{r mapAvar, echo=FALSE}
+#library(tigris)
+state_borders <- states(cb = T)
+state_borders <- state_borders %>% 
+                  filter(STATEFP %in% c("51")) #save only geometry for VA
+
+MYMAP2 <- ggplot(va20_S$geometry) + 
+  geom_sf(data = state_borders, color = 'black', fill = 'grey') + 
+  geom_sf(aes(fill=va20_S$estimate)) + 
+  scale_color_viridis_c() + scale_fill_viridis_c() + 
+  coord_sf(datum = NA) + 
+  theme_void() +
+   labs(fill = "Med Pop Inc",
+       title = "Median Pop Income Across Sterling in Loudoun county, VA",
+       caption = "Note: I used get_acs() to get this data")
+
+MYMAP2
+```
+
+
+```{r}
+# Creating a map with leaflet
+#library(leaflet)
+
+mypal <- colorNumeric(
+  palette = "magma",
+  domain = va20_S$estimate
+)
+
+mypal(c(10, 20, 30, 40, 50))
+
+leaflet() %>%
+  addProviderTiles(providers$Stamen.TonerLite) %>%
+  addPolygons(data = va20_S,
+              color = ~mypal(estimate),
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5,
+              label = ~estimate) %>%
+  addLegend(
+    position = "bottomright",
+    pal = mypal,
+    values = va20_S$estimate,
+    title = "Median Population Income Across VA Counties"
+  )
+```
+
+```{r}
+# Creating a map with leaflet
+#library(leaflet)
+
+mypal <- colorNumeric(
+  palette = "magma",
+  domain = VA_income$estimate
+)
+
+mypal(c(10, 20, 30, 40, 50))
+
+leaflet() %>%
+  addProviderTiles(providers$Stamen.TonerLite) %>%
+  addPolygons(data = VA_income,
+              color = ~mypal(estimate),
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5,
+              label = ~estimate) %>% 
+  
+  addPolygons(data=va20_S, color = ~mypal(estimate),
+              weight = 0,
+              smoothFactor = 0.2,
+              fillOpacity = .10,
+              label = ~estimate) %>%
+  
+  addPolylines(data = va20_S, color = "black", 
+               opacity = 10, weight = 5)%>%
+  addLegend(
+    position = "bottomright",
+    pal = mypal,
+    values = VA_income$estimate,
+    title = "Median Population Income Across VA Counties"
+  )
+```
+
+```{r}
+#specify the bin breaks
+mybins <- c(0,10000,20000,30000,40000,50000,60000,70000)
+#specify the default color
+mypalette <- colorBin(palette="inferno", domain=va20_S$estimate, na.color="transparent", bins=mybins)
+
+leaflet(data = va20_S) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~mypalette(va20_S$`estimate`),
+    stroke=TRUE,
+    weight = 1,
+    smoothFactor = 0.2,
+    opacity = 1.0,
+    fillOpacity = 0.7, 
+    label=paste("County: ",va20_S$GEOID, ", Value: ",va20_S$estimate),
+    highlightOptions = highlightOptions(color = "white",
+                                        weight = 2,
+                                        bringToFront = TRUE)) %>%
+  addLegend(pal=mypalette, position = "bottomright",
+            values = ~va20_S$estimate,
+            opacity = 0.5, title = "Median Population Income") %>%
+  addPolylines(data = va20_S, color = "black", 
+               opacity = 0.2, weight = 1)
+
+```
