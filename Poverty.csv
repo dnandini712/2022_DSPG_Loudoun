@@ -1,0 +1,183 @@
+ID Age,Age,ID Year,Year,ID Poverty Status,Poverty Status,Poverty Population,Poverty Population Moe,Geography,ID Geography,Slug Geography,share,Sex,ID Sex
+0,"Under 5 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",74,71,"Sterling, VA","16000US5175376","sterling-va",0.048588312541037425,"Male",0
+0,"Under 5 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",66,68,"Sterling, VA","16000US5175376","sterling-va",0.04333552199606041,"Female",1
+1,"5 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",17,30.000000000000004,"Sterling, VA","16000US5175376","sterling-va",0.011162179908076166,"Male",0
+1,"5 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",30,48,"Sterling, VA","16000US5175376","sterling-va",0.01969796454366382,"Female",1
+2,"6 to 11 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",8,13,"Sterling, VA","16000US5175376","sterling-va",0.005252790544977019,"Male",0
+2,"6 to 11 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",42,51,"Sterling, VA","16000US5175376","sterling-va",0.02757715036112935,"Female",1
+3,"12 to 14 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",0,26,"Sterling, VA","16000US5175376","sterling-va",0,"Male",0
+3,"12 to 14 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",10,15.000000000000002,"Sterling, VA","16000US5175376","sterling-va",0.006565988181221274,"Female",1
+4,"15 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",0,26,"Sterling, VA","16000US5175376","sterling-va",0,"Male",0
+4,"15 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",33,46,"Sterling, VA","16000US5175376","sterling-va",0.021667760998030205,"Female",1
+5,"16 & 17 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",70,73,"Sterling, VA","16000US5175376","sterling-va",0.04596191726854892,"Male",0
+5,"16 & 17 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",0,26,"Sterling, VA","16000US5175376","sterling-va",0,"Female",1
+6,"18 to 24 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",119,94,"Sterling, VA","16000US5175376","sterling-va",0.07813525935653316,"Male",0
+6,"18 to 24 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",203,120.00000000000001,"Sterling, VA","16000US5175376","sterling-va",0.13328956007879186,"Female",1
+7,"25 to 34 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",112,85,"Sterling, VA","16000US5175376","sterling-va",0.07353906762967827,"Male",0
+7,"25 to 34 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",36,31,"Sterling, VA","16000US5175376","sterling-va",0.023637557452396585,"Female",1
+8,"35 to 44 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",0,26,"Sterling, VA","16000US5175376","sterling-va",0,"Male",0
+8,"35 to 44 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",118,88,"Sterling, VA","16000US5175376","sterling-va",0.07747866053841103,"Female",1
+9,"45 to 54 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",76,53,"Sterling, VA","16000US5175376","sterling-va",0.04990151017728168,"Male",0
+9,"45 to 54 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",64,51,"Sterling, VA","16000US5175376","sterling-va",0.04202232435981615,"Female",1
+10,"55 to 64 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",55,48,"Sterling, VA","16000US5175376","sterling-va",0.03611293499671701,"Male",0
+10,"55 to 64 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",48,35,"Sterling, VA","16000US5175376","sterling-va",0.03151674326986211,"Female",1
+11,"65 to 74 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",32,39,"Sterling, VA","16000US5175376","sterling-va",0.021011162179908074,"Male",0
+11,"65 to 74 Years",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",130,97,"Sterling, VA","16000US5175376","sterling-va",0.08535784635587657,"Female",1
+12,"75 Years & Over",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",62,59,"Sterling, VA","16000US5175376","sterling-va",0.040709126723571895,"Male",0
+12,"75 Years & Over",2019,"2019",0,"Income In The Past 12 Months Below Poverty Level",118,66,"Sterling, VA","16000US5175376","sterling-va",0.07747866053841103,"Female",1
+0,"Under 5 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",86,73,"Sterling, VA","16000US5175376","sterling-va",0.04982618771726535,"Male",0
+0,"Under 5 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",28,37,"Sterling, VA","16000US5175376","sterling-va",0.016222479721900347,"Female",1
+1,"5 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",49,54.99999999999999,"Sterling, VA","16000US5175376","sterling-va",0.028389339513325607,"Male",0
+1,"5 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",63,67,"Sterling, VA","16000US5175376","sterling-va",0.03650057937427578,"Female",1
+2,"6 to 11 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",37,47,"Sterling, VA","16000US5175376","sterling-va",0.021436848203939745,"Male",0
+2,"6 to 11 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",44,56,"Sterling, VA","16000US5175376","sterling-va",0.02549246813441483,"Female",1
+3,"12 to 14 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",13,20,"Sterling, VA","16000US5175376","sterling-va",0.007531865585168019,"Male",0
+3,"12 to 14 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",29,32,"Sterling, VA","16000US5175376","sterling-va",0.016801853997682505,"Female",1
+4,"15 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",11,17,"Sterling, VA","16000US5175376","sterling-va",0.006373117033603708,"Male",0
+4,"15 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",19,28.999999999999996,"Sterling, VA","16000US5175376","sterling-va",0.01100811123986095,"Female",1
+5,"16 & 17 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",50,62,"Sterling, VA","16000US5175376","sterling-va",0.028968713789107765,"Male",0
+5,"16 & 17 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",25,39,"Sterling, VA","16000US5175376","sterling-va",0.014484356894553883,"Female",1
+6,"18 to 24 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",73,74,"Sterling, VA","16000US5175376","sterling-va",0.042294322132097335,"Male",0
+6,"18 to 24 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",225,181,"Sterling, VA","16000US5175376","sterling-va",0.13035921205098494,"Female",1
+7,"25 to 34 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",34,34,"Sterling, VA","16000US5175376","sterling-va",0.019698725376593278,"Male",0
+7,"25 to 34 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",43,32,"Sterling, VA","16000US5175376","sterling-va",0.024913093858632676,"Female",1
+8,"35 to 44 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",13,20,"Sterling, VA","16000US5175376","sterling-va",0.007531865585168019,"Male",0
+8,"35 to 44 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",240,118,"Sterling, VA","16000US5175376","sterling-va",0.13904982618771727,"Female",1
+9,"45 to 54 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",75,57.99999999999999,"Sterling, VA","16000US5175376","sterling-va",0.043453070683661645,"Male",0
+9,"45 to 54 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",63,47,"Sterling, VA","16000US5175376","sterling-va",0.03650057937427578,"Female",1
+10,"55 to 64 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",54,42,"Sterling, VA","16000US5175376","sterling-va",0.031286210892236384,"Male",0
+10,"55 to 64 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",65,46,"Sterling, VA","16000US5175376","sterling-va",0.03765932792584009,"Female",1
+11,"65 to 74 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",23,35,"Sterling, VA","16000US5175376","sterling-va",0.013325608342989572,"Male",0
+11,"65 to 74 Years",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",169,114.00000000000001,"Sterling, VA","16000US5175376","sterling-va",0.09791425260718424,"Female",1
+12,"75 Years & Over",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",49,50,"Sterling, VA","16000US5175376","sterling-va",0.028389339513325607,"Male",0
+12,"75 Years & Over",2018,"2018",0,"Income In The Past 12 Months Below Poverty Level",146,74,"Sterling, VA","16000US5175376","sterling-va",0.08458864426419467,"Female",1
+0,"Under 5 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",42,33,"Sterling, VA","16000US5175376","sterling-va",0.028225806451612902,"Male",0
+0,"Under 5 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",21,25,"Sterling, VA","16000US5175376","sterling-va",0.014112903225806451,"Female",1
+1,"5 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",55,53,"Sterling, VA","16000US5175376","sterling-va",0.03696236559139785,"Male",0
+1,"5 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",35,42,"Sterling, VA","16000US5175376","sterling-va",0.023521505376344086,"Female",1
+2,"6 to 11 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",33,41,"Sterling, VA","16000US5175376","sterling-va",0.02217741935483871,"Male",0
+2,"6 to 11 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",20,25,"Sterling, VA","16000US5175376","sterling-va",0.013440860215053764,"Female",1
+3,"12 to 14 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",40,48,"Sterling, VA","16000US5175376","sterling-va",0.026881720430107527,"Male",0
+3,"12 to 14 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",24,28,"Sterling, VA","16000US5175376","sterling-va",0.016129032258064516,"Female",1
+4,"15 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",31,35,"Sterling, VA","16000US5175376","sterling-va",0.020833333333333332,"Male",0
+4,"15 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",17,28,"Sterling, VA","16000US5175376","sterling-va",0.0114247311827957,"Female",1
+5,"16 & 17 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",9,14,"Sterling, VA","16000US5175376","sterling-va",0.006048387096774193,"Male",0
+5,"16 & 17 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",25,40,"Sterling, VA","16000US5175376","sterling-va",0.016801075268817203,"Female",1
+6,"18 to 24 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",46,60.00000000000001,"Sterling, VA","16000US5175376","sterling-va",0.030913978494623656,"Male",0
+6,"18 to 24 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",101,78,"Sterling, VA","16000US5175376","sterling-va",0.0678763440860215,"Female",1
+7,"25 to 34 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",36,37,"Sterling, VA","16000US5175376","sterling-va",0.024193548387096774,"Male",0
+7,"25 to 34 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",53,32,"Sterling, VA","16000US5175376","sterling-va",0.035618279569892476,"Female",1
+8,"35 to 44 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",11,17,"Sterling, VA","16000US5175376","sterling-va",0.00739247311827957,"Male",0
+8,"35 to 44 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",212,111,"Sterling, VA","16000US5175376","sterling-va",0.1424731182795699,"Female",1
+9,"45 to 54 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",81,61,"Sterling, VA","16000US5175376","sterling-va",0.05443548387096774,"Male",0
+9,"45 to 54 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",56,44,"Sterling, VA","16000US5175376","sterling-va",0.03763440860215054,"Female",1
+10,"55 to 64 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",60,42,"Sterling, VA","16000US5175376","sterling-va",0.04032258064516129,"Male",0
+10,"55 to 64 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",93,60.00000000000001,"Sterling, VA","16000US5175376","sterling-va",0.0625,"Female",1
+11,"65 to 74 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",0,25,"Sterling, VA","16000US5175376","sterling-va",0,"Male",0
+11,"65 to 74 Years",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",129,104,"Sterling, VA","16000US5175376","sterling-va",0.08669354838709678,"Female",1
+12,"75 Years & Over",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",51,53,"Sterling, VA","16000US5175376","sterling-va",0.034274193548387094,"Male",0
+12,"75 Years & Over",2017,"2017",0,"Income In The Past 12 Months Below Poverty Level",207,100,"Sterling, VA","16000US5175376","sterling-va",0.13911290322580644,"Female",1
+0,"Under 5 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",125,78,"Sterling, VA","16000US5175376","sterling-va",0.0708215297450425,"Male",0
+0,"Under 5 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",32,45,"Sterling, VA","16000US5175376","sterling-va",0.018130311614730877,"Female",1
+1,"5 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",49,53,"Sterling, VA","16000US5175376","sterling-va",0.027762039660056657,"Male",0
+1,"5 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",45,44,"Sterling, VA","16000US5175376","sterling-va",0.025495750708215296,"Female",1
+2,"6 to 11 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",43,45,"Sterling, VA","16000US5175376","sterling-va",0.024362606232294616,"Male",0
+2,"6 to 11 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",50,47,"Sterling, VA","16000US5175376","sterling-va",0.028328611898016998,"Female",1
+3,"12 to 14 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",36,46,"Sterling, VA","16000US5175376","sterling-va",0.020396600566572238,"Male",0
+3,"12 to 14 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",24,30.000000000000004,"Sterling, VA","16000US5175376","sterling-va",0.013597733711048159,"Female",1
+4,"15 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",44,44,"Sterling, VA","16000US5175376","sterling-va",0.024929178470254956,"Male",0
+4,"15 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",26,36,"Sterling, VA","16000US5175376","sterling-va",0.014730878186968839,"Female",1
+5,"16 & 17 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",13,20,"Sterling, VA","16000US5175376","sterling-va",0.0073654390934844195,"Male",0
+5,"16 & 17 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",27,39,"Sterling, VA","16000US5175376","sterling-va",0.01529745042492918,"Female",1
+6,"18 to 24 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",49,73,"Sterling, VA","16000US5175376","sterling-va",0.027762039660056657,"Male",0
+6,"18 to 24 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",118,76,"Sterling, VA","16000US5175376","sterling-va",0.06685552407932012,"Female",1
+7,"25 to 34 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",76,83,"Sterling, VA","16000US5175376","sterling-va",0.04305949008498584,"Male",0
+7,"25 to 34 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",150,106,"Sterling, VA","16000US5175376","sterling-va",0.08498583569405099,"Female",1
+8,"35 to 44 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",19,22,"Sterling, VA","16000US5175376","sterling-va",0.01076487252124646,"Male",0
+8,"35 to 44 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",219,115,"Sterling, VA","16000US5175376","sterling-va",0.12407932011331445,"Female",1
+9,"45 to 54 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",52,41,"Sterling, VA","16000US5175376","sterling-va",0.029461756373937678,"Male",0
+9,"45 to 54 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",55,46,"Sterling, VA","16000US5175376","sterling-va",0.031161473087818695,"Female",1
+10,"55 to 64 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",46,35,"Sterling, VA","16000US5175376","sterling-va",0.026062322946175637,"Male",0
+10,"55 to 64 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",109,92,"Sterling, VA","16000US5175376","sterling-va",0.06175637393767705,"Female",1
+11,"65 to 74 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",0,22,"Sterling, VA","16000US5175376","sterling-va",0,"Male",0
+11,"65 to 74 Years",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",111,98,"Sterling, VA","16000US5175376","sterling-va",0.06288951841359773,"Female",1
+12,"75 Years & Over",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",39,35,"Sterling, VA","16000US5175376","sterling-va",0.02209631728045326,"Male",0
+12,"75 Years & Over",2016,"2016",0,"Income In The Past 12 Months Below Poverty Level",208,88,"Sterling, VA","16000US5175376","sterling-va",0.11784702549575071,"Female",1
+0,"Under 5 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",145,108,"Sterling, VA","16000US5175376","sterling-va",0.07413087934560328,"Male",0
+0,"Under 5 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",59,74,"Sterling, VA","16000US5175376","sterling-va",0.03016359918200409,"Female",1
+1,"5 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",76,70,"Sterling, VA","16000US5175376","sterling-va",0.03885480572597137,"Male",0
+1,"5 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",42,42,"Sterling, VA","16000US5175376","sterling-va",0.02147239263803681,"Female",1
+2,"6 to 11 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",72,79,"Sterling, VA","16000US5175376","sterling-va",0.03680981595092025,"Male",0
+2,"6 to 11 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",67,62,"Sterling, VA","16000US5175376","sterling-va",0.03425357873210634,"Female",1
+3,"12 to 14 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",30,37,"Sterling, VA","16000US5175376","sterling-va",0.015337423312883436,"Male",0
+3,"12 to 14 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",19,23,"Sterling, VA","16000US5175376","sterling-va",0.009713701431492843,"Female",1
+4,"15 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",11,27,"Sterling, VA","16000US5175376","sterling-va",0.005623721881390593,"Male",0
+4,"15 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",0,22,"Sterling, VA","16000US5175376","sterling-va",0,"Female",1
+5,"16 & 17 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",9,16,"Sterling, VA","16000US5175376","sterling-va",0.004601226993865031,"Male",0
+5,"16 & 17 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",32,49,"Sterling, VA","16000US5175376","sterling-va",0.016359918200409,"Female",1
+6,"18 to 24 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",0,22,"Sterling, VA","16000US5175376","sterling-va",0,"Male",0
+6,"18 to 24 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",159,83,"Sterling, VA","16000US5175376","sterling-va",0.08128834355828221,"Female",1
+7,"25 to 34 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",63,64,"Sterling, VA","16000US5175376","sterling-va",0.032208588957055216,"Male",0
+7,"25 to 34 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",269,165,"Sterling, VA","16000US5175376","sterling-va",0.13752556237218813,"Female",1
+8,"35 to 44 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",32,36,"Sterling, VA","16000US5175376","sterling-va",0.016359918200409,"Male",0
+8,"35 to 44 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",224,105,"Sterling, VA","16000US5175376","sterling-va",0.11451942740286299,"Female",1
+9,"45 to 54 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",105,72,"Sterling, VA","16000US5175376","sterling-va",0.05368098159509203,"Male",0
+9,"45 to 54 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",90,77,"Sterling, VA","16000US5175376","sterling-va",0.046012269938650305,"Female",1
+10,"55 to 64 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",35,32,"Sterling, VA","16000US5175376","sterling-va",0.01789366053169734,"Male",0
+10,"55 to 64 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",80,57.99999999999999,"Sterling, VA","16000US5175376","sterling-va",0.0408997955010225,"Female",1
+11,"65 to 74 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",0,22,"Sterling, VA","16000US5175376","sterling-va",0,"Male",0
+11,"65 to 74 Years",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",112,108,"Sterling, VA","16000US5175376","sterling-va",0.05725971370143149,"Female",1
+12,"75 Years & Over",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",18,28.999999999999996,"Sterling, VA","16000US5175376","sterling-va",0.009202453987730062,"Male",0
+12,"75 Years & Over",2015,"2015",0,"Income In The Past 12 Months Below Poverty Level",207,97,"Sterling, VA","16000US5175376","sterling-va",0.1058282208588957,"Female",1
+0,"Under 5 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",119,86,"Sterling, VA","16000US5175376","sterling-va",0.05605275553462082,"Male",0
+0,"Under 5 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",46,44,"Sterling, VA","16000US5175376","sterling-va",0.02166745171926519,"Female",1
+1,"5 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",100,95,"Sterling, VA","16000US5175376","sterling-va",0.047103155911446065,"Male",0
+1,"5 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",51,50,"Sterling, VA","16000US5175376","sterling-va",0.024022609514837492,"Female",1
+2,"6 to 11 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",71,57.00000000000001,"Sterling, VA","16000US5175376","sterling-va",0.03344324069712671,"Male",0
+2,"6 to 11 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",99,73,"Sterling, VA","16000US5175376","sterling-va",0.046632124352331605,"Female",1
+3,"12 to 14 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",49,46,"Sterling, VA","16000US5175376","sterling-va",0.023080546396608573,"Male",0
+3,"12 to 14 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",22,27,"Sterling, VA","16000US5175376","sterling-va",0.010362694300518135,"Female",1
+4,"15 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",16,30.000000000000004,"Sterling, VA","16000US5175376","sterling-va",0.007536504945831371,"Male",0
+4,"15 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",0,22,"Sterling, VA","16000US5175376","sterling-va",0,"Female",1
+5,"16 & 17 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",29,32,"Sterling, VA","16000US5175376","sterling-va",0.013659915214319359,"Male",0
+5,"16 & 17 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",52,75,"Sterling, VA","16000US5175376","sterling-va",0.024493641073951956,"Female",1
+6,"18 to 24 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",0,22,"Sterling, VA","16000US5175376","sterling-va",0,"Male",0
+6,"18 to 24 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",158,92,"Sterling, VA","16000US5175376","sterling-va",0.07442298634008479,"Female",1
+7,"25 to 34 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",161,147,"Sterling, VA","16000US5175376","sterling-va",0.07583608101742817,"Male",0
+7,"25 to 34 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",268,135,"Sterling, VA","16000US5175376","sterling-va",0.12623645784267545,"Female",1
+8,"35 to 44 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",49,40,"Sterling, VA","16000US5175376","sterling-va",0.023080546396608573,"Male",0
+8,"35 to 44 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",238,129,"Sterling, VA","16000US5175376","sterling-va",0.11210551106924165,"Female",1
+9,"45 to 54 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",127,81,"Sterling, VA","16000US5175376","sterling-va",0.05982100800753651,"Male",0
+9,"45 to 54 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",100,81,"Sterling, VA","16000US5175376","sterling-va",0.047103155911446065,"Female",1
+10,"55 to 64 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",24,27,"Sterling, VA","16000US5175376","sterling-va",0.011304757418747056,"Male",0
+10,"55 to 64 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",65,51,"Sterling, VA","16000US5175376","sterling-va",0.030617051342439944,"Female",1
+11,"65 to 74 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",0,22,"Sterling, VA","16000US5175376","sterling-va",0,"Male",0
+11,"65 to 74 Years",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",145,99,"Sterling, VA","16000US5175376","sterling-va",0.0682995760715968,"Female",1
+12,"75 Years & Over",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",0,22,"Sterling, VA","16000US5175376","sterling-va",0,"Male",0
+12,"75 Years & Over",2014,"2014",0,"Income In The Past 12 Months Below Poverty Level",134,70,"Sterling, VA","16000US5175376","sterling-va",0.06311822892133773,"Female",1
+0,"Under 5 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",138,96,"Sterling, VA","16000US5175376","sterling-va",0.07705192629815745,"Male",0
+0,"Under 5 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",39,37,"Sterling, VA","16000US5175376","sterling-va",0.021775544388609715,"Female",1
+1,"5 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",30,37,"Sterling, VA","16000US5175376","sterling-va",0.01675041876046901,"Male",0
+1,"5 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",53,53,"Sterling, VA","16000US5175376","sterling-va",0.02959240647682859,"Female",1
+2,"6 to 11 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",51,51,"Sterling, VA","16000US5175376","sterling-va",0.02847571189279732,"Male",0
+2,"6 to 11 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",82,64,"Sterling, VA","16000US5175376","sterling-va",0.04578447794528197,"Female",1
+3,"12 to 14 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",60,67,"Sterling, VA","16000US5175376","sterling-va",0.03350083752093802,"Male",0
+3,"12 to 14 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",8,12,"Sterling, VA","16000US5175376","sterling-va",0.00446677833612507,"Female",1
+4,"15 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",22,37,"Sterling, VA","16000US5175376","sterling-va",0.012283640424343942,"Male",0
+4,"15 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",0,23,"Sterling, VA","16000US5175376","sterling-va",0,"Female",1
+5,"16 & 17 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",23,33,"Sterling, VA","16000US5175376","sterling-va",0.012841987716359575,"Male",0
+5,"16 & 17 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",11,20,"Sterling, VA","16000US5175376","sterling-va",0.006141820212171971,"Female",1
+6,"18 to 24 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",0,23,"Sterling, VA","16000US5175376","sterling-va",0,"Male",0
+6,"18 to 24 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",187,121,"Sterling, VA","16000US5175376","sterling-va",0.1044109436069235,"Female",1
+7,"25 to 34 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",205,164,"Sterling, VA","16000US5175376","sterling-va",0.11446119486320491,"Male",0
+7,"25 to 34 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",224,112.99999999999999,"Sterling, VA","16000US5175376","sterling-va",0.12506979341150196,"Female",1
+8,"35 to 44 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",62,51,"Sterling, VA","16000US5175376","sterling-va",0.03461753210496929,"Male",0
+8,"35 to 44 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",163,108,"Sterling, VA","16000US5175376","sterling-va",0.0910106085985483,"Female",1
+9,"45 to 54 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",92,72,"Sterling, VA","16000US5175376","sterling-va",0.0513679508654383,"Male",0
+9,"45 to 54 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",43,37,"Sterling, VA","16000US5175376","sterling-va",0.02400893355667225,"Female",1
+10,"55 to 64 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",24,28,"Sterling, VA","16000US5175376","sterling-va",0.01340033500837521,"Male",0
+10,"55 to 64 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",43,34,"Sterling, VA","16000US5175376","sterling-va",0.02400893355667225,"Female",1
+11,"65 to 74 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",10,15.000000000000002,"Sterling, VA","16000US5175376","sterling-va",0.005583472920156337,"Male",0
+11,"65 to 74 Years",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",79,59,"Sterling, VA","16000US5175376","sterling-va",0.044109436069235064,"Female",1
+12,"75 Years & Over",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",0,23,"Sterling, VA","16000US5175376","sterling-va",0,"Male",0
+12,"75 Years & Over",2013,"2013",0,"Income In The Past 12 Months Below Poverty Level",142,81,"Sterling, VA","16000US5175376","sterling-va",0.07928531546621999,"Female",1
