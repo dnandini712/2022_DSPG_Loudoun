@@ -1,0 +1,287 @@
+---
+title: "loudoun research 2.0"
+author: "NDP"
+date: '2022-06-09'
+output: html_document
+---
+# Sterling Gender Demographic
+```{r}
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(tidycensus)
+
+sterling <- read_excel("sterlingdata.xlsx",skip=1,col_names=TRUE)
+subset_sterling <- sterling[3:4,c(1,6:7)]
+
+Gender$estimate
+
+sterling$Estimate...6[6:7]
+
+gender_estimate <- sterling$Estimate...6[6:7]
+as.numeric(gsub(",","",gender_estimate))
+gender_estimate <-as.numeric(gsub(",","",gender_estimate))
+gender_cat <- (subset_sterling$Label)
+
+ggplot(subset_sterling,aes(x=gender_cat,y=gender_estimate,fill=gender_cat))+geom_col()+theme(axis.text.x=element_text(face="bold"))+scale_x_discrete(limits=gender_cat)+labs(title="Gender Demographics of Sterling, VA",caption= "Source: ACS data 2016-2020",x="Age",y="Estimated Gender Population") 
+```
+
+#Male Population in Sterling,VA
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+#I load my packages as I use them so you can see what 
+#they are used with.
+library(dplyr)
+library(tidycensus)
+library(ggplot2)
+
+readRenviron("~/.Renviron")
+Sys.getenv("CENSUS_API_KEY")
+
+blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 3, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia","Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
+
+va20 <- get_acs(geography = "block group",
+                variables = c(Males = "B01001_002"),
+                state = "VA",
+                year = 2020,
+                geometry = TRUE) %>%
+filter(NAME %in% blocks)
+
+zap2 <- ggplot(va20$geometry) + geom_sf(aes(fill=va20$estimate)) +
+scale_color_viridis_c() + scale_fill_viridis_c()+
+coord_sf(datum = NA) +
+theme_minimal() +labs(fill = "male")
+
+zap2
+
+library(leaflet)
+mypal <- colorNumeric(
+palette = "magma",
+domain = va20$estimate)
+mypal(c(10, 20, 30, 40, 50))
+
+leaflet() %>%
+addProviderTiles(providers$Stamen.TonerLite) %>%
+addPolygons(data = va20,
+color = ~mypal(estimate),
+weight = 0.5,
+smoothFactor = 0.2,
+fillOpacity = 0.5,
+label = ~estimate) %>%
+addLegend(
+position = "bottomright",
+pal = mypal,
+values = va20$estimate,
+title = "Male Population"
+)
+```
+#Female Population in Sterling,VA
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+#I load my packages as I use them so you can see what 
+#they are used with.
+library(dplyr)
+library(tidycensus)
+library(ggplot2)
+
+readRenviron("~/.Renviron")
+Sys.getenv("CENSUS_API_KEY")
+
+blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 3, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia","Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
+
+va20 <- get_acs(geography = "block group",
+                variables = c(Females = "B01001_026"),
+                state = "VA",
+                year = 2020,
+                geometry = TRUE) %>%
+filter(NAME %in% blocks)
+
+zap2 <- ggplot(va20$geometry) + geom_sf(aes(fill=va20$estimate)) +
+scale_color_viridis_c() + scale_fill_viridis_c()+
+coord_sf(datum = NA) +
+theme_minimal() +labs(fill = "female")
+
+zap2
+
+library(leaflet)
+mypal <- colorNumeric(
+palette = "magma",
+domain = va20$estimate)
+mypal(c(10, 20, 30, 40, 50))
+
+leaflet() %>%
+addProviderTiles(providers$Stamen.TonerLite) %>%
+addPolygons(data = va20,
+color = ~mypal(estimate),
+weight = 0.5,
+smoothFactor = 0.2,
+fillOpacity = 0.5,
+label = ~estimate) %>%
+addLegend(
+position = "bottomright",
+pal = mypal,
+values = va20$estimate,
+title = "Female Population"
+)
+```
+
+#Variable codes
+```{r}
+va20_S <- get_acs(geography = "place",
+variables = c(Males = "B01001_002",
+Females = "B01001_026", 
+Gender = "B01001_001",
+whiteM = "B01001A_002",
+whiteF = "B01001A_017",
+af.amM = "B01001B_002",
+af.amF = "B01001B_017",
+asianM = "B01001D_002",
+asianF = "B01001D_017",
+hispanicM = "B01001I_002",
+hispanicF = "B01001I_017"),
+state = "VA", year = 2020,
+geometry = TRUE) %>%
+filter(NAME == "Sterling CDP, Virginia")
+```
+
+#Specific Demographic Gender
+```{r}
+male <- filter(va20_S,variable=="Males")
+female <- filter(va20_S,variable=="Females")
+whiteM <- filter(va20_S,variable=="whiteM")
+whiteF <- filter(va20_S,variable=="whiteF")
+af.amM <- filter(va20_S,variable=="af.amM")
+af.amF <- filter(va20_S,variable=="af.amF")
+asianM <- filter(va20_S,variable=="asianM")
+asianF <- filter(va20_S,variable=="asianF")
+hispanicM <- filter(va20_S,variable=="hispanicM")
+hispanicF <- filter(va20_S,variable=="hispanicF")
+```
+
+#Better Map Visualization, builds off of the maps ^
+```{r}
+#specify the bin breaks
+mybins <- c(0,500,1000,1500,2000,2500,3000)
+#specify the default color
+mypalette <- colorBin(palette="inferno", domain=va20$estimate, na.color="transparent", bins=mybins)
+
+leaflet(data = va20) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~mypalette(va20$`estimate`),
+    stroke=TRUE,
+    weight = 1,
+    smoothFactor = 0.2,
+    opacity = 1.0,
+    fillOpacity = 0.7, 
+    label=paste("County: ",va20$GEOID, ", Value: ",va20$estimate),
+    highlightOptions = highlightOptions(color = "white",
+                                        weight = 2,
+                                        bringToFront = TRUE)) %>%
+  addLegend(pal=mypalette, position = "bottomright",
+            values = ~va20$estimate,
+            opacity = 0.5, title = "Female Population") %>%
+  addPolylines(data = va20, color = "black", 
+               opacity = 0.2, weight = 1)
+
+```
+
+
+
+#Code being sent to teams
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+#I load my packages as I use them so you can see what 
+#they are used with.
+library(dplyr)
+library(tidycensus)
+library(ggplot2)
+
+readRenviron("~/.Renviron")
+Sys.getenv("CENSUS_API_KEY")
+
+blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 3, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia","Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
+
+va20 <- get_acs(geography = "block group",
+                variables = c(Females = "B01001_026"),
+                state = "VA",
+                year = 2020,
+                geometry = TRUE) %>%
+filter(NAME %in% blocks)
+
+zap2 <- ggplot(va20$geometry) + geom_sf(aes(fill=va20$estimate)) +
+scale_color_viridis_c() + scale_fill_viridis_c()+
+coord_sf(datum = NA) +
+theme_minimal() +labs(fill = "female")
+
+zap2
+
+library(leaflet)
+mypal <- colorNumeric(
+palette = "magma",
+domain = va20$estimate)
+mypal(c(10, 20, 30, 40, 50))
+
+leaflet() %>%
+addProviderTiles(providers$Stamen.TonerLite) %>%
+addPolygons(data = va20,
+color = ~mypal(estimate),
+weight = 0.5,
+smoothFactor = 0.2,
+fillOpacity = 0.5,
+label = ~estimate) %>%
+addLegend(
+position = "bottomright",
+pal = mypal,
+values = va20$estimate,
+title = "Female Population"
+)
+
+#specify the bin breaks
+mybins <- c(0,500,1000,1500,2000,2500,3000)
+#specify the default color
+mypalette <- colorBin(palette="inferno", domain=va20$estimate, na.color="transparent", bins=mybins)
+
+leaflet(data = va20) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~mypalette(va20$`estimate`),
+    stroke=TRUE,
+    weight = 1,
+    smoothFactor = 0.2,
+    opacity = 1.0,
+    fillOpacity = 0.7, 
+    label=paste("County: ",va20$GEOID, ", Value: ",va20$estimate),
+    highlightOptions = highlightOptions(color = "white",
+                                        weight = 2,
+                                        bringToFront = TRUE)) %>%
+  addLegend(pal=mypalette, position = "bottomright",
+            values = ~va20$estimate,
+            opacity = 0.5, title = "Female Population") %>%
+  addPolylines(data = va20, color = "black", 
+               opacity = 0.2, weight = 1)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
