@@ -1,0 +1,45 @@
+---
+title: "Employment Sterling"
+author: "Abdullah Rizwan"
+date: '2022-06-10'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(ggplot2)
+library(tidycensus)
+library(viridis)
+```
+
+```{r}
+library(readxl)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+sterling <- read_excel("C:/Users/abdul/Downloads/DSPG/Employmentsterling.xlsx",skip=2,col_names=TRUE)
+subset_sterling <- sterling[103:127,c(1, 2:5)]
+subset_sterling$`EMPLOYMENT STATUS`
+subset_sterling$Label <- as.factor(subset_sterling$`EMPLOYMENT STATUS`)
+```
+```{r}
+sterling$...2[103:127]
+health_estimate <- sterling$...2[103:127]
+health_estimate<- as.numeric(gsub(",", "", health_estimate))
+health_name <- subset_sterling$`EMPLOYMENT STATUS`
+#summed_edu <- subset_sterling %>% 
+ # group_by(`EMPLOYMENT STATUS`) %>%
+  #summarize(edu_sum = sum(employment_estimate))
+#summed_edu1 <- summed_edu[-(10:15),]
+```
+
+```{r}
+ggplot(subset_sterling,aes(emp_name, health_estimate, fill = emp_name)) + geom_col()#+ #theme(axis.text.x = element_text(angle=30))
+```
+
+```{r}
+
+ggplot(subset_sterling,aes(emp_name, health_estimate, fill=emp_name)) + geom_col() +
+  theme(axis.text.x = element_text(angle=90)) + coord_polar() + scale_y_log10()
+```
