@@ -4,6 +4,7 @@ author: "Leonard-Allen"
 Last Update: 6/7/2022
 output:
   html_document:
+    code_folding: show
     toc: yes
     toc_depth: 4
     toc_float:
@@ -70,6 +71,10 @@ blocks_CDP<-c("Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","B
 
 va_20_CDP <- va20_S %>% filter (NAME %in% blocks_CDP)
 ```
+
+Export the data
+
+Import the data
 
 
 ```{r}
@@ -163,7 +168,7 @@ leaflet() %>%
     position = "bottomright",
     pal = mypal,
     values = va20_S$estimate,
-    title = "Median Population Income Across VA Counties"
+    title = "Median Population Income"
   )
 ```
 
@@ -199,7 +204,7 @@ leaflet() %>%
     position = "bottomright",
     pal = mypal,
     values = VA_income$estimate,
-    title = "Median Population Income Across VA Counties"
+    title = "Median Population Income"
   )
 ```
 
@@ -207,7 +212,7 @@ leaflet() %>%
 #specify the bin breaks
 mybins <- c(0,10000,20000,30000,40000,50000,60000,70000)
 #specify the default color
-mypalette <- colorBin(palette="inferno", domain=va20_S$estimate, na.color="transparent", bins=mybins)
+mypalette <- colorBin(palette="inferno", domain=va20_S$estimate, na.color="transparent")#, bins=mybins)
 
 leaflet(data = va20_S) %>%
   addTiles() %>%
