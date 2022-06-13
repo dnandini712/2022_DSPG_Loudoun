@@ -31,14 +31,12 @@ library(tidyverse)
 sterling <- read_excel("sterlingdata.xlsx",skip=1,col_names=TRUE)
 subset_sterling <- sterling[6:18,c(1, 10:13)]
 subset_sterling
-sterling$Estimate...10[6:18]
-age_estimate <- sterling$Estimate...10[6:18]
-as.numeric(gsub(",","",age_estimate))
-age_estimate <-as.numeric(gsub(",","",age_estimate))
+sterling$Percent...12[6:18]
+age_estimate <- sterling$Percent...12[6:18]
 age_cat <- (subset_sterling$Label)
 #this is how to subset the data
 #turn categories into factors 
-ggplot(subset_sterling,aes(x=age_cat,y=age_estimate, fill=age_cat))+geom_col()+theme(axis.text.x=element_text(angle=22.5, size=7.5, face="bold"))+scale_x_discrete(limits=age_cat)+labs(title="Age Demographics of Sterling, VA",subtitle="2016-2020",caption= "Source: ACS data 2016-2020",x="Age",y="Estimated Population") + coord_polar()
+ggplot(subset_sterling,aes(x=age_cat,y=age_estimate, fill=age_cat))+geom_col()+theme(axis.text.x=element_text(size=7.5, face="bold"),axis.text.y = element_blank(),axis.ticks.y=element_blank())+scale_x_discrete(limits=age_cat)+labs(title="Age Demographics of Sterling, VA",subtitle="2016-2020",caption= "Source: S0101 ACS data 2016-2020",x="Age Group",y="Estimated Percent of Population",) + coord_polar() + guides(fill = guide_legend(title = "Age Group")) 
 
 ```
 
