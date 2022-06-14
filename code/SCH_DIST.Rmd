@@ -1,0 +1,140 @@
+---
+title: "school zone"
+author: "Leonard-Allen"
+date: '2022-06-13'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+```{r}
+library(sf)
+library(st)
+
+#I load my packages as I use them so you can see what 
+#they are used with.
+library(tidycensus)
+library(leaflet)
+library(dplyr)
+library(ggplot2)
+library(tigris)
+library(viridis)
+```
+
+
+```{r}
+readRenviron("~/.Renviron") #read in Census API key
+Sys.getenv("census_api_key") #confirm you have read in your Census API key
+
+```
+
+
+```{r}
+va20_S <- get_acs(geography = "place",variables = c(medincome = "B19326_001"), #median.household.income="B19013_001"),
+                  geometry = TRUE) %>%
+  filter(NAME == "Sterling CDP, Virginia")
+```
+
+
+```{r}
+#Map and shape files into one file
+# Read in all files file
+mapelsd  <- st_read("C:/Users/Leo Allen/Downloads/tl_2021_51_elsd/tl_2021_51_elsd.shp",
+                  stringsAsFactors = FALSE)
+plot(mapelsd)
+```
+```{r}
+ggplot(data = mapelsd, aes(fill = ALAND)) + geom_sf() + scale_fill_distiller(palette = "RdPu", direction = 1) + labs(title = "Random",
+                                                                                                                       caption = "Data source: 2020 5-year ACS, US Census Bureau",
+                                                                                                                       fill = "ACS estimate") + 
+  theme_void()
+```
+
+```{r}
+# Creating a map with leaflet
+#library(leaflet)
+
+mypal <- colorNumeric(
+  palette = "magma",
+  domain = mapelsd$ALAND
+)
+
+mypal(c(10, 20, 30, 40, 50))
+
+leaflet() %>%
+  addProviderTiles(providers$Stamen.TonerLite) %>%
+  addPolygons(data = mapelsd,
+              color = ~mypal(ALAND),
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5,
+              label = ~ALAND) %>% 
+  
+#  addPolygons(data=va20_S, color = ~mypal(estimate),
+#              weight = 0,
+#              smoothFactor = 0.2,
+#              fillOpacity = .10,
+#              label = ~estimate) %>%
+  
+  addPolylines(data = mapelsd, color = "black", 
+               opacity = 10, weight = 5)%>%
+  addLegend(
+    position = "bottomright",
+    pal = mypal,
+    values = mapelsd$ALAND,
+    title = "Median Population Income"
+  )
+```
+
+
+```{r}
+va20_S <- get_acs(geography = "place",variables = c(medincome = "B19326_001"), #median.household.income="B19013_001"),
+geometry = TRUE) %>%
+filter(NAME == "Sterling CDP, Virginia")
+```
+
+
+```{r}
+
+# Creating a map with leaflet
+#library(leaflet)
+
+mypal <- colorNumeric(
+  palette = "magma",
+  domain = va20_S$estimate
+)
+
+mypal(c(10, 20, 30, 40, 50))
+
+leaflet() %>%
+  addProviderTiles(providers$Stamen.TonerLite) %>%
+#  addPolygons(data = mapelsd,
+#              color = ~mypal(ALAND),
+#              weight = 0.5,
+#              smoothFactor = 0.2,
+#              fillOpacity = 0.5,
+#              label = ~ALAND) %>% 
+#  
+  addPolygons(data=va20_S, color = ~mypal(estimate),
+              weight = 0,
+              smoothFactor = 0.2,
+              fillOpacity = .10,
+              label = ~estimate) %>%
+  
+  addPolylines(data = mapelsd$geometry, color = "black", 
+               opacity = 10, weight = 5)%>%
+  addLegend(
+    position = "bottomright",
+    pal = mypal,
+    values = va20_S$estimate,
+    title = "Median Population Income"
+  )
+```
+
+
+
+
+
