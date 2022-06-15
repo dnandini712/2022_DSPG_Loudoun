@@ -1,0 +1,189 @@
+---
+title: "Shape file"
+author: "Nandini Das"
+date: '2022-06-07'
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 4
+    toc_float:
+      collapsed: yes
+    theme: readable
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+colorlinks: yes
+urlcolor: blue
+linkcolor: blue
+citecolor: blue
+anchorcolor: blue
+toccolor: blue
+fontsize: 14pt
+---
+```{r setup, message = FALSE }
+knitr::opts_chunk$set(echo = TRUE)
+#I load my packages as I use them so you can see what 
+#they are used with.
+library(dplyr)
+library(tidycensus)
+library(ggplot2)
+library(mapdeck)
+library(shiny)
+library(shinythemes)
+library(shinyjs)
+library(ggplot2)
+library(maps)
+library(plotly)
+library(DT)
+library(dplyr)
+library(tigris)
+library(tidyverse)
+library(tidycensus)
+library(readxl)
+library(collapsibleTree)
+library(shinycssloaders)
+library(leaflet)
+library(leaflet.extras)
+library(rvest)
+library(sf)
+library(shinydashboard)
+library(shinydashboardPlus)
+library(tidygeocoder)
+library(janitor)
+library(dplyr)
+library(ggplot2)
+library(magrittr)
+options(tigris_use_cache = TRUE)
+```
+
+
+```{r set_up_API, }
+readRenviron("~/.Renviron")
+Sys.getenv("CENSUS_API_KEY")
+```
+
+```{r}
+blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6112.05, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6112.05, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6112.04, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6112.04, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6115.02, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6115.02, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6113, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6113, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6113, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6114, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6114, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6114, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6117.01, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6117.01, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6116.02, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6116.02, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6116.01, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6116.01, Loudoun County, Virginia", 
+"Block Group 3, Census Tract 6112.02, Loudoun County, Virginia")
+
+va20_2 <- get_acs(geography = "block group",
+                variables = c(hispanic = "B03002_012"),
+                state = "VA",
+                year = 2020,
+                geometry = TRUE) %>%
+filter(NAME %in% blocks)
+```
+```{r}
+
+blocks_CDP<-c("Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia","Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
+
+va_20_CDP <- va20_2 %>% filter (NAME %in% blocks_CDP)
+
+```
+
+
+```{r}
+zap2 <- ggplot(va20_2$geometry) + geom_sf(aes(fill=va20_2$estimate)) +
+scale_color_viridis_c() + scale_fill_viridis_c()+
+coord_sf(datum = NA) +
+theme_minimal() +labs(fill = "Hispanic Population")
+
+zap2
+```
+
+
+```{r}
+library(leaflet)
+mypal <- colorNumeric(
+palette = "magma",
+domain = va20_2$estimate)
+mypal(c(10, 20, 30, 40, 50))
+
+leaflet() %>%
+addProviderTiles(providers$Stamen.TonerLite) %>%
+addPolygons(data = va20_2,
+color = ~mypal(estimate),
+weight = 0.5,
+smoothFactor = 0.2,
+fillOpacity = 0.5,
+label = ~estimate) %>%
+addLegend(
+position = "bottomright",
+pal = mypal,
+values = va20_2$estimate,
+title = "Hispanic Population"
+)
+```
+
+```{r}
+#specify the bin breaks
+mybins <- c(0,300,600,900,1200,1500,1800,2100)
+#specify the default color
+mypalette <- colorBin(palette="inferno", domain=va20_2$estimate, na.color="transparent", bins=mybins)
+
+leaflet(data = va20_2) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~mypalette(va20_2$`estimate`),
+    stroke=TRUE,
+    weight = 1,
+    smoothFactor = 0.2,
+    opacity = 1.0,
+    fillOpacity = 0.7, 
+    label=paste("County: ",va20_2$GEOID, ", Value: ",va20_2$estimate),
+    highlightOptions = highlightOptions(color = "white",
+                                        weight = 2,
+                                        bringToFront = TRUE)) %>%
+  addLegend(pal=mypalette, position = "bottomright",
+            values = ~va20_2$estimate,
+            opacity = 0.5, title = "Median Population Income") 
+
+
+```
+```{r}
+#specify the bin breaks
+#mybins <- c(0,300,600,900,1200,1500,1800,2100)
+#specify the default color
+#mypalette <- colorBin(palette="inferno", domain=va20_2$estimate, na.color="transparent", bins=mybins)
+
+Sugar <- as_Spatial(sugarland)
+va20S <- as_Spatial(va20_2)
+
+leaflet(data = Sugar) %>%
+ fitBounds(lng1 = -77.458921, lat1 = 39.000, lng2 = -77.483035, lat2=39.1) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = "red",
+    stroke=TRUE,
+    weight = 1,
+    smoothFactor = 0.2,
+    opacity = 1.0,
+    fillOpacity = 0.7,
+    color="red",
+    highlightOptions = highlightOptions(color = "white",
+                                        weight = 2,
+                                        bringToFront = TRUE))
+
+plot(Sugar, col = "lightgreen")
+plot(va20S, col = "blue", add = TRUE, plot.new())
+
+
+```

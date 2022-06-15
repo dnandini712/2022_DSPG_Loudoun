@@ -84,7 +84,7 @@ va_20_CDP <- va20_2 %>% filter (NAME %in% blocks_CDP)
 
 ```{r}
 
-map <- read_excel(paste0(getwd(),"/data/school_locations.xlsx")) 
+map <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/data/school_locations.xlsx")
 
 map$Longitude <- as.numeric(map$Longitude)
 map$Latitude <- as.numeric(map$Latitude)
@@ -111,3 +111,57 @@ fillOpacity = 0.5) %>%
   #geom_polygon(data = spdf_fortified, aes( x = long, y = lat, group = group), fill="#69b3a2", color="white") +
   #theme_void() 
 ```
+
+
+```{r}
+library(rgdal)
+library(ggplot2)
+library(sf)
+
+my_spdf <- readOGR( 
+  dsn= paste0(getwd(),"/data/tl_2021_51_elsd.shp"))
+
+library(tools)
+r1_gdb <- file_path_as_absolute("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/data/tl_2021_51_elsd.shp")
+
+chi_shape <- st_read("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/data/tl_2021_51_elsd.shx")
+
+
+r1_lyrlist <- ogrListLayers(r1_gdb)
+
+```
+{
+```{r}
+require(rgdal)
+sugarland <- st_read(dsn = "/Users/nandinidas/Desktop/2022_DSPG_Loudoun/Sugarland_Elementary_AZ", "SugarL_ES_AZ", stringsAsFactors = FALSE)
+
+length(sugarland)
+
+summary(shape@data)
+
+#shape$INTPTLAT <- as.numeric(shape$INTPTLAT)
+#shape$INTPTLON <- as.numeric(shape$INTPTLON)
+
+shapemap <- ggplot() + geom_polygon(data = shape, aes(x = "INTPTLON", y = "INTPTLAN"), colour = "black", fill = NA)
+
+shape + theme_void()
+
+par(mar=c(0,0,0,0))
+plot(shapemap, col="#f2f2f2", bg="skyblue", lwd=0.25, border=0 )
+
+#shp_df <- broom::tidy(shapemap, region = "")
+#lapply(shp_df, class)
+
+#ggplot() + 
+  geom_sf(data = shapemap, size = 3, color = "black", fill = "cyan1") + 
+  ggtitle("AOI Boundary Plot") + 
+  coord_sf()
+
+shape
+```
+
+```{r}
+par(mar=c(0,0,0,0))
+plot(shape, col="#f2f2f2", bg="skyblue", lwd=0.25, border=0 )
+```
+
