@@ -21,7 +21,7 @@ library(readr)
 
 # Importing the data
 ```{r}
-Assessments <- read_csv("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Loudoun/data/raw/Assessments.csv", 
+Assessments <- read_csv("data/raw/Assessments.csv", 
                         col_names = T, skip = 2)
 
 ```
