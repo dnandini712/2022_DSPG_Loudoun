@@ -1,0 +1,44 @@
+---
+title: "Performance"
+author: "Leonard-Allen"
+date: '2022-06-15'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Loading the packages
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+library(readxl)
+library(readr)
+```
+
+
+# Importing the data
+```{r}
+Assessments <- read_csv("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Loudoun/data/raw/Assessments.csv", 
+                        col_names = T, skip = 2)
+
+```
+
+
+# subsetting the data
+```{r}
+Guilford <- Assessments[which(Assessments$School == "Guilford Elementary"),]
+Forest <- Assessments[which(Assessments$School == "Forest Grove Elementary"),]
+Rolling <- Assessments[which(Assessments$School == "Rolling Ridge Elementary"),]
+Sterling <- Assessments[which(Assessments$School == "Sterling Elementary"),]
+Sugar <- Assessments[which(Assessments$School == "Sugarland Elementary"),]
+Sully <- Assessments[which(Assessments$School == "Sully Elementary"),]
+```
+
+# Guilford
+```{r}
+
+```
+
