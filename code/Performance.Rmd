@@ -20,10 +20,9 @@ library(readr)
 
 
 # Importing the data
-```{r}
-Assessments <- read_csv("data/raw/Assessments.csv", 
+```{r message=FALSE, warning=FALSE}
+Assessments <- read_csv("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Loudoun/data/raw/Assessments.csv", 
                         col_names = T, skip = 2)
-
 ```
 
 
@@ -36,6 +35,7 @@ Sterling <- Assessments[which(Assessments$School == "Sterling Elementary"),]
 Sugar <- Assessments[which(Assessments$School == "Sugarland Elementary"),]
 Sully <- Assessments[which(Assessments$School == "Sully Elementary"),]
 ```
+
 
 # Guilford
 ```{r}
