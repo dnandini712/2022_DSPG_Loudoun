@@ -95,7 +95,7 @@ summed_edu1 <- summed_edu[-(10:15),]
 ```
 
 ```{r}
-ggplot(summed_edu1,aes(Label, edu_sum)) + geom_col() + theme(axis.text.x = element_text(angle=90))
+ggplot(summed_edu1,aes(Label, edu_sum)) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "Qualification", y = "Number of population", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Education Qualification") + coord_flip()
 ```
 
 ```{r}
