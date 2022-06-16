@@ -32,115 +32,16 @@ library(tidycensus)
 sterling <- read_excel("sterlingdata.xlsx",skip=1,col_names=TRUE)
 subset_sterling <- sterling[3:4,c(1,6:7)]
 
-sterling$Estimate...6[6:7]
 
-gender_estimate <- sterling$Estimate...6[6:7]
+gender_estimate <- subset_sterling$Estimate...6
 as.numeric(gsub(",","",gender_estimate))
 gender_estimate <-as.numeric(gsub(",","",gender_estimate))
 gender_cat <- (subset_sterling$Label)
 
-ggplot(subset_sterling,aes(x=gender_cat,y=gender_estimate,fill=gender_cat))+geom_col()+theme(axis.text.x=element_text(face="bold"))+scale_x_discrete(limits=gender_cat)+labs(title="Gender Demographics of Sterling, VA",caption= "Source: ACS data 2016-2020",x="Age",y="Estimated Gender Population") 
+ggplot(subset_sterling,aes(x=gender_cat,y=gender_estimate,fill=gender_cat))+geom_col()+theme(axis.text.x=element_text(face="bold"))+scale_x_discrete(limits=gender_cat)+labs(title="Gender Population",caption= "Source: DP05 ACS data 2016-2020",x="Gender",y="Population") + guides(fill = guide_legend(title = "Gender"))
 ```
+This demographic displays a bar graph of the gender demographics in Sterling,VA. The two gender in the legend are male and female. The male demographic is represented by the blue grapgh and the female demographic is represented by the pink graph. Males make up 50.5% of the population in Sterling,VA. That means out of the 30,271 individuals in Sterling,VA, 15,282 of them are males. Females make up 49.4% of the population in Sterling,VA. That means out of the 30,721 individuals in Sterling,VA, 14,989 of them are female
 
-#Male Population in Sterling,VA
-```{r}
-knitr::opts_chunk$set(echo = TRUE)
-#I load my packages as I use them so you can see what 
-#they are used with.
-library(dplyr)
-library(tidycensus)
-library(ggplot2)
-
-readRenviron("~/.Renviron")
-Sys.getenv("CENSUS_API_KEY")
-
-blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 3, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia","Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
-
-vaMale <- get_acs(geography = "block group",
-                variables = c(Males = "B01001_002"),
-                state = "VA",
-                year = 2020,
-                geometry = TRUE) %>%
-filter(NAME %in% blocks)
-
-zapMale <- ggplot(vaMale$geometry) + geom_sf(aes(fill=vaMale$estimate)) +
-scale_color_viridis_c() + scale_fill_viridis_c()+
-coord_sf(datum = NA) +
-theme_minimal() +labs(fill = "male")
-
-zapMale
-
-library(leaflet)
-mypal <- colorNumeric(
-palette = "magma",
-domain = vaMale$estimate)
-mypal(c(10, 20, 30, 40, 50))
-
-leaflet() %>%
-addProviderTiles(providers$Stamen.TonerLite) %>%
-addPolygons(data = vaMale,
-color = ~mypal(estimate),
-weight = 0.5,
-smoothFactor = 0.2,
-fillOpacity = 0.5,
-label = ~estimate) %>%
-addLegend(
-position = "bottomright",
-pal = mypal,
-values = vaMale$estimate,
-title = "Male Population"
-)
-```
-
-#Female Population in Sterling,VA
-```{r}
-knitr::opts_chunk$set(echo = TRUE)
-#I load my packages as I use them so you can see what 
-#they are used with.
-library(dplyr)
-library(tidycensus)
-library(ggplot2)
-
-readRenviron("~/.Renviron")
-Sys.getenv("CENSUS_API_KEY")
-
-blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 3, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia","Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
-
-vaFemale <- get_acs(geography = "block group",
-                variables = c(Females = "B01001_026"),
-                state = "VA",
-                year = 2020,
-                geometry = TRUE) %>%
-filter(NAME %in% blocks)
-
-zapFemale <- ggplot(vaFemale$geometry) + geom_sf(aes(fill=vaFemale$estimate)) +
-scale_color_viridis_c() + scale_fill_viridis_c()+
-coord_sf(datum = NA) +
-theme_minimal() +labs(fill = "female")
-
-zapFemale
-
-library(leaflet)
-mypal <- colorNumeric(
-palette = "magma",
-domain = vaFemale$estimate)
-mypal(c(10, 20, 30, 40, 50))
-
-leaflet() %>%
-addProviderTiles(providers$Stamen.TonerLite) %>%
-addPolygons(data = vaFemale,
-color = ~mypal(estimate),
-weight = 0.5,
-smoothFactor = 0.2,
-fillOpacity = 0.5,
-label = ~estimate) %>%
-addLegend(
-position = "bottomright",
-pal = mypal,
-values = vaFemale$estimate,
-title = "Female Population"
-)
-```
 
 #Variable codes
 ```{r}
@@ -178,14 +79,14 @@ hispanicF <- filter(va20_S,variable=="hispanicF")
 #Better Map Visualization of Males in Sterling,VA
 ```{r}
 #specify the bin breaks
-mybins <- c(0,500,1000,1500,2000,2500,3000)
+mybinsM <- c(0,500,1000,1500,2000,2500,3000)
 #specify the default color
-mypalette <- colorBin(palette="inferno", domain=vaMale$estimate, na.color="transparent", bins=mybins)
+mypaletteM <- colorBin(palette="inferno", domain=vaMale$estimate, na.color="transparent", bins=mybinsM)
 
 leaflet(data = vaMale) %>%
   addTiles() %>%
   addPolygons(
-    fillColor = ~mypalette(vaMale$`estimate`),
+    fillColor = ~mypaletteM(vaMale$`estimate`),
     stroke=TRUE,
     weight = 1,
     smoothFactor = 0.2,
@@ -195,25 +96,27 @@ leaflet(data = vaMale) %>%
     highlightOptions = highlightOptions(color = "white",
                                         weight = 2,
                                         bringToFront = TRUE)) %>%
-  addLegend(pal=mypalette, position = "bottomright",
+  addLegend(pal=mypaletteM, position = "bottomright",
             values = ~vaMale$estimate,
             opacity = 0.5, title = "Male Population In Sterling,VA") %>%
   addPolylines(data = vaMale, color = "black", 
                opacity = 0.2, weight = 1)
 
 ```
+Here is a map visualization of the male population in Sterling,VA. I used the 2020 census block map to map out Sterling, and from there, used the ACS data to locate the number of individuals in each block/area who identify as a male.
+
 
 #Better Map Visualization of Females in Sterling,VA
 ```{r}
 #specify the bin breaks
-mybins <- c(0,500,1000,1500,2000,2500,3000)
+mybinsF <- c(0,500,1000,1500,2000,2500,3000)
 #specify the default color
-mypalette <- colorBin(palette="inferno", domain=vaFemale$estimate, na.color="transparent", bins=mybins)
+mypaletteF <- colorBin(palette="inferno", domain=vaFemale$estimate, na.color="transparent", bins=mybinsF)
 
 leaflet(data = vaFemale) %>%
   addTiles() %>%
   addPolygons(
-    fillColor = ~mypalette(vaFemale$`estimate`),
+    fillColor = ~mypaletteF(vaFemale$`estimate`),
     stroke=TRUE,
     weight = 1,
     smoothFactor = 0.2,
@@ -223,27 +126,37 @@ leaflet(data = vaFemale) %>%
     highlightOptions = highlightOptions(color = "white",
                                         weight = 2,
                                         bringToFront = TRUE)) %>%
-  addLegend(pal=mypalette, position = "bottomright",
+  addLegend(pal=mypaletteF, position = "bottomright",
             values = ~vaFemale$estimate,
             opacity = 0.5, title = "Female Population In Sterling,VA") %>%
   addPolylines(data = vaFemale, color = "black", 
                opacity = 0.2, weight = 1)
 
 ```
+Here is a map visualization of the female population in Sterling,VA. I used the 2020 census block map to map out Sterling, and from there, used the ACS data to locate the number of individuals in each block/area who identify as a female.
 
+#Gender Pie Chart
+```{r}
+# 3D Exploded Pie Chart
+library(plotrix)
+slices.GENDER <- c(50.5, 49.5)
+lbls.GENDER <- c("Males 50.5%", "Females 49.5%")
+pie3D(slices.GENDER,labels=lbls.GENDER,explode=0.1,
+   main="Source: DP05 ACS 5-yr 2016-2020") 
 
+library(plotly)
 
+labelsG = c("Male", "Female")
+valuesG = c(15282, 14989)
 
+figG <- plot_ly(type='pie', labels=labelsG, values=valuesG, 
+               textinfo='label+percent',
+               insidetextorientation='radial') %>% layout(title ='Gender Percentage', legend=list(title=list(text='Gender')))
 
+figG
+```
 
-
-
-
-
-
-
-
-
+This demographic displays a pie chart of the gender demographics in Sterling,VA. The two gender in the legend are male and female. The male demographic is represented by the red half and the female demographic is represented by the light blue half. Males make up 50.5% of the population in Sterling,VA. That means out of the 30,271 individuals in Sterling,VA, 15,282 of them are males. Females make up 49.4% of the population in Sterling,VA. That means out of the 30,721 individuals in Sterling,VA, 14,989 of them are female
 
 
 

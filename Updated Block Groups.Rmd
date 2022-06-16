@@ -1,0 +1,220 @@
+---
+title: "Updated Block Groups"
+author: "NDP"
+date: '2022-06-14'
+output: html_document
+---
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+#I load my packages as I use them so you can see what 
+#they are used with.
+library(dplyr)
+library(tidycensus)
+library(ggplot2)
+
+readRenviron("~/.Renviron")
+Sys.getenv("CENSUS_API_KEY")
+
+blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", 
+          "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", 
+          "Block Group 3, Census Tract 6112.05, Loudoun County, Virginia",
+          "Block Group 1, Census Tract 6112.04, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia",
+          "Block Group 3, Census Tract 6112.04, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia",
+          "Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", 
+          "Block Group 1, Census Tract 6113, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6113, Loudoun County, Virginia",
+          "Block Group 3, Census Tract 6113, Loudoun County, Virginia", 
+          "Block Group 1, Census Tract 6114, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6114, Loudoun County, Virginia",
+          "Block Group 3, Census Tract 6114, Loudoun County, Virginia",
+          "Block Group 1, Census Tract 6117.01, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", 
+          "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6116.02, Loudoun County, Virginia",
+          "Block Group 1, Census Tract 6116.01, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
+
+vaWhite <- get_acs(geography = "block group",
+                variables = c(White = "B02001_002"),
+                state = "VA",
+                year = 2020,
+                geometry = TRUE) %>%
+filter(NAME %in% blocks)
+
+zapWhite <- ggplot(vaWhite$geometry) + geom_sf(aes(fill=vaWhite$estimate)) +
+scale_color_viridis_c() + scale_fill_viridis_c()+
+coord_sf(datum = NA) +
+theme_minimal() +labs(fill = "white")
+
+library(leaflet)
+mypalW <- colorNumeric(
+palette = "magma",
+domain = vaWhite$estimate)
+mypalW(c(10, 20, 30, 40, 50))
+
+#specify the bin breaks
+mybinsW <- c(0,600,1200,1800,2400,3000,3600)
+#specify the default color
+mypaletteW <- colorBin(palette="inferno", domain=vaWhite$estimate, na.color="transparent", bins=mybinsW)
+
+leaflet(data = vaWhite) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~mypaletteW(vaWhite$`estimate`),
+    stroke=TRUE,
+    weight = 1,
+    smoothFactor = 0.2,
+    opacity = 1.0,
+    fillOpacity = 0.7, 
+    label=paste("County: ",vaWhite$GEOID, ", Value: ",vaWhite$estimate),
+    highlightOptions = highlightOptions(color = "white",
+                                        weight = 2,
+                                        bringToFront = TRUE)) %>%
+  addLegend(pal=mypaletteW, position = "bottomright",
+            values = ~vaWhite$estimate,
+            opacity = 0.5, title = "White Population") %>%
+  addPolylines(data = vaWhite, color = "black", 
+               opacity = 0.2, weight = 1)
+```
+
+
+* Number of teachers by schools based on the school websites
+    * Sterling Elementary - 81 staff members; 32 teachers
+    * Sugarland Elementary - 74 staff members; 52 teachers
+    * Rolling Ridge Elementary - 93 staff members; 66 teachers
+    * Forest Grove Elementary - 75 staff members; 55 teachers
+    * Guilford Elementary - 88 staff members; 59 teachers
+    * Sully Elementary - 54 staff members; 35 teachers???
+    
+    loudoun shiny app
+    
+```{r}
+library(shiny)
+library(shinythemes)
+library(shinyjs)
+library(ggplot2)
+library(maps)
+library(plotly)
+library(DT)
+library(dplyr)
+library(tigris)
+library(tidyverse)
+library(tidycensus)
+library(readxl)
+library(collapsibleTree)
+library(shinycssloaders)
+library(leaflet)
+library(leaflet.extras)
+library(rvest)
+library(sf)
+library(shinydashboard)
+library(shinydashboardPlus)
+library(tidygeocoder)
+library(janitor)
+library(dplyr)
+library(ggplot2)
+library(magrittr)
+options(tigris_use_cache = TRUE)
+
+library(rstudioapi)
+```
+
+```{r set_up_API, }
+readRenviron("~/.Renviron")
+Sys.getenv("CENSUS_API_KEY")
+```
+
+```{r}
+blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6112.05, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6112.05, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6112.04, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6112.04, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6115.02, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6115.02, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6113, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6113, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6113, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6114, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6114, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6114, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6117.01, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6117.01, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6116.02, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6116.02, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6116.01, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6116.01, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6112.02, Loudoun County, Virginia")
+
+va20_2 <- get_acs(geography = "block group",
+                  variables = c(hispanics = "B03002_012"),
+                state = "VA",
+                year = 2020,
+                geometry = TRUE) %>%
+filter(NAME %in% blocks)
+```
+
+```{r}
+
+blocks_CDP<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6112.05, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6112.05, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6112.04, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6112.04, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6115.02, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6115.02, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6113, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6113, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6113, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6114, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6114, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6114, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6117.01, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6117.01, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6116.02, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6116.02, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6116.01, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6116.01, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6112.02, Loudoun County, Virginia")
+
+va_20_CDP <- va20_2 %>% filter (NAME %in% blocks_CDP)
+
+```
+
+
+
+```{r}
+
+map <- read_excel("Sterling_Youth_Development.xlsx")
+subset_map <- map[1:11,c(1,2:3)]
+
+subset_map$Longitude <- as.numeric(subset_map$Longitude)
+subset_map$Latitude <- as.numeric(subset_map$Latitude)
+
+
+# Show first 20 rows from the `quakes` dataset
+leaflet(data = subset_map) %>% addTiles() %>%
+  addPolygons(data = va20_2,
+color="yellow",
+weight = 0.5,
+smoothFactor = 0.2,
+fillOpacity = 0.5) %>%
+  addMarkers(~Longitude, ~Latitude, popup = ~as.character(Name), label = ~as.character(Name)) %>% addPolygons(data = va_20_CDP,
+color="red",
+weight = 0.5,
+smoothFactor = 0.2,
+fillOpacity = 0.5) %>%
+  addMarkers(~Longitude, ~Latitude, popup = ~as.character(Name), label = ~as.character(Name)) 
+
+
+# Plot it
+#library(ggplot2)
+#ggplot() +
+  #geom_polygon(data = spdf_fortified, aes( x = long, y = lat, group = group), fill="#69b3a2", color="white") +
+  #theme_void() 
+```
+```
+    
+    

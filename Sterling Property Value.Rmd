@@ -1,0 +1,98 @@
+---
+title: "Sterling,VA Property Value"
+author: "NDP"
+date: '2022-06-13'
+output: html_document
+---
+```{r set_up_API, }
+readRenviron("~/.Renviron") #readin Census API key
+Sys.getenv("CENSUS_API_KEY") #confirm you have read in your Census API key
+```
+
+```{r}
+library(tidycensus)
+# Set a year of interest
+this.year = 2020
+
+# This looks at the 5 year estimates
+# You can also do "acs1"
+vars <- load_variables(year = 2019,
+                      dataset = "acs5",
+                      cache = TRUE)
+```
+
+#Home Owner Property Value Visualization
+```{r}
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(tidycensus)
+
+sterlingPV <- read_csv("Property_Value.csv",skip=1,col_names=TRUE)
+#subset_sterlingPV <- sterlingPV[c(92:99),c(1,2:3)]
+
+Property_Value_estimate <- subset_sterlingPV$...2 
+as.numeric(gsub(",","",Property_Value_estimate))
+Property_Value_estimate <-as.numeric(gsub(",","",Property_Value_estimate))
+Property_Value_cat <- (subset_sterlingPV$`HOUSING OCCUPANCY`)
+
+ggplot(subset_sterlingPV,aes(x=Property_Value_cat,y=Property_Value_estimate,fill=Property_Value_cat))+geom_col()+theme(axis.text.x=element_text(face="bold",angle=90))+scale_x_discrete(limits=Property_Value_cat)+labs(title="Home Owner Property Value",caption= "Source: DP04 ACS data 2016-2020",x="Value",y="Number of Properties") + coord_flip() + guides(fill = guide_legend(title = "Property Values"))
+
+#Better Graph
+ggplot(subset_sterlingPV,aes(x=Property_Value_cat,y=Property_Value_estimate,fill=Property_Value_cat))+geom_col()+theme(axis.text.x=element_blank(),axis.ticks.x=element_blank())+scale_x_discrete(limits=Property_Value_cat)+labs(title="Home Owner Property Value",caption= "Source: DP04 ACS data 2016-2020",x="",y="Number of Properties") + guides(fill = guide_legend(title = "Property Values"))
+```
+This bar graph displays how many home-owned properties fall into each value set. The largest data group is the properties that fall into the $300,000 to $499,999. An estimated 4,653 properties fall into this category. Next is the $200,000 to $299,999 value range. An estimated 1,137 properties fall within this group of values. The third largest group is the value that ranges from $500,000 to $999,999. An estimated 709 properties fall within this group of values. 
+
+#Home owner vs renter demographic (pie chart)
+```{r}
+# Sample Pie Chart
+slices.HOUSING <- c(73.9, 26.1)
+lbls.HOUSING <- c("Owner-Occupied 73.9%", "Renter-Occupied 26.1%")
+pie(slices.HOUSING, labels = lbls.HOUSING, main="Pie Chart of Home-owners vs Home-renters In Sterling,VA")
+
+# 3D Exploded Pie Chart
+library(plotrix)
+slices.HOUSING <- c(73.9, 26.1)
+lbls.HOUSING <- c("Owner-Occupied", "Renter-Occupied")
+pie3D(slices.HOUSING,labels=lbls.HOUSING,explode=0.5,
+   main="Pie Chart of Home-owners vs Home-renters In Sterling,VA") 
+```
+This pie chart shows, in percentage, how many occupied homes in Sterling,VA are occupied by the owner themselves, or renters. As displayed, Owner-occupied homes are significantly larger than renter-occupied homes. Owner-occupied homes make up about 6,839 or 73.9% of the total estimated 9,548 occupied homes in Sterling,VA. Renter-occupied homes come in at a low 2,412 or 26.1% out of the total estimated 9,548 homes. 
+
+#Home owner property value pie chart
+```{r}
+# Sample Pie Chart
+slices.HOPV <- c(0.8, 0.1, 0.7, 3.0, 16.6, 68, 10.4, 0.4)
+lbls.HOPV <- c("Less than $50,000", "$50,000 to $99,000","$100,000 to $149,000","$150,000 to $199,000", "$200,000 to $299,000", "$300,000 to $499,000", "$500,000 to $999,999", "$1,000,000 or more")
+pie(slices.HOPV, labels = lbls.HOPV, main="Pie Chart of Home Owner Property Value In Sterling,VA")
+
+# 3D Exploded Pie Chart
+library(plotrix)
+slices.HOPV <- c(0.8, 0.1, 0.7, 3.0, 16.6, 68, 10.4, 0.4)
+lbls.HOPV <- c("Less than $50,000", "$50,000 to $99,000","$100,000 to $149,000","$150,000 to $199,000", "$200,000 to $299,000", "$300,000 to $499,000", "$500,000 to $999,999", "$1,000,000 or more")
+pie3D(slices.HOPV,labels=lbls.HOPV,explode=0.2,
+   main="Pie Chart of Home Owner Property Value In Sterling,VA")
+
+#Best Pie chart?
+library(plotly)
+
+labelsPV = c("Less than $50,000", "$50,000 to $99,000","$100,000 to $149,000","$150,000 to $199,000", "$200,000 to $299,000", "$300,000 to $499,000", "$500,000 to $999,999", "$1,000,000 or more")
+valuesPV = c(58, 6, 46, 204, 1137, 4683, 709, 26)
+
+figPV <- plot_ly(type='pie', labels=labelsPV, values=valuesPV, 
+               textinfo='percent',
+               insidetextorientation='radial') %>% layout(title ='Property Value Percentage', legend=list(title=list(text='Values')))
+
+figPV
+
+#Pie chart with table
+slices.HOPV <- c(0.8, 0.1, 0.7, 3.0, 16.6, 68, 10.4, 0.4)
+lbls.HOPV <- c("Less than $50,000", "$50,000 to $99,000","$100,000 to $149,000","$150,000 to $199,000", "$200,000 to $299,000", "$300,000 to $499,000", "$500,000 to $999,999", "$1,000,000 or more")
+
+pie(slices.HOPV, labels = piepercentPV, main = "property value", sub = "Source: DP04 ACS data 2016-2020", col = rainbow(length(slices.HOPV)))
+legend("topright", c("Less than $50,000", "$50,000 to $99,000","$100,000 to $149,000","$150,000 to $199,000", "$200,000 to $299,000", "$300,000 to $499,000", "$500,000 to $999,999", "$1,000,000 or more"), cex = 0.8,
+   fill = rainbow(length(slices.HOPV)))
+```
+This visualization displays the proportions of the percentage of home owner property values. As displayed in the pie chart, 68% of home owned property has a value between $300,000 to $499,000. Next is homes that have a value of $200,000 to $299,000. 16.6% of property fall into this category. The third largest category of home value is the $500,000 to $999,999. 10.5% of properties fall within this category. 
+
+There is a total of 9,548 housing units in Sterling,VA. Out of the 9,548 housing units, 9,548 are occupied by residents. 
