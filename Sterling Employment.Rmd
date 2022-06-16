@@ -44,4 +44,80 @@ ggplot(subset_sterling,aes(subset_sterling$Label, employment_estimate, fill = La
 ggplot(subset_sterling,aes(subset_sterling$Label, employment_estimate, fill=Label)) + geom_col() +
   theme(axis.text.x = element_text(angle=90)) + coord_polar() + scale_y_log10()
 ```
+
+
+Employment and unemloyment bar graph
+
+```{r}
+subset_sterling <- sterling[c(2, 7),]
+inLabor <- as.numeric(sub("%", "", subset_sterling[1, "...4"]))
+outLabor <- as.numeric(sub("%", "", subset_sterling[2, "...4"]))
+subset_sterling[, "...4"] <- c(inLabor, outLabor)
+
+
+ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.25) + labs(x = "Available to work", y= "percent population", caption = " Source : DP03 ACS data 2016-2020", title = "Labour force")+ guides(fill = guide_legend(title = "Labour Force"))
 ```
+The graph shows us the percentage of the population that is part of the labor force which is 77.2% and also the percentage of population that is not in the labor force which is 22.8%
+
+```{r}
+sterling <- read_excel("C:/Users/abdul/Downloads/DSPG/Employmentsterling.xlsx",skip=2,col_names=TRUE)
+subset_sterling <- sterling[(4:5), c(1,4)]
+employed <- as.numeric(sub("%", "", subset_sterling[1, "...4"]))
+unemployed <- as.numeric(sub("%", "", subset_sterling[2, "...4"]))
+subset_sterling[, "...4"] <- c(employed, unemployed)
+
+
+ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.25) + labs(x = "Employment Status", y= "Percentage population", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment")+ guides(fill = guide_legend(title = "Employment"))
+```
+
+s
+Commuting to work bar graph
+```{r}
+subset_sterling <- sterling[c(20:25),]
+percNum <- c()
+for(i in 1:6){
+  percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
+}
+subset_sterling[, "...4"] <- percNum
+ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = sqrt(...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90)) + labs(x = "Commute", y = "sqrt of percentages", caption = " Source : DP03 ACS data 2016-2020")+ guides(fill = guide_legend(title = "Method of Commute"))  #+ coord_polar()## REALLY have to note it's a sqrt()
+```
+The bar graph shows the different modes of commute. With driving alone being the  most popular one and walking is the least popular commute method to work. 
+
+```{r}
+library(plotly)
+
+
+subset_sterling <- sterling[c(20:25),]
+percNum <- c()
+for(i in 1:6){
+  percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
+}
+subset_sterling[, "...4"] <- percNum
+ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90)) + labs(x = "Commute", y = "sqrt of percentages", caption = " Source : DP03 ACS data 2016-2020")+ guides(fill = guide_legend(title = "Method of Commute"))  #+ coord_polar()## REALLY have to note it's a sqrt()
+
+# sterling <- data.frame("Categorie"=rownames(sterling), sterling)
+# percNum <- c(percNum, as.numeric(sub("%", "", sterling[i, "...4"])))
+# data <- sterling[,c('Categorie', 'percNum')]
+# 
+# fig <- plot_ly(data, labels = ~Categorie, values = ~percNum, type = 'pie')
+# fig <- fig %>% layout(title = 'United States Personal Expenditures by Categories in 1960',
+#          xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+#          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+# 
+# fig
+
+```
+
+
+bar graph for occupation 
+```{r}
+subset_sterling <- sterling[c(29:33),]
+percNum <- c()
+for(i in 1:5){
+  percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
+}
+subset_sterling[, "...4"] <- percNum
+ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
+```
+
+The bar graph shows the population percentage and their occupations. Management, business, science, and arts occupation is the most popular occupation in the sterling area. Production and transportation occupation is the least popular which tells us that sterling area is less of a industrial area and more of a corporate area which offers more of the service industry. 
