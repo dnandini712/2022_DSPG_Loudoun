@@ -1,5 +1,5 @@
 ---
-title: "Performance"
+title: "Performance/Grades"
 author: "Leonard-Allen"
 date: '2022-06-15'
 output: html_document
@@ -19,14 +19,30 @@ library(readr)
 ```
 
 
+
 # Importing the data
 ```{r message=FALSE, warning=FALSE}
-Assessments <- read_csv("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Loudoun/data/raw/Assessments.csv", 
-                        col_names = T, skip = 2)
+#Assessments <- read_csv("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Loudoun/data/raw/Assessments.csv", 
+#                        col_names = T, skip = 2)
+
+#I have an excel cleaned version
+Assessments <- read_excel("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Loudoun/data/new/Assessments.xlsx")
+
+#View(Assessments)
+#str(Assessments)
 ```
 
+```{r}
+as.factor(Assessments$Year) %>% str()
+as.factor(Assessments$Division) %>% str()
+as.factor(Assessments$School) %>% str()
+as.factor(Assessments$Subgroup) %>% str()
+as.factor(Assessments$`Test Level`) %>% str()
+as.factor(Assessments$`Subject Area`) %>% str()
+as.factor(Assessments$Subject) %>% str()
+```
 
-# subsetting the data
+# subsetting the data for each school
 ```{r}
 Guilford <- Assessments[which(Assessments$School == "Guilford Elementary"),]
 Forest <- Assessments[which(Assessments$School == "Forest Grove Elementary"),]
@@ -37,7 +53,31 @@ Sully <- Assessments[which(Assessments$School == "Sully Elementary"),]
 ```
 
 
-# Guilford
+# Making the year discrete
+```{r}
+Year <- c("2018/2019","2020/2021") %>% as.factor()
+```
+
+# Schools
+## Forest Grove Elementary
+```{r}
+FGE_All <- Forest[which(Forest$Subgroup=="All Students"),] 
+
+#filter for only subjects
+FGE_eng <- Forest[which(FGE_All$Subject=="English Reading"),] 
+#Use ggplot
+plot(Year, FGE_eng$`Percent Pass`)
+
+FGE_math <- Forest[which(FGE_All$Subject=="Mathematics"),] 
+#Use ggplot
+plot(Year, FGE_eng$`Percent Pass`)
+
+FGE_sci <- Forest[which(FGE_All$Subject=="Science"),] 
+#Use ggplot
+plot(Year, FGE_eng$`Percent Pass`)
+
+```
+## School 2
 ```{r}
 
 ```
