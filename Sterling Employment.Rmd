@@ -67,7 +67,7 @@ unemployed <- as.numeric(sub("%", "", subset_sterling[2, "...4"]))
 subset_sterling[, "...4"] <- c(employed, unemployed)
 
 
-ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.25) + labs(x = "Employment Status", y= "Percentage population", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment")+ guides(fill = guide_legend(title = "Employment"))
+ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.25) + labs(x = "Employment Status", y= "Percentage population", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment")+ guides(fill = guide_legend(title = "Employment"))+ scale_y_continuous(limits = c(0,80))
 ```
 
 s
@@ -93,7 +93,7 @@ for(i in 1:6){
   percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
 }
 subset_sterling[, "...4"] <- percNum
-ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90)) + labs(x = "Commute", y = "sqrt of percentages", caption = " Source : DP03 ACS data 2016-2020")+ guides(fill = guide_legend(title = "Method of Commute"))  #+ coord_polar()## REALLY have to note it's a sqrt()
+ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90)) + labs(x = "Commute", y = "Percentage", caption = " Source : DP03 ACS data 2016-2020")+ guides(fill = guide_legend(title = "Method of Commute"))  #+ coord_polar()## REALLY have to note it's a sqrt()
 
 # sterling <- data.frame("Categorie"=rownames(sterling), sterling)
 # percNum <- c(percNum, as.numeric(sub("%", "", sterling[i, "...4"])))
@@ -117,7 +117,7 @@ for(i in 1:5){
   percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
 }
 subset_sterling[, "...4"] <- percNum
-ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
+ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
 ```
 
 The bar graph shows the population percentage and their occupations. Management, business, science, and arts occupation is the most popular occupation in the sterling area. Production and transportation occupation is the least popular which tells us that sterling area is less of a industrial area and more of a corporate area which offers more of the service industry. 

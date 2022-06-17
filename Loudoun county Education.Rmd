@@ -88,6 +88,8 @@ summed_edu <- subset_sterling %>%
   group_by(Label) %>%
   summarize(edu_sum = sum(Estimate...2))
 summed_edu1 <- summed_edu[-(10:15),]
+summed_edu2 <- summed_edu1[-(7),]
+summed_edu3 <- summed_edu2[-(4),]
 
 # edu_data <- summed_edu[!(Label %chin% c("Population"))]
 # edu_data <- subset_sterling %>% summarize(Bachelor's degree or higher= sum(Bachelors+Bachelor's degree or higher),
@@ -95,7 +97,7 @@ summed_edu1 <- summed_edu[-(10:15),]
 ```
 
 ```{r}
-ggplot(summed_edu1,aes(Label, edu_sum)) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "Qualification", y = "Number of population", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Education Qualification") + coord_flip()
+ggplot(summed_edu3,aes(Label, edu_sum)) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "Qualification", y = "Number of population", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Education Qualification") + coord_flip()
 ```
 
 ```{r}
