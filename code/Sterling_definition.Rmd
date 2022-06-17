@@ -102,7 +102,7 @@ color="red",
 weight = 0.5,
 smoothFactor = 0.2,
 fillOpacity = 0.5) %>%
-  addMarkers(~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(Address)) 
+  addMarkers(~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(School)) 
 
 
 # Plot it
