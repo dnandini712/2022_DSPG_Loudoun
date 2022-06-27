@@ -21,6 +21,12 @@ library(readr)
 
 
 # Importing the data
+## Data has following variables to consider:
+- Percent Pass
+- Percent Proficiency
+- Advance
+- Fail
+- Total number
 ```{r message=FALSE, warning=FALSE}
 #Assessments <- read_csv("C:/Users/Leo Allen/Desktop/DSPG/2022_DSPG_Loudoun/data/raw/Assessments.csv", 
 #                        col_names = T, skip = 2)
@@ -57,12 +63,10 @@ Sully <- Assessments[which(Assessments$School == "Sully Elementary"),]
 ```
 
 
-
-
-
-# Making the year discrete
 ```{r}
-Year <- c("2018/2019","2020/2021") %>% as.factor()
+# Dont run this chunk, used as a test only
+# Making the year discrete
+#Year <- c("2018/2019","2020/2021") %>% as.factor()
 ```
 
 
@@ -75,7 +79,8 @@ ALL6 %>%
 #+legend()
 #+  scale_fill_viridis_c(breaks = c(breaks you’d like), option = "E") # change the option if you’d like to change the theme of the palette
 ```
-# Schools
+
+# Schools' Percent Pass
 ## Forest Grove Elementary
 ```{r}
 FGE_All <- Forest[which(Forest$Subgroup=="All Students"),] 
