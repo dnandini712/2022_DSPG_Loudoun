@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 #Loading the packages
-```{r}
+```{r include=FALSE}
 library(ggplot2)
 library(dplyr)
 library(tidyverse)
@@ -63,21 +63,22 @@ Sully <- Assessments[which(Assessments$School == "Sully Elementary"),]
 ```
 
 
-```{r}
+```{r include=FALSE}
 # Dont run this chunk, used as a test only
 # Making the year discrete
 #Year <- c("2018/2019","2020/2021") %>% as.factor()
 ```
 
 
-# More work need to be done here for the legend and the color pallette
+# More work needs to be done here for the color pallette
 ```{r}
 ALL6 %>% 
-  arrange(School) %>% #the column you'd like to be arranged into order)   %>% 
-  group_by(Subject) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("School") 
-
-#+legend()
+  arrange(Subject) %>% #the column you'd like to be arranged into order)   %>% 
+  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Subject`)) + geom_bar(stat="identity") + labs(title='Academic Performance For Elementary School by Subject', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("School") 
 #+  scale_fill_viridis_c(breaks = c(breaks you’d like), option = "E") # change the option if you’d like to change the theme of the palette
+
+  ALL6 %>% arrange(Subject) %>% #the column you'd like to be arranged into order)   %>% 
+group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Academic Performance For Elementary School by Subjects', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("School") 
 ```
 
 # Schools' Percent Pass
@@ -98,13 +99,10 @@ FGE_sci <- Forest[which(FGE_All$Subject=="Science"),]
 #Use ggplot
 #plot(Year, FGE_sci$`Percent Pass`)
 
-```
 
-
-```{r}
 FGE_All %>% 
   arrange(Subject) %>% #the column you'd like to be arranged into order)   %>% 
-  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject") 
+  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Academic Performance for Forest Grove',caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject") 
 ```
 
 ## Guilford Elementary
@@ -220,12 +218,16 @@ SUL_All %>%
   group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject") 
 ```
 
+# Other variables if interested
+
+- Percent Proficiency
+- Advance
+- Fail
+- Total number
 
 
 
-
-
-#Do not delete, just my template
+# Do not delete, just my template
 ```{r}
 #You could make x=year, y= pass rate, and facet_wrap by school
 
