@@ -78,7 +78,7 @@ ALL6 %>%
 #+  scale_fill_viridis_c(breaks = c(breaks you’d like), option = "E") # change the option if you’d like to change the theme of the palette
 
   ALL6 %>% arrange(Subject) %>% #the column you'd like to be arranged into order)   %>% 
-group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Academic Performance For Elementary School by Subjects', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("School") 
+group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Academic Performance For Elementary School by Subject', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("School") 
 ```
 
 # Schools' Percent Pass
@@ -87,22 +87,33 @@ group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent P
 FGE_All <- Forest[which(Forest$Subgroup=="All Students"),] 
 
 #filter for only subjects
-FGE_eng <- Forest[which(FGE_All$Subject=="English Reading"),] 
+FGE_eng <- Forest[which(Forest$Subject=="English Reading"),] 
 #Use ggplot
 #plot(Year, FGE_eng$`Percent Pass`)
 
-FGE_math <- Forest[which(FGE_All$Subject=="Mathematics"),] 
+FGE_math <- Forest[which(Forest$Subject=="Mathematics"),] 
 #Use ggplot
 #plot(Year, FGE_math$`Percent Pass`)
 
-FGE_sci <- Forest[which(FGE_All$Subject=="Science"),]
+FGE_sci <- Forest[which(Forest$Subject=="Science"),]
 #Use ggplot
 #plot(Year, FGE_sci$`Percent Pass`)
 
 
 FGE_All %>% 
   arrange(Subject) %>% #the column you'd like to be arranged into order)   %>% 
-  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Academic Performance for Forest Grove',caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject") 
+  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Forest Grove Elementary Academic Performance for Forest Grove',caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject") 
+
+
+
+EMS1 <- rbind(FGE_eng, FGE_math, FGE_sci)
+FEMS <- EMS1[which(EMS1$Subgroup=="All Students"),] 
+
+FEMS %>% 
+  arrange(Subject) %>% #the column you'd like to be arranged into order)   %>% 
+  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Forest Grove Elementary Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject")
+
+
 ```
 
 ## Guilford Elementary
@@ -114,17 +125,25 @@ GUIL_eng <- Guilford[which(GUIL_All$Subject=="English Reading"),]
 #Use ggplot
 #plot(Year, GUIL_eng$`Percent Pass`)
 
-GUIL_math <- Guilford[which(GUIL_All$Subject=="Mathematics"),] 
+GUIL_math <- Guilford[which(Guilford$Subject=="Mathematics"),] 
 #Use ggplot
 #plot(Year, GUIL_math$`Percent Pass`)
 
-GUIL_sci <- Guilford[which(GUIL_All$Subject=="Science"),]
+GUIL_sci <- Guilford[which(Guilford$Subject=="Science"),]
 #Use ggplot
 #plot(Year, GUIL_sci$`Percent Pass`)
 
 GUIL_All %>% 
   arrange(Subject) %>% #the column you'd like to be arranged into order)   %>% 
-  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject") 
+  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Guilford Elementary Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject") 
+
+EMS2 <- rbind(GUIL_eng, GUIL_math, GUIL_sci)
+GEMS <- EMS2[which(EMS2$Subgroup=="All Students"),] 
+
+GEMS %>% 
+  arrange(Subject) %>% #the column you'd like to be arranged into order)   %>% 
+  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Guilford Elementary Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject")
+
 ```
 
 
@@ -133,21 +152,31 @@ GUIL_All %>%
 ROLL_All <- Rolling[which(Rolling$Subgroup=="All Students"),] 
 
 #filter for only subjects
-ROLL_eng <- Rolling[which(ROLL_All$Subject=="English Reading"),] 
+ROLL_eng <- Rolling[which(Rolling$Subject=="English Reading"),] 
 #Use ggplot
 #plot(Year, ROLL_eng$`Percent Pass`)
 
-ROLL_math <- Rolling[which(ROLL_All$Subject=="Mathematics"),] 
+ROLL_math <- Rolling[which(Rolling$Subject=="Mathematics"),] 
 #Use ggplot
 #plot(Year, ROLL_math$`Percent Pass`)
 
-ROLL_sci <- Rolling[which(ROLL_All$Subject=="Science"),]
+ROLL_sci <- Rolling[which(Rolling$Subject=="Science"),]
 #Use ggplot
 #plot(Year, ROLL_sci$`Percent Pass`)
 
 ROLL_All %>% 
   arrange(Subject) %>% #the column you'd like to be arranged into order)   %>% 
-  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject") 
+  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Rolling Ridge Elementary Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject")
+
+
+EMS3 <- rbind(ROLL_eng, ROLL_math, ROLL_sci)
+REMS <- EMS3[which(EMS3$Subgroup=="All Students"),] 
+
+REMS %>% 
+  arrange(Subject) %>% #the column you'd like to be arranged into order)   %>% 
+  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Rolling Ridge Elementary Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject")
+
+
 ```
 
 
@@ -156,21 +185,30 @@ ROLL_All %>%
 STER_All <- Sterling[which(Sterling$Subgroup=="All Students"),] 
 
 #filter for only subjects
-STER_eng <- Sterling[which(STER_All$Subject=="English Reading"),] 
+STER_eng <- Sterling[which(Sterling$Subject=="English Reading"),] 
 #Use ggplot
 #plot(Year, STER_eng$`Percent Pass`)
 
-STER_math <- Sterling[which(STER_All$Subject=="Mathematics"),] 
+STER_math <- Sterling[which(Sterling$Subject=="Mathematics"),] 
 #Use ggplot
 #plot(Year, STER_math$`Percent Pass`)
 
-STER_sci <- Sterling[which(STER_All$Subject=="Science"),]
+STER_sci <- Sterling[which(Sterling$Subject=="Science"),]
 #Use ggplot
 #plot(Year, STER_sci$`Percent Pass`)
 
 STER_All %>% 
   arrange(Subject) %>% #the column you'd like to be arranged into order)   %>% 
-  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject") 
+  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Sterling Elementary Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject") 
+
+
+EMS4 <- rbind(STER_eng, STER_math, STER_sci)
+STEMS <- EMS4[which(EMS4$Subgroup=="All Students"),] 
+
+STEMS %>% 
+  arrange(Subject) %>% #the column you'd like to be arranged into order)   %>% 
+  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Sterling Elementary Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject")
+
 ```
 
 ## Sugarland
@@ -178,21 +216,31 @@ STER_All %>%
 SUG_All <- Sugar[which(Sugar$Subgroup=="All Students"),] 
 
 #filter for only subjects
-SUG_eng <- Sugar[which(SUG_All$Subject=="English Reading"),] 
+SUG_eng <- Sugar[which(Sugar$Subject=="English Reading"),] 
 #Use ggplot
 #plot(Year, STER_eng$`Percent Pass`)
 
-SUG_math <- Sugar[which(SUG_All$Subject=="Mathematics"),] 
+SUG_math <- Sugar[which(Sugar$Subject=="Mathematics"),] 
 #Use ggplot
 #plot(Year, STER_math$`Percent Pass`)
 
-SUG_sci <- Sugar[which(SUG_All$Subject=="Science"),]
+SUG_sci <- Sugar[which(Sugar$Subject=="Science"),]
 #Use ggplot
 #plot(Year, STER_sci$`Percent Pass`)
 
 SUG_All %>% 
   arrange(Subject) %>% #the column you'd like to be arranged into order)   %>% 
-  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject") 
+  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Sugarland Elementary Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject")
+
+EMS5 <- rbind(SUG_eng, SUG_math, SUG_sci)
+SUTEMS <- EMS5[which(EMS5$Subgroup=="All Students"),] 
+
+SUTEMS %>% 
+  arrange(Subject) %>% #the column you'd like to be arranged into order)   %>% 
+  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Sugarland Elementary Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject")
+
+
+
 ```
 
 
@@ -201,21 +249,32 @@ SUG_All %>%
 SUL_All <- Sully[which(Sully$Subgroup=="All Students"),] 
 
 #filter for only subjects
-SUL_eng <- Sully[which(STER_All$Subject=="English Reading"),] 
+SUL_eng <- Sully[which(Sully$Subject=="English Reading"),] 
 #Use ggplot
 #plot(Year, STER_eng$`Percent Pass`)
 
-SUL_math <- Sully[which(STER_All$Subject=="Mathematics"),] 
+SUL_math <- Sully[which(Sully$Subject=="Mathematics"),] 
 #Use ggplot
 #plot(Year, STER_math$`Percent Pass`)
 
-SUL_sci <- Sully[which(STER_All$Subject=="Science"),]
+SUL_sci <- Sully[which(Sully$Subject=="Science"),]
 #Use ggplot
 #plot(Year, STER_sci$`Percent Pass`)
 
 SUL_All %>% 
   arrange(Subject) %>% #the column you'd like to be arranged into order)   %>% 
-  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject") 
+  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Sully Elementary Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject")
+
+EMS6 <- rbind(SUL_eng, SUL_math, SUL_sci)
+SULTEMS <- EMS6[which(EMS6$Subgroup=="All Students"),] 
+
+SULTEMS %>% 
+  arrange(Subject) %>% #the column you'd like to be arranged into order)   %>% 
+  group_by(School) %>%  ggplot(aes(x = Year, y = `Percent Pass`, fill = `Percent Pass`)) + geom_bar(stat="identity") + labs(title='Sully Elementary Academic Performance', caption = "Source: VDOE \n No data for 2019/2020 due to COVID/school closure") + facet_wrap("Subject")
+
+
+
+
 ```
 
 # Other variables if interested
