@@ -33,11 +33,18 @@ subset_sterling <- sterling[6:18,c(1, 10:13)]
 subset_sterling
 sterling$Percent...12[6:18]
 age_estimate <- sterling$Percent...12[6:18]
+age_estimate <- gsub("%","",age_estimate)
+age_percent <- as.numeric(age_estimate)
 age_cat <- (subset_sterling$Label)
 #this is how to subset the data
 #turn categories into factors 
-ggplot(subset_sterling,aes(x=age_cat,y=age_estimate, fill=age_cat))+geom_col()+theme(axis.text.x=element_text(size=7.5, face="bold"),axis.text.y = element_blank(),axis.ticks.y=element_blank())+scale_x_discrete(limits=age_cat)+labs(title="Age Demographics of Sterling, VA",subtitle="2016-2020",caption= "Source: S0101 ACS data 2016-2020",x="Age Group",y="Estimated Percent of Population",) + coord_polar() + guides(fill = guide_legend(title = "Age Group")) 
+ggplot(subset_sterling,aes(x=age_cat,y=age_percent, fill=age_cat))+geom_col()+theme(axis.text.x=element_blank(), axis.title.x = element_blank(), axis.text.y = element_blank(),axis.ticks.y=element_blank())+scale_x_discrete(limits=age_cat)+labs(caption= "Source: S0101 ACS 5-year data 2016-2020",y="Percent",)+ coord_polar()+guides(fill = guide_legend(title = "Age Group")) + geom_text(aes(label = age_percent, y = age_percent), size = 3, position = position_stack(vjust = 0.8))
+```
+
+```{r}
 
 ```
+
+
 
 The age demographics of the CDP Sterling, VA reveal that the largest demographic is 35 to 44 years old, then closely following are 25 to 34 years old, followed by 45 to 54 years old. Those in the age demographics of 5 to 9, 10 to 14, 15 to 19, and 20 to 24 make up roughly the same proportion within Sterling however the under 5 years category is slightly larger. The smallest age groups consist of 75 to 84 years old and over 85 years old.  
