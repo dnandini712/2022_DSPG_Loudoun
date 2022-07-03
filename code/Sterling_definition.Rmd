@@ -144,7 +144,7 @@ summary(shape@data)
 
 shapemap <- ggplot() + geom_polygon(data = shape, aes(x = "INTPTLON", y = "INTPTLAN"), colour = "black", fill = NA)
 
-shape + theme_void()
+shape 
 
 par(mar=c(0,0,0,0))
 plot(shapemap, col="#f2f2f2", bg="skyblue", lwd=0.25, border=0 )
@@ -153,15 +153,15 @@ plot(shapemap, col="#f2f2f2", bg="skyblue", lwd=0.25, border=0 )
 #lapply(shp_df, class)
 
 #ggplot() + 
-  geom_sf(data = shapemap, size = 3, color = "black", fill = "cyan1") + 
-  ggtitle("AOI Boundary Plot") + 
-  coord_sf()
+  #geom_sf(data = shapemap, size = 3, color = "black", fill = "cyan1") + 
+  #ggtitle("AOI Boundary Plot") + 
+  #coord_sf()
 
-shape
+#shape
 ```
 
 ```{r}
 par(mar=c(0,0,0,0))
-plot(shape, col="#f2f2f2", bg="skyblue", lwd=0.25, border=0 )
+plot(sugarland, col="#f2f2f2", bg="skyblue", lwd=0.25, border=0 )
 ```
 
