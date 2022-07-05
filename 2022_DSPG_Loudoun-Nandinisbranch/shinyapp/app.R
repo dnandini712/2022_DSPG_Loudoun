@@ -80,7 +80,7 @@ blocks_CDP<-c("Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","B
 
 va_20_CDP <- va20_2 %>% filter (NAME %in% blocks_CDP)
 
-map <- read_excel(paste0(getwd(), "/data/school_locations.xlsx"))
+map <- read_excel(paste0(getwd(), "/shinyapp/data/school_locations.xlsx"))
 
 map$Longitude <- as.numeric(map$Longitude)
 map$Latitude <- as.numeric(map$Latitude)
@@ -107,7 +107,7 @@ vars <- load_variables(year = 2020,
                        cache = TRUE)
 dim(vars)
 
-sterling <- read_excel(paste0(getwd(),"/data/sterlingdata.xlsx"),skip=1,col_names=TRUE)
+sterling <- read_excel(paste0(getwd(),"/shinyapp/data/sterlingdata.xlsx"),skip=1,col_names=TRUE)
 subset_sterling <- sterling[6:18,c(1, 10:13)]
 subset_sterling
 sterling$Percent...12[6:18]

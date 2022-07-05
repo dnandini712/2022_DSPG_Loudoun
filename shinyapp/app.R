@@ -81,8 +81,8 @@ va_20_CDP <- va20_2 %>% filter (NAME %in% blocks_CDP)
 
 map <- read_excel(paste0(getwd(), "/data/school_locations.xlsx"))
 
-map$Longitude <- as.numeric(map$Longitude)
-map$Latitude <- as.numeric(map$Latitude)
+map$Longitudes <- as.numeric(map$Longitudes)
+map$Latitudes <- as.numeric(map$Latitudes)
 
 
 map1<-leaflet(data = map) %>% addTiles() %>%
@@ -91,12 +91,12 @@ map1<-leaflet(data = map) %>% addTiles() %>%
               weight = 0.5,
               smoothFactor = 0.2,
               fillOpacity = 0.5) %>%
-  addMarkers(~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(Address)) %>% addPolygons(data = va_20_CDP,
+  addMarkers(~Longitudes, ~Latitudes, popup = ~as.character(Address), label = ~as.character(Address)) %>% addPolygons(data = va_20_CDP,
                                                                                                                     color="red",
                                                                                                                     weight = 0.5,
                                                                                                                     smoothFactor = 0.2,
                                                                                                                     fillOpacity = 0.5) %>%
-  addMarkers(~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(School)) 
+  addMarkers(~Longitudes, ~Latitudes, popup = ~as.character(Address), label = ~as.character(School)) 
 
 #---------Age pie chart---------------------------------------
 

@@ -29,7 +29,7 @@ library(dplyr)
 library(ggplot2)
 library(tidycensus)
 
-sterling <- read_excel("sterlingdata.xlsx",skip=1,col_names=TRUE)
+sterling <- read_excel(paste0(getwd(), "/sterlingdata.xlsx"),skip=1,col_names=TRUE)
 subset_sterling <- sterling[3:4,c(1,6:7)]
 
 

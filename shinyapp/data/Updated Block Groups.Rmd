@@ -157,7 +157,7 @@ va_20_CDP <- va20_2 %>% filter (NAME %in% blocks_CDP)
 
 ```{r}
 
-map <- read_excel("Sterling_Youth_Development.xlsx")
+map <- read_excel(paste0(getwd(), "/shinyapp/data/Sterling_Youth_Development.xlsx"))
 subset_map <- map[1:11,c(1,2:3)]
 
 subset_map$Longitude <- as.numeric(subset_map$Longitude)
