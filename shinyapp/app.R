@@ -162,7 +162,7 @@ race_subset <- races[(1:153),c(1,5,6,7)]
 School <- race_subset$`School Name`
 race <- race_subset$Race
 total <- race_subset$`Full Time Count (All Grades)`
-raceehtn <- ggplot(race_subset, aes(x=race,y=total,fill=School))+ geom_col()+labs(x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1") + scale_fill_discrete(name = "")
+raceehtn <- ggplot(race_subset, aes(x=race,y=total,fill=School))+ geom_col()+labs(x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1),axis.text.x=element_text(angle=90)) + scale_fill_brewer(palette = "Set1") + scale_fill_discrete(name = "")
 raceehtn<-ggplotly(raceehtn)
 
 #attendance --------------
