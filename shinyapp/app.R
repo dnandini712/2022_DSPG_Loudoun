@@ -97,7 +97,17 @@ map1<-leaflet(data = map) %>% addTiles() %>%
                                                                                                                     weight = 0.5,
                                                                                                                     smoothFactor = 0.2,
                                                                                                                     fillOpacity = 0.5) %>%
-  addMarkers(~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(School)) 
+  addMarkers(~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(School))
+
+
+#----------Gender---------------------------------------------
+
+labelsG = c("Male", "Female")
+valuesG = c(15282, 14989)
+gender <- plot_ly(type='pie', labels=labelsG, values=valuesG, 
+                textinfo='label+percent',
+                insidetextorientation='radial', marker = list(colors = c('20AFCC', 'F56D4F'))) %>% layout(title ='', legend=list(title=list(text='')))
+gender
 
 #---------Age pie chart---------------------------------------
 
@@ -282,8 +292,8 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                                        "Property Value" = "propval"
                                                        ),
                                                      ), 
-                                                     withSpinner(plotOutput("ageplot", height = "500px", width = "60%")),
-                                                     
+                                                     withSpinner(plotOutput("ageplot1", height = "500px", width = "60%")),
+                                                     withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%")),
                                               ),
                                               # column(12, 
                                               #      h4("References: "), 
@@ -304,9 +314,9 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                                        "Gender" = "cgender",
                                                        "Race/Ethnicity" ="crace", 
                                                        "Hispanic Population" = "chispanic",
-                                                       "No. of teacher" = "teacher",
-                                                       "Enrollment" = "enrol", 
-                                                       "Absences By Quarter" = "absense", 
+                                                       "No. of teacher" = "cteacher",
+                                                       "Enrollment" = "cenrol", 
+                                                       "Absences By Quarter" = "cabsense", 
                                                        "Chronic Absenteeism" = "chronic"
                                                      ),
                                                      ), 
@@ -336,20 +346,29 @@ server <- function(input, output, session) {
     map1
   })
   
-  ageVar <- reactive({
+  Var <- reactive({
     input$demosdrop
   })
   
-  output$ageplot <- renderPlot({
-    if (ageVar() == "age") {
+  output$ageplot1 <- renderPlot({
+    if (Var() == "age") {
       
       age
     }
-    else if (ageVar() == "faminc") {
+    else if (Var() == "faminc") {
      income
     }
-    else if(ageVar() == "pov"){
+    
+  })
+  
+  output$ageplot2 <- renderPlotly({
+    if (Var() == "pov") {
+      
       pov
+    }
+    
+    else if (Var() == "gender") {
+      gender
     }
     
   })
