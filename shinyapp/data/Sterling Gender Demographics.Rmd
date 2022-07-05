@@ -137,13 +137,6 @@ Here is a map visualization of the female population in Sterling,VA. I used the 
 
 #Gender Pie Chart
 ```{r}
-# 3D Exploded Pie Chart
-library(plotrix)
-slices.GENDER <- c(50.5, 49.5)
-lbls.GENDER <- c("Males 50.5%", "Females 49.5%")
-pie3D(slices.GENDER,labels=lbls.GENDER,explode=0.1,
-   main="Source: DP05 ACS 5-yr 2016-2020") 
-
 library(plotly)
 
 labelsG = c("Male", "Female")

@@ -152,6 +152,15 @@ ggplot(subset_poverty_as, aes(x=povas_cat,y=povas_pop,fill=Sex)) +
 
 pov <- ggplot(subset_poverty_as,aes(x=povas_cat,y=povas_pop, fill=Sex))+geom_col(position="dodge",width=1.5)+theme(axis.text.x=element_text(angle=90, size=7.5, face="bold"),axis.title.x = element_blank())+scale_x_discrete(limits=povas_cat[1:length(povas_cat)/2])+labs(caption= "Source: B17001 ACS 5-year data 2016-2020",x="Age",y="Total Population")+ scale_fill_discrete(name = "", labels = c("Female", "Male")) 
 
+#-----------------Gender-------------------------------------
+
+labelsG = c("Male", "Female")
+valuesG = c(15282, 14989)
+
+figG <- plot_ly(type='pie', labels=labelsG, values=valuesG, 
+                textinfo='label+percent',
+                insidetextorientation='radial', marker = list(colors = c('20AFCC', 'F56D4F'))) %>% layout(title ='', legend=list(title=list(text='')))
+
 
 
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
@@ -308,7 +317,7 @@ ui <- navbarPage(title = "DSPG 2022",
                                                      h4(strong("Sterling, CDP")),
                                                      selectInput("demosdrop", "Select Variable:", width = "60%", choices = c(
                                                        "Age" = "age",
-                                                       "Gender" = "gender",
+                                                       "Gender" = "figG",
                                                        "Race/ethnicity" = "race", 
                                                        "Educational Attainment" = "edu",
                                                        "Poverty by Age and Sex" = "pov", 
