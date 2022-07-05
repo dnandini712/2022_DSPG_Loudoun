@@ -18,13 +18,12 @@ library(readxl)
 
 bar graph for enrollment Sugarland 2016 - 2020
 ```{r}
-enrollment <- read_excel("C:/Users/abdul/Downloads/DSPG/Enrollment 16-20.xlsx",skip=0,col_names=TRUE)
+enrollment <- read_excel("C:/Users/abdul/Downloads/DSPG/2022_DSPG_Loudoun/Shinyapp/data/Enrollment 16-20.xlsx",skip=0,col_names=TRUE)
 subset_enrollment <- enrollment[(1:4), (1:7)]
 subset_enrollment$'Year'
 subset_enrollment$Year <- as.factor(subset_enrollment$'Year')
 
-# ggplot(subset_enrollment,aes(Year, (subset_enrollment$Sugarland), fill = Year)) + geom_col(width =0.25) +
-#   theme(axis.text.x = element_text(angle=0)) + labs(x = "School Year", y = "Number of Students", caption = " Source : Virginia Department of Education", title = 'Total Enrollment of Sugarland Elementary')
+
 Years <- as.numeric(subset_enrollment$Year)
 ggplot(subset_enrollment, aes(x = as.numeric(Year), y = `Sugarland`, group_by = Years, color = 'Sugarland'), size = 4) + geom_line(size = 2, color = 'skyblue') + geom_point(size = 3, color = 'black')+ scale_x_discrete(limits = subset_enrollment$Year) + theme(legend.position = "none", axis.text.x = element_text(angle=0))+ labs(x = "School Year", y = "Number of Students", caption = " Source : Virginia Department of Education", title = "Total Enrollment of Sugarland Elementary")+ scale_y_continuous(limits = c(500,600))+ theme(panel.background = element_rect(fill = "grey95"))
 # library(plotly)

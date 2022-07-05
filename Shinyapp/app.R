@@ -97,7 +97,17 @@ map1<-leaflet(data = map) %>% addTiles() %>%
                                                                                                                     weight = 0.5,
                                                                                                                     smoothFactor = 0.2,
                                                                                                                     fillOpacity = 0.5) %>%
-  addMarkers(~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(School)) 
+  addMarkers(~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(School))
+
+
+#----------Gender---------------------------------------------
+
+labelsG = c("Male", "Female")
+valuesG = c(15282, 14989)
+gender <- plot_ly(type='pie', labels=labelsG, values=valuesG, 
+                  textinfo='label+percent',
+                  insidetextorientation='radial', marker = list(colors = c('20AFCC', 'F56D4F'))) %>% layout(title ='', legend=list(title=list(text='')))
+gender
 
 #---------Age pie chart---------------------------------------
 
@@ -153,7 +163,23 @@ ggplot(subset_poverty_as, aes(x=povas_cat,y=povas_pop,fill=Sex)) +
 
 pov <- ggplot(subset_poverty_as,aes(x=povas_cat,y=povas_pop, fill=Sex))+geom_col(position="dodge",width=1.5)+theme(axis.text.x=element_text(angle=90, size=7.5, face="bold"),axis.title.x = element_blank())+scale_x_discrete(limits=povas_cat[1:length(povas_cat)/2])+labs(caption= "Source: B17001 ACS 5-year data 2016-2020",x="Age",y="Total Population")+ scale_fill_discrete(name = "", labels = c("Female", "Male")) 
 
+#------------------employment-----------------
+sterling <- read_excel("C:/Users/abdul/Downloads/DSPG/2022_DSPG_Loudoun/Shinyapp/data/Employmentsterling.xlsx",skip=2,col_names=TRUE)
+subset_sterling <- sterling[c(29:33),]
+percNum <- c()
+for(i in 1:5){
+  percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
+}
+subset_sterling[, "...4"] <- percNum
+employment <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
 
+#---------------------health insurance----------------------------
+
+
+health <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
+
+subset_health <- health[c(103:105),]
+healthin <- ggplot(subset_health, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020", titlel = "Distribution of Health Insurance") + guides(fill = guide_legend(title = "Health Insurance Type"))+ theme(axis.text.x = element_text(angle=0))+ coord_flip()
 
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
@@ -279,11 +305,14 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                                        "Poverty by Age and Sex" = "pov", 
                                                        "Marital Status" = "mar",
                                                        "Family Income" = "faminc",
-                                                       "Property Value" = "propval"
+                                                       "Property Value" = "propval",
+                                                       "Employment" = "employment",
+                                                       "Health Insurance" = "health"
+                                                       
                                                      ),
                                                      ), 
-                                                     withSpinner(plotOutput("ageplot", height = "500px", width = "60%")),
-                                                     
+                                                     withSpinner(plotOutput("ageplot1", height = "500px", width = "60%")),
+                                                     withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%")),
                                               ),
                                               # column(12, 
                                               #      h4("References: "), 
@@ -304,9 +333,9 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                                        "Gender" = "cgender",
                                                        "Race/Ethnicity" ="crace", 
                                                        "Hispanic Population" = "chispanic",
-                                                       "No. of teacher" = "teacher",
-                                                       "Enrollment" = "enrol", 
-                                                       "Absences By Quarter" = "absense", 
+                                                       "No. of teacher" = "cteacher",
+                                                       "Enrollment" = "cenrol", 
+                                                       "Absences By Quarter" = "cabsense", 
                                                        "Chronic Absenteeism" = "chronic"
                                                      ),
                                                      ), 
@@ -336,20 +365,37 @@ server <- function(input, output, session) {
     map1
   })
   
-  ageVar <- reactive({
+  Var <- reactive({
     input$demosdrop
   })
   
-  output$ageplot <- renderPlot({
-    if (ageVar() == "age") {
+  output$ageplot1 <- renderPlot({
+    if (Var() == "age") {
       
       age
     }
-    else if (ageVar() == "faminc") {
+    else if (Var() == "faminc") {
       income
     }
-    else if(ageVar() == "pov"){
+    else if (Var() == "employment"){
+      employment
+    }
+    else if (Var() == "health") {
+      
+      healthin 
+    }
+    
+    
+  })
+  
+  output$ageplot2 <- renderPlotly({
+    if (Var() == "pov") {
+      
       pov
+    }
+    
+    else if (Var() == "gender") {
+      gender
     }
     
   })
@@ -358,4 +404,3 @@ server <- function(input, output, session) {
 #sociodemo tabset ----------------------------------------------------
 
 shinyApp(ui = ui, server = server)
- 
