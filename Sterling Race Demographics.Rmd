@@ -61,7 +61,7 @@ valuesR = c(18138, 3132, 418, 5313, 144, 4570)
 
 figR <- plot_ly(type='pie', labels=labelsR, values=valuesR, 
                textinfo='label+percent',
-               insidetextorientation='radial') %>% layout(title ='Race & Ethnicity Percentage', legend=list(title=list(text='Race/Ethnicity')))
+               insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Race/Ethnicity')))
 
 figR
 ```
@@ -76,7 +76,7 @@ valuesH = c(12472, 17799)
 
 figH <- plot_ly(type='pie', labels=labelsH, values=valuesH, 
                textinfo='label+percent',
-               insidetextorientation='radial') %>% layout(title ='Hispanic Percentage', legend=list(title=list(text='Race/Ethnicity')))
+               insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Race/Ethnicity')))
 
 figH
 

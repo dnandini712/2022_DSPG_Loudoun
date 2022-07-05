@@ -29,7 +29,7 @@ library(ggplot2)
 library(tidycensus)
 
 sterlingPV <- read_csv("Property_Value.csv",skip=1,col_names=TRUE)
-#subset_sterlingPV <- sterlingPV[c(92:99),c(1,2:3)]
+#subset_sterlingPV_TESTING <- sterlingPV[c(92:99),c(1,2:3)]
 
 Property_Value_estimate <- subset_sterlingPV$...2 
 as.numeric(gsub(",","",Property_Value_estimate))
@@ -45,17 +45,42 @@ This bar graph displays how many home-owned properties fall into each value set.
 
 #Home owner vs renter demographic (pie chart)
 ```{r}
-# Sample Pie Chart
-slices.HOUSING <- c(73.9, 26.1)
-lbls.HOUSING <- c("Owner-Occupied 73.9%", "Renter-Occupied 26.1%")
-pie(slices.HOUSING, labels = lbls.HOUSING, main="Pie Chart of Home-owners vs Home-renters In Sterling,VA")
+library(plotly)
 
-# 3D Exploded Pie Chart
-library(plotrix)
-slices.HOUSING <- c(73.9, 26.1)
-lbls.HOUSING <- c("Owner-Occupied", "Renter-Occupied")
-pie3D(slices.HOUSING,labels=lbls.HOUSING,explode=0.5,
-   main="Pie Chart of Home-owners vs Home-renters In Sterling,VA") 
+lbls.HOUSING = c("Owners", "Renters")
+slices.HOUSING = c(6839, 2412)
+
+figHOUSING <- plot_ly(type='pie', labels=lbls.HOUSING, values=slices.HOUSING, 
+               textinfo='label+percent',
+               insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Occupants')))
+
+figHOUSING 
+
+dfpv <- data.frame(Valuepv=c('Less than $50,000', '$50,000 to $99,000', '$100,000 to $149,999', '$150,000 to $199,999', '$200,000 to $299,999', '$300,000 to $499,999', '$500,000 to $999,999', '$1,000,000 or more'), Numberpv=c(58,6,46,204,1137,4653,709,26))
+
+dfpv <- plot_ly(dfpv, 
+        labels = ~Valuepv, 
+        values = ~Numberpv, 
+        type = "pie",
+        sort = FALSE, direction = "counterclockwise",
+               textinfo='percent',
+               insidetextorientation='radial') %>%
+    layout(legend = list(x = 1, y = 0.5))
+
+dfpv
+
+
+#Donute Chart
+dfpv <- subset_sterlingPV
+dfpv <- dfpv %>% group_by(`HOUSING OCCUPANCY`)
+dfpv <- dfpv %>% summarise(count = ...2)
+figpv <- dfpv %>% plot_ly(labels = ~`HOUSING OCCUPANCY`, values = ~dfpv$count)
+figpv <- figpv %>% add_pie(hole = 0.6)
+figpv <- figpv %>% layout(title = "",  showlegend = T,
+                      xaxis = list(showgrid = TRUE, zeroline = TRUE, showticklabels = TRUE),
+                      yaxis = list(showgrid = TRUE, zeroline = TRUE, showticklabels = TRUE))
+
+figpv
 ```
 This pie chart shows, in percentage, how many occupied homes in Sterling,VA are occupied by the owner themselves, or renters. As displayed, Owner-occupied homes are significantly larger than renter-occupied homes. Owner-occupied homes make up about 6,839 or 73.9% of the total estimated 9,548 occupied homes in Sterling,VA. Renter-occupied homes come in at a low 2,412 or 26.1% out of the total estimated 9,548 homes. 
 

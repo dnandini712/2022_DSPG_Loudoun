@@ -1,0 +1,370 @@
+---
+title: "Pulling ACS Data in R"
+author: "DSPG"
+date: "`r format(Sys.time(), '%B %Y')`"
+output:
+  html_document:
+    toc: yes
+    toc_depth: '3'
+    df_print: paged
+  html_notebook:
+    highlight: pygments
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(include = TRUE, warning = FALSE, message = FALSE)
+library(tidycensus)
+library(tidyverse)
+theme_set(theme_bw())
+```
+
+
+## Getting Started: Setting a Working Directory
+
+## Getting Started: Census Data Interface
+
+To get a feel for the data we will be working with, let us visit the Census's website at <https://data.census.gov/cedsci/>
+
+## Getting Started: Getting a API Key
+
+In order to pull data from the Census using `R`, we will need an API key. 
+
+Go ahead and visit <https://www.census.gov/data/developers/data-sets.html> and sign up for an API key (it's free!). The direct link is <https://api.census.gov/data/key_signup.html>.
+
+
+## Installing  `tidycensus`
+
+We will utilize the `tidycensus` package to pull data from the ACS into R.
+
+- First, we will have to install the package using the syntax:
+
+```{r, eval = FALSE}
+install.packages("tidycensus")
+```
+
+We need only to do this once so it would be best to do this in the console.
+
+- Before every session, you will need to load the package into the `R` environment. We will load the package using:
+
+```{r, eval = FALSE}
+library(tidycensus)
+```
+
+- Again, in your console, install your census key. The argument `install = TRUE` is optional. It is used to install your API key for use in future sessions. This is a safer alternative than presenting your key in your codes for others to see.
+
+```{r, eval = FALSE}
+census_api_key("PASTE-YOUR-KEY-HERE", install = TRUE)
+```
+
+## `tidycensus` Basics
+
+There are 2 major functions in the `tidycensus` package: 
+
+`get_decennial()`: 
+  : grants access to the 2000 and 2010 decennial US Census APIs, 
+
+`get_acs()`:
+ : allows access to the 1-year and 5-year American Community Survey (ACS) APIs.
+
+## API in Motion
+
+### What was the total number of females across states in the U.S. in 2020?
+
+```{r}
+tot_female <- get_acs(geography = "state",
+                       variables = "B01001_026", 
+                       year = 2020)
+tot_female %>% head()
+```
+
+### Understanding the `GEOID`
+
+The `GEOID` above represents the Federal Information Processing Series (FIPS) codes for each state and the District of Columbia. 
+
+See link here <https://www.census.gov/library/reference/code-lists/ansi.html>. 
+
+
+### Visualizing the data
+
+```{r,fig.height=4}
+tot_female %>% ggplot(aes(x = estimate/1000000, y = NAME)) + 
+  geom_point(col = "red") + labs(x = "Total Females ('millions')")
+```
+
+The plot above is a bit difficult to see so lets reorder the plot based on the value.
+
+```{r, fig.height=4}
+tot_female %>% ggplot(aes(x = estimate, 
+                          y = reorder(NAME,estimate))) + 
+  geom_point(color = 'navy blue')
+```
+
+### Geographies
+
+Similar to the line of code above where we pulled the median age information, we can select other `geography` parameters.
+
+That is we can select data at other levels such as census regions, census tracts, counties, etc.
+
+For example:
+![Geography Arguments](geos.png)
+
+## Searching for Variables
+
+We can search of the potential variables directly in `R`. 
+
+```{r eval = TRUE}
+variables <- load_variables(2020, "acs5", cache = TRUE)
+
+View(variables)
+```
+
+Filtering:
+Now we can use the filter command to get to our variable(s) of interest quicker.
+
+![Filtering Variables](Filtering.gif)
+
+
+## Using `get_acs`
+
+By default, the `get_acs` function pulls the 5-year ACS. 
+
+For this example, we will pull the Median income across Virginia Counties 
+
+```{r}
+va20 <- get_acs(geography = "county", 
+              variables = c(medincome = "B19326_001"), 
+              state = "VA", 
+              year = 2020)
+va20 %>% head()
+```
+
+If we would like the 1-year ACS, we would include `survey = "acs1"` explicitly.
+
+
+```{r}
+va19.acs1 <- get_acs(geography = "county", 
+              variables = c(medincome = "B19326_001"), 
+              state = "VA",
+              survey = "acs1",
+              year = 2019)
+va19.acs1 %>% head()
+```
+
+
+### Visualizing the Data
+
+To help our visualization, I will present only the first 30 counties in the plot.
+```{r, fig.heigh=4.5}
+va20[1:30,] %>% ggplot(aes(x = estimate, y = reorder(GEOID,estimate))) +
+  labs(title = "Median Income (2016 -- 2020)", subtitle = "Look at me now", y = "County ID", 
+       caption = "Source: ACS 5-Year") +
+  geom_point(color = "hotpink")
+
+```
+
+### Montgomery county
+
+```{r}
+get_mc <- get_acs(geography = "county", state = 51,
+                      county = 121,
+                      variables = c(medincome = "B19326_001"),
+                      year = 2020)
+get_mc %>% head()
+```
+
+
+### Multiple counties
+
+To pull multiple (specific) counties, it would be best to use a loop to achieve this.
+
+```{r}
+#Specify your counties of interest
+mycounty <- c(103, 111, 119, 121)
+
+# Before looping start with the first county
+get_multi <- get_acs(geography = "county", state = 51,
+                      county = mycounty[1],
+                      variables = c(medincome = "B19326_001"),
+                      year = 2020)
+
+## Pull all other counties of interest in one go
+for(i in 2:length(mycounty)){
+temp <- get_acs(geography = "county", state = 51,
+                      county = mycounty[i],
+                      variables = c(medincome = "B19326_001"),
+                      year = 2018)
+
+#Combine the counties at each stage of the loop
+get_multi <- rbind(get_multi,temp)
+}
+get_multi %>% head()
+
+ggplot(aes(x = NAME, y = estimate, fill = NAME), data = get_multi) + 
+  geom_bar(stat = "identity") + theme(legend.position = "none")
+```
+
+## Pulling Multiple Variables
+Below, we will pull variables across two counties at the tract level. We are most interested in the `Sex by Age` variable. 
+
+This time, to filter the variables in the ACS database, we will use the `filter` command from the `tidyverse` package. 
+
+Below, we will filter the ACS Data set to get the codes for the `Sex by Age` series. Recall that earlier we used the `load_variable` command to see all the variables in the ACS data base. Also, we stored this in a variable called `variables`. The `Sex by Age` was reported under the `concept` column.
+
+```{r}
+variables %>% filter(concept == "SEX BY AGE")
+```
+
+We can quickly see that the code for `Estimate!!Total` is `B01001_001` and `B01001_002` for the `Estimate!!Total!!Male` etc.
+
+Now, we can proceed to pulling data for the 25-39 Age groups for Males. In the later block, we will use the `mutate` function to perform calculations on our variables (and create new variables).
+
+```{r}
+county2 <- c("Montgomery County", "Richmond County")
+myvars <- c(
+# Sex by AGE
+  
+## Total
+"B01001_001", 
+
+## Male
+"B01001_002",
+
+## Males (25-39)
+"B01001_011", "B01001_012", "B01001_013")
+
+dat1 <- get_acs(geography = "tract", state = 51,
+                county = county2, variables = myvars,
+                output = "wide", year = 2020,
+                geometry = TRUE,
+                keep_geo_vars = TRUE)
+dat1 %>% head()
+```
+
+Notice the `geometry = TRUE` argument? We will use this to pull the geographical data for the census tracts. In a few, we will produce some basic maps of the data.
+
+### Creating new variables
+
+We need to compute the percentage of Males within 25--39 age group (relative to the total number of males).
+
+For this, we will use the `mutate` argument. The previous variables remain unchanged and the new variable, `age25.39` will be added.
+
+```{r}
+my_acs_tract <- dat1 %>% 
+  mutate(
+  age25.39 = 100*(B01001_011E + B01001_012E + B01001_013E)/B01001_002E
+  )
+
+my_acs_tract %>% head()
+```
+
+### Plot data
+
+```{r}
+ggplot(aes(x = age25.39, y = TRACTCE, color = TRACTCE), data = my_acs_tract) + geom_point(size = 3) +
+  labs(y = NULL, x = "%", title = "Percentage of males in 25 -- 39 Age group") +
+  theme(axis.title.y=element_blank(), #Mute the y values
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+```
+
+
+## Exporting the Data (`.csv`)
+
+We can use the `write.csv` option to export our data to our working directory. This will allow us to manipulate the data further later or use in another program.
+
+For this example, use the `get_multi` data set we created earlier using the loop.
+
+```{r}
+write.csv(get_multi, file = "ACS-county.csv")
+``` 
+
+This is where setting the working directory becomes important. Notice that I did not have to set the adsolute path to my directory. Instead, R will place the data there for me.
+
+**Question:** What about storing the data in a "Data" Folder?
+
+- Within your working directory, create the "Data" folder
+- Specify that sub-folder in the `file` argument when writing the `.csv` file.
+
+```{r}
+write.csv(get_multi, file = "DSPG-R-Training/data/ACS-county.csv")
+``` 
+
+## Importing the Data (`.csv`)
+
+Now let us re-import the data (saved in the Data folder) into our R session. We will call it `import.mult` so that we can distinguish it from the original dataset above.
+
+We will use the `read.csv` function here.
+
+```{r}
+import.mult <- read.csv("DSPG-R-Training/data/ACS-county.csv")
+```
+
+
+## Plot Data
+
+As promised, here is a flavor of how to produce quick maps using the `tidycensus` package.
+
+For this exercise, we will plot the percentages of males computed and stored in the `my_acs_tract` dataset.
+
+**Method 1: Using the `plot` function**
+
+```{r}
+plot(my_acs_tract["age25.39"], 
+     main = "Percentage Males in 25 -- 39 Age Group")
+
+```
+
+**Method 2: Using the `ggplot` function**
+
+```{r}
+ggplot(data = my_acs_tract, aes(fill = age25.39)) + 
+  geom_sf() + 
+  scale_fill_distiller(palette = "Blues",
+                       direction = 1) + 
+  labs(title = "Percentage Males in 25 -- 39 Age Group",
+       caption = "Data source: 2016 -- 2020 5-year ACS",
+       fill = "Estimate") + 
+  theme_bw()
+```
+
+## Your Turn
+
+For this exercise, your task is to pull the median household income across all states in the U.S. in 2020.
+
+- Pull the data and store it into a variable called `med.income`. Be sure to add the `geometry = TRUE` argument to store the mapping data.
+  - You might need to do a filter of the variables to find the code.
+- Use the `head()` command to get a feel for your data.
+
+```{r}
+med.income <- get_acs(geography = "state",
+                      variables = "B19013_001",
+                      year = 2020,
+                      geometry = TRUE)
+med.income %>% head()
+  
+```
+
+
+- Next, use the ggplot syntax to plot the map of the 
+
+```{r}
+plot(med.income["estimate"])
+
+ggplot(data = med.income, aes(fill= estimate)) + 
+  geom_sf() + scale_fill_distiller(palette = "Blue",
+                                   direction = 1) + 
+  labs(title = "Change This", 
+       caption = "Data source: 2016 -- 2020 5-year ACS", 
+       fill = "Estimate") +
+  theme_classic()
+```
+
+
+
+## Need More R Help?
+
+Chapter 13 of this Data Wrangling website might prove useful: https://dcl-wrangle.stanford.edu/census.html 
+

@@ -3,6 +3,8 @@ title: "Updated Block Groups"
 author: "NDP"
 date: '2022-06-14'
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 
@@ -24,9 +26,9 @@ Teachers <- c(32, 52, 66, 55, 59, 35)
 Staff <- c(49, 22, 27, 20, 29, 19)
 dataSTAFF <- data.frame(Schools, Teachers, Staff)
 
-figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = 'Teachers')
-figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff')
-figSTM <- figSTM %>% layout(yaxis = list(title = 'Count'), barmode = 'stack')
+figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = 'Teachers', marker = list(color = 'rgb(255, 2, 2 )'))
+figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(20, 252, 241 )'))
+figSTM <- figSTM %>% layout(yaxis = list(title = 'Total Number'), barmode = 'stack')
 
 figSTM
 ```
