@@ -1,3 +1,4 @@
+# Load Packages ---------------------------------------------------------------
 library(dplyr)
 library(tidycensus)
 library(ggplot2)
@@ -96,7 +97,17 @@ map1<-leaflet(data = map) %>% addTiles() %>%
                                                                                                                     weight = 0.5,
                                                                                                                     smoothFactor = 0.2,
                                                                                                                     fillOpacity = 0.5) %>%
-  addMarkers(~Longitudes, ~Latitudes, popup = ~as.character(Address), label = ~as.character(School)) 
+  addMarkers(~Longitudes, ~Latitudes, popup = ~as.character(Address), label = ~as.character(School))
+
+
+#----------Gender---------------------------------------------
+
+labelsG = c("Male", "Female")
+valuesG = c(15282, 14989)
+figG <- plot_ly(type='pie', labels=labelsG, values=valuesG, 
+                  textinfo='label+percent',
+                  insidetextorientation='radial', marker = list(colors = c('20AFCC', 'F56D4F'))) %>% layout(title ='', legend=list(title=list(text='')))
+figG
 
 #---------Age pie chart---------------------------------------
 
@@ -152,16 +163,13 @@ ggplot(subset_poverty_as, aes(x=povas_cat,y=povas_pop,fill=Sex)) +
 
 pov <- ggplot(subset_poverty_as,aes(x=povas_cat,y=povas_pop, fill=Sex))+geom_col(position="dodge",width=1.5)+theme(axis.text.x=element_text(angle=90, size=7.5, face="bold"),axis.title.x = element_blank())+scale_x_discrete(limits=povas_cat[1:length(povas_cat)/2])+labs(caption= "Source: B17001 ACS 5-year data 2016-2020",x="Age",y="Total Population")+ scale_fill_discrete(name = "", labels = c("Female", "Male")) 
 
-#-----------------Gender-------------------------------------
-
-labelsG = c("Male", "Female")
-valuesG = c(15282, 14989)
-
-figG <- plot_ly(type='pie', labels=labelsG, values=valuesG, 
-                textinfo='label+percent',
-                insidetextorientation='radial', marker = list(colors = c('20AFCC', 'F56D4F'))) %>% layout(title ='', legend=list(title=list(text='')))
+#---------------------health insurance----------------------------
 
 
+health <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
+
+subset_health <- health[c(103:105),]
+healthin <- ggplot(subset_health, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020", titlel = "Distribution of Health Insurance") + guides(fill = guide_legend(title = "Health Insurance Type"))+ theme(axis.text.x = element_text(angle=0))+ coord_flip()
 
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
@@ -201,44 +209,8 @@ jscode <- "function getUrlVars() {
            }
            "
 
-
-jscode <- "function getUrlVars() {
-                var vars = {};
-                var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-                    vars[key] = value;
-                });
-                return vars;
-            }
-           function getUrlParam(parameter, defaultvalue){
-                var urlparameter = defaultvalue;
-                if(window.location.href.indexOf(parameter) > -1){
-                    urlparameter = getUrlVars()[parameter];
-                    }
-                return urlparameter;
-            }
-            var mytype = getUrlParam('type','Empty');
-            function changeLinks(parameter) {
-                links = document.getElementsByTagName(\"a\");
-                for(var i = 0; i < links.length; i++) {
-                   var link = links[i];
-                   var newurl = link.href + '?type=' + parameter;
-                   link.setAttribute('href', newurl);
-                 }
-            }
-           var x = document.getElementsByClassName('navbar-brand');
-           if (mytype != 'economic') {
-             x[0].innerHTML = '<div style=\"margin-top:-14px\"><a href=\"https://datascienceforthepublicgood.org/node/451\">' +
-                              '<img src=\"DSPG_black-01.png\", alt=\"DSPG 2020 Symposium Proceedings\", style=\"height:42px;\">' +
-                              '</a></div>';
-             //changeLinks('dspg');
-           } else {
-             x[0].innerHTML = '<div style=\"margin-top:-14px\"><a href=\"https://datascienceforthepublicgood.org/economic-mobility/community-insights/case-studies\">' +
-                              '<img src=\"AEMLogoGatesColorsBlack-11.png\", alt=\"Gates Economic Mobility Case Studies\", style=\"height:42px;\">' +
-                              '</a></div>';
-             //changeLinks('economic');
-           }
-           "
-ui <- navbarPage(title = "DSPG 2022",
+# user -------------------------------------------------------------
+ui <- navbarPage(title = "DSPG-LivDiv 2022",
                  selected = "overview",
                  theme = shinytheme("lumen"),
                  tags$head(tags$style('.selectize-dropdown {z-index: 10000}')),
@@ -323,11 +295,12 @@ ui <- navbarPage(title = "DSPG 2022",
                                                        "Poverty by Age and Sex" = "pov", 
                                                        "Marital Status" = "mar",
                                                        "Family Income" = "faminc",
-                                                       "Property Value" = "propval"
+                                                       "Property Value" = "propval",
+                                                       "Health Insurance" = "health"
                                                      ),
                                                      ), 
-                                                     withSpinner(plotOutput("ageplot", height = "500px", width = "60%")),
-                                                     
+                                                     withSpinner(plotOutput("ageplot1", height = "500px", width = "60%")),
+                                                     withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%")),
                                               ),
                                               # column(12, 
                                               #      h4("References: "), 
@@ -348,9 +321,9 @@ ui <- navbarPage(title = "DSPG 2022",
                                                        "Gender" = "cgender",
                                                        "Race/Ethnicity" ="crace", 
                                                        "Hispanic Population" = "chispanic",
-                                                       "No. of teacher" = "teacher",
-                                                       "Enrollment" = "enrol", 
-                                                       "Absences By Quarter" = "absense", 
+                                                       "No. of teacher" = "cteacher",
+                                                       "Enrollment" = "cenrol", 
+                                                       "Absences By Quarter" = "cabsense", 
                                                        "Chronic Absenteeism" = "chronic"
                                                      ),
                                                      ), 
@@ -369,6 +342,7 @@ ui <- navbarPage(title = "DSPG 2022",
                  
 )
 
+
 # server -----------------------------------------------------------
 server <- function(input, output, session) {
   # Run JavaScript Code
@@ -379,24 +353,38 @@ server <- function(input, output, session) {
     map1
   })
   
-  ageVar <- reactive({
+  Var <- reactive({
     input$demosdrop
   })
   
-  output$ageplot <- renderPlot({
-    if (ageVar() == "age") {
+  output$ageplot1 <- renderPlot({
+    if (Var() == "age") {
       
       age
     }
-    else if (ageVar() == "faminc") {
+    else if (Var() == "faminc") {
       income
     }
-    else if(ageVar() == "pov"){
+    else if (Var() == "health") {
+      
+      healthin 
+    }
+    
+  })
+  
+  output$ageplot2 <- renderPlotly({
+    if (Var() == "pov") {
+      
       pov
+    }
+    
+    else if (Var() == "figG") {
+      figG
     }
     
   })
 }
 
-shinyApp(ui = ui, server = server)
+#sociodemo tabset ----------------------------------------------------
 
+shinyApp(ui = ui, server = server)
