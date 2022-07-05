@@ -106,7 +106,7 @@ vars <- load_variables(year = 2020,
                        cache = TRUE)
 dim(vars)
 
-sterling <- read_excel(paste0(getwd(),"sterlingdata.xlsx"),skip=1,col_names=TRUE)
+sterling <- read_excel(paste0(getwd(),"/data/sterlingdata.xlsx"),skip=1,col_names=TRUE)
 subset_sterling <- sterling[6:18,c(1, 10:13)]
 subset_sterling
 sterling$Percent...12[6:18]
@@ -119,7 +119,7 @@ age_cat <- (subset_sterling$Label)
 age<-ggplot(subset_sterling,aes(x=age_cat,y=age_percent, fill=age_cat))+geom_col()+theme(axis.text.x=element_blank(), axis.title.x = element_blank(), axis.text.y = element_blank(),axis.ticks.y=element_blank())+scale_x_discrete(limits=age_cat)+labs(caption= "Source: S0101 ACS 5-year data 2016-2020",y="Percent",)+ coord_polar()+guides(fill = guide_legend(title = "Age Group")) + geom_text(aes(label = age_percent, y = age_percent), size = 3, position = position_stack(vjust = 0.8))
 
 #-------income--------------------------------
-medianin <- read_excel(paste0(getwd(),"incomemedian.xlsx"))
+medianin <- read_excel(paste0(getwd(),"/data/incomemedian.xlsx"))
 
 subset_medianin <- medianin[4:13, 1:5]
 subset_medianin
@@ -136,7 +136,7 @@ income <- ggplot(subset_medianin,aes(x=mi_cat.fac,y=pop_num, fill=mi_cat.fac))+g
 
 #------------------poverty-------------------------------
 
-poverty_as<- read_excel(paste0(getwd(),"povertybyageandsexnewss.xlsx"), 
+poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
                         sheet = "Data")
 
 subset_poverty_as <- poverty_as[3:28, 1:4]
