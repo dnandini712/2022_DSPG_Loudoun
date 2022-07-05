@@ -163,7 +163,13 @@ ggplot(subset_poverty_as, aes(x=povas_cat,y=povas_pop,fill=Sex)) +
 
 pov <- ggplot(subset_poverty_as,aes(x=povas_cat,y=povas_pop, fill=Sex))+geom_col(position="dodge",width=1.5)+theme(axis.text.x=element_text(angle=90, size=7.5, face="bold"),axis.title.x = element_blank())+scale_x_discrete(limits=povas_cat[1:length(povas_cat)/2])+labs(caption= "Source: B17001 ACS 5-year data 2016-2020",x="Age",y="Total Population")+ scale_fill_discrete(name = "", labels = c("Female", "Male")) 
 
+#---------------------health insurance----------------------------
 
+
+health <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
+
+subset_health <- health[c(103:105),]
+healthin <- ggplot(subset_health, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020", titlel = "Distribution of Health Insurance") + guides(fill = guide_legend(title = "Health Insurance Type"))+ theme(axis.text.x = element_text(angle=0))+ coord_flip()
 
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
@@ -289,7 +295,8 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                                        "Poverty by Age and Sex" = "pov", 
                                                        "Marital Status" = "mar",
                                                        "Family Income" = "faminc",
-                                                       "Property Value" = "propval"
+                                                       "Property Value" = "propval",
+                                                       "Health Insurance" = "health"
                                                        ),
                                                      ), 
                                                      withSpinner(plotOutput("ageplot1", height = "500px", width = "60%")),
@@ -357,6 +364,10 @@ server <- function(input, output, session) {
     }
     else if (Var() == "faminc") {
      income
+    }
+    else if (Var() == "health") {
+      
+     healthin 
     }
     
   })
