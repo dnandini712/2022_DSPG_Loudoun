@@ -26,7 +26,7 @@ subset_enrollment$Year <- as.factor(subset_enrollment$'Year')
 # ggplot(subset_enrollment,aes(Year, (subset_enrollment$Sugarland), fill = Year)) + geom_col(width =0.25) +
 #   theme(axis.text.x = element_text(angle=0)) + labs(x = "School Year", y = "Number of Students", caption = " Source : Virginia Department of Education", title = 'Total Enrollment of Sugarland Elementary')
 Years <- as.numeric(subset_enrollment$Year)
-ggplot(subset_enrollment, aes(x = as.numeric(Year), y = `Sugarland`, group_by = Years, color = 'Sugarland'), size = 4) + geom_line(size = 2, color = 'skyblue') + geom_point(size = 3, color = 'lightgreen')+ scale_x_discrete(limits = subset_enrollment$Year) + theme(legend.position = "none", axis.text.x = element_text(angle=0))+ labs(x = "School Year", y = "Number of Students", caption = " Source : Virginia Department of Education", title = "Total Enrollment of Sugarland Elementary")+ scale_y_continuous(limits = c(500,600))+ theme(panel.background = element_rect(fill = "grey95"))
+ggplot(subset_enrollment, aes(x = as.numeric(Year), y = `Sugarland`, group_by = Years, color = 'Sugarland'), size = 4) + geom_line(size = 2, color = 'skyblue') + geom_point(size = 3, color = 'black')+ scale_x_discrete(limits = subset_enrollment$Year) + theme(legend.position = "none", axis.text.x = element_text(angle=0))+ labs(x = "School Year", y = "Number of Students", caption = " Source : Virginia Department of Education", title = "Total Enrollment of Sugarland Elementary")+ scale_y_continuous(limits = c(500,600))+ theme(panel.background = element_rect(fill = "grey95"))
 # library(plotly)
 # x <- c(as.numeric(Year))
 # random_y <- rnorm(100, mean = 0)
@@ -41,7 +41,7 @@ bargraph for Sterling
 # ggplot(subset_enrollment,aes(Year, (subset_enrollment$Sterling), fill = Year)) + geom_col(width = 0.25) +
 #   theme(axis.text.x = element_text(angle=0))+ labs(x = "School Year", y = "Number of Students", caption = " Source : Virginia Department of Education", title = "Total Enrollment of Sterling Elementary")
 Years <- as.numeric(subset_enrollment$Year)
-ggplot(subset_enrollment, aes(x = as.numeric(Year), y = `Sterling`, group_by = Years, color = Years)) + geom_line(color = 'skyblue',size = 2) + geom_point(size = 3, color = 'lightgreen')+ scale_x_discrete(limits = subset_enrollment$Year) + theme(legend.position = "none", axis.text.x = element_text(angle=0))+ labs(x = "School Year", y = "Number of Students", caption = " Source : Virginia Department of Education", title = "Total Enrollment of Sterling Elementary")+ scale_y_continuous(limits = c(400,600))+ theme(panel.background = element_rect(fill = "grey95"))
+ggplot(subset_enrollment, aes(x = as.numeric(Year), y = `Sterling`, group_by = Years, color = Years)) + geom_line(color = 'skyblue',size = 2) + geom_point(size = 3, color = 'black')+ scale_x_discrete(limits = subset_enrollment$Year) + theme(legend.position = "none", axis.text.x = element_text(angle=0))+ labs(x = "School Year", y = "Number of Students", caption = " Source : Virginia Department of Education", title = "Total Enrollment of Sterling Elementary")+ scale_y_continuous(limits = c(400,600))+ theme(panel.background = element_rect(fill = "grey95"))
 ```
 Bargraph for Rolling Ridge
 ```{r}

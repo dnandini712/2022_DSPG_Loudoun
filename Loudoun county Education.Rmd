@@ -97,7 +97,20 @@ summed_edu3 <- summed_edu2[-(4),]
 ```
 
 ```{r}
-ggplot(summed_edu3,aes(Label, edu_sum)) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "Qualification", y = "Number of population", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Education Qualification") + coord_flip()
+
+df2 <- data.frame(
+levels=c("Less than 9th grade",
+"9th to 12th grade, no diploma","High School graduate",
+"Some college or no degree","Associate's degree",
+"Bachelor's Degree",
+
+"Graduate or professional"),
+number=c(2193, 1943, 4050, 3094, 1396, 4706, 2402))
+
+
+
+df2$levels <- factor(df2$levels, levels = df2$levels)
+ggplot(df2,aes(levels, number)) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "", y = "Number of population", caption = " Source : S1501 ACS 5-yr data 2016-2020", title = "") + coord_flip() 
 ```
 
 ```{r}

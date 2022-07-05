@@ -67,7 +67,7 @@ unemployed <- as.numeric(sub("%", "", subset_sterling[2, "...4"]))
 subset_sterling[, "...4"] <- c(employed, unemployed)
 
 
-ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.25) + labs(x = "Employment Status", y= "Percentage population", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment")+ guides(fill = guide_legend(title = "Employment"))+ scale_y_continuous(limits = c(0,80))
+ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.25) + labs(x = "Employment Status", y= "Percentage population", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment")+ guides(fill = guide_legend(title = "Employment"))+ scale_y_continuous(limits = c(0,80.0))
 ```
 
 s
@@ -79,8 +79,32 @@ for(i in 1:6){
   percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
 }
 subset_sterling[, "...4"] <- percNum
-ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = sqrt(...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90)) + labs(x = "Commute", y = "sqrt of percentages", caption = " Source : DP03 ACS data 2016-2020")+ guides(fill = guide_legend(title = "Method of Commute"))  #+ coord_polar()## REALLY have to note it's a sqrt()
+ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y =(...4), fill = `EMPLOYMENT STATUS`)) +geom_bar(position = "stack", stat="identity", width = 0.5) + theme(axis.text.x = element_text(angle=45)) + labs(x = "", y = "", caption = " Source : DP03 ACS data 2016-2020")+ guides(fill = guide_legend(title = "Method of Commute"))+ coord_polar()## REALLY have to note it's a sqrt()#+ geom_bar(position = "stack", stat="identity", width = 0.5)
 ```
+```{r}
+
+slices <- c(20, 21, 22, 23, 24, 25)
+lbls <- c("Drove Alone", "Carpooled", "Public Transportation", "Walked", "Other")
+pct <- round(slices/sum(slices)*100)
+lbls <- paste(lbls, pct) # add percents to labels
+lbls <- paste(lbls,"%",sep="") # ad % to labels
+pie(slices,labels = lbls, col=rainbow(length(lbls)),main="Pie Chart of Countries")
+```
+```{r}
+my_colors <- c("#CA001B", "#1D28B0", "#D71DA4", "#00A3AD", "#FF8200", "#753BBD", "#00B5E2", "#008578", "#EB6FBD", "#FE5000", "#6CC24A", "#D9D9D6", "#AD0C27", "#950078")
+slices.Races <- c(75.0, 14.9, 1.8, 0.4, 3.5, 4.3)
+lbls.Races <- c("Drove Alone 75.0%", "Carpooled 14.9%", "Public Transport 1.8%", "Walked 0.4%","Other means 3.5%","Worked from home 4.3%")
+pie(slices.Races, labels = lbls.Races, main="", sub = "Source: DP03 ACS data 2016-2020")
+library(plotly)
+labelsR = c("Drove Alone", "Carpooled", "Public Transport", "Walked","Other means","Worked from home")
+valuesR = c(12922, 2574, 308, 77, 609, 741)
+figR <- plot_ly(type='pie', labels=labelsR, values=valuesR, 
+               textinfo='label+percent',
+               insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='')))
+figR
+```
+
+
 The bar graph shows the different modes of commute. With driving alone being the  most popular one and walking is the least popular commute method to work. 
 
 ```{r}
