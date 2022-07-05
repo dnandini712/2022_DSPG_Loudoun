@@ -1,0 +1,45 @@
+---
+title: "Sterling,VA Commuter Time"
+author: "NDP"
+date: '2022-06-13'
+output: html_document
+---
+
+```{r set_up_API, }
+readRenviron("~/.Renviron") #readin Census API key
+Sys.getenv("CENSUS_API_KEY") #confirm you have read in your Census API key
+```
+
+```{r}
+library(tidycensus)
+# Set a year of interest
+this.year = 2020
+
+# This looks at the 5 year estimates
+# You can also do "acs1"
+vars <- load_variables(year = 2019,
+                      dataset = "acs5",
+                      cache = TRUE)
+```
+
+#Pie chart for commuter times of population
+
+```{r}
+#Best Pie chart?
+library(plotly)
+
+labelsCT = c("Less than 10 minutes","10 to 14 minutes","15 to 19 minutes","20 to 24 minutes", "25 to 29 minutes", "30 to 34 minutes", "35 to 44 minutes", "45 to 59 minutes", "60 or more minutes")
+valuesCT = c(5.99, 18.0, 16.9, 13.2, 4.8, 13.1, 7.09, 10.2, 10.8)
+
+figCT <- plot_ly(type='funnelarea', labels=labelsCT, values=valuesCT, sort = FALSE, direction = "",
+               textinfo='percent',
+               insidetextorientation='radial') %>% layout(title ='', showlegend=TRUE, legend=list(x=1, y=0.5))
+
+figCT
+```
+
+```{r}
+figCT <- plot_ly(type='pie', labels=labelsCT, values=valuesCT, 
+               textinfo='percent',
+               insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='')))
+```

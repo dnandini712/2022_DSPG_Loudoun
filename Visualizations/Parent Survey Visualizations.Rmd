@@ -1,0 +1,122 @@
+---
+title: "Parent Survey Visualizations"
+author: "NDP"
+date: '2022-06-29'
+output: html_document
+---
+```{r}
+library(ggplot2)
+library(plotly)
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(tidycensus)
+```
+
+Q1: visualization
+```{r}
+parentsurvey <- read_excel("~/Downloads/2022_DSPG_Loudoun/loudoun_parentsurvey.xlsx", col_names=TRUE)
+subset_parentsurveyQ1 <- parentsurvey[1:6,1:2]
+
+schools1 <- subset_parentsurveyQ1$School
+question1 <- subset_parentsurveyQ1$`1f. The school seeks ways to improve my child’s learning.`
+
+question1 <- subset_parentsurveyQ1$`1f. The school seeks ways to improve my child’s learning.`*100
+
+question1 <- as.numeric(question1)
+
+one <- ggplot(subset_parentsurveyQ1,aes(x=schools1,y=question1,fill=schools1))+geom_col()+labs(title="The school seeks ways to improve my child’s learning.",x="School",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = question1, y = question1), size = 3, position = position_stack(vjust = 1.02))
+
+ggplotly(one)
+```
+Out of all of the parents that responded to the survey, over 90 percent of parents at sully, sterling, rolling ridge and guilford believe their school seeks new ways to improve their childrens learning while only 87 percent believe that at forest grove. 100 percent of the parents at sterling believe their school seeks new ways to improve their childrens learning. 
+
+Q2: visualization
+```{r}
+parentsurvey <- read_excel("~/Downloads/2022_DSPG_Loudoun/loudoun_parentsurvey.xlsx", col_names=TRUE)
+subset_parentsurveyQ2 <- parentsurvey[1:6,c(1,3)]
+
+schools2 <- subset_parentsurveyQ2$School
+question2 <- subset_parentsurveyQ2$`2a. This school effectively communicates important information to parents`
+
+question2 <- subset_parentsurveyQ2$`2a. This school effectively communicates important information to parents`*100
+
+question2 <- as.numeric(question2)
+
+two <- ggplot(subset_parentsurveyQ2,aes(x=schools2,y=question2,fill=schools2))+geom_col()+labs(title="This school effectively communicates important information to parents",x="School",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = question2, y = question2), size = 3, position = position_stack(vjust = 1.02))
+
+ggplotly(two)
+```
+Noticably, less than 85 percent of parents at forest grove and sugarland believe their students school effectively communicates important information to parents. the other four schools, guilford, rolling ridge, sterling, and sully have over 90 percent of parents who believe their childs school maintains good communication with them 
+
+Q3: visualization
+```{r}
+parentsurvey <- read_excel("~/Downloads/2022_DSPG_Loudoun/loudoun_parentsurvey.xlsx", col_names=TRUE)
+subset_parentsurveyQ3 <- parentsurvey[1:6,c(1,4)]
+
+schools3 <- subset_parentsurveyQ3$School
+question3 <- subset_parentsurveyQ3$`2d. The school provides a variety of ways for parents to become involved.`
+
+question3 <- subset_parentsurveyQ3$`2d. The school provides a variety of ways for parents to become involved.`*100
+
+question3 <- as.numeric(question3)
+
+three <- ggplot(subset_parentsurveyQ3,aes(x=schools3,y=question3,fill=schools3))+geom_col()+labs(title="The school provides a variety of ways for parents to become involved",x="School",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = question3, y = question3), size = 3, position = position_stack(vjust = 1.02))
+
+ggplotly(three)
+```
+most schools have over 90 percent of parents who believe their childs school provides a variety of ways for parents to become involved but noticably sugarland and forest grove once again, do not meet that mark. 
+
+Q4: visualization
+```{r}
+parentsurvey <- read_excel("~/Downloads/2022_DSPG_Loudoun/loudoun_parentsurvey.xlsx", col_names=TRUE)
+subset_parentsurveyQ4 <- parentsurvey[1:6,c(1,5)]
+
+schools4 <- subset_parentsurveyQ4$School
+question4 <- subset_parentsurveyQ4$`3a. A welcoming environment exists in my child’s school.`
+
+question4 <- subset_parentsurveyQ4$`3a. A welcoming environment exists in my child’s school.`*100
+
+question4 <- as.numeric(question4)
+
+four <- ggplot(subset_parentsurveyQ4,aes(x=schools4,y=question4,fill=schools4))+geom_col()+labs(title="A welcoming environment exists in my child’s school",x="School",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = question4, y = question4), size = 3, position = position_stack(vjust = 1.02))
+
+ggplotly(four)
+```
+interestingly enough, this time every school's parents except guilford's parents believes a welcoming environment exists in their childs school. this could help us determine and ask questions to see why parents feel this way about their school 
+
+Q5: visualization
+```{r}
+parentsurvey <- read_excel("~/Downloads/2022_DSPG_Loudoun/loudoun_parentsurvey.xlsx", col_names=TRUE)
+subset_parentsurveyQ5 <- parentsurvey[1:6,c(1,6)]
+
+schools5 <- subset_parentsurveyQ5$School
+question5 <- subset_parentsurveyQ5$`3b. This school respects diversity and welcomes all cultures.`
+
+question5 <- subset_parentsurveyQ5$`3b. This school respects diversity and welcomes all cultures.`*100
+
+question5 <- as.numeric(question5)
+
+five <- ggplot(subset_parentsurveyQ5,aes(x=schools5,y=question5,fill=schools5))+geom_col()+labs(title="This school respects diversity and welcomes all cultures",x="School",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = question5, y = question5), size = 3, position = position_stack(vjust = 1.02))
+
+ggplotly(five)
+```
+This graph is a visualization of the results from the six title one community schools in sterling from one of  the questions in the parent survey. This question asked in the survey was "This school respects diversity and welcomes all cultures". almost 90 percent of parents at every school feel like their school respects diversity and welcomes all cultures and thats a good thing. everyone should feel respected and appreciated in any environment they are in. 
+
+Q6: visualization
+```{r}
+parentsurvey <- read_excel("~/Downloads/2022_DSPG_Loudoun/loudoun_parentsurvey.xlsx", col_names=TRUE)
+subset_parentsurveyQ6 <- parentsurvey[1:6,c(1,7)]
+
+schools6 <- subset_parentsurveyQ6$School
+question6 <- subset_parentsurveyQ6$`3d. The administration is responsive to parents and children.`
+
+question6 <- subset_parentsurveyQ6$`3d. The administration is responsive to parents and children.`*100
+
+question6 <- as.numeric(question6)
+
+six <- ggplot(subset_parentsurveyQ6,aes(x=schools6,y=question6,fill=schools6))+geom_col()+labs(title="The administration is responsive to parents and children",x="School",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = question6, y = question6), size = 3, position = position_stack(vjust = 1.02))
+
+ggplotly(six)
+```
+This graph is a visualization of the results from the six title one community schools in sterling from one of  the questions in the parent survey. This question asked in the survey was "The administration is responsive to parents and children". Forest grove and Guilford have less than 90 percent of parents who believe The administration is responsive to parents and children and althought that is still a high percentage in the 80's, it would interesting to try to find ways to increase it and make it higher than 90. 
