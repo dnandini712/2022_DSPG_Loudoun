@@ -1,0 +1,152 @@
+---
+title: "Charlotte"
+author: "Abdullah Rizwan"
+date: '2022-06-10'
+output: html_document
+
+    toc: yes
+    toc_depth: '4'
+  html_document:
+    toc: yes
+    toc_depth: 4
+    toc_float:
+      collapsed: yes
+    theme: readable
+colorlinks: yes
+urlcolor: blue
+linkcolor: blue
+citecolor: blue
+anchorcolor: blue
+toccolor: blue
+fontsize: 12pt
+---
+```{r setup, message = FALSE }
+knitr::opts_chunk$set(echo = TRUE)
+#I load my packages as I use them so you can see what 
+#they are used with.
+```
+
+```{r}
+library(tidycensus)
+
+# Set a year of interest
+this.year = 2019
+
+# This looks at the 5 year estimates
+# You can also do "acs1"
+vars <- load_variables(year = 2019,
+                      dataset = "acs5",
+                      cache = TRUE)
+
+# There are 22711 possible variables 
+dim(vars)
+```
+
+```{r}
+## Names for variable types
+# Gives five year estimates
+
+NCS5.2019 <- get_acs(geography = "tract", year=this.year,
+                  state = "NC", county = c("Mecklenburg"), geometry = TRUE,
+                  variables = c(population = "B02001_001",
+                                median.gross.rent = "B25064_001",
+                                median.household.income = "B19013_001",
+                                rent.burden = "B25071_001",
+                                white = "B03002_003", 
+                                af.am = "B03002_004",
+                                hispanic = "B03002_012",
+                                am.ind = "B03002_005",
+                                asian = "B03002_006",
+                                nh.pi = "B03002_007",
+                                multiple = "B03002_009",
+                                other = "B03002_008"))
+head(NCS5.2019)
+```
+```{r}
+library(dplyr)
+Nmyacs_map <- filter(NCS5.2019, variable == "median.household.income")
+# Create a colorblind friendly palette.
+library(viridis)
+
+zap2 <- ggplot(Nmyacs_map$geometry) + geom_sf(aes(fill=Nmyacs_map$estimate)) + 
+    scale_color_viridis_c() + scale_fill_viridis_c()+ 
+    coord_sf(datum = NA) +
+    theme_minimal() +
+  labs(fill = "Med Pop Inc",
+       title = "Median Pop Income by Census Tracts: Mecklenburg, NC",
+       caption = "Note: I used get_acs() to get this data")
+zap2
+
+```
+```{r mapAvar, echo=FALSE}
+library(tigris)
+state_borders <- states(cb = T)
+state_borders <- state_borders %>% 
+                  filter(STATEFP %in% c("37")) #save only geometry for VA
+
+MYMAP3 <- ggplot(Nmyacs_map$geometry) + 
+  geom_sf(data = state_borders, color = 'black', fill = 'grey') + 
+  geom_sf(aes(fill=Nmyacs_map$estimate)) + 
+  scale_color_viridis_c() + scale_fill_viridis_c() + 
+  coord_sf(datum = NA) + 
+  theme_void() +
+   labs(fill = "Med Pop Inc",
+       title = "Median Pop Income Across Census Tracts in Mecklenburg,NC",
+       caption = "Note: I used get_acs() to get this data")
+
+MYMAP3
+```
+
+```{r}
+# Creating a map with leaflet
+library(leaflet)
+
+mypal <- colorNumeric(
+  palette = "magma",
+  domain = Nmyacs_map$estimate
+)
+
+mypal(c(10, 20, 30, 40, 50))
+
+leaflet() %>%
+  addProviderTiles(providers$Stamen.TonerLite) %>%
+  addPolygons(data = Nmyacs_map,
+              color = ~mypal(estimate),
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5,
+              label = ~estimate) %>%
+  addLegend(
+    position = "bottomright",
+    pal = mypal,
+    values = Nmyacs_map$estimate,
+    title = "Median Population Income Across NC Counties"
+  )
+```
+
+```{r}
+#specify the bin breaks
+mybins <- c(0,10000,20000,30000,40000,50000,60000,70000,80000)
+#specify the default color
+mypalette <- colorBin(palette="inferno", domain=Nmyacs_map$estimate, na.color="transparent", bins=mybins)
+
+leaflet(data = Nmyacs_map) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~mypalette(Nmyacs_map$`estimate`),
+    stroke=TRUE,
+    weight = 1,
+    smoothFactor = 0.2,
+    opacity = 1.0,
+    fillOpacity = 0.7, 
+    label=paste("County: ",Nmyacs_map$GEOID, ", Value: ",Nmyacs_map$estimate),
+    highlightOptions = highlightOptions(color = "white",
+                                        weight = 2,
+                                        bringToFront = TRUE)) %>%
+  addLegend(pal=mypalette, position = "bottomright",
+            values = ~Nmyacs_map$estimate,
+            opacity = 0.5, title = "Median Population Income") %>%
+  addPolylines(data = myacs_map, color = "black", 
+               opacity = 0.2, weight = 1)
+
+```
