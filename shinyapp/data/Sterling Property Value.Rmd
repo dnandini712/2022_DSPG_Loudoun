@@ -28,7 +28,7 @@ library(dplyr)
 library(ggplot2)
 library(tidycensus)
 
-sterlingPV <- read_csv("Property_Value.csv",skip=1,col_names=TRUE)
+sterlingPV <- read_excel("Property_Value.xlsx",col_names=TRUE)
 #subset_sterlingPV_TESTING <- sterlingPV[c(92:99),c(1,2:3)]
 
 Property_Value_estimate <- subset_sterlingPV$...2 
@@ -58,27 +58,27 @@ figHOUSING
 
 dfpv <- data.frame(Valuepv=c('Less than $50,000', '$50,000 to $99,000', '$100,000 to $149,999', '$150,000 to $199,999', '$200,000 to $299,999', '$300,000 to $499,999', '$500,000 to $999,999', '$1,000,000 or more'), Numberpv=c(58,6,46,204,1137,4653,709,26))
 
-dfpv <- plot_ly(dfpv, 
-        labels = ~Valuepv, 
-        values = ~Numberpv, 
-        type = "pie",
-        sort = FALSE, direction = "counterclockwise",
-               textinfo='percent',
-               insidetextorientation='radial') %>%
-    layout(legend = list(x = 1, y = 0.5))
+#dfpv <- plot_ly(dfpv, 
+        #labels = ~Valuepv, 
+        #values = ~Numberpv, 
+        #type = "pie",
+        #sort = FALSE, direction = "counterclockwise",
+               #textinfo='percent',
+               #insidetextorientation='radial') %>%
+    #layout(legend = list(x = 1, y = 0.5))
 
-dfpv
-
+#dfpv
 
 #Donute Chart
-dfpv <- subset_sterlingPV
-dfpv <- dfpv %>% group_by(`HOUSING OCCUPANCY`)
-dfpv <- dfpv %>% summarise(count = ...2)
-figpv <- dfpv %>% plot_ly(labels = ~`HOUSING OCCUPANCY`, values = ~dfpv$count)
-figpv <- figpv %>% add_pie(hole = 0.6)
-figpv <- figpv %>% layout(title = "",  showlegend = T,
-                      xaxis = list(showgrid = TRUE, zeroline = TRUE, showticklabels = TRUE),
-                      yaxis = list(showgrid = TRUE, zeroline = TRUE, showticklabels = TRUE))
+dfpv <- read_excel("Property_Value.xlsx",col_names=TRUE)
+#dfpv <- dfpv %>% group_by(`HOUSING OCCUPANCY`)
+#dfpv <- dfpv %>% summarise(count = count)
+
+figpv <- dfpv %>% plot_ly(labels = ~`HOUSING OCCUPANCY`, values = ~dfpv$count, sort = FALSE, direction = "clockwise")
+figpv <- figpv %>% add_pie(hole = 0.5)
+figpv <- figpv %>% layout(title = "", showlegend = T,
+                      xaxis = list(showgrid = TRUE, zeroline = FALSE, showticklabels = TRUE),
+                      yaxis = list(showgrid = TRUE, zeroline = FALSE, showticklabels = TRUE))
 
 figpv
 ```

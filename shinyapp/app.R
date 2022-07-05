@@ -104,10 +104,9 @@ map1<-leaflet(data = map) %>% addTiles() %>%
 
 labelsG = c("Male", "Female")
 valuesG = c(15282, 14989)
-figG <- plot_ly(type='pie', labels=labelsG, values=valuesG, 
+gender <- plot_ly(type='pie', labels=labelsG, values=valuesG, 
                   textinfo='label+percent',
                   insidetextorientation='radial', marker = list(colors = c('20AFCC', 'F56D4F'))) %>% layout(title ='', legend=list(title=list(text='')))
-figG
 
 #---------Age pie chart---------------------------------------
 
@@ -129,6 +128,17 @@ age_cat <- (subset_sterling$Label)
 #turn categories into factors 
 age<-ggplot(subset_sterling,aes(x=age_cat,y=age_percent, fill=age_cat))+geom_col()+theme(axis.text.x=element_blank(), axis.title.x = element_blank(), axis.text.y = element_blank(),axis.ticks.y=element_blank())+scale_x_discrete(limits=age_cat)+labs(caption= "Source: S0101 ACS 5-year data 2016-2020",y="Percent",)+ coord_polar()+guides(fill = guide_legend(title = "Age Group")) + geom_text(aes(label = age_percent, y = age_percent), size = 3, position = position_stack(vjust = 0.8))
 
+#-----------Race/Ethnicity--------------------
+
+library(plotly)
+
+labelsR = c("White", "Black", "Am.Indian", "Asian","Hawaiian","Other")
+valuesR = c(18138, 3132, 418, 5313, 144, 4570)
+
+race <- plot_ly(type='pie', labels=labelsR, values=valuesR, 
+                textinfo='label+percent',
+                insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Race/Ethnicity')))
+
 #-------income--------------------------------
 medianin <- read_excel(paste0(getwd(),"/data/incomemedian.xlsx"))
 
@@ -144,6 +154,33 @@ pop_nop <- subset_medianin$new_pop
 pop_num <- as.numeric(pop_nop)
 income <- ggplot(subset_medianin,aes(x=mi_cat.fac,y=pop_num, fill=mi_cat.fac))+geom_col(stat="identity")+theme(axis.text.x=element_blank(),axis.ticks.y=element_blank(),axis.title.x = element_blank()+scale_x_discrete(limits=mi_cat.fac),axis.text.y=element_blank())+labs(caption= "Source: S1901 ACS 5-year data 2016-2020",x="Income", y="Percent") + coord_polar() + guides(fill = guide_legend(title = "Income Level ($)")) + geom_text(aes(label=pop_num,y=pop_num), size = 3, position = position_stack(vjust = 1.1))
 
+#---------Property Value---------------------------------
+
+dfpv <- read_excel(paste0(getwd(), "/data/Property_Value.xlsx"), col_names = TRUE)
+
+figpv <- dfpv %>% plot_ly(labels = ~`HOUSING OCCUPANCY`, values = ~dfpv$count, sort = FALSE, direction = "clockwise")
+figpv <- figpv %>% add_pie(hole = 0.5)
+property <- figpv %>% layout(title = "", showlegend = T,
+                          xaxis = list(showgrid = TRUE, zeroline = FALSE, showticklabels = TRUE),
+                          yaxis = list(showgrid = TRUE, zeroline = FALSE, showticklabels = TRUE))
+
+#------------Housing Occupancy---------------------------
+
+lbls.HOUSING = c("Owners", "Renters")
+slices.HOUSING = c(6839, 2412)
+
+housing <- plot_ly(type='pie', labels=lbls.HOUSING, values=slices.HOUSING, 
+                      textinfo='label+percent',
+                      insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Occupants')))
+
+#-------------Commuter Time------------------------------
+
+labelsCT = c("Less than 10 minutes","10 to 14 minutes","15 to 19 minutes","20 to 24 minutes", "25 to 29 minutes", "30 to 34 minutes", "35 to 44 minutes", "45 to 59 minutes", "60 or more minutes")
+valuesCT = c(5.99, 18.0, 16.9, 13.2, 4.8, 13.1, 7.09, 10.2, 10.8)
+
+commutertime <- plot_ly(type='funnelarea', labels=labelsCT, values=valuesCT, sort = FALSE, direction = "",
+                 textinfo='percent',
+                 insidetextorientation='radial') %>% layout(title ='', showlegend=TRUE, legend=list(x=1, y=0.5))
 
 #------------------poverty-------------------------------
 
@@ -289,13 +326,15 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                                      h4(strong("Sterling, CDP")),
                                                      selectInput("demosdrop", "Select Variable:", width = "60%", choices = c(
                                                        "Age" = "age",
-                                                       "Gender" = "figG",
+                                                       "Gender" = "gender",
                                                        "Race/ethnicity" = "race", 
                                                        "Educational Attainment" = "edu",
                                                        "Poverty by Age and Sex" = "pov", 
                                                        "Marital Status" = "mar",
                                                        "Family Income" = "faminc",
-                                                       "Property Value" = "propval",
+                                                       "Property Value" = "property",
+                                                       "Housing Occupancy" = "housing",
+                                                       "Commuter Time" = "commutertime",
                                                        "Health Insurance" = "health"
                                                      ),
                                                      ), 
@@ -378,8 +417,29 @@ server <- function(input, output, session) {
       pov
     }
     
-    else if (Var() == "figG") {
-      figG
+    else if (Var() == "gender") {
+     
+       gender
+    }
+    
+    else if (Var() == "race") {
+     
+       race
+    }
+    
+    else if (Var() == "property") {
+      
+      property
+    }
+    
+    else if (Var() == "housing") {
+      
+      housing
+    }
+    
+    else if (Var() == "commutertime") {
+      
+      commutertime
     }
     
   })
