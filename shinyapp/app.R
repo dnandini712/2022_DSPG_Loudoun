@@ -49,6 +49,7 @@ library(ggpubr)
 library(lubridate)
 library(shinyWidgets)
 library(viridis)
+library(dplyr)
 
 
 prettyblue <- "#232D4B"
@@ -134,6 +135,7 @@ pop_num <- as.numeric(pop_nop)
 income <- ggplot(subset_medianin,aes(x=mi_cat.fac,y=pop_num, fill=mi_cat.fac))+geom_col(stat="identity")+theme(axis.text.x=element_blank(),axis.ticks.y=element_blank(),axis.title.x = element_blank()+scale_x_discrete(limits=mi_cat.fac),axis.text.y=element_blank())+labs(caption= "Source: S1901 ACS 5-year data 2016-2020",x="Income", y="Percent") + coord_polar() + guides(fill = guide_legend(title = "Income Level ($)")) + geom_text(aes(label=pop_num,y=pop_num), size = 3, position = position_stack(vjust = 1.1))
 
 
+
 #------------------poverty-------------------------------
 
 poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
@@ -152,9 +154,29 @@ ggplot(subset_poverty_as, aes(x=povas_cat,y=povas_pop,fill=Sex)) +
 
 pov <- ggplot(subset_poverty_as,aes(x=povas_cat,y=povas_pop, fill=Sex))+geom_col(position="dodge",width=1.5)+theme(axis.text.x=element_text(angle=90, size=7.5, face="bold"),axis.title.x = element_blank())+scale_x_discrete(limits=povas_cat[1:length(povas_cat)/2])+labs(caption= "Source: B17001 ACS 5-year data 2016-2020",x="Age",y="Total Population")+ scale_fill_discrete(name = "", labels = c("Female", "Male")) 
 
+#race by school ----------------------------
+
+races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
+
+race_subset <- races[(1:153),c(1,5,6,7)]
+School <- race_subset$`School Name`
+race <- race_subset$Race
+total <- race_subset$`Full Time Count (All Grades)`
+raceehtn <- ggplot(race_subset, aes(x=race,y=total,fill=School))+ geom_col()+labs(x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1") + scale_fill_discrete(name = "")
+raceehtn<-ggplotly(raceehtn)
+
+#attendance --------------
+
+attendance <- read_excel(paste0(getwd(),"/data/absencerate.xlsx"))
+att_per <- attendance$`Absence Rate`
+att_rate <- att_per*100
+quarter <- attendance$`School Quarter`
+School <- attendance$`School Name`
+attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",
+                                                                                                                                                                                      plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
 
 
-# CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
+# CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY ----------------
 jscode <- "function getUrlVars() {
                 var vars = {};
                 var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
@@ -235,7 +257,7 @@ ui <- navbarPage(title = "DSPG 2022",
                  tags$head(tags$style('.selectize-dropdown {z-index: 10000}')),
                  useShinyjs(),
                  
-                 # main tab -----------------------------------------------------------
+# main tab -----------------------------------------------------------
                  tabPanel("Project Overview", value = "overview",
                           fluidRow(style = "margin: 2px;",
                                    align = "center",
@@ -276,7 +298,7 @@ ui <- navbarPage(title = "DSPG 2022",
                           # p(tags$small(em('Last updated: August 2021'))))
                  ),
                  
-                 ## Sterling Area--------------------------------------------
+## Sterling Area--------------------------------------------
                  tabPanel("Sterling Area", value = "overview",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
@@ -337,15 +359,15 @@ ui <- navbarPage(title = "DSPG 2022",
                                                      h4(strong("Community Schools")),
                                                      selectInput("schooldrop", "Select Variable:", width = "60%", choices = c(
                                                        "Gender" = "cgender",
-                                                       "Race/Ethnicity" ="crace", 
+                                                       "Race/Ethnicity" ="raceehtn", 
                                                        "Hispanic Population" = "chispanic",
                                                        "No. of teacher" = "teacher",
                                                        "Enrollment" = "enrol", 
-                                                       "Absences By Quarter" = "absense", 
+                                                       "Absences By Quarter" = "attend", 
                                                        "Chronic Absenteeism" = "chronic"
                                                      ),
                                                      ), 
-                                                     withSpinner(plotOutput("ocuplot", height = "500px")),
+                                                     withSpinner(plotlyOutput("ocuplot", height = "500px")),
                                                      
                                               ),
                                               # column(12, 
@@ -370,6 +392,7 @@ server <- function(input, output, session) {
     map1
   })
   
+  # Sterling Demos
   ageVar <- reactive({
     input$demosdrop
   })
@@ -387,9 +410,22 @@ server <- function(input, output, session) {
     }
     
   })
-}
+ 
+  #School Demos
+   
+schoolVar <- reactive({
+    input$schooldrop
+  })
+
+  output$ocuplot <- renderPlotly({
+    
+    if(schoolVar() == "raceehtn"){
+    raceehtn 
+      }
+    
+  else if(schoolVar()== "attend"){
+    attend }
+  })
+}  
 
 shinyApp(ui = ui, server = server)
-
-
-  
