@@ -136,7 +136,7 @@ income <- ggplot(subset_medianin,aes(x=mi_cat.fac,y=pop_num, fill=mi_cat.fac))+g
 
 
 
-#------------------poverty---------------------------------
+#------------------poverty----------------------------------
 
 poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
                         sheet = "Data")
