@@ -1,0 +1,245 @@
+---
+title: "Isochrone"
+author: "Leonard-Allen"
+Last Update: 7/05/2022
+output:
+  html_document:
+    toc: yes
+    toc_depth: 4
+    toc_float:
+      collapsed: yes
+    theme: readable
+  pdf_document:
+    toc: yes
+    toc_depth: '4'
+colorlinks: yes
+urlcolor: blue
+linkcolor: blue
+citecolor: blue
+anchorcolor: blue
+toccolor: blue
+fontsize: 12pt
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+install.packages("traveltime")
+install.packages("mapview")
+```
+
+# Loading my packages
+
+```{r}
+#setwd("C:/Users/Leo Allen/Desktop/Isochrones/isochrones")  #set the working directory
+
+library(RColorBrewer)
+library(traveltime)
+library(tidyverse)
+library(tidycensus)
+library(sf)
+library(osmdata)
+library(leaflet)
+library(sp)
+library(purrr)
+library(mapview)
+library(osrm)
+library(rmapzen)
+library(rgdal)
+library(ggplot2)
+library(scales)
+library(nycflights13)
+library(readxl)
+```
+
+#TRAVELTIME; install this in R console (NOT R STUDIO)!!!
+#Install the latest version of this package by entering the following in R:
+#install.packages("remotes")
+#remotes::install_github("tlorusso/traveltimeR")
+
+```{r}
+#install.packages("remotes")
+#remotes::install_github("tlorusso/traveltimeR")
+```
+
+
+
+#getting population and maps of surrounding of page from acs
+#I registered for my personal key from the website
+
+##############
+#travel time, I did this once to generate center RDS file
+#to get the api and the id I visited the website and signed up:
+#https://traveltime.com/docs/api/overview/getting-keys
+
+```{r}
+YourAPIKey <- "103eac37d04686a8b0104d96d983c612"
+YourAppId <- "ad147923"
+
+```
+
+
+#Error Check
+```{r eval=FALSE, include=FALSE}
+# retrieve data via request 
+
+# The following transport modes are supported:
+
+# "cycling"", "cycling_ferry", "driving", "driving+train", "driving_ferry", "public_transport", 
+# "walking", "walking+coach", "walking_bus", "walking_ferry" or "walking_train".
+
+# how far can you go by public transport within 30 minutes?
+
+
+
+traveltime30 <- traveltime_map(appId="YourAppId",
+               apiKey="YourAPIKey",
+               location=c(47.378610,8.54000),
+               traveltime=1800,
+               type="public_transport",
+               departure="2018-11-15T08:00:00+01:00")
+
+# ... and within 60 minutes?
+traveltime60 <- traveltime_map(appId="YourAppId",
+               apiKey="YourAPIKey",
+               location=c(47.378610,8.54000),
+               traveltime=3600,
+               type="public_transport",
+               departure="2018-11-15T08:00:00+01:00")
+
+```
+
+
+# Checks: latitude, Longitude, seconds
+# Also, departure time must lie in the future.
+
+```{r}
+# retrieve data via request 
+
+# The following transport modes are supported:
+
+# "cycling"", "cycling_ferry", "driving", "driving+train", "driving_ferry", "public_transport", 
+# "walking", "walking+coach", "walking_bus", "walking_ferry" or "walking_train".
+
+# how far can you go by public transport within 30 minutes?
+
+
+
+traveltime10 <- traveltime_map(appId=YourAppId,
+               apiKey=YourAPIKey,
+               location=c(39.009006,-77.4029155),
+               traveltime=600,
+               type="driving",
+               departure="2022-07-06T08:00:00+01:00")
+
+# ... and within 60 minutes?
+traveltime20 <- traveltime_map(appId=YourAppId,
+              apiKey=YourAPIKey,
+              location=c(39.009006,-77.4029155),
+              traveltime=1200,
+              type="driving",
+              departure="2022-07-06T08:00:00+01:00")
+
+```
+
+
+
+
+
+View the polygons
+```{r}
+#traveltime30
+#traveltime60
+```
+
+
+
+```{r}
+m1 = mapview(traveltime10,  col.regions = c("grey"))
+# add the second layer on top
+m1 + traveltime20
+```
+
+
+```{r}
+read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/schooldata/school_locations.xlsx")
+map <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/schooldata/school_locations.xlsx")
+map$Longitude <- as.numeric(map$Longitudes)
+map$Latitude <- as.numeric(map$Latitudes)
+
+total <- merge(va20_2,map)
+
+#specify the bin breaks
+mybins <- c(0,300,600,900,1200,1500,1800,2100)
+#specify the default color
+mypalette <- colorBin(palette="inferno", domain=va20_2$estimate, na.color="transparent", bins=mybins)
+
+leaflet(data = total) %>%
+  addTiles() %>%
+  addPolygons(
+    stroke=TRUE,
+    weight = 1,
+    smoothFactor = 0.2,
+    opacity = 1.0,
+    fillOpacity = 0.7, 
+    label=paste("County: ",va20_2$GEOID,
+    highlightOptions = highlightOptions(color = "white",
+                                        weight = 2,
+                                        bringToFront = TRUE)) %>% 
+    addPolygons(data=traveltime20, color= "black",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% 
+  addLegend(pal=mypalette, position = "bottomright",
+            values = ~va20_2$estimate,
+            opacity = 0.5, title = "Hispanic Population") %>%
+  addMarkers( ~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(School), labelOptions = TRUE))
+```
+#GOOD MAP
+
+```{r}
+
+blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
+va20_2 <- get_acs(geography = "block group",
+                variables = c(hispanic = "B03002_012"),
+                state = "VA",
+                year = 2020,
+                geometry = TRUE) %>%
+filter(NAME %in% blocks)
+
+leaflet(data = map) %>% addTiles() %>%
+  addPolygons(data = va20_2,
+color="yellow",
+weight = 0.5,
+smoothFactor = 0.2,
+fillOpacity = 0.5)  %>% 
+    addPolygons(data=traveltime20, color= "black",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>%
+  addMarkers( ~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(School), labelOptions = TRUE)
+```
+
+# Check on leaflet map, this needs editing
+```{r eval=FALSE, include=FALSE}
+#mypalette <- colorNumeric(palette="viridis", centerPop_RPK_dist$POPULATION)
+
+map <- leaflet() %>%
+  addTiles() %>%
+  addProviderTiles("Esri") %>%  addPolygons(data=RPK_dist_outline,color = mypalette(centerPop_RPK_dist$POPULATION),
+              smoothFactor = 0.2, fillOpacity=.6, weight = 1,stroke = F, 
+              label=paste(" ", acs_RPK_dist$Census_tract,", Population: ",centerPop_RPK_dist$POPULATION))
+              
+%>%
+  
+###Adding the travel time bounds
+   addPolygons(data = traveltime30 , color = "green",
+               opacity = 1, weight = 2, fillColor = "white",fillOpacity = .1, group = "zurich driving distance")              
+              
+map              
+```
+
+
+
+
+
+
+# Useful link
+
+[Website](https://tlorusso.github.io/traveltime/vignette.html#:~:text=traveltime%20%2D%20a%20Traveltime%20API%20Wrapper%20for%20R,-1%20Querying%20the&text=The%20isochrones%20display%20how%20far,modes%20of%20transport%20are%20supported.&text=For%20non%2Dcommercial%20use%20the,max%2030%20queries%20per%20min)
