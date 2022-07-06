@@ -182,6 +182,19 @@ valuesCT = c(5.99, 18.0, 16.9, 13.2, 4.8, 13.1, 7.09, 10.2, 10.8)
 commutertime <- plot_ly(type='funnelarea', labels=labelsCT, values=valuesCT, sort = FALSE, direction = "",
                         textinfo='percent',
                         insidetextorientation='radial') %>% layout(title ='', showlegend=TRUE, legend=list(x=1, y=0.5))
+#-----------------Commuter mode--------------------------
+my_colors <- c("#CA001B", "#1D28B0", "#D71DA4", "#00A3AD", "#FF8200", "#753BBD", "#00B5E2", "#008578", "#EB6FBD", "#FE5000", "#6CC24A", "#D9D9D6", "#AD0C27", "#950078")
+slices.Races <- c(75.0, 14.9, 1.8, 0.4, 3.5, 4.3)
+lbls.Races <- c("Drove Alone 75.0%", "Carpooled 14.9%", "Public Transport 1.8%", "Walked 0.4%","Other means 3.5%","Worked from home 4.3%")
+pie(slices.Races, labels = lbls.Races, main="", sub = "Source: DP03 ACS data 2016-2020")
+labelsR = c("Drove Alone", "Carpooled", "Public Transport", "Walked","Other means","Worked from home")
+valuesR = c(12922, 2574, 308, 77, 609, 741)
+
+commutermode <- plot_ly(type='pie', labels=labelsR, values=valuesR,
+                textinfo='label+percent',
+                insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='')))
+
+
 #------------------poverty-------------------------------
 
 poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
@@ -200,6 +213,20 @@ ggplot(subset_poverty_as, aes(x=povas_cat,y=povas_pop,fill=Sex)) +
 
 pov <- ggplot(subset_poverty_as,aes(x=povas_cat,y=povas_pop, fill=Sex))+geom_col(position="dodge",width=1.5)+theme(axis.text.x=element_text(angle=90, size=7.5, face="bold"),axis.title.x = element_blank())+scale_x_discrete(limits=povas_cat[1:length(povas_cat)/2])+labs(caption= "Source: B17001 ACS 5-year data 2016-2020",x="Age",y="Total Population")+ scale_fill_discrete(name = "", labels = c("Female", "Male")) 
 
+
+#--------gender by school
+
+
+genders <- data.frame(sex=rep(c("Male", "Female"), each=6),
+                 schools=c("Sugarland","Rolling Ridge","Guilford","Sterling","Sully","Forest Grove"),
+                 number=c(268, 273, 278, 237,221, 282, 255, 259, 272, 200, 217, 278))
+
+genders<- ggplot(data=genders, aes(x=schools, y=number, fill=sex,  width=0.9)) +
+  geom_bar(stat="identity", position="stack") +
+  scale_fill_manual(values = c('#F56D4F', "#20AFCC")) + labs(y="", x="", fill="")+ggtitle("Gender by Schools") + theme_minimal() + 
+  geom_text(aes(label = number, y = number), size = 3, position = position_stack(vjust = 0.5))
+
+genders <-ggplotly(genders)
 #race by school ----------------------------
 
 races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
@@ -223,17 +250,47 @@ attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))
                                                                                                                                                                                                 
 
 #------------------employment-----------------
-emp <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
-subset_emp <- emp[c(29:33),]
+sterling <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
+subset_sterling <- sterling[(4:5), c(1,4)]
+employed <- as.numeric(sub("%", "", subset_sterling[1, "...4"]))
+unemployed <- as.numeric(sub("%", "", subset_sterling[2, "...4"]))
+subset_sterling[, "...4"] <- c(employed, unemployed)
+
+
+labor <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.25) + labs(x = "Employment Status", y= "Percentage population", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment")+ guides(fill = guide_legend(title = "Employment"))+ scale_y_continuous(limits = c(0,80.0))
+employment <- ggplotly(labor)
+
+
+#-------------------work occupation----------------------
+
+subset_sterling <- sterling[c(29:33),]
 percNum <- c()
 for(i in 1:5){
-  percNum <- c(percNum, as.numeric(sub("%", "", subset_emp[i, "...4"])))
+  percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
 }
-subset_emp[, "...4"] <- percNum
-employment <- ggplot(subset_emp, aes(x = `EMPLOYMENT STATUS`, y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
+subset_sterling[, "...4"] <- percNum
+employmento <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = `...4`, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
+occuplot <- ggplotly(employmento)
+
+#------------------education-------------------------
+
+sterling <- read_excel(paste0(getwd(),"/data/Loudouncountyeducation.xlsx"),skip=2,col_names=TRUE)
+subset_sterling <- sterling[2:28,c(1, 2:5)]
+subset_sterling$Label <- as.factor(subset_sterling$Label)
+df2 <- data.frame(
+  levels=c("Less than 9th grade",
+           "9th to 12th grade, no diploma","High School graduate",
+           "Some college or no degree","Associate's degree",
+           "Bachelor's Degree",
+           
+           "Graduate or professional"),
+  number=c(2193, 1943, 4050, 3094, 1396, 4706, 2402))
 
 
-employment<- ggplotly(employment)
+
+df2$levels <- factor(df2$levels, levels = df2$levels)
+education <- ggplot(df2,aes(levels, number)) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "", y = "Number of population", caption = " Source : S1501 ACS 5-yr data 2016-2020", title = "") + coord_flip() 
+education <- ggplotly(education)
 #---------------------health insurance----------------------------
 
 
@@ -241,6 +298,7 @@ health <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_
 
 subset_health <- health[c(103:105),]
 healthin <- ggplot(subset_health, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020", titlel = "Distribution of Health Insurance") + guides(fill = guide_legend(title = "Health Insurance Type"))+ theme(axis.text.x = element_text(angle=0))+ coord_flip()
+healthin <- ggplotly(healthin)
 #race by school ----------------------------
 
 races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
@@ -315,7 +373,7 @@ jscode <- "function getUrlVars() {
 
 var <- c("ageplot1","ageplot2")
 # user -------------------------------------------------------------
-ui <- navbarPage(title = "DSPG-LivDiv 2022",
+ui <- navbarPage(title = "DSPG",
                  selected = "overview",
                  theme = shinytheme("lumen"),
                  tags$head(tags$style('.selectize-dropdown {z-index: 10000}')),
@@ -402,13 +460,13 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                                        "Employment" = "employment",
                                                        "Work Occupation" = "workoccu",
                                                        "Commuter Time" = "commutertime",
-                                                       "Commuter Mode" = "commmode",
+                                                       "Commuter Mode" = "commutermode",
                                                        "Poverty by Age and Sex" = "pov", 
                                                        "Health Coverage" = "health"
                                                        ),
                                                      ),
                                                      
-                                                     withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%")),
+                                                     withSpinner(plotlyOutput("ageplot2", height = "500px", width ="80%")),
                                                      withSpinner(plotOutput("ageplot1", height = "500px", width = "60%")),
                                                      
                                                        #if ( == "age"){
@@ -610,8 +668,25 @@ server <- function(input, output, session) {
       
       commutertime
     }
+    else if (Var() == "commutermode") {
+      
+      commutermode
+    }
+    else if (Var() == "workoccu"){
+      occuplot
+    }
+    
+    else if (Var() == "health"){
+      healthin
+    }
+    else if (Var() == "education"){
+      education
+    }
     else if (Var() == "employment"){
       employment
+    }
+    else if (Var() == "edu"){
+      education
     }
   })
 
@@ -627,7 +702,10 @@ output$ocuplot <- renderPlotly({
   if(Var2() == "raceehtn"){
     raceehtn 
   }
-  
+  else if(Var2() == "cgender"){
+    genders 
+  }
+
   else if(Var2() == "attend"){
     attend 
   }
