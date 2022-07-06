@@ -46,7 +46,8 @@ ggplot(subset_sterling,aes(emp_name, health_estimate, fill=emp_name)) + geom_col
 bar graph for health insurance 
 ```{r}
 subset_sterling <- sterling[c(103:105),]
-ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020", titlel = "Distribution of Health Insurance") + guides(fill = guide_legend(title = "Health Insurance Type"))+ theme(axis.text.x = element_text(angle=0))+ coord_flip()
+health <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`,y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020", titlel = "Distribution of Health Insurance") + guides(fill = guide_legend(title = "Health Insurance Type"))+ theme(axis.text.y = element_text(angle=0), axis.ticks.y= element_blank())#+ coord_flip()
+ggplotly(health)
 ```
 
 The bar graph shows that the greatest percentage of population in the sterling area have private insurance. There is only a small percentage of 16.5% that do not have any health insurance coverage. Private insurance is more common in the population compared to public health insurance.

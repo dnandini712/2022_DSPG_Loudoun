@@ -110,7 +110,9 @@ number=c(2193, 1943, 4050, 3094, 1396, 4706, 2402))
 
 
 df2$levels <- factor(df2$levels, levels = df2$levels)
-ggplot(df2,aes(levels, number)) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "", y = "Number of population", caption = " Source : S1501 ACS 5-yr data 2016-2020", title = "") + coord_flip() 
+p<-ggplot(df2,aes(levels, number)) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "", y = "Number of population", caption = " Source : S1501 ACS 5-yr data 2016-2020", title = "") + coord_flip() 
+
+ggplotly(p)
 ```
 
 ```{r}
