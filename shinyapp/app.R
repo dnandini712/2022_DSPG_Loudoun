@@ -381,7 +381,7 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                   ) 
                                    )
                  ), 
-                 tabPanel("Sociodemographics of Sterling",
+                 tabPanel("Sociodemographics",
                                      fluidRow(style = "margin: 6px;",
                                               h1(strong("Sterling"), align = "center"),
                                               p("", style = "padding-top:10px;"), 
@@ -422,7 +422,8 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                               #     p(tags$small("[1] Groundwater: Groundwater sustainability. (2021). Retrieved July 27, 2021, from https://www.ngwa.org/what-is-groundwater/groundwater-issues/groundwater-sustainability")) ,
                                               #     p("", style = "padding-top:10px;")) 
                                      )), 
-                      tabPanel("Community Schools", 
+                      navbarMenu("Community Schools",
+                                    tabPanel("Demographics", 
                                      fluidRow(style = "margin: 6px;",
                                               h1(strong("Demographics of Community Schools"), align = "center"),
                                               p("", style = "padding-top:10px;"), 
@@ -450,6 +451,32 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                               #       p(tags$small("[1] Groundwater: Groundwater sustainability. (2021). Retrieved July 27, 2021, from https://www.ngwa.org/what-is-groundwater/groundwater-issues/groundwater-sustainability")) ,
                                               #      p("", style = "padding-top:10px;")) 
                                      )), 
+                 
+                           tabPanel("Climate Survey Reports",
+                          fluidRow(style = "margin: 6px;",
+                                   p("", style = "padding-top:10px;"),
+                                   column(12, align = "center",h4(strong("Climate Survey")),
+                                          p("Parent, Student and Staff"),
+                                          br("")
+                                          
+                                          
+                                          
+                                   )),
+                          
+                        )
+                      ),
+                 tabPanel("Availability of Resources",
+                          fluidRow(style = "margin: 6px;",
+                                   p("", style = "padding-top:10px;"),
+                                   column(12, align = "center",h4(strong("Availability of Resources")),
+                                          p("Four Pillars"),
+                                          br("")
+                                          
+                                          
+                                          
+                                   )),
+                          
+                 )
                             
                             
                             
