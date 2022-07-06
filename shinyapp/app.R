@@ -163,6 +163,28 @@ ggplot(subset_poverty_as, aes(x=povas_cat,y=povas_pop,fill=Sex)) +
 
 pov <- ggplot(subset_poverty_as,aes(x=povas_cat,y=povas_pop, fill=Sex))+geom_col(position="dodge",width=1.5)+theme(axis.text.x=element_text(angle=90, size=7.5, face="bold"),axis.title.x = element_blank())+scale_x_discrete(limits=povas_cat[1:length(povas_cat)/2])+labs(caption= "Source: B17001 ACS 5-year data 2016-2020",x="Age",y="Total Population")+ scale_fill_discrete(name = "", labels = c("Female", "Male")) 
 
+#race by school ----------------------------
+
+races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
+
+race_subset <- races[(1:153),c(1,5,6,7)]
+School <- race_subset$`School Name`
+race <- race_subset$Race
+total <- race_subset$`Full Time Count (All Grades)`
+raceehtn <- ggplot(race_subset, aes(x=race,y=total,fill=School))+ geom_col()+labs(x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1),axis.text.x=element_text(angle=90)) + scale_fill_brewer(palette = "Set1") + scale_fill_discrete(name = "")
+raceehtn<-ggplotly(raceehtn)
+
+#attendance --------------
+
+attendance <- read_excel(paste0(getwd(),"/data/absencerate.xlsx"))
+att_per <- attendance$`Absence Rate`
+att_rate <- att_per*100
+quarter <- attendance$`School Quarter`
+School <- attendance$`School Name`
+attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
+
+                                                                                                                                                                                                
+
 #------------------employment-----------------
 emp <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
 subset_emp <- emp[c(29:33),]
@@ -182,6 +204,27 @@ health <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_
 
 subset_health <- health[c(103:105),]
 healthin <- ggplot(subset_health, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020", titlel = "Distribution of Health Insurance") + guides(fill = guide_legend(title = "Health Insurance Type"))+ theme(axis.text.x = element_text(angle=0))+ coord_flip()
+#race by school ----------------------------
+
+races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
+
+race_subset <- races[(1:153),c(1,5,6,7)]
+School <- race_subset$`School Name`
+race <- race_subset$Race
+total <- race_subset$`Full Time Count (All Grades)`
+raceehtn <- ggplot(race_subset, aes(x=race,y=total,fill=School))+ geom_col()+labs(x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1),axis.text.x=element_text(angle=90)) + scale_fill_brewer(palette = "Set1") + scale_fill_discrete(name = "")
+raceehtn<-ggplotly(raceehtn)
+
+#attendance --------------
+
+attendance <- read_excel(paste0(getwd(),"/data/absencerate.xlsx"))
+att_per <- attendance$`Absence Rate`
+att_rate <- att_per*100
+quarter <- attendance$`School Quarter`
+School <- attendance$`School Name`
+attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
+
+
 
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
@@ -345,15 +388,15 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                                      h4(strong("Community Schools")),
                                                      selectInput("schooldrop", "Select Variable:", width = "60%", choices = c(
                                                        "Gender" = "cgender",
-                                                       "Race/Ethnicity" ="crace", 
+                                                       "Race/Ethnicity" ="raceehtn", 
                                                        "Hispanic Population" = "chispanic",
-                                                       "No. of teacher" = "cteacher",
-                                                       "Enrollment" = "cenrol", 
-                                                       "Absences By Quarter" = "cabsense", 
+                                                       "No. of teacher" = "teacher",
+                                                       "Enrollment" = "enrol", 
+                                                       "Absences By Quarter" = "attend", 
                                                        "Chronic Absenteeism" = "chronic"
                                                      ),
                                                      ), 
-                                                     withSpinner(plotOutput("ocuplot", height = "500px")),
+                                                     withSpinner(plotlyOutput("ocuplot", height = "500px", width = "60%")),
                                                      
                                               ),
                                               # column(12, 
@@ -366,8 +409,7 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                             
                  ), 
                  
-)
-                 
+)               
                  
 # server -----------------------------------------------------------
 server <- function(input, output, session) {
@@ -412,7 +454,24 @@ server <- function(input, output, session) {
     }
     
   })
-}
+
+
+#School Demos
+
+schoolVar <- reactive({
+  input$schooldrop
+})
+
+output$ocuplot <- renderPlotly({
+  
+  if(schoolVar() == "raceehtn"){
+    raceehtn 
+  }
+  
+  else if(schoolVar()== "attend"){
+    attend }
+})
+}  
   
   #sociodemo tabset ----------------------------------------------------
 
