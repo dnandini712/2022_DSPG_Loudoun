@@ -310,6 +310,36 @@ total <- race_subset$`Full Time Count (All Grades)`
 raceehtn <- ggplot(race_subset, aes(x=raceS,y=total,fill=School))+ geom_col()+labs(x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1),axis.text.x=element_text(angle=90)) + scale_fill_brewer(palette = "Set1") + scale_fill_discrete(name = "")
 raceehtn<-ggplotly(raceehtn)
 
+#-----------hispanic population-----------------
+
+map$Longitude <- as.numeric(map$Longitude)
+map$Latitude <- as.numeric(map$Latitude)
+
+total <- merge(va20_2,map)
+
+#specify the bin breaks
+mybins <- c(0,300,600,900,1200,1500,1800,2100)
+#specify the default color
+mypalette <- colorBin(palette="inferno", domain=va20_2$estimate, na.color="transparent", bins=mybins)
+
+hispanicschool <- leaflet(data = total) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~mypalette(va20_2$`estimate`),
+    stroke=TRUE,
+    weight = 1,
+    smoothFactor = 0.2,
+    opacity = 1.0,
+    fillOpacity = 0.7, 
+    label=paste("County: ",va20_2$GEOID, ", Value: ",va20_2$estimate),
+    highlightOptions = highlightOptions(color = "white",
+                                        weight = 2,
+                                        bringToFront = TRUE)) %>%
+  addLegend(pal=mypalette, position = "bottomright",
+            values = ~va20_2$estimate,
+            opacity = 0.5, title = "Hispanic Population") %>%
+  addMarkers( ~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(School), labelOptions = TRUE)
+
 #attendance --------------
 
 attendance <- read_excel(paste0(getwd(),"/data/absencerate.xlsx"))
@@ -329,6 +359,16 @@ dataSTAFF <- data.frame(Schools, Teachers, Staff)
 figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = 'Teachers', marker = list(color = 'rgb(255, 2, 2 )'))
 figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(20, 252, 241 )'))
 cteacher <- figSTM %>% layout(yaxis = list(title = 'Total Number'), barmode = 'stack')
+#--------Chronic absenteeism------------------
+
+chronic <- data.frame(sex=rep(c("Missed less than 10%"), each=6),
+                  schools=c("Sugarland","Rolling Ridge","Guilford","Sterling Elementary","Sully","Forest Grove"),
+                  number=c(11.1, 10.1, 6.7, 5.8, 9.7,7.9))
+
+chronic<- ggplot(data=chronic, aes(x=schools, y=number, fill=schools,  width=0.8)) +
+  geom_bar(stat="identity")  + labs(y="", x="", fill="")+ggtitle("Percentage of Chronic absenteeism") 
+
+chronic<-ggplotly(chronic)
 
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
@@ -501,8 +541,8 @@ ui <- navbarPage(title = "DSPG",
                                                        "Chronic Absenteeism" = "chronic"
                                                      ),
                                                      ), 
-                                                     withSpinner(plotlyOutput("ocuplot", height = "500px", width = "60%")),
-                                                     
+                                                     withSpinner(plotlyOutput("ocuplot1", height = "500px", width = "60%")),
+                                                     withSpinner(leafletOutput("ocuplot2", height = "500px", width = "60%")),
                                               ),
                                               # column(12, 
                                               #       h4("References: "), 
@@ -692,12 +732,11 @@ server <- function(input, output, session) {
 
 
 #School Demos
-
 Var2 <- reactive({
-    input$schooldrop
-  }) 
+  input$schooldrop
+}) 
   
-output$ocuplot <- renderPlotly({
+output$ocuplot1 <- renderPlotly({
   
   if(Var2() == "raceehtn"){
     raceehtn 
@@ -713,11 +752,26 @@ output$ocuplot <- renderPlotly({
   else if (Var2() == "cteacher") {
     
     cteacher
+  
+  }
+  else if (Var2() == "chronic") {
+    
+    chronic
+    
+    
   }
 })
-}  
-
   
+
+output$ocuplot2 <- renderLeaflet({
+  if (Var2() == "chispanic") {
+    
+    hispanicschool
+  }  
+
+})
+
+}
   #sociodemo tabset ----------------------------------------------------
 
 shinyApp(ui = ui, server = server)
