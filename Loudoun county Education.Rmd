@@ -1,0 +1,135 @@
+---
+title: "Education Loudoun"
+author: "Abdullah Rizwan"
+date: '2022-06-08'
+output: html_document
+---
+```{r setup, message = FALSE }
+knitr::opts_chunk$set(echo = TRUE)
+#I load my packages as I use them so you can see what 
+#they are used with.
+library(dplyr)
+library(ggplot2)
+library(tidycensus)
+library(viridis)
+
+
+
+
+```
+
+
+
+
+```{r}
+
+va20_S <- get_acs(geography = "place",
+variables = c(education.total = "B06009_001",
+less.then.HighSchool = "B06009_002",
+highschool.graduate = "B06009_003",
+college.or.associate = "B06009_004",
+bachelors.degree= "B06009_005",
+Graduate.or.professional = "B06009_006"),
+
+state = "VA", year = 2020,
+geometry = TRUE) %>%
+filter(NAME == "Sterling CDP, Virginia")
+
+
+```
+
+```{r}
+library(tidycensus)
+# Set a year of interest
+this.year = 2020
+
+# This looks at the 5 year estimates
+# You can also do "acs1"
+vars <- load_variables(year = 2020,
+                      dataset = "acs5",
+                      cache = TRUE)
+
+# There are 22711 possible variables 
+dim(vars)
+```
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(include = TRUE, warning = FALSE, message = FALSE)
+library(tidycensus)
+library(tidyverse)
+theme_set(theme_bw())
+```
+
+```{r,fig.height=2}
+va20_S %>% ggplot(aes(x = variable , y =estimate  )) +
+  geom_point(col = "red")
+```
+
+```{r, fig.height=2}
+# va20_S %>% ggplot(aes(x = variable, 
+#                           y = estimate)) + 
+#   geom_point(color = 'blue')
+# 
+# ggplot(aes(x = NAME, y = estimate, fill = NAME), data = get_multi) + 
+#   geom_bar(stat = "variable") + theme(legend.position = "none")
+```
+```{r}
+library(readxl)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+sterling <- read_excel("C:/Users/abdul/Downloads/DSPG/2022_DSPG_Loudoun/Shinyapp/data/Loudouncountyeducation.xlsx",skip=2,col_names=TRUE)
+subset_sterling <- sterling[2:28,c(1, 2:5)]
+subset_sterling$Label <- as.factor(subset_sterling$Label)
+```
+
+```{r}
+subset_sterling$Estimate...2 <- as.numeric(gsub(",", "", subset_sterling$Estimate...2))
+summed_edu <- subset_sterling %>% 
+  group_by(Label) %>%
+  summarize(edu_sum = sum(Estimate...2))
+summed_edu1 <- summed_edu[-(10:15),]
+summed_edu2 <- summed_edu1[-(7),]
+summed_edu3 <- summed_edu2[-(4),]
+
+# edu_data <- summed_edu[!(Label %chin% c("Population"))]
+# edu_data <- subset_sterling %>% summarize(Bachelor's degree or higher= sum(Bachelors+Bachelor's degree or higher),
+                                          # )
+```
+
+```{r}
+
+df2 <- data.frame(
+levels=c("Less than 9th grade",
+"9th to 12th grade, no diploma","High School graduate",
+"Some college or no degree","Associate's degree",
+"Bachelor's Degree",
+
+"Graduate or professional"),
+number=c(2193, 1943, 4050, 3094, 1396, 4706, 2402))
+
+
+
+df2$levels <- factor(df2$levels, levels = df2$levels)
+p<-ggplot(df2,aes(levels, number)) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "", y = "Number of population", caption = " Source : S1501 ACS 5-yr data 2016-2020", title = "") + coord_flip() 
+
+ggplotly(p)
+```
+
+```{r}
+ggplot(summed_edu1,aes(Label, edu_sum, fill = Label)) + geom_col() + theme(axis.text.x = element_text(angle=90)) + coord_polar() + scale_y_log10()
+```
+
+
+```{r}
+
+# sterling$Estimate...3[2:5]
+# education_estimate <- sterling$Estimate...3[2:5]
+# as.numeric(gsub(",","",education_estimate))
+# education_estimate <-as.numeric(gsub(",","",education_estimate))
+# education_cat <- (subset_sterling$Label)
+# 
+# 
+# ggplot(subset_sterling,aes(x=education_cat,y=education_estimate))+geom_col()+theme(axis.text.x=element_text(angle=20,size=7.5, face="bold"))+scale_x_discrete(limits=education_cat)+labs(title="Education Demographics of Sterling, VA",caption= "Source: ACS data 2016-2020",x="Age",y="Estimated Population")
+
+
+```
