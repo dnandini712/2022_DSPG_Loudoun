@@ -4,7 +4,7 @@ author: "NDP"
 date: '2022-06-14'
 output: html_document
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 
@@ -157,33 +157,32 @@ va_20_CDP <- va20_2 %>% filter (NAME %in% blocks_CDP)
 
 ```{r}
 
-map <- read_excel(paste0(getwd(), "/shinyapp/data/Sterling_Youth_Development.xlsx"))
-subset_map <- map[1:11,c(1,2:3)]
+mapyouth <- read_excel(paste0(getwd(), "/Sterling_Youth_Development.xlsx"))
+subset_mapyouth <- mapyouth[1:18,c(1,4:5)]
 
-subset_map$Longitude <- as.numeric(subset_map$Longitude)
-subset_map$Latitude <- as.numeric(subset_map$Latitude)
+subset_mapyouth$Longitude <- as.numeric(subset_mapyouth$Longitude)
+subset_mapyouth$`Latitude ` <- as.numeric(subset_mapyouth$`Latitude `)
 
 
 # Show first 20 rows from the `quakes` dataset
-leaflet(data = subset_map) %>% addTiles() %>%
+leaflet(data = subset_mapyouth) %>% addTiles() %>%
   addPolygons(data = va20_2,
 color="yellow",
 weight = 0.5,
 smoothFactor = 0.2,
 fillOpacity = 0.5) %>%
-  addMarkers(~Longitude, ~Latitude, popup = ~as.character(Name), label = ~as.character(Name)) %>% addPolygons(data = va_20_CDP,
+  addMarkers(~Longitude, ~subset_mapyouth$`Latitude `, popup = ~as.character(Name), label = ~as.character(Name)) %>% addPolygons(data = va_20_CDP,
 color="red",
 weight = 0.5,
 smoothFactor = 0.2,
 fillOpacity = 0.5) %>%
-  addMarkers(~Longitude, ~Latitude, popup = ~as.character(Name), label = ~as.character(Name)) 
+  addMarkers(~Longitude, ~subset_mapyouth$`Latitude `, popup = ~as.character(Name), label = ~as.character(Name)) 
 
 
-# Plot it
 #library(ggplot2)
 #ggplot() +
   #geom_polygon(data = spdf_fortified, aes( x = long, y = lat, group = group), fill="#69b3a2", color="white") +
-  #theme_void() 
+ # theme_void() 
 ```
 ```
     

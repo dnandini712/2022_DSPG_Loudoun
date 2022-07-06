@@ -139,6 +139,15 @@ race <- plot_ly(type='pie', labels=labelsR, values=valuesR,
                 textinfo='label+percent',
                 insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Race/Ethnicity')))
 
+#---------------Hisp. Ethnicity---------------
+
+labelsH = c('Hispanic or Latino','Not Hispanic or Latino')
+valuesH = c(12472, 17799)
+
+hispanic <- plot_ly(type='pie', labels=labelsH, values=valuesH, 
+                textinfo='label+percent',
+                insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Race/Ethnicity')))
+
 #-------income--------------------------------
 medianin <- read_excel(paste0(getwd(),"/data/incomemedian.xlsx"))
 
@@ -338,7 +347,8 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                                      selectInput("demosdrop", "Select Variable:", width = "60%", choices = c(
                                                        "Age" = "age",
                                                        "Gender" = "gender",
-                                                       "Race/ethnicity" = "race", 
+                                                       "Race" = "race", 
+                                                       "Hispanic Ethnicity Population" = "hispanic",
                                                        "Educational Attainment" = "edu",
                                                        "Poverty by Age and Sex" = "pov", 
                                                        "Marital Status" = "mar",
@@ -460,9 +470,9 @@ server <- function(input, output, session) {
       commutertime
     }
     
-    else if (Var() == "cteacher") {
+    else if (Var() == "hispanic") {
       
-      cteacher
+      hispanic
     }
     
   })
