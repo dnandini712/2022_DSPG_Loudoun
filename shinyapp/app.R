@@ -74,7 +74,7 @@ va20_2 <- get_acs(geography = "block group",
                   state = "VA",
                   year = 2020,
                   geometry = TRUE) %>%
-  filter(NAME %in% blocks)
+                  filter(NAME %in% blocks)
 
 blocks_CDP<-c("Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia","Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
 
@@ -366,8 +366,8 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                  tabPanel("Sterling Area", value = "overview",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("Map of Sterling")),
-                                          p("This map shows the Sterling area and the 6 schools."),
+                                   column(12, align = "justify",h4(strong("Map of Sterling")),
+                                          p("This map shows the six schools and the area of Sterling. The orange area is the Census Designated Place of Sterling. It can be observed that Sugarland Elementary is outside the CDP of Sterling. Hence, the team considered to mimic the school zone of this school by selecting respective blocks as assigned by the US Census Bureau. It is shown by the yellow area. For this project, we have defined Sterling as both the orange area and the yellow area as seen in the map."),
                                           br("")
                                           
                                           
@@ -375,7 +375,7 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                    )),
                           
                           fluidPage(
-                            column(12, align = "center", leafletOutput("map1", width = "60%")
+                            column(12, align = "center", leafletOutput("map1", width = "50%")
                                    #fluidRow(align = "center",
                                    #    p(tags$small(em('Last updated: August 2021'))))
                                   ) 
@@ -465,11 +465,82 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                           
                         )
                       ),
-                 tabPanel("Availability of Resources",
+                 navbarMenu("Availability of Resources",
+                          tabPanel("Health and Social Services"),
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("Availability of Resources")),
-                                          p("Four Pillars"),
+                                   column(12, align = "center",h4(strong("")),
+                                          p(""),
+                                          br("")
+                                          
+                                          
+                                          
+                                   )),
+                         
+                          tabPanel("Mental Health"),
+                          fluidRow(style = "margin: 6px;",
+                                   p("", style = "padding-top:10px;"),
+                                   column(12, align = "center",h4(strong("")),
+                                          p(""),
+                                          br("")
+                                          
+                                          
+                                          
+                                   )),
+                          tabPanel("Family Engagement"),
+                          fluidRow(style = "margin: 6px;",
+                                   p("", style = "padding-top:10px;"),
+                                   column(12, align = "center",h4(strong("")),
+                                          p(""),
+                                          br("")
+                                          
+                                          
+                                          
+                                   )),
+                          tabPanel("Youth Development Opportunities"),
+                          fluidRow(style = "margin: 6px;",
+                                   p("", style = "padding-top:10px;"),
+                                   column(12, align = "center",h4(strong("")),
+                                          p(""),
+                                          br("")
+                                          
+                                          
+                                          
+                                   )),
+                          
+                 ),
+                            
+                 tabPanel("Service Gaps",
+                          fluidRow(style = "margin: 6px;",
+                                   p("", style = "padding-top:10px;"),
+                                   column(12, align = "center",h4(strong("Service gaps")),
+                                          p(""),
+                                          br("")
+                                          
+                                          
+                                          
+                                   )),
+                          
+                 ),
+                 
+                 tabPanel("Analysis",
+                          fluidRow(style = "margin: 6px;",
+                                   p("", style = "padding-top:10px;"),
+                                   column(12, align = "center",h4(strong("")),
+                                          p(""),
+                                          br("")
+                                          
+                                          
+                                          
+                                   )),
+                          
+                 ),
+                 
+                 tabPanel("Meet the Team",
+                          fluidRow(style = "margin: 6px;",
+                                   p("", style = "padding-top:10px;"),
+                                   column(12, align = "center",h4(strong("")),
+                                          p(""),
                                           br("")
                                           
                                           
@@ -477,8 +548,6 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                    )),
                           
                  )
-                            
-                            
                             
                  )
                  
