@@ -105,8 +105,8 @@ map1<-leaflet(data = map) %>% addTiles() %>%
 labelsG = c("Male", "Female")
 valuesG = c(15282, 14989)
 gender <- plot_ly(type='pie', labels=labelsG, values=valuesG, 
-                textinfo='label+percent',
-                insidetextorientation='radial', marker = list(colors = c('20AFCC', 'F56D4F'))) %>% layout(title ='', legend=list(title=list(text='')))
+                  textinfo='label+percent',
+                  insidetextorientation='radial', marker = list(colors = c('20AFCC', 'F56D4F'))) %>% layout(title ='', legend=list(title=list(text='')))
 gender
 
 #---------Age pie chart---------------------------------------
@@ -185,7 +185,7 @@ commutertime <- plot_ly(type='funnelarea', labels=labelsCT, values=valuesCT, sor
 #------------------poverty-------------------------------
 
 poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
-           sheet = "Data")
+                        sheet = "Data")
 
 subset_poverty_as <- poverty_as[3:28, 1:4]
 subset_poverty_as
@@ -220,7 +220,7 @@ quarter <- attendance$`School Quarter`
 School <- attendance$`School Name`
 attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
 
-                                                                                                                                                                                                
+
 
 #------------------employment-----------------
 emp <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
@@ -233,7 +233,7 @@ subset_emp[, "...4"] <- percNum
 employment <- ggplot(subset_emp, aes(x = `EMPLOYMENT STATUS`, y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
 
 
-
+employment<- ggplotly(employment)
 #---------------------health insurance----------------------------
 
 
@@ -349,7 +349,7 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                           h2(strong("Project Background")),
                                           
                                           p("During the 2018 – 2019 school year, the Community school model provided the families with clothes, shoes, and other basic supplies 538 times; enabled 135 families to receive weekend meals throughout the school year; supported 6 academic programs for 323 students; and provided 9 after-school enrichment programs for 373 students. Funds have provided these Community Schools with additional resources, such as full-time parent liaisons, a full-time social worker, and programs that keep families engaged in their child’s education. The Community Schools initiative focuses on bolstering these schools in six areas: academies, health and social services, youth and community engagement, building stronger families, and healthier communities."),
-                                          ),
+                                   ),
                                    
                                    column(4,
                                           h2(strong("Project Goals")),
@@ -366,8 +366,8 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                  tabPanel("Sterling Area", value = "overview",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("Map of Sterling")),
-                                          p("This map shows the Sterling area and the 6 schools."),
+                                   column(12, align = "justify",h4(strong("Map of Sterling")),
+                                          p("This map shows the six schools and the area of Sterling. The orange area is the Census Designated Place of Sterling. It can be observed that Sugarland Elementary is outside the CDP of Sterling. Hence, the team considered to mimic the school zone of this school by selecting respective blocks as assigned by the US Census Bureau. It is shown by the yellow area. For this project, we have defined Sterling as both the orange area and the yellow area as seen in the map."),
                                           br("")
                                           
                                           
@@ -375,55 +375,55 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                    )),
                           
                           fluidPage(
-                            column(12, align = "center", leafletOutput("map1", width = "60%")
+                            column(12, align = "center", leafletOutput("map1", width = "50%")
                                    #fluidRow(align = "center",
                                    #    p(tags$small(em('Last updated: August 2021'))))
-                                  ) 
-                                   )
+                            ) 
+                          )
                  ), 
-                 navbarMenu("Sociodemographics" , 
-                            tabPanel("Sterling", 
-                                     fluidRow(style = "margin: 6px;",
-                                              h1(strong("Sterling"), align = "center"),
-                                              p("", style = "padding-top:10px;"), 
-                                              #column(4, 
-                                              #      h4(strong("Education")),
-                                              #     p("These are demographics"),
-                                              #) ,
-                                              column(8, 
-                                                     h4(strong("Sterling, CDP")),
-                                                     selectInput("demosdrop", "Select Variable:", width = "60%", choices = c(
-                                                       "Gender" = "gender",
-                                                       "Age" = "age",
-                                                       "Race/ethnicity" = "race", 
-                                                       "Educational Attainment" = "edu",
-                                                       "Family Income" = "faminc",
-                                                       "Property Value" = "property",
-                                                       "Housing Occupancy" = "housing",
-                                                       "Employment" = "employment",
-                                                       "Work Occupation" = "workoccu",
-                                                       "Commuter Time" = "commutertime",
-                                                       "Commuter Mode" = "commmode",
-                                                       "Poverty by Age and Sex" = "pov", 
-                                                       "Health Coverage" = "health"
-                                                       ),
-                                                     ),
-                                                     
-                                                     withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%")),
-                                                     withSpinner(plotOutput("ageplot1", height = "500px", width = "60%")),
-                                                     
-                                                       #if ( == "age"){
-                                                         #withSpinner(plotOutput("ageplot1", height = "500px", width = "60%"))
-                                                       #} else {
-                                                         #withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%"))
-                                                       ),
-                                                     
-                                              # column(12, 
-                                              #      h4("References: "), 
-                                              #     p(tags$small("[1] Groundwater: Groundwater sustainability. (2021). Retrieved July 27, 2021, from https://www.ngwa.org/what-is-groundwater/groundwater-issues/groundwater-sustainability")) ,
-                                              #     p("", style = "padding-top:10px;")) 
-                                     )), 
-                            tabPanel("Community Schools", 
+                 tabPanel("Sociodemographics",
+                          fluidRow(style = "margin: 6px;",
+                                   h1(strong("Sterling"), align = "center"),
+                                   p("", style = "padding-top:10px;"), 
+                                   #column(4, 
+                                   #      h4(strong("Education")),
+                                   #     p("These are demographics"),
+                                   #) ,
+                                   column(8, 
+                                          h4(strong("Sterling, CDP")),
+                                          selectInput("demosdrop", "Select Variable:", width = "60%", choices = c(
+                                            "Gender" = "gender",
+                                            "Age" = "age",
+                                            "Race/ethnicity" = "race", 
+                                            "Educational Attainment" = "edu",
+                                            "Family Income" = "faminc",
+                                            "Property Value" = "property",
+                                            "Housing Occupancy" = "housing",
+                                            "Employment" = "employment",
+                                            "Work Occupation" = "workoccu",
+                                            "Commuter Time" = "commutertime",
+                                            "Commuter Mode" = "commmode",
+                                            "Poverty by Age and Sex" = "pov", 
+                                            "Health Coverage" = "health"
+                                          ),
+                                          ),
+                                          
+                                          withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%")),
+                                          withSpinner(plotOutput("ageplot1", height = "500px", width = "60%")),
+                                          
+                                          #if ( == "age"){
+                                          #withSpinner(plotOutput("ageplot1", height = "500px", width = "60%"))
+                                          #} else {
+                                          #withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%"))
+                                   ),
+                                   
+                                   # column(12, 
+                                   #      h4("References: "), 
+                                   #     p(tags$small("[1] Groundwater: Groundwater sustainability. (2021). Retrieved July 27, 2021, from https://www.ngwa.org/what-is-groundwater/groundwater-issues/groundwater-sustainability")) ,
+                                   #     p("", style = "padding-top:10px;")) 
+                          )), 
+                 navbarMenu("Community Schools",
+                            tabPanel("Demographics", 
                                      fluidRow(style = "margin: 6px;",
                                               h1(strong("Demographics of Community Schools"), align = "center"),
                                               p("", style = "padding-top:10px;"), 
@@ -452,12 +452,106 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                               #      p("", style = "padding-top:10px;")) 
                                      )), 
                             
+                            tabPanel("Climate Survey Reports",
+                                     fluidRow(style = "margin: 6px;",
+                                              p("", style = "padding-top:10px;"),
+                                              column(12, align = "center",h4(strong("Climate Survey")),
+                                                     p("Parent, Student and Staff"),
+                                                     br("")
+                                                     
+                                                     
+                                                     
+                                              )),
+                                     
+                            )
+                 ),
+                 navbarMenu("Availability of Resources",
+                            tabPanel("Health and Social Services"),
+                            fluidRow(style = "margin: 6px;",
+                                     p("", style = "padding-top:10px;"),
+                                     column(12, align = "center",h4(strong("")),
+                                            p(""),
+                                            br("")
+                                            
+                                            
+                                            
+                                     )),
                             
+                            tabPanel("Mental Health"),
+                            fluidRow(style = "margin: 6px;",
+                                     p("", style = "padding-top:10px;"),
+                                     column(12, align = "center",h4(strong("")),
+                                            p(""),
+                                            br("")
+                                            
+                                            
+                                            
+                                     )),
+                            tabPanel("Family Engagement"),
+                            fluidRow(style = "margin: 6px;",
+                                     p("", style = "padding-top:10px;"),
+                                     column(12, align = "center",h4(strong("")),
+                                            p(""),
+                                            br("")
+                                            
+                                            
+                                            
+                                     )),
+                            tabPanel("Youth Development Opportunities"),
+                            fluidRow(style = "margin: 6px;",
+                                     p("", style = "padding-top:10px;"),
+                                     column(12, align = "center",h4(strong("")),
+                                            p(""),
+                                            br("")
+                                            
+                                            
+                                            
+                                     )),
                             
-                 ), 
+                 ),
                  
-)               
+                 tabPanel("Service Gaps",
+                          fluidRow(style = "margin: 6px;",
+                                   p("", style = "padding-top:10px;"),
+                                   column(12, align = "center",h4(strong("Service gaps")),
+                                          p(""),
+                                          br("")
+                                          
+                                          
+                                          
+                                   )),
+                          
+                 ),
                  
+                 tabPanel("Analysis",
+                          fluidRow(style = "margin: 6px;",
+                                   p("", style = "padding-top:10px;"),
+                                   column(12, align = "center",h4(strong("")),
+                                          p(""),
+                                          br("")
+                                          
+                                          
+                                          
+                                   )),
+                          
+                 ),
+                 
+                 tabPanel("Meet the Team",
+                          fluidRow(style = "margin: 6px;",
+                                   p("", style = "padding-top:10px;"),
+                                   column(12, align = "center",h4(strong("")),
+                                          p(""),
+                                          br("")
+                                          
+                                          
+                                          
+                                   )),
+                          
+                 )
+                 
+)
+
+
 # server -----------------------------------------------------------
 server <- function(input, output, session) {
   # Run JavaScript Code
@@ -471,7 +565,7 @@ server <- function(input, output, session) {
   Var <- reactive({
     input$demosdrop
   })
-
+  
   
   output$ageplot1 <- renderPlot({
     if (Var() == "age") {
@@ -479,14 +573,11 @@ server <- function(input, output, session) {
       age
     }
     else if (Var() == "faminc") {
-     income
+      income
     }
     else if (Var() == "health") {
       
-     healthin 
-    }
-    else if (Var() == "employment"){
-      employment
+      healthin 
     }
     
   })
@@ -501,7 +592,7 @@ server <- function(input, output, session) {
       gender
     }
     else if (Var() == "race") {
-    
+      
       race
     }
     
@@ -519,33 +610,36 @@ server <- function(input, output, session) {
       
       commutertime
     }
+    else if (Var() == "employment"){
+      employment
+    }
   })
-
-
-#School Demos
-
-Var2 <- reactive({
+  
+  
+  #School Demos
+  
+  Var2 <- reactive({
     input$schooldrop
   }) 
   
-output$ocuplot <- renderPlotly({
-  
-  if(Var2() == "raceehtn"){
-    raceehtn 
-  }
-  
-  else if(Var2() == "attend"){
-    attend 
-  }
-  
-  else if (Var2() == "cteacher") {
+  output$ocuplot <- renderPlotly({
     
-    cteacher
-  }
-})
+    if(Var2() == "raceehtn"){
+      raceehtn 
+    }
+    
+    else if(Var2() == "attend"){
+      attend 
+    }
+    
+    else if (Var2() == "cteacher") {
+      
+      cteacher
+    }
+  })
 }  
 
-  
-  #sociodemo tabset ----------------------------------------------------
+
+#sociodemo tabset ----------------------------------------------------
 
 shinyApp(ui = ui, server = server)
