@@ -168,11 +168,29 @@ sterling <- read_excel("C:/Users/abdul/Downloads/DSPG/2022_DSPG_Loudoun/Shinyapp
 subset_sterling <- sterling[c(29:33),]
 percNum <- c()
 for(i in 1:5){
-  percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
+percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
 }
 subset_sterling[, "...4"] <- percNum
 employment <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
 
+#------------------education-------------------------
+
+sterling <- read_excel(paste0(getwd(),"/data/Loudouncountyeducation.xlsx"),skip=2,col_names=TRUE)
+subset_sterling <- sterling[2:28,c(1, 2:5)]
+subset_sterling$Label <- as.factor(subset_sterling$Label)
+df2 <- data.frame(
+  levels=c("Less than 9th grade",
+           "9th to 12th grade, no diploma","High School graduate",
+           "Some college or no degree","Associate's degree",
+           "Bachelor's Degree",
+           
+           "Graduate or professional"),
+  number=c(2193, 1943, 4050, 3094, 1396, 4706, 2402))
+
+
+
+df2$levels <- factor(df2$levels, levels = df2$levels)
+education <- ggplot(df2,aes(levels, number)) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "", y = "Number of population", caption = " Source : S1501 ACS 5-yr data 2016-2020", title = "") + coord_flip() 
 #---------------------health insurance----------------------------
 
 
@@ -307,6 +325,7 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                                        "Family Income" = "faminc",
                                                        "Property Value" = "propval",
                                                        "Employment" = "employment",
+                                                       "Education" = "education",
                                                        "Health Insurance" = "health"
                                                        
                                                      ),
@@ -379,6 +398,10 @@ server <- function(input, output, session) {
     }
     else if (Var() == "employment"){
       employment
+    }
+    else if (Var() == "education"){
+      
+      education
     }
     else if (Var() == "health") {
       

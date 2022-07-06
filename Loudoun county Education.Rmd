@@ -77,7 +77,7 @@ library(readxl)
 library(ggplot2)
 library(dplyr)
 library(tidyverse)
-sterling <- read_excel("C:/Users/abdul/Downloads/DSPG/Loudouncountyeducation.xlsx",skip=2,col_names=TRUE)
+sterling <- read_excel("C:/Users/abdul/Downloads/DSPG/2022_DSPG_Loudoun/Shinyapp/data/Loudouncountyeducation.xlsx",skip=2,col_names=TRUE)
 subset_sterling <- sterling[2:28,c(1, 2:5)]
 subset_sterling$Label <- as.factor(subset_sterling$Label)
 ```
