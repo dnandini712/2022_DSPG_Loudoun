@@ -371,13 +371,14 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                                        "Gender" = "cgender",
                                                        "Race/Ethnicity" ="crace", 
                                                        "Hispanic Population" = "chispanic",
-                                                       "No. of teacher" = "cteacher",
+                                                       "No. of teacher/staff" = "cteacher",
                                                        "Enrollment" = "cenrol", 
                                                        "Absences By Quarter" = "cabsense", 
                                                        "Chronic Absenteeism" = "chronic"
                                                      ),
                                                      ), 
-                                                     withSpinner(plotOutput("ocuplot", height = "500px")),
+                                                     withSpinner(plotOutput("ocuplot", height = "500px", width = "60%")),
+                                                     withSpinner(plotlyOutput("ocuplot2", height = "500px", width = "60%")),
                                                      
                                               ),
                                               # column(12, 
@@ -407,14 +408,20 @@ server <- function(input, output, session) {
     input$demosdrop
   })
   
+  Var2 <- reactive({
+    input$schooldrop
+  }) 
+  
   output$ageplot1 <- renderPlot({
     if (Var() == "age") {
       
       age
     }
+    
     else if (Var() == "faminc") {
       income
     }
+    
     else if (Var() == "health") {
       
       healthin 
@@ -458,6 +465,13 @@ server <- function(input, output, session) {
       cteacher
     }
     
+  })
+  
+  output$ocuplot2 <- renderPlotly({
+    if (Var2() == "cteacher") {
+      
+      cteacher
+    }
   })
 }
 
