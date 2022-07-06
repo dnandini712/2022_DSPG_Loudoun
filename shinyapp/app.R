@@ -1,4 +1,4 @@
-# Load Packages ---------------------------------------------------------------
+library(shiny)
 library(dplyr)
 library(tidycensus)
 library(ggplot2)
@@ -61,7 +61,7 @@ colors <- c("#232d4b","#2c4f6b","#0e879c","#60999a","#d1e0bf","#d9e12b","#e6ce3a
 
 # data -----------------------------------------------------------
 
-# Sterling Map -----------------------------------------------------
+# Sterling Map ----------------------------------------------------
 
 
 readRenviron("~/.Renviron")
@@ -129,17 +129,6 @@ age_cat <- (subset_sterling$Label)
 #turn categories into factors 
 age<-ggplot(subset_sterling,aes(x=age_cat,y=age_percent, fill=age_cat))+geom_col()+theme(axis.text.x=element_blank(), axis.title.x = element_blank(), axis.text.y = element_blank(),axis.ticks.y=element_blank())+scale_x_discrete(limits=age_cat)+labs(caption= "Source: S0101 ACS 5-year data 2016-2020",y="Percent",)+ coord_polar()+guides(fill = guide_legend(title = "Age Group")) + geom_text(aes(label = age_percent, y = age_percent), size = 3, position = position_stack(vjust = 0.8))
 
-#-----------Race/Ethnicity--------------------
-
-library(plotly)
-
-labelsR = c("White", "Black", "Am.Indian", "Asian","Hawaiian","Other")
-valuesR = c(18138, 3132, 418, 5313, 144, 4570)
-
-race <- plot_ly(type='pie', labels=labelsR, values=valuesR, 
-                textinfo='label+percent',
-                insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Race/Ethnicity')))
-
 #-------income--------------------------------
 medianin <- read_excel(paste0(getwd(),"/data/incomemedian.xlsx"))
 
@@ -155,33 +144,7 @@ pop_nop <- subset_medianin$new_pop
 pop_num <- as.numeric(pop_nop)
 income <- ggplot(subset_medianin,aes(x=mi_cat.fac,y=pop_num, fill=mi_cat.fac))+geom_col(stat="identity")+theme(axis.text.x=element_blank(),axis.ticks.y=element_blank(),axis.title.x = element_blank()+scale_x_discrete(limits=mi_cat.fac),axis.text.y=element_blank())+labs(caption= "Source: S1901 ACS 5-year data 2016-2020",x="Income", y="Percent") + coord_polar() + guides(fill = guide_legend(title = "Income Level ($)")) + geom_text(aes(label=pop_num,y=pop_num), size = 3, position = position_stack(vjust = 1.1))
 
-#---------Property Value---------------------------------
 
-dfpv <- read_excel(paste0(getwd(), "/data/Property_Value.xlsx"), col_names = TRUE)
-
-figpv <- dfpv %>% plot_ly(labels = ~`HOUSING OCCUPANCY`, values = ~dfpv$count, sort = FALSE, direction = "clockwise")
-figpv <- figpv %>% add_pie(hole = 0.5)
-property <- figpv %>% layout(title = "", showlegend = T,
-                             xaxis = list(showgrid = TRUE, zeroline = FALSE, showticklabels = TRUE),
-                             yaxis = list(showgrid = TRUE, zeroline = FALSE, showticklabels = TRUE))
-
-#------------Housing Occupancy---------------------------
-
-lbls.HOUSING = c("Owners", "Renters")
-slices.HOUSING = c(6839, 2412)
-
-housing <- plot_ly(type='pie', labels=lbls.HOUSING, values=slices.HOUSING, 
-                   textinfo='label+percent',
-                   insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Occupants')))
-
-#-------------Commuter Time------------------------------
-
-labelsCT = c("Less than 10 minutes","10 to 14 minutes","15 to 19 minutes","20 to 24 minutes", "25 to 29 minutes", "30 to 34 minutes", "35 to 44 minutes", "45 to 59 minutes", "60 or more minutes")
-valuesCT = c(5.99, 18.0, 16.9, 13.2, 4.8, 13.1, 7.09, 10.2, 10.8)
-
-commutertime <- plot_ly(type='funnelarea', labels=labelsCT, values=valuesCT, sort = FALSE, direction = "",
-                        textinfo='percent',
-                        insidetextorientation='radial') %>% layout(title ='', showlegend=TRUE, legend=list(x=1, y=0.5))
 #------------------poverty-------------------------------
 
 poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
@@ -200,40 +163,49 @@ ggplot(subset_poverty_as, aes(x=povas_cat,y=povas_pop,fill=Sex)) +
 
 pov <- ggplot(subset_poverty_as,aes(x=povas_cat,y=povas_pop, fill=Sex))+geom_col(position="dodge",width=1.5)+theme(axis.text.x=element_text(angle=90, size=7.5, face="bold"),axis.title.x = element_blank())+scale_x_discrete(limits=povas_cat[1:length(povas_cat)/2])+labs(caption= "Source: B17001 ACS 5-year data 2016-2020",x="Age",y="Total Population")+ scale_fill_discrete(name = "", labels = c("Female", "Male")) 
 
-#race by school ----------------------------
-
-races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
-
-race_subset <- races[(1:153),c(1,5,6,7)]
-School <- race_subset$`School Name`
-raceS <- race_subset$Race
-total <- race_subset$`Full Time Count (All Grades)`
-raceehtn <- ggplot(race_subset, aes(x=raceS,y=total,fill=School))+ geom_col()+labs(x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1),axis.text.x=element_text(angle=90)) + scale_fill_brewer(palette = "Set1") + scale_fill_discrete(name = "")
-raceehtn<-ggplotly(raceehtn)
-
-#attendance --------------
-
-attendance <- read_excel(paste0(getwd(),"/data/absencerate.xlsx"))
-att_per <- attendance$`Absence Rate`
-att_rate <- att_per*100
-quarter <- attendance$`School Quarter`
-School <- attendance$`School Name`
-attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
-
-
-
 #------------------employment-----------------
-emp <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
-subset_emp <- emp[c(29:33),]
-percNum <- c()
-for(i in 1:5){
-  percNum <- c(percNum, as.numeric(sub("%", "", subset_emp[i, "...4"])))
-}
-subset_emp[, "...4"] <- percNum
-employment <- ggplot(subset_emp, aes(x = `EMPLOYMENT STATUS`, y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
+# sterling <- read_excel("C:/Users/abdul/Downloads/DSPG/2022_DSPG_Loudoun/Shinyapp/data/Employmentsterling.xlsx",skip=2,col_names=TRUE)
+# subset_sterling <- sterling[c(29:33),]
+# percNum <- c()
+# for(i in 1:5){
+# percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
+# }
+# subset_sterling[, "...4"] <- percNum
+# employment <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
+df2 <- data.frame(
+  levels=c("Less than 9th grade",
+           "9th to 12th grade, no diploma","High School graduate",
+           "Some college or no degree","Associate's degree",
+           "Bachelor's Degree",
+           
+           "Graduate or professional"),
+  number=c(2193, 1943, 4050, 3094, 1396, 4706, 2402))
 
 
-employment<- ggplotly(employment)
+
+df2$levels <- factor(df2$levels, levels = df2$levels)
+employment<-ggplot(df2,aes(levels, number)) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "", y = "Number of population", caption = " Source : S1501 ACS 5-yr data 2016-2020", title = "") + coord_flip() 
+
+employment<-ggplotly(employment)
+#------------------education-------------------------
+
+sterling <- read_excel(paste0(getwd(),"/data/Loudouncountyeducation.xlsx"),skip=2,col_names=TRUE)
+subset_sterling <- sterling[2:28,c(1, 2:5)]
+subset_sterling$Label <- as.factor(subset_sterling$Label)
+df2 <- data.frame(
+  levels=c("Less than 9th grade",
+           "9th to 12th grade, no diploma","High School graduate",
+           "Some college or no degree","Associate's degree",
+           "Bachelor's Degree",
+           
+           "Graduate or professional"),
+  number=c(2193, 1943, 4050, 3094, 1396, 4706, 2402))
+
+
+
+df2$levels <- factor(df2$levels, levels = df2$levels)
+education <- ggplot(df2,aes(levels, number)) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "", y = "Number of population", caption = " Source : S1501 ACS 5-yr data 2016-2020", title = "") + coord_flip() 
+education <- ggplotly(education)
 #---------------------health insurance----------------------------
 
 
@@ -241,37 +213,7 @@ health <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_
 
 subset_health <- health[c(103:105),]
 healthin <- ggplot(subset_health, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020", titlel = "Distribution of Health Insurance") + guides(fill = guide_legend(title = "Health Insurance Type"))+ theme(axis.text.x = element_text(angle=0))+ coord_flip()
-#race by school ----------------------------
-
-races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
-
-race_subset <- races[(1:153),c(1,5,6,7)]
-School <- race_subset$`School Name`
-raceS <- race_subset$Race
-total <- race_subset$`Full Time Count (All Grades)`
-raceehtn <- ggplot(race_subset, aes(x=raceS,y=total,fill=School))+ geom_col()+labs(x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1),axis.text.x=element_text(angle=90)) + scale_fill_brewer(palette = "Set1") + scale_fill_discrete(name = "")
-raceehtn<-ggplotly(raceehtn)
-
-#attendance --------------
-
-attendance <- read_excel(paste0(getwd(),"/data/absencerate.xlsx"))
-att_per <- attendance$`Absence Rate`
-att_rate <- att_per*100
-quarter <- attendance$`School Quarter`
-School <- attendance$`School Name`
-attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
-
-#---------------Number of Teachers/Staff--------------------------
-
-Schools <- c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
-Teachers <- c(32, 52, 66, 55, 59, 35)
-Staff <- c(49, 22, 27, 20, 29, 19)
-dataSTAFF <- data.frame(Schools, Teachers, Staff)
-
-figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = 'Teachers', marker = list(color = 'rgb(255, 2, 2 )'))
-figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(20, 252, 241 )'))
-cteacher <- figSTM %>% layout(yaxis = list(title = 'Total Number'), barmode = 'stack')
-
+healthin <- ggplotly(healthin)
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
                 var vars = {};
@@ -310,10 +252,6 @@ jscode <- "function getUrlVars() {
            }
            "
 
-
-#plotly vs plot variable----
-
-var <- c("ageplot1","ageplot2")
 # user -------------------------------------------------------------
 ui <- navbarPage(title = "DSPG-LivDiv 2022",
                  selected = "overview",
@@ -366,8 +304,8 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                  tabPanel("Sterling Area", value = "overview",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(12, align = "justify",h4(strong("Map of Sterling")),
-                                          p("This map shows the six schools and the area of Sterling. The orange area is the Census Designated Place of Sterling. It can be observed that Sugarland Elementary is outside the CDP of Sterling. Hence, the team considered to mimic the school zone of this school by selecting respective blocks as assigned by the US Census Bureau. It is shown by the yellow area. For this project, we have defined Sterling as both the orange area and the yellow area as seen in the map."),
+                                   column(12, align = "center",h4(strong("Map of Sterling")),
+                                          p("This map shows the Sterling area and the 6 schools."),
                                           br("")
                                           
                                           
@@ -375,55 +313,47 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                    )),
                           
                           fluidPage(
-                            column(12, align = "center", leafletOutput("map1", width = "50%")
+                            column(12, align = "center", leafletOutput("map1", width = "60%")
                                    #fluidRow(align = "center",
                                    #    p(tags$small(em('Last updated: August 2021'))))
                             ) 
                           )
                  ), 
-                 tabPanel("Sociodemographics",
-                          fluidRow(style = "margin: 6px;",
-                                   h1(strong("Sterling"), align = "center"),
-                                   p("", style = "padding-top:10px;"), 
-                                   #column(4, 
-                                   #      h4(strong("Education")),
-                                   #     p("These are demographics"),
-                                   #) ,
-                                   column(8, 
-                                          h4(strong("Sterling, CDP")),
-                                          selectInput("demosdrop", "Select Variable:", width = "60%", choices = c(
-                                            "Gender" = "gender",
-                                            "Age" = "age",
-                                            "Race/ethnicity" = "race", 
-                                            "Educational Attainment" = "edu",
-                                            "Family Income" = "faminc",
-                                            "Property Value" = "property",
-                                            "Housing Occupancy" = "housing",
-                                            "Employment" = "employment",
-                                            "Work Occupation" = "workoccu",
-                                            "Commuter Time" = "commutertime",
-                                            "Commuter Mode" = "commmode",
-                                            "Poverty by Age and Sex" = "pov", 
-                                            "Health Coverage" = "health"
-                                          ),
-                                          ),
-                                          
-                                          withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%")),
-                                          withSpinner(plotOutput("ageplot1", height = "500px", width = "60%")),
-                                          
-                                          #if ( == "age"){
-                                          #withSpinner(plotOutput("ageplot1", height = "500px", width = "60%"))
-                                          #} else {
-                                          #withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%"))
-                                   ),
-                                   
-                                   # column(12, 
-                                   #      h4("References: "), 
-                                   #     p(tags$small("[1] Groundwater: Groundwater sustainability. (2021). Retrieved July 27, 2021, from https://www.ngwa.org/what-is-groundwater/groundwater-issues/groundwater-sustainability")) ,
-                                   #     p("", style = "padding-top:10px;")) 
-                          )), 
-                 navbarMenu("Community Schools",
-                            tabPanel("Demographics", 
+                 navbarMenu("Sociodemographics" , 
+                            tabPanel("Sterling", 
+                                     fluidRow(style = "margin: 6px;",
+                                              h1(strong("Sterling"), align = "center"),
+                                              p("", style = "padding-top:10px;"), 
+                                              #column(4, 
+                                              #      h4(strong("Education")),
+                                              #     p("These are demographics"),
+                                              #) ,
+                                              column(12, 
+                                                     h4(strong("Sterling, CDP")),
+                                                     selectInput("demosdrop", "Select Variable:", width = "60%", choices = c(
+                                                       "Age" = "age",
+                                                       "Gender" = "gender",
+                                                       "Race/ethnicity" = "race", 
+                                                       "Educational Attainment" = "edu",
+                                                       "Poverty by Age and Sex" = "pov", 
+                                                       "Marital Status" = "mar",
+                                                       "Family Income" = "faminc",
+                                                       "Property Value" = "propval",
+                                                       "Employment" = "employment",
+                                                       "Education" = "education",
+                                                       "Health Insurance" = "health"
+                                                       
+                                                     ),
+                                                     ), 
+                                                     withSpinner(plotOutput("ageplot1", height = "500px", width = "60%")),
+                                                     withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%")),
+                                              ),
+                                              # column(12, 
+                                              #      h4("References: "), 
+                                              #     p(tags$small("[1] Groundwater: Groundwater sustainability. (2021). Retrieved July 27, 2021, from https://www.ngwa.org/what-is-groundwater/groundwater-issues/groundwater-sustainability")) ,
+                                              #     p("", style = "padding-top:10px;")) 
+                                     )), 
+                            tabPanel("Community Schools", 
                                      fluidRow(style = "margin: 6px;",
                                               h1(strong("Demographics of Community Schools"), align = "center"),
                                               p("", style = "padding-top:10px;"), 
@@ -435,15 +365,15 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                                      h4(strong("Community Schools")),
                                                      selectInput("schooldrop", "Select Variable:", width = "60%", choices = c(
                                                        "Gender" = "cgender",
-                                                       "Race/Ethnicity" ="raceehtn", 
+                                                       "Race/Ethnicity" ="crace", 
                                                        "Hispanic Population" = "chispanic",
-                                                       "No. of teacher/Staff" = "cteacher",
+                                                       "No. of teacher" = "cteacher",
                                                        "Enrollment" = "cenrol", 
-                                                       "Absences By Quarter" = "attend", 
+                                                       "Absences By Quarter" = "cabsense", 
                                                        "Chronic Absenteeism" = "chronic"
                                                      ),
                                                      ), 
-                                                     withSpinner(plotlyOutput("ocuplot", height = "500px", width = "60%")),
+                                                     withSpinner(plotOutput("ocuplot", height = "500px")),
                                                      
                                               ),
                                               # column(12, 
@@ -452,102 +382,9 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                               #      p("", style = "padding-top:10px;")) 
                                      )), 
                             
-                            tabPanel("Climate Survey Reports",
-                                     fluidRow(style = "margin: 6px;",
-                                              p("", style = "padding-top:10px;"),
-                                              column(12, align = "center",h4(strong("Climate Survey")),
-                                                     p("Parent, Student and Staff"),
-                                                     br("")
-                                                     
-                                                     
-                                                     
-                                              )),
-                                     
-                            )
-                 ),
-                 navbarMenu("Availability of Resources",
-                            tabPanel("Health and Social Services"),
-                            fluidRow(style = "margin: 6px;",
-                                     p("", style = "padding-top:10px;"),
-                                     column(12, align = "center",h4(strong("")),
-                                            p(""),
-                                            br("")
-                                            
-                                            
-                                            
-                                     )),
                             
-                            tabPanel("Mental Health"),
-                            fluidRow(style = "margin: 6px;",
-                                     p("", style = "padding-top:10px;"),
-                                     column(12, align = "center",h4(strong("")),
-                                            p(""),
-                                            br("")
-                                            
-                                            
-                                            
-                                     )),
-                            tabPanel("Family Engagement"),
-                            fluidRow(style = "margin: 6px;",
-                                     p("", style = "padding-top:10px;"),
-                                     column(12, align = "center",h4(strong("")),
-                                            p(""),
-                                            br("")
-                                            
-                                            
-                                            
-                                     )),
-                            tabPanel("Youth Development Opportunities"),
-                            fluidRow(style = "margin: 6px;",
-                                     p("", style = "padding-top:10px;"),
-                                     column(12, align = "center",h4(strong("")),
-                                            p(""),
-                                            br("")
-                                            
-                                            
-                                            
-                                     )),
                             
-                 ),
-                 
-                 tabPanel("Service Gaps",
-                          fluidRow(style = "margin: 6px;",
-                                   p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("Service gaps")),
-                                          p(""),
-                                          br("")
-                                          
-                                          
-                                          
-                                   )),
-                          
-                 ),
-                 
-                 tabPanel("Analysis",
-                          fluidRow(style = "margin: 6px;",
-                                   p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("")),
-                                          p(""),
-                                          br("")
-                                          
-                                          
-                                          
-                                   )),
-                          
-                 ),
-                 
-                 tabPanel("Meet the Team",
-                          fluidRow(style = "margin: 6px;",
-                                   p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("")),
-                                          p(""),
-                                          br("")
-                                          
-                                          
-                                          
-                                   )),
-                          
-                 )
+                 ), 
                  
 )
 
@@ -566,7 +403,6 @@ server <- function(input, output, session) {
     input$demosdrop
   })
   
-  
   output$ageplot1 <- renderPlot({
     if (Var() == "age") {
       
@@ -575,10 +411,18 @@ server <- function(input, output, session) {
     else if (Var() == "faminc") {
       income
     }
-    else if (Var() == "health") {
-      
-      healthin 
-    }
+    # else if (Var() == "employment"){
+    #   employment
+    # }
+    # else if (Var() == "education"){
+    #   
+    #   education
+    # }
+    # else if (Var() == "health") {
+    #   
+    #   healthin 
+    # }
+    
     
   })
   
@@ -591,54 +435,18 @@ server <- function(input, output, session) {
     else if (Var() == "gender") {
       gender
     }
-    else if (Var() == "race") {
-      
-      race
+    else if (Var() == "employment") {
+       employment
+    }
+    else if (Var() == "health"){
+      healthin
+    }
+    else if (Var() == "education"){
+      education
     }
     
-    else if (Var() == "property") {
-      
-      property
-    }
-    
-    else if (Var() == "housing") {
-      
-      housing
-    }
-    
-    else if (Var() == "commutertime") {
-      
-      commutertime
-    }
-    else if (Var() == "employment"){
-      employment
-    }
   })
-  
-  
-  #School Demos
-  
-  Var2 <- reactive({
-    input$schooldrop
-  }) 
-  
-  output$ocuplot <- renderPlotly({
-    
-    if(Var2() == "raceehtn"){
-      raceehtn 
-    }
-    
-    else if(Var2() == "attend"){
-      attend 
-    }
-    
-    else if (Var2() == "cteacher") {
-      
-      cteacher
-    }
-  })
-}  
-
+}
 
 #sociodemo tabset ----------------------------------------------------
 
