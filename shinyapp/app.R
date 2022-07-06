@@ -202,12 +202,23 @@ pov <- ggplot(subset_poverty_as,aes(x=povas_cat,y=povas_pop, fill=Sex))+geom_col
 
 #---------------------health insurance----------------------------
 
-
 health <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
 
 subset_health <- health[c(103:105),]
 healthin <- ggplot(subset_health, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020", titlel = "Distribution of Health Insurance") + guides(fill = guide_legend(title = "Health Insurance Type"))+ theme(axis.text.x = element_text(angle=0))+ coord_flip()
 
+#---------------Number of Teachers/Staff--------------------------
+
+Schools <- c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
+Teachers <- c(32, 52, 66, 55, 59, 35)
+Staff <- c(49, 22, 27, 20, 29, 19)
+dataSTAFF <- data.frame(Schools, Teachers, Staff)
+
+figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = 'Teachers', marker = list(color = 'rgb(255, 2, 2 )'))
+figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(20, 252, 241 )'))
+cteacher <- figSTM %>% layout(yaxis = list(title = 'Total Number'), barmode = 'stack')
+
+#------------------------------------------------------------------
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
                 var vars = {};
@@ -440,6 +451,11 @@ server <- function(input, output, session) {
     else if (Var() == "commutertime") {
       
       commutertime
+    }
+    
+    else if (Var() == "cteacher") {
+      
+      cteacher
     }
     
   })
