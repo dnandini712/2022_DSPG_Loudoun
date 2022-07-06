@@ -233,7 +233,7 @@ subset_emp[, "...4"] <- percNum
 employment <- ggplot(subset_emp, aes(x = `EMPLOYMENT STATUS`, y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
 
 
-
+employment<- ggplotly(employment)
 #---------------------health insurance----------------------------
 
 
@@ -381,8 +381,7 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                   ) 
                                    )
                  ), 
-                 navbarMenu("Sociodemographics" , 
-                            tabPanel("Sterling", 
+                 tabPanel("Sociodemographics of Sterling",
                                      fluidRow(style = "margin: 6px;",
                                               h1(strong("Sterling"), align = "center"),
                                               p("", style = "padding-top:10px;"), 
@@ -423,7 +422,7 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                               #     p(tags$small("[1] Groundwater: Groundwater sustainability. (2021). Retrieved July 27, 2021, from https://www.ngwa.org/what-is-groundwater/groundwater-issues/groundwater-sustainability")) ,
                                               #     p("", style = "padding-top:10px;")) 
                                      )), 
-                            tabPanel("Community Schools", 
+                      tabPanel("Community Schools", 
                                      fluidRow(style = "margin: 6px;",
                                               h1(strong("Demographics of Community Schools"), align = "center"),
                                               p("", style = "padding-top:10px;"), 
@@ -454,9 +453,8 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                             
                             
                             
-                 ), 
+                 )
                  
-)               
                  
 # server -----------------------------------------------------------
 server <- function(input, output, session) {
@@ -484,9 +482,6 @@ server <- function(input, output, session) {
     else if (Var() == "health") {
       
      healthin 
-    }
-    else if (Var() == "employment"){
-      employment
     }
     
   })
@@ -518,6 +513,9 @@ server <- function(input, output, session) {
     else if (Var() == "commutertime") {
       
       commutertime
+    }
+    else if (Var() == "employment"){
+      employment
     }
   })
 
