@@ -164,7 +164,7 @@ ggplot(subset_poverty_as, aes(x=povas_cat,y=povas_pop,fill=Sex)) +
 pov <- ggplot(subset_poverty_as,aes(x=povas_cat,y=povas_pop, fill=Sex))+geom_col(position="dodge",width=1.5)+theme(axis.text.x=element_text(angle=90, size=7.5, face="bold"),axis.title.x = element_blank())+scale_x_discrete(limits=povas_cat[1:length(povas_cat)/2])+labs(caption= "Source: B17001 ACS 5-year data 2016-2020",x="Age",y="Total Population")+ scale_fill_discrete(name = "", labels = c("Female", "Male")) 
 
 #------------------employment-----------------
-# sterling <- read_excel("C:/Users/abdul/Downloads/DSPG/2022_DSPG_Loudoun/Shinyapp/data/Employmentsterling.xlsx",skip=2,col_names=TRUE)
+ sterling <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
 # subset_sterling <- sterling[c(29:33),]
 # percNum <- c()
 # for(i in 1:5){
@@ -172,21 +172,14 @@ pov <- ggplot(subset_poverty_as,aes(x=povas_cat,y=povas_pop, fill=Sex))+geom_col
 # }
 # subset_sterling[, "...4"] <- percNum
 # employment <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
-df2 <- data.frame(
-  levels=c("Less than 9th grade",
-           "9th to 12th grade, no diploma","High School graduate",
-           "Some college or no degree","Associate's degree",
-           "Bachelor's Degree",
-           
-           "Graduate or professional"),
-  number=c(2193, 1943, 4050, 3094, 1396, 4706, 2402))
-
-
-
-df2$levels <- factor(df2$levels, levels = df2$levels)
-employment<-ggplot(df2,aes(levels, number)) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "", y = "Number of population", caption = " Source : S1501 ACS 5-yr data 2016-2020", title = "") + coord_flip() 
-
-employment<-ggplotly(employment)
+subset_sterling <- sterling[c(29:33),]
+percNum <- c()
+for(i in 1:5){
+  percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
+}
+subset_sterling[, "...4"] <- percNum
+employment <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = `...4`, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
+employment <- ggplotly(employment)
 #------------------education-------------------------
 
 sterling <- read_excel(paste0(getwd(),"/data/Loudouncountyeducation.xlsx"),skip=2,col_names=TRUE)
