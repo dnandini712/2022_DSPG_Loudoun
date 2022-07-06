@@ -163,6 +163,18 @@ ggplot(subset_poverty_as, aes(x=povas_cat,y=povas_pop,fill=Sex)) +
 
 pov <- ggplot(subset_poverty_as,aes(x=povas_cat,y=povas_pop, fill=Sex))+geom_col(position="dodge",width=1.5)+theme(axis.text.x=element_text(angle=90, size=7.5, face="bold"),axis.title.x = element_blank())+scale_x_discrete(limits=povas_cat[1:length(povas_cat)/2])+labs(caption= "Source: B17001 ACS 5-year data 2016-2020",x="Age",y="Total Population")+ scale_fill_discrete(name = "", labels = c("Female", "Male")) 
 
+#------------------employment-----------------
+emp <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
+subset_emp <- emp[c(29:33),]
+percNum <- c()
+for(i in 1:5){
+  percNum <- c(percNum, as.numeric(sub("%", "", subset_emp[i, "...4"])))
+}
+subset_emp[, "...4"] <- percNum
+employment <- ggplot(subset_emp, aes(x = `EMPLOYMENT STATUS`, y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
+
+
+
 #---------------------health insurance----------------------------
 
 
@@ -209,6 +221,10 @@ jscode <- "function getUrlVars() {
            }
            "
 
+
+#plotly vs plot variable----
+
+var <- c("ageplot1","ageplot2")
 # user -------------------------------------------------------------
 ui <- navbarPage(title = "DSPG-LivDiv 2022",
                  selected = "overview",
@@ -285,23 +301,33 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                               #      h4(strong("Education")),
                                               #     p("These are demographics"),
                                               #) ,
-                                              column(12, 
+                                              column(8, 
                                                      h4(strong("Sterling, CDP")),
                                                      selectInput("demosdrop", "Select Variable:", width = "60%", choices = c(
-                                                       "Age" = "age",
                                                        "Gender" = "gender",
+                                                       "Age" = "age",
                                                        "Race/ethnicity" = "race", 
                                                        "Educational Attainment" = "edu",
-                                                       "Poverty by Age and Sex" = "pov", 
-                                                       "Marital Status" = "mar",
                                                        "Family Income" = "faminc",
                                                        "Property Value" = "propval",
-                                                       "Health Insurance" = "health"
+                                                       "Housing Occupancy" = "occu",
+                                                       "Employment" = "emp",
+                                                       "Work Occupation" = "workoccu",
+                                                       "Commuter Time" = "commtime",
+                                                       "Commuter Mode" = "commmode",
+                                                       "Poverty by Age and Sex" = "pov", 
+                                                       "Health Coverage" = "health"
                                                        ),
-                                                     ), 
+                                                     ),
                                                      withSpinner(plotOutput("ageplot1", height = "500px", width = "60%")),
                                                      withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%")),
-                                              ),
+                                                     
+                                                       #if ( == "age"){
+                                                         #withSpinner(plotOutput("ageplot1", height = "500px", width = "60%"))
+                                                       #} else {
+                                                         #withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%"))
+                                                       ),
+                                                     
                                               # column(12, 
                                               #      h4("References: "), 
                                               #     p(tags$small("[1] Groundwater: Groundwater sustainability. (2021). Retrieved July 27, 2021, from https://www.ngwa.org/what-is-groundwater/groundwater-issues/groundwater-sustainability")) ,
@@ -368,6 +394,9 @@ server <- function(input, output, session) {
     else if (Var() == "health") {
       
      healthin 
+    }
+    else if (Var() == "emp"){
+      employment
     }
     
   })
