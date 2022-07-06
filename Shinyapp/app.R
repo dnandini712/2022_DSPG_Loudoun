@@ -382,7 +382,7 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
 )
 
 
-# server -----------------------------------------------------------
+# server ------------------------------------------------------------------
 server <- function(input, output, session) {
   # Run JavaScript Code
   runjs(jscode)
