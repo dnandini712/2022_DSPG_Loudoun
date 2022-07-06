@@ -206,9 +206,9 @@ races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
 
 race_subset <- races[(1:153),c(1,5,6,7)]
 School <- race_subset$`School Name`
-race <- race_subset$Race
+raceS <- race_subset$Race
 total <- race_subset$`Full Time Count (All Grades)`
-raceehtn <- ggplot(race_subset, aes(x=race,y=total,fill=School))+ geom_col()+labs(x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1),axis.text.x=element_text(angle=90)) + scale_fill_brewer(palette = "Set1") + scale_fill_discrete(name = "")
+raceehtn <- ggplot(race_subset, aes(x=raceS,y=total,fill=School))+ geom_col()+labs(x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1),axis.text.x=element_text(angle=90)) + scale_fill_brewer(palette = "Set1") + scale_fill_discrete(name = "")
 raceehtn<-ggplotly(raceehtn)
 
 #attendance --------------
@@ -247,9 +247,9 @@ races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
 
 race_subset <- races[(1:153),c(1,5,6,7)]
 School <- race_subset$`School Name`
-race <- race_subset$Race
+raceS <- race_subset$Race
 total <- race_subset$`Full Time Count (All Grades)`
-raceehtn <- ggplot(race_subset, aes(x=race,y=total,fill=School))+ geom_col()+labs(x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1),axis.text.x=element_text(angle=90)) + scale_fill_brewer(palette = "Set1") + scale_fill_discrete(name = "")
+raceehtn <- ggplot(race_subset, aes(x=raceS,y=total,fill=School))+ geom_col()+labs(x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1),axis.text.x=element_text(angle=90)) + scale_fill_brewer(palette = "Set1") + scale_fill_discrete(name = "")
 raceehtn<-ggplotly(raceehtn)
 
 #attendance --------------
@@ -408,8 +408,9 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                                        "Health Coverage" = "health"
                                                        ),
                                                      ),
-                                                     withSpinner(plotOutput("ageplot1", height = "500px", width = "60%")),
+                                                     
                                                      withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%")),
+                                                     withSpinner(plotOutput("ageplot1", height = "500px", width = "60%")),
                                                      
                                                        #if ( == "age"){
                                                          #withSpinner(plotOutput("ageplot1", height = "500px", width = "60%"))
@@ -436,13 +437,13 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                                        "Gender" = "cgender",
                                                        "Race/Ethnicity" ="raceehtn", 
                                                        "Hispanic Population" = "chispanic",
-                                                       "No. of teacher" = "teacher",
+                                                       "No. of teacher/Staff" = "cteacher",
                                                        "Enrollment" = "cenrol", 
                                                        "Absences By Quarter" = "attend", 
                                                        "Chronic Absenteeism" = "chronic"
                                                      ),
                                                      ), 
-                                                     withSpinner(plotOutput("ocuplot", height = "500px", width = "60%")),
+                                                     withSpinner(plotlyOutput("ocuplot", height = "500px", width = "60%")),
                                                      
                                               ),
                                               # column(12, 
@@ -470,10 +471,7 @@ server <- function(input, output, session) {
   Var <- reactive({
     input$demosdrop
   })
-  
-  Var2 <- reactive({
-    input$schooldrop
-  }) 
+
   
   output$ageplot1 <- renderPlot({
     if (Var() == "age") {
@@ -503,7 +501,7 @@ server <- function(input, output, session) {
       gender
     }
     else if (Var() == "race") {
-      
+    
       race
     }
     
@@ -526,10 +524,10 @@ server <- function(input, output, session) {
 
 #School Demos
 
-schoolVar <- reactive({
-  input$schooldrop
-})
-
+Var2 <- reactive({
+    input$schooldrop
+  }) 
+  
 output$ocuplot <- renderPlotly({
   
   if(Var2() == "raceehtn"){
