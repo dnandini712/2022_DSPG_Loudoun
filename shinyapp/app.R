@@ -129,6 +129,17 @@ age_cat <- (subset_sterling$Label)
 #turn categories into factors 
 age<-ggplot(subset_sterling,aes(x=age_cat,y=age_percent, fill=age_cat))+geom_col()+theme(axis.text.x=element_blank(), axis.title.x = element_blank(), axis.text.y = element_blank(),axis.ticks.y=element_blank())+scale_x_discrete(limits=age_cat)+labs(caption= "Source: S0101 ACS 5-year data 2016-2020",y="Percent",)+ coord_polar()+guides(fill = guide_legend(title = "Age Group")) + geom_text(aes(label = age_percent, y = age_percent), size = 3, position = position_stack(vjust = 0.8))
 
+#-----------Race/Ethnicity--------------------
+
+library(plotly)
+
+labelsR = c("White", "Black", "Am.Indian", "Asian","Hawaiian","Other")
+valuesR = c(18138, 3132, 418, 5313, 144, 4570)
+
+race <- plot_ly(type='pie', labels=labelsR, values=valuesR, 
+                textinfo='label+percent',
+                insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Race/Ethnicity')))
+
 #-------income--------------------------------
 medianin <- read_excel(paste0(getwd(),"/data/incomemedian.xlsx"))
 
@@ -144,7 +155,33 @@ pop_nop <- subset_medianin$new_pop
 pop_num <- as.numeric(pop_nop)
 income <- ggplot(subset_medianin,aes(x=mi_cat.fac,y=pop_num, fill=mi_cat.fac))+geom_col(stat="identity")+theme(axis.text.x=element_blank(),axis.ticks.y=element_blank(),axis.title.x = element_blank()+scale_x_discrete(limits=mi_cat.fac),axis.text.y=element_blank())+labs(caption= "Source: S1901 ACS 5-year data 2016-2020",x="Income", y="Percent") + coord_polar() + guides(fill = guide_legend(title = "Income Level ($)")) + geom_text(aes(label=pop_num,y=pop_num), size = 3, position = position_stack(vjust = 1.1))
 
+#---------Property Value---------------------------------
 
+dfpv <- read_excel(paste0(getwd(), "/data/Property_Value.xlsx"), col_names = TRUE)
+
+figpv <- dfpv %>% plot_ly(labels = ~`HOUSING OCCUPANCY`, values = ~dfpv$count, sort = FALSE, direction = "clockwise")
+figpv <- figpv %>% add_pie(hole = 0.5)
+property <- figpv %>% layout(title = "", showlegend = T,
+                             xaxis = list(showgrid = TRUE, zeroline = FALSE, showticklabels = TRUE),
+                             yaxis = list(showgrid = TRUE, zeroline = FALSE, showticklabels = TRUE))
+
+#------------Housing Occupancy---------------------------
+
+lbls.HOUSING = c("Owners", "Renters")
+slices.HOUSING = c(6839, 2412)
+
+housing <- plot_ly(type='pie', labels=lbls.HOUSING, values=slices.HOUSING, 
+                   textinfo='label+percent',
+                   insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Occupants')))
+
+#-------------Commuter Time------------------------------
+
+labelsCT = c("Less than 10 minutes","10 to 14 minutes","15 to 19 minutes","20 to 24 minutes", "25 to 29 minutes", "30 to 34 minutes", "35 to 44 minutes", "45 to 59 minutes", "60 or more minutes")
+valuesCT = c(5.99, 18.0, 16.9, 13.2, 4.8, 13.1, 7.09, 10.2, 10.8)
+
+commutertime <- plot_ly(type='funnelarea', labels=labelsCT, values=valuesCT, sort = FALSE, direction = "",
+                        textinfo='percent',
+                        insidetextorientation='radial') %>% layout(title ='', showlegend=TRUE, legend=list(x=1, y=0.5))
 #------------------poverty-------------------------------
 
 poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
@@ -224,7 +261,16 @@ quarter <- attendance$`School Quarter`
 School <- attendance$`School Name`
 attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
 
+#---------------Number of Teachers/Staff--------------------------
 
+Schools <- c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
+Teachers <- c(32, 52, 66, 55, 59, 35)
+Staff <- c(49, 22, 27, 20, 29, 19)
+dataSTAFF <- data.frame(Schools, Teachers, Staff)
+
+figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = 'Teachers', marker = list(color = 'rgb(255, 2, 2 )'))
+figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(20, 252, 241 )'))
+cteacher <- figSTM %>% layout(yaxis = list(title = 'Total Number'), barmode = 'stack')
 
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
@@ -352,11 +398,11 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                                        "Race/ethnicity" = "race", 
                                                        "Educational Attainment" = "edu",
                                                        "Family Income" = "faminc",
-                                                       "Property Value" = "propval",
-                                                       "Housing Occupancy" = "occu",
-                                                       "Employment" = "emp",
+                                                       "Property Value" = "property",
+                                                       "Housing Occupancy" = "housing",
+                                                       "Employment" = "employment",
                                                        "Work Occupation" = "workoccu",
-                                                       "Commuter Time" = "commtime",
+                                                       "Commuter Time" = "commutertime",
                                                        "Commuter Mode" = "commmode",
                                                        "Poverty by Age and Sex" = "pov", 
                                                        "Health Coverage" = "health"
@@ -391,12 +437,12 @@ ui <- navbarPage(title = "DSPG-LivDiv 2022",
                                                        "Race/Ethnicity" ="raceehtn", 
                                                        "Hispanic Population" = "chispanic",
                                                        "No. of teacher" = "teacher",
-                                                       "Enrollment" = "enrol", 
+                                                       "Enrollment" = "cenrol", 
                                                        "Absences By Quarter" = "attend", 
                                                        "Chronic Absenteeism" = "chronic"
                                                      ),
                                                      ), 
-                                                     withSpinner(plotlyOutput("ocuplot", height = "500px", width = "60%")),
+                                                     withSpinner(plotOutput("ocuplot", height = "500px", width = "60%")),
                                                      
                                               ),
                                               # column(12, 
@@ -425,6 +471,10 @@ server <- function(input, output, session) {
     input$demosdrop
   })
   
+  Var2 <- reactive({
+    input$schooldrop
+  }) 
+  
   output$ageplot1 <- renderPlot({
     if (Var() == "age") {
       
@@ -437,7 +487,7 @@ server <- function(input, output, session) {
       
      healthin 
     }
-    else if (Var() == "emp"){
+    else if (Var() == "employment"){
       employment
     }
     
@@ -452,7 +502,25 @@ server <- function(input, output, session) {
     else if (Var() == "gender") {
       gender
     }
+    else if (Var() == "race") {
+      
+      race
+    }
     
+    else if (Var() == "property") {
+      
+      property
+    }
+    
+    else if (Var() == "housing") {
+      
+      housing
+    }
+    
+    else if (Var() == "commutertime") {
+      
+      commutertime
+    }
   })
 
 
@@ -464,14 +532,21 @@ schoolVar <- reactive({
 
 output$ocuplot <- renderPlotly({
   
-  if(schoolVar() == "raceehtn"){
+  if(Var2() == "raceehtn"){
     raceehtn 
   }
   
-  else if(schoolVar()== "attend"){
-    attend }
+  else if(Var2() == "attend"){
+    attend 
+  }
+  
+  else if (Var2() == "cteacher") {
+    
+    cteacher
+  }
 })
 }  
+
   
   #sociodemo tabset ----------------------------------------------------
 
