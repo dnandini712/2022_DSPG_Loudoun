@@ -437,21 +437,23 @@ ui <- navbarPage(title = "DSPG",
                           ),
                           fluidRow(style = "margin: 6px;",
                                    column(4,
-                                          h2(strong("The Setting")),
+                                          h2(strong("The Setting")),align = "justify",
                                           
-                                          p("The Community schools are centers for neighborhood enrichment, uniting families, educators and community partners to provide world class education, enrichment, health services, and other opportunities to succeed in school and life. Loudoun County atarted the community school initiative back in 2016. The first community school was Sterling Elementary School. Throughout the past several years, there's been a big community effort to build key connections in Loudoun County’s six Title 1 elementary schools, which serve under-resourced neighborhoods in Sterling. It’s called the Community Schools Initiative and its goal is to provide additional resources for Sugarland, Sterling, Rolling Ridge, Sully, Guilford, and Forest Grove elementary schools."),
+                                          p("                     
+The Community schools are centers for neighborhood enrichment, uniting families, educators and community partners to provide world class education, enrichment, health services, and other opportunities to succeed in school and life. Loudoun County atarted the community school initiative back in 2016. The first community school was Sterling Elementary School. Throughout the past several years, there's been a big community effort to build key connections in Loudoun County’s six Title 1 elementary schools, which serve under-resourced neighborhoods in Sterling. It’s called the Community Schools Initiative and its goal is to provide additional resources for Sugarland, Sterling, Rolling Ridge, Sully, Guilford, and Forest Grove elementary schools.
+"),
                                           #p("During the 2018 – 2019 school year, the Community school model provided the families with clothes, shoes, and other basic supplies 538 times; enabled 135 families to receive weekend meals throughout the school year; supported 6 academic programs for 323 students; and provided 9 after-school enrichment programs for 373 students. Funds have provided these Community Schools with additional resources, such as full-time parent liaisons, a full-time social worker, and programs that keep families engaged in their child’s education. The Community Schools initiative focuses on bolstering these schools in six areas: academies, health and social services, youth and community engagement, building stronger families, and healthier communities."),
                                           
                                    ),
                                    column(4,
-                                          h2(strong("Project Background")),
+                                          h2(strong("Project Background")), align = "justify",
                                           
                                           p("During the 2018 – 2019 school year, the Community school model provided the families with clothes, shoes, and other basic supplies 538 times; enabled 135 families to receive weekend meals throughout the school year; supported 6 academic programs for 323 students; and provided 9 after-school enrichment programs for 373 students. Funds have provided these Community Schools with additional resources, such as full-time parent liaisons, a full-time social worker, and programs that keep families engaged in their child’s education. The Community Schools initiative focuses on bolstering these schools in six areas: academies, health and social services, youth and community engagement, building stronger families, and healthier communities."),
                                           ),
                                    
                                    column(4,
                                           h2(strong("Project Goals")),
-                                          p("Identifying service gaps in the Community Schools"),
+                                          p("Identifying possible opportunities in services in the Community Schools"),
                                           #p(""),
                                           #p("")
                                    )
@@ -514,8 +516,28 @@ ui <- navbarPage(title = "DSPG",
                                                        #} else {
                                                          #withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%"))
                                                        ),
+                                              
+                                              column(8,
+                                                     h2(strong("Analysis")), align = "justify",
+                                                     p("To access the possible opportunities within the six title 1 community schools in Sterling, VA, it is important to understand the neighborhood and area in which these schools are located. By looking at the graph, it appears to be almost an equal split of male’s and females in Sterling, VA. The total population in sterling is 30,271. 15,282 members of the population are male, while the remaining 14,989 are female. There are only 293 more males than females so that gives us almost a one to one ratio - so that’s good.", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("So, once the team looked at the gender distribution, we were curious to look at the age distribution of the individuals of Sterling. The largest age group in Sterling are Adults (ages 35 to 44) which is represented by the blue green block, and then the older millennials (25 to 34) which is represented by the light green block. The age groups are fitting for the high median income within the area. ", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("
+Another important determinant that might impact someone’s availability of opportunities is their race or ethnicity. So, our logical next step was to look at the ethnicity/race distribution of the people of Sterling. Collecting the Race and Ethnicity demographic proved to be a little challenging at first. While the team was observing the data, we kept noticing that the number of individuals in each race population kept exceeding the total population of Sterling. For example, when we would add up all of the white, hispanic, asian, Hawaiian, and  African American population’s, the total number would exceed 30,271, the population of Sterling, VA. We later learned that this is because the American Community Survey does not recognize hispanic as a race. To the American Community Survey, Hispanic is an ethnicity so People can identify as white or asian and still be of hispanic decent, or they could select “other” as there is a separate category for them to mark hispanic. Knowing that disclaimer, we had to create a separate visualization for the hispanic population so we could best represent them. As you can see, majority of the Sterling population is white. When you look at the ethnicity visualization, almost half of the sterling CDP population identifies as being hispanic or latino.
+", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("Now that we looked at the ethnic groups, we wanted to look at the educational attainment levels. The data was collected from the individuals who are ages 25 and over. It seems that a large number of the population are educated with that of a bachelors agree or higher, which is fitting for the county’s high median income. 
+
+so a reasonable population has achieved high education - how much is Sterling making? Thus, we looked at family income levels. This data was collected looking at family households in the last 12 months of the ACS collected data (2020). It has also been adjusted for inflation. Interestingly enough, the largest income bracket lies within the range of $100,000 to $149,999 which is represented by the dark purple area however we do acknowledge that this may not apply our families of interest.
+", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("So we wondered if the high-income levels also affect the housing market so this can help us to understand housing needs and availability of the children’s families. Looking at this visualization, we see that this area has a high property value with a large percentage of properties being worth $300,000 to $499,999, shown by the blue part of the circle. This is important to take into consideration considering our targeted title1 area. Once we looked at the high property values, we were intrigued to find out how many occupants own their homes. As expected, majority housing residents are home owners, while a little over a quarter housing residents are renters. This could be because of families high incomes.", style = "padding-top:15px;font-size: 14px;"),  
+                                                     p("Next, we visualized the data for employment in the sterling area. Pink is used to show the Employed Percentage whereas Aqua blue shows the unemployed percentage of the population. One thing to note is that this percentage is from within the labor force not the total population of the area. One key take away from this graph is that the majority of sterling is employed at a remarkably
+high rate higher than the national average. 71.8% employment rate.", style = "padding-top:15px;font-size: 14px;"), 
+                                                     p("The next best thing to do was to look at what groups are being employed so we saw that the majority of them are being employed in the management, business, and science industry with a total number of 6,380 individuals. The service industry comes in second place at around 25% which makes it upto 4,122 individuals. The graph shows that one of the smallest occupations is the production industry which suggests that sterling is not an industrial area but has more corporate jobs to offer as management and business are one of the highest employable sectors in sterling. Using ACS American community survey data of the sterling cdp census designated place we found that 75% commuters drive on their own while only a quarter prefer other modes of commute. Notably less than 2 % of commuters take public transportation, this may be something we want to further research.", style = "padding-top:15px;font-size: 14px;"), 
                                                      
-                                              # column(12, 
+                                                     p("The visualization for healthcare tells us that private health insurance is the most popular type of health insurance. Private health insurance mainly consists of insurance plans provided through the employer. Coming in second place is the public insurance type which mainly consists of low-cost government backed programs such as medicare, medicaid, blue cross blue shield and Virginia Cover. However, there is a chunk of population of about 16.5% that does not have any kind of health insurance this might be an area where we can research more to figure out the possible opportunities in the community.", style = "padding-top:15px;font-size: 14px;"),
+                                                     
+                                              )
+                                                     
+                                              # column(14, 
                                               #      h4("References: "), 
                                               #     p(tags$small("[1] Groundwater: Groundwater sustainability. (2021). Retrieved July 27, 2021, from https://www.ngwa.org/what-is-groundwater/groundwater-issues/groundwater-sustainability")) ,
                                               #     p("", style = "padding-top:10px;")) 
@@ -548,6 +570,29 @@ ui <- navbarPage(title = "DSPG",
                                               #       h4("References: "), 
                                               #       p(tags$small("[1] Groundwater: Groundwater sustainability. (2021). Retrieved July 27, 2021, from https://www.ngwa.org/what-is-groundwater/groundwater-issues/groundwater-sustainability")) ,
                                               #      p("", style = "padding-top:10px;")) 
+                                     
+                                     
+                                     #fluidRow(style = "margin: 12px;",
+                                              #h1(strong("Analysis"), align = "center"),
+                                              #p("", style = "padding-top:15px;font-size: 35px;"), 
+                                       
+                                              column(8,
+                                                     h2(strong("Analysis")), align = "justify",
+                                                     p("After understanding the demographics of the areas that feed into the community schools, next we began to look at the demographics of our specific populations, the 6 schools. For this, we used data from the Virginia Department of Education as well as the Loudoun County Public Schools dashboard and staff directory.", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("To further understand our population, we wanted to compare the race and ethnicity demographics we visualized from the Sterling CDP and our 6 community schools.   In this graph, we visualized data from all 6 schools together and found that overall, Hispanic students, represented by the light purple bar, make up the greatest percentage of students which differs from the general make-up of the Sterling CDP where White people made up the majority of residents. After seeing this, we wanted to look at the breakdown of the Hispanic population within the greater Sterling area.   Using data from the American Community Survey of Greater Sterling between the years 2016 to 2020, we found that the area where Rolling Ridge is located, represented by the light yellow area of the map, has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary, the area of the map shaded mustard yellow,  and Forest Grove Elementary, the dark orange, lower area of the map.   This information will help us to identify possible opportunities within the schools and neighborhoods specifically surrounding language services.", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("Once we felt we understood the demographics of those attending the schools, we switched our focus to the data within the schools themselves. Beginning with the number of teachers and staff employed at each school, we used data from the 2022 school directory, which revealed that at most of the schools, there are more teachers than staff except for Sterling Elementary, which has a larger amount of staff than teachers which may suggest possible possible opportunities in service.    Also notable was the lower total number of staff and teachers employed at Sully Elementary, seen in the last bar on the graph, which led us to visualize the total enrollment for each of the schools to better understand these differences.
+
+ 
+
+Using data from the Virginia Department of Education’s Fall Membership Reports for the years 2016 to 2020,   we found that Guilford, seen in the bottom left graph,   Sugarland, the top right graph,   and Rolling Ridge, the bottom right graph,  all maintained a total enrollment of between 550 and 600 students with only slight variations between years. For Forest Grove, the top left graph,   enrollment remained steady between 2016 and 2020 hovering right at 575 students.   On the other hand, Sterling Elementary, the top right graph,   had an enrollment of 450 to 500 students with a slight decline from 2016 to 2020   and Sully Elementary, has only between 400 to 475 students enrolled.   Since the implementation of the Community School Initiative, there has been an increase in enrollment at Sully and Guilford,   while we are not saying that this program is the cause of this increase, it was noticed and may be worth looking into further. Additionally, the differences in enrollment between schools may suggest possible opportunities to look into surrounding youth engagement resources.
+", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("To further breakdown the enrollment statistics, we used the LCPS Dashboard data to visualize the student’s absences by quarter at each school during the 2021 to 2022 school year.   While Rolling Ridge, the green line,   Sugarland, the dark blue line,   and Guilford, the yellow line,   all saw spikes in absences during quarter two,   it was Sully, the pink line,   Sterling, the light blue line,   and Forest Grove, the orange line,   that had a steady increase in absences over the 4 quarters. However it is important to note that this data came from the school year during the COVID-19 pandemic.
+To determine if this issue was chronic,   we used Virginia Department of Education data from prior to the pandemic on chronic absenteeism.   This is defined as the percentage of students who miss more than 10% of total classes throughout the year.   This data revealed to us that Sugarland and Rolling Ridge Elementary continued to have a high number of absences prior to the pandemic, suggesting that this may be an area to look for possible service gaps.
+", style = "padding-top:15px;font-size: 14px;"),
+                                                     
+                                                     
+                                              
+                                              )
                                      )), 
                  
                            tabPanel("Climate Survey Reports",
@@ -608,10 +653,10 @@ ui <- navbarPage(title = "DSPG",
                           
                  ),
                             
-                 tabPanel("Service Gaps",
+                 tabPanel("Service possible opportunities",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("Service gaps")),
+                                   column(12, align = "center",h4(strong("Service possible opportunities")),
                                           p(""),
                                           br("")
                                           
