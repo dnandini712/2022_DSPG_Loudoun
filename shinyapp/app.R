@@ -339,6 +339,14 @@ hispanicschool <- leaflet(data = total) %>%
             values = ~va20_2$estimate,
             opacity = 0.5, title = "Hispanic Population") %>%
   addMarkers( ~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(School), labelOptions = TRUE)
+#-----------enrollment-----------------
+
+enrollment <- read_excel(paste0(getwd(),"/data/Enrollment16-20.xlsx"))
+enr_total <- enrollment$Total
+School <- enrollment$Schools
+Year <- enrollment$Year
+enroll <- ggplot(enrollment,aes(x=Year, y = enr_total, group = School, color = School)) + geom_point()+geom_line()+labs(caption= "Source: LCPS Dashboard 2021-2022",x="School",y="Number of Students") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
+enroll<- ggplotly(enroll)
 
 #attendance --------------
 
@@ -805,14 +813,18 @@ output$ocuplot1 <- renderPlotly({
     
     
   }
-})
+  else if (Var2() == "cenrol") {
+    enroll
+}
+  })
   
 
 output$ocuplot2 <- renderLeaflet({
   if (Var2() == "chispanic") {
     
     hispanicschool
-  }  
+  }
+  
 
 })
 
