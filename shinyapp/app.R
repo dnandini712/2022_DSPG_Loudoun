@@ -50,6 +50,14 @@ library(ggpubr)
 library(lubridate)
 library(shinyWidgets)
 library(viridis)
+library(traveltime)
+library(nycflights13)
+library(osmdata)
+library(purrr)
+library(mapview)
+library(osrm)
+library(rmapzen)
+library(scales)
 
 
 prettyblue <- "#232D4B"
@@ -67,8 +75,26 @@ colors <- c("#232d4b","#2c4f6b","#0e879c","#60999a","#d1e0bf","#d9e12b","#e6ce3a
 readRenviron("~/.Renviron")
 Sys.getenv("CENSUS_API_KEY")
 
-blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
-
+blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia",
+          "Block Group 3, Census Tract 6112.05, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia",
+          "Block Group 3, Census Tract 6112.04, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia",
+          "Block Group 3, Census Tract 6115.02, Loudoun County, Virginia",
+          "Block Group 1, Census Tract 6113, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6113, Loudoun County, Virginia",
+          "Block Group 3, Census Tract 6113, Loudoun County, Virginia",
+          "Block Group 1, Census Tract 6114, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6114, Loudoun County, Virginia",
+          "Block Group 3, Census Tract 6114, Loudoun County, Virginia",
+          "Block Group 1, Census Tract 6117.01, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6117.01, Loudoun County, Virginia",
+          "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6116.02, Loudoun County, Virginia",
+          "Block Group 1, Census Tract 6116.01, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia", 
+          "Block Group 3, Census Tract 6112.02, Loudoun County, Virginia")
 va20_2 <- get_acs(geography = "block group",
                   variables = c(hispanic = "B03002_012"),
                   state = "VA",
@@ -359,7 +385,7 @@ attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))
 
 #---------------Number of Teachers/Staff--------------------------
 
-Schools <- c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
+Schools = c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
 Teachers <- c(32, 52, 66, 55, 59, 35)
 Staff <- c(49, 22, 27, 20, 29, 19)
 dataSTAFF <- data.frame(Schools, Teachers, Staff)
@@ -377,6 +403,166 @@ chronic<- ggplot(data=chronic, aes(x=schools, y=number, fill=schools,  width=0.8
   geom_bar(stat="identity")  + labs(y="", x="", fill="")+ggtitle("Percentage of Chronic absenteeism") 
 
 chronic<-ggplotly(chronic)
+
+#---------------map_health and isochrones-----------------------------------------
+
+YourAPIKey <- "103eac37d04686a8b0104d96d983c612"
+YourAppId <- "ad147923"
+
+traveltime10 <- traveltime_map(appId=YourAppId,
+                               apiKey=YourAPIKey,
+                               location=c(39.009006,-77.4029155),
+                               traveltime=600,
+                               type="driving",
+                               departure="2022-08-09T08:00:00+01:00")
+# ... and within 60 minutes?
+traveltime20 <- traveltime_map(appId=YourAppId,
+                               apiKey=YourAPIKey,
+                               location=c(39.009006,-77.4029155),
+                               traveltime=1200,
+                               type="driving",
+                               departure="2022-08-09T08:00:00+01:00")
+traveltime45 <- traveltime_map(appId = YourAppId,
+                               apiKey = YourAPIKey,
+                               location = c(39.009006,-77.4029155),
+                               traveltime= 2700,
+                               type = "driving",
+                               departure = "2022-08-09T08:00:00+01:00")
+map<- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/school_locations.xlsx")
+
+subset_map <- map[1,c(1,4,5)]
+
+healthsep <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx")
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(healthsep$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        healthsep$Description ,
+        "<br />",
+        "<strong>Serves:</strong>",
+        healthsep$Serves, 
+        "<br />",
+        "<strong>Hours:</strong>",
+        healthsep$Hours,
+        "<br />",
+        "<strong>Language:</strong>",
+        healthsep$Language,
+        "<br />",
+        "<strong>Address:</strong>",
+        healthsep$Address),
+  
+  htmltools::HTML
+)
+
+foods <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx",sheet="Food")
+clothes <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx",sheet = "Clothing")
+counseling <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx", sheet = "Counseling")
+dental <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx", sheet = "Dental Care")
+vision <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx", sheet = "Vision Care")
+medical <-  read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx", sheet = "Medical Services")
+speech <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx", sheet = "Speech and Hearing")
+physical <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx", sheet = "Physical Therapy")
+
+
+blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
+va20_2 <- get_acs(geography = "block group",
+                  variables = c(hispanic = "B03002_012"),
+                  state = "VA",
+                  year = 2020,
+                  geometry = TRUE) %>%
+  filter(NAME %in% blocks)
+leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=foods,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),color="#2e850c",group = "Food",weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addCircleMarkers(data=clothes,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),color=         "#0a31a5",group="Clothing",weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)  %>%
+  addCircleMarkers(data=counseling,~Longitude,~Latitude,popup =~popups,label=~as.character(Name),color="#ec1c1c",group = "Counseling", weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addCircleMarkers(data=dental,~Longitude,~Latitude,popup = ~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addCircleMarkers(data=vision,~Longitude,~Latitude,popup =~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addCircleMarkers(data=medical,~Longitude,~Latitude,popup = ~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addCircleMarkers(data=speech,~Longitude,~Latitude,popup =~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addCircleMarkers(data=physical,~Longitude,~Latitude,popup = ~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addLayersControl(overlayGroups = c("Food", "Clothing", "Counseling","Medical Services")) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_health
+
+
+#--------------youth development map ----------------
+
+youth <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/Sterling_Youth_Development 2.xlsx")
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(youth$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        youth$Description ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        youth$Hours, 
+        "<br />",
+        "<strong>Address:</strong>",
+        youth$Address),
+  
+  
+  htmltools::HTML
+)
+leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=youth,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),color="#8310b0",weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
+
+
+#---------mental health resources map------------------------
+
+ment <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/mentalhealthres.xlsx",sheet = "Mental")
+
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(ment$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        ment$Description ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        ment$Hours, 
+        "<br />",
+        "<strong>Address:</strong>",
+        ment$Address),
+  
+  
+  htmltools::HTML
+)
+leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=ment,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),color="#54cbd0",weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
+
 
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
@@ -472,21 +658,39 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                  
                  ## Sterling Area--------------------------------------------
                  tabPanel("Sterling Area", value = "overview",
-                          fluidRow(style = "margin: 6px;",
+                          fluidRow(style = "margin: 2px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(12, align = "justify",h4(strong("Map of Sterling")),
+                                   column(8, h4(strong("Map of Sterling")),
                                           p("This map shows the six schools and the area of Sterling. The orange area is the Census Designated Place of Sterling. It can be observed that Sugarland Elementary is outside the CDP of Sterling. Hence, the team considered to mimic the school zone of this school by selecting respective blocks as assigned by the US Census Bureau. It is shown by the yellow area. For this project, we have defined Sterling as both the orange area and the yellow area as seen in the map."),
                                           br("")
                                           
                                           
                                           
-                                   )),
+                                   ),
+                                   
+                                   
+                                   
+                                   
+                                   ),
                           
-                          fluidPage(
-                            column(12, align = "center", leafletOutput("map1", width = "50%")
+                          fluidPage(style = "margin: 2px;",
+                            column(8, leafletOutput("map1", width = "100%")
                                    #fluidRow(align = "center",
                                    #    p(tags$small(em('Last updated: August 2021'))))
-                                  ) 
+                                  ),
+                            
+                            column(4,
+                                   h4(strong("Schools")),
+                                   tags$ul(
+                                     tags$li("Forest Grove Elementary"),
+                                     tags$li("Guilford Elementary"),
+                                     tags$li("Rolling Ridge Elementary"),
+                                     tags$li("Sterling Elementary"), 
+                                     tags$li("Sugarland Elementary"), 
+                                     tags$li("Sully Elementary")
+                                   ),
+                                   br("")
+                            )
                                    )
                  ), 
                  tabPanel("Sociodemographics",
@@ -516,8 +720,8 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                                                        ),
                                                      ),
                                                      
-                                                     withSpinner(plotlyOutput("ageplot2", height = "500px", width ="80%")),
-                                                     withSpinner(plotOutput("ageplot1", height = "500px", width = "60%")),
+                                                     withSpinner(plotlyOutput("ageplot2", height = "500px", width ="100%")),
+                                                     withSpinner(plotOutput("ageplot1", height = "500px", width = "100%")),
                                                      
                                                        #if ( == "age"){
                                                          #withSpinner(plotOutput("ageplot1", height = "500px", width = "60%"))
@@ -574,6 +778,12 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                                                      withSpinner(plotlyOutput("ocuplot1", height = "500px", width = "60%")),
                                                      withSpinner(leafletOutput("ocuplot2", height = "500px", width = "60%")),
                                               ),
+                                              
+                                             
+                                                  
+          
+                                                           
+                                                         
                                               # column(12, 
                                               #       h4("References: "), 
                                               #       p(tags$small("[1] Groundwater: Groundwater sustainability. (2021). Retrieved July 27, 2021, from https://www.ngwa.org/what-is-groundwater/groundwater-issues/groundwater-sustainability")) ,
@@ -614,21 +824,34 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                           
                                    )),
                           
-                        )
-                      ),
+                        )),
+                      
                  navbarMenu("Availability of Resources",
-                          tabPanel("Health and Social Services"),
+                          tabPanel("Health and Social Services",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("")),
+                                   column(12, align = "center",h4(strong("Health and Social Services")),
                                           p(""),
                                           br("")
+                                          
+                                     
+                          
                                           
                                           
                                           
                                    )),
+                          
+                          fluidPage(style = "margin: 2px;", 
+                                    column(8, 
+                                           leafletOutput("map_health", width = "100%")
+                                           #fluidRow(align = "center",
+                                           #    p(tags$small(em('Last updated: August 2021'))))
+                                    )
+                          )),
+                          
+                        
                          
-                          tabPanel("Mental Health"),
+                          tabPanel("Mental Health",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
                                    column(12, align = "center",h4(strong("")),
@@ -638,7 +861,16 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                           
                                           
                                    )),
-                          tabPanel("Family Engagement"),
+                          fluidPage(style = "margin: 2px;", 
+                                    column(8, 
+                                           leafletOutput("map_mental", width = "100%")
+                                           #fluidRow(align = "center",
+                                           #    p(tags$small(em('Last updated: August 2021'))))
+                                    )
+                          )
+                          
+                          ),
+                          tabPanel("Family Engagement",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
                                    column(12, align = "center",h4(strong("")),
@@ -647,17 +879,25 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                           
                                           
                                           
-                                   )),
-                          tabPanel("Youth Development Opportunities"),
+                                   ))),
+                          tabPanel("Youth Development Opportunities",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("")),
+                                   column(12, align = "center",h4(strong("Youth Development Opportunities")),
                                           p(""),
                                           br("")
                                           
                                           
                                           
                                    )),
+                          
+                          fluidPage(style = "margin: 2px;", 
+                                    column(8, 
+                                           leafletOutput("map_youth", width = "100%")
+                                           #fluidRow(align = "center",
+                                           #    p(tags$small(em('Last updated: August 2021'))))
+                                    )
+                          )),
                           
                  ),
                             
@@ -712,6 +952,19 @@ server <- function(input, output, session) {
   output$map1 <- renderLeaflet({
     map1
   })
+  
+  output$map_health <- renderLeaflet({
+    map_health
+  })
+  
+  output$map_youth <- renderLeaflet({
+    map_youth
+  })
+  
+  output$map_mental <- renderLeaflet({
+    map_mental
+  })
+  
   
   Var <- reactive({
     input$demosdrop
