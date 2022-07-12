@@ -428,11 +428,11 @@ traveltime45 <- traveltime_map(appId = YourAppId,
                                traveltime= 2700,
                                type = "driving",
                                departure = "2022-08-09T08:00:00+01:00")
-map<- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/school_locations.xlsx")
+map<- read_excel(paste0(getwd(),"/data/school_locations.xlsx"))
 
 subset_map <- map[1,c(1,4,5)]
 
-healthsep <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx")
+healthsep <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
 popups <- lapply(
   paste("<strong>Name: </strong>",
         str_to_title(healthsep$Name),
@@ -455,14 +455,14 @@ popups <- lapply(
   htmltools::HTML
 )
 
-foods <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx",sheet="Food")
-clothes <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx",sheet = "Clothing")
-counseling <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx", sheet = "Counseling")
-dental <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx", sheet = "Dental Care")
-vision <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx", sheet = "Vision Care")
-medical <-  read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx", sheet = "Medical Services")
-speech <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx", sheet = "Speech and Hearing")
-physical <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/healthsep.xlsx", sheet = "Physical Therapy")
+foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"),sheet="Food")
+clothes <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"),sheet = "Clothing")
+counseling <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Counseling")
+dental <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Dental Care")
+vision <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Vision Care")
+medical <-  read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Medical Services")
+speech <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Speech and Hearing")
+physical <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Physical Therapy")
 
 
 blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
@@ -501,7 +501,7 @@ leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
 
 #--------------youth development map ----------------
 
-youth <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/Sterling_Youth_Development 2.xlsx")
+youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 2.xlsx"))
 popups <- lapply(
   paste("<strong>Name: </strong>",
         str_to_title(youth$Name),
@@ -533,7 +533,7 @@ leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
 
 #---------mental health resources map------------------------
 
-ment <- read_excel("/Users/nandinidas/Desktop/2022_DSPG_Loudoun/shinyapp/data/mentalhealthres.xlsx",sheet = "Mental")
+ment <- read_excel(paste0(getwd(),"/data/mentalhealthres.xlsx"),sheet = "Mental")
 
 popups <- lapply(
   paste("<strong>Name: </strong>",
