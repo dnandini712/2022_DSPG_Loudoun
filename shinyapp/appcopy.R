@@ -748,7 +748,7 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                  tabPanel("Sterling Area", value = "overview",
                           fluidRow(style = "margin: 2px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(8, h4(strong("Map of Sterling")),
+                                   column(8, h4(strong("Map of Sterling")), align = "justify",
                                           p("This map shows the six schools and the area of Sterling. The orange area is the Census Designated Place of Sterling. It can be observed that Sugarland Elementary is outside the CDP of Sterling. Hence, the team considered to mimic the school zone of this school by selecting respective blocks as assigned by the US Census Bureau. It is shown by the yellow area. For this project, we have defined Sterling as both the orange area and the yellow area as seen in the map."),
                                           br("")
                                           
@@ -917,16 +917,18 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                         tabPanel("School Reports",
                                  fluidRow(style = "margin: 2px;",
                                           p("", style = "padding-top:5px;"),
-                                          column(12, align = "center",h4(strong("Representatives' responses"))),
-                                          tabPanel("Weaknesses and biggest challenges",
-                                                 br(""),
+                                          column(12, align = "center",h4(strong("Representatives' responses")),
+                                                 h4("Weaknesses and biggest challenges"),
+                                                 br("")
                                                  
                                                  
-                                              
+                                                 
+                                          ),
                                   
                                            column(12, align = "center",
                                                   wordcloud2Output("cloud1")
-                                            ))),
+                                            )),
+                                 
                                  
                                  fluidRow(style = "margin: 2px;",
                                           p("", style = "padding-top:5px;"),
@@ -937,12 +939,11 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                  
                                                  
                                           ),
-                                          
-                                          column(12, align = "center",
-                                                 wordcloud2Output("cloud2")
-                                                 
-                                          ))
-                       
+         
+                                           column(12, align = "center",
+                                                  wordcloud2Output("cloud2")
+  
+                                           ))
                                  
                                  
                                  )),
@@ -1000,12 +1001,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                           
                                           
                                           
-                                   )),
-                        
-                          
-                          
-                          
-                          ),
+                                   ))),
                           tabPanel("Youth Development Opportunities",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
@@ -1015,11 +1011,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                           
                                           
                                           
-                                   )
-                                   
-                                   ),
-                          
-                          
+                                   )),
                           
                           fluidPage(style = "margin: 2px;", 
                                     column(12, 
@@ -1094,10 +1086,6 @@ server <- function(input, output, session) {
   output$map_mental <- renderLeaflet({
     map_mental
   })
-  
-  output$cloud2 <- renderWordcloud2(
-    cloud2
-  )
   
   
   Var <- reactive({
@@ -1222,6 +1210,8 @@ output$cloud1 <- renderWordcloud2(
   cloud1
   )
 
-
+output$cloud2 <- renderWordcloud2(
+  cloud2
+)
 }
 shinyApp(ui = ui, server = server)
