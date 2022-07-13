@@ -121,7 +121,7 @@ FEMS %>%
 GUIL_All <- Guilford[which(Guilford$Subgroup=="All Students"),] 
 
 #filter for only subjects
-GUIL_eng <- Guilford[which(GUIL_All$Subject=="English Reading"),] 
+GUIL_eng <- Guilford[which(Guilford$Subject=="English Reading"),] 
 #Use ggplot
 #plot(Year, GUIL_eng$`Percent Pass`)
 
