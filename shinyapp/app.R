@@ -408,16 +408,15 @@ chronic<-ggplotly(chronic)
 
 #--------------free or not free resources ---------------------------------------
 
-costs <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx")
-healthfree <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet = "Health Free")
-healthpay <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx", sheet = "Health")
-youthfree <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx", sheet = "Youth Free")
-youthpay <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet="Youth")
-mentfree <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet= "Mental Free")
-mentpay <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet = "Mental")
-famfree <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet = "Family Free")
-fampay <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet = "Family")
-
+costs <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"))
+foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"),sheet="Food")
+clothes <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"),sheet = "Clothing")
+counseling <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Counseling")
+dental <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Dental Care")
+vision <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Vision Care")
+medical <-  read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Medical Services")
+speech <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Speech and Hearing")
+physical <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Physical Therapy")
 #---------------map_health and isochrones-----------------------------------------
 
 YourAPIKey <- "103eac37d04686a8b0104d96d983c612"
