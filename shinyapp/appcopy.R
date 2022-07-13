@@ -854,41 +854,67 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                                    
                           ),
                  ), 
+                 
+                 
                  tabPanel("Sterling Sociodemographics",
-                          fluidRow(style = "margin: 2px;",
+                          fluidRow(style = "margin: 4px;",
                                    h1(strong("Sterling"), align = "center"),
                                    p("", style = "padding-top:10px;"), 
-                                   #column(4, 
-                                   #      h4(strong("Education")),
-                                   #     p("These are demographics"),
-                                   #) ,
-                                   column(7, 
+                                   column(6, 
                                           h4(strong("Sterling Residents' Characteristics")),
-                                          selectInput("demosdrop", "Select Variable:", width = "60%", choices = c(
-                                            "Gender" = "gender",
-                                            "Age" = "age",
-                                            "Race/ethnicity" = "race", 
-                                            "Educational Attainment" = "edu",
-                                            "Family Income" = "faminc",
-                                            "Property Value" = "property",
-                                            "Housing Occupancy" = "housing",
-                                            "Employment" = "employment",
-                                            "Work Occupation" = "workoccu",
-                                            "Commuter Time" = "commutertime",
-                                            "Commuter Mode" = "commutermode",
-                                            "Poverty by Age and Sex" = "pov", 
-                                            "Health Coverage" = "health"
-                                          ),
-                                          ),
                                           
-                                          withSpinner(plotlyOutput("ageplot2", height = "500px", width ="100%")),
-                                          withSpinner(plotOutput("ageplot1", height = "500px", width = "100%")),
-                                          
-                                          #if ( == "age"){
-                                          #withSpinner(plotOutput("ageplot1", height = "500px", width = "60%"))
-                                          #} else {
-                                          #withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%"))
-                                   ),
+                                          tabsetPanel(
+                                            
+                                            tabPanel("Demographic",
+                                                     fluidRow(style = "margin: 4px;",
+                                                              p("", style = "padding-top:10px;"),
+                                                              column(10, align = "left",
+                                                                     selectInput("demos1drop", "Select Socioeconomic Characteristic:", width = "100%", choices = c(
+                                                                       "Gender" = "gender",
+                                                                       "Age" = "age",
+                                                                       "Race/ethnicity" = "race"
+                                                                       
+                                                                     ),
+                                                                     ),   
+                                                                     
+                                                                     withSpinner(plotlyOutput("demo1", height = "500px", width ="100%")),
+                                                                     
+                                                                     
+                                                              ))),
+                                            
+                                            tabPanel("Income",
+                                                     fluidRow(style = "margin: 4px;",
+                                                              p("", style = "padding-top:10px;"),
+                                                              column(10, align = "left",
+                                                                     selectInput("demos2drop", "Select Socioeconomic Characteristic:", width = "60%", choices = c(
+                                                                       "Educational Attainment" = "edu",
+                                                                       "Family Income" = "faminc",
+                                                                       "Poverty by Age and Sex" = "pov", 
+                                                                       "Health Coverage" = "health"
+                                                                     ),
+                                                                     ),     
+                                                                     
+                                                                     withSpinner(plotlyOutput("demo2", height = "500px", width ="100%")),
+                                                                     
+                                                              ))),
+                                            tabPanel("Occupation/Work",
+                                                     fluidRow(style = "margin: 4px;",
+                                                              p("", style = "padding-top:10px;"),
+                                                              column(10, align = "left",
+                                                                     selectInput("demos3drop", "Select Socioeconomic Characteristic:", width = "60%", choices = c(
+                                                                       "Employment" = "employment",
+                                                                       "Work Occupation" = "workoccu",
+                                                                       "Commuter Time" = "commutertime",
+                                                                       "Commuter Mode" = "commutermode"
+                                                                     ),
+                                                                     ),         
+                                                                     
+                                                                     withSpinner(plotlyOutput("demo3", height = "500px", width ="100%")),
+                                                              ))),
+                                            
+                                            
+                                            
+                                          )),
                                    
                                    column(5,
                                           h2(strong("Analysis")), align = "justify",
@@ -908,93 +934,7 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                                           
                                           p("The visualization for healthcare tells us that private health insurance is the most popular type of health insurance. Private health insurance mainly consists of insurance plans provided through the employer. Coming in second place is the public insurance type which mainly consists of low-cost government backed programs such as medicare, medicaid, blue cross blue shield and Virginia Cover. However, there is a chunk of population of about 16.5% that does not have any kind of health insurance this might be an area where we can research more to figure out the possible opportunities in the community.", style = "padding-top:15px;font-size: 14px;"),
                                           
-                                   )
-                                   
-                                   # column(14, 
-                                   #      h4("References: "), 
-                                   #     p(tags$small("[1] Groundwater: Groundwater sustainability. (2021). Retrieved July 27, 2021, from https://www.ngwa.org/what-is-groundwater/groundwater-issues/groundwater-sustainability")) ,
-                                   #     p("", style = "padding-top:10px;")) 
-                          )), 
-                 
-                 tabPanel("Sterling Sociodemographics",
-                          fluidRow(style = "margin: 2px;",
-                                   h1(strong("Sterling"), align = "center"),
-                                   p("", style = "padding-top:10px;"), 
-                                   column(7, 
-                                          h4(strong("Sterling Residents' Characteristics")))),
-                          
-                          tabsetPanel(
-                            
-                            tabPanel("Demographic",
-                                     fluidRow(style = "margin: 2px;",
-                                              p("", style = "padding-top:10px;"),
-                                              column(6, align = "left",
-                                                     selectInput("demos1drop", "Select Socioeconomic Characteristic:", width = "60%", choices = c(
-                                                       "Gender" = "gender",
-                                                       "Age" = "age",
-                                                       "Race/ethnicity" = "race"
-                                                       
-                                                     ),
-                                                     ),   
-                                                     
-                                                     withSpinner(plotlyOutput("demo1", height = "500px", width ="100%")),
-                                                     
-                                                     
-                                              ))),
-                            
-                            tabPanel("Income",
-                                     fluidRow(style = "margin: 2px;",
-                                              p("", style = "padding-top:10px;"),
-                                              column(6, align = "left",
-                                                     selectInput("demos2drop", "Select Socioeconomic Characteristic:", width = "60%", choices = c(
-                                                       "Educational Attainment" = "edu",
-                                                       "Family Income" = "faminc",
-                                                       "Poverty by Age and Sex" = "pov", 
-                                                       "Health Coverage" = "health"
-                                                     ),
-                                                     ),     
-                                                     
-                                                     withSpinner(plotlyOutput("demo2", height = "500px", width ="100%")),
-                                                     
-                                              ))),
-                            tabPanel("Occupation/Work",
-                                     fluidRow(style = "margin: 2px;",
-                                              p("", style = "padding-top:10px;"),
-                                              column(6, align = "left",
-                                                     selectInput("demos3drop", "Select Socioeconomic Characteristic:", width = "60%", choices = c(
-                                                       "Employment" = "employment",
-                                                       "Work Occupation" = "workoccu",
-                                                       "Commuter Time" = "commutertime",
-                                                       "Commuter Mode" = "commutermode"
-                                                     ),
-                                                     ),         
-                                                     
-                                                     withSpinner(plotlyOutput("demo3", height = "500px", width ="100%")),
-                                              ))),
-                            
-                            
-                            
-                          ),
-                          
-                          column(4,
-                                 h2(strong("Analysis")), align = "justify",
-                                 p("To access the possible opportunities within the six title 1 community schools in Sterling, VA, it is important to understand the neighborhood and area in which these schools are located. By looking at the graph, it appears to be almost an equal split of male’s and females in Sterling, VA. The total population in sterling is 30,271. 15,282 members of the population are male, while the remaining 14,989 are female. There are only 293 more males than females so that gives us almost a one to one ratio - so that’s good.", style = "padding-top:15px;font-size: 14px;"),
-                                 p("So, once the team looked at the gender distribution, we were curious to look at the age distribution of the individuals of Sterling. The largest age group in Sterling are Adults (ages 35 to 44) which is represented by the blue green block, and then the older millennials (25 to 34) which is represented by the light green block. The age groups are fitting for the high median income within the area. ", style = "padding-top:15px;font-size: 14px;"),
-                                 p("
-Another important determinant that might impact someone’s availability of opportunities is their race or ethnicity. So, our logical next step was to look at the ethnicity/race distribution of the people of Sterling. Collecting the Race and Ethnicity demographic proved to be a little challenging at first. While the team was observing the data, we kept noticing that the number of individuals in each race population kept exceeding the total population of Sterling. For example, when we would add up all of the white, hispanic, asian, Hawaiian, and  African American population’s, the total number would exceed 30,271, the population of Sterling, VA. We later learned that this is because the American Community Survey does not recognize hispanic as a race. To the American Community Survey, Hispanic is an ethnicity so People can identify as white or asian and still be of hispanic decent, or they could select “other” as there is a separate category for them to mark hispanic. Knowing that disclaimer, we had to create a separate visualization for the hispanic population so we could best represent them. As you can see, majority of the Sterling population is white. When you look at the ethnicity visualization, almost half of the sterling CDP population identifies as being hispanic or latino.
-", style = "padding-top:15px;font-size: 14px;"),
-                                 p("Now that we looked at the ethnic groups, we wanted to look at the educational attainment levels. The data was collected from the individuals who are ages 25 and over. It seems that a large number of the population are educated with that of a bachelors agree or higher, which is fitting for the county’s high median income. 
-
-so a reasonable population has achieved high education - how much is Sterling making? Thus, we looked at family income levels. This data was collected looking at family households in the last 12 months of the ACS collected data (2020). It has also been adjusted for inflation. Interestingly enough, the largest income bracket lies within the range of $100,000 to $149,999 which is represented by the dark purple area however we do acknowledge that this may not apply our families of interest.
-", style = "padding-top:15px;font-size: 14px;"),
-                                 p("So we wondered if the high-income levels also affect the housing market so this can help us to understand housing needs and availability of the children’s families. Looking at this visualization, we see that this area has a high property value with a large percentage of properties being worth $300,000 to $499,999, shown by the blue part of the circle. This is important to take into consideration considering our targeted title1 area. Once we looked at the high property values, we were intrigued to find out how many occupants own their homes. As expected, majority housing residents are home owners, while a little over a quarter housing residents are renters. This could be because of families high incomes.", style = "padding-top:15px;font-size: 14px;"),  
-                                 p("Next, we visualized the data for employment in the sterling area. Pink is used to show the Employed Percentage whereas Aqua blue shows the unemployed percentage of the population. One thing to note is that this percentage is from within the labor force not the total population of the area. One key take away from this graph is that the majority of sterling is employed at a remarkably
-high rate higher than the national average. 71.8% employment rate.", style = "padding-top:15px;font-size: 14px;"), 
-                                 p("The next best thing to do was to look at what groups are being employed so we saw that the majority of them are being employed in the management, business, and science industry with a total number of 6,380 individuals. The service industry comes in second place at around 25% which makes it upto 4,122 individuals. The graph shows that one of the smallest occupations is the production industry which suggests that sterling is not an industrial area but has more corporate jobs to offer as management and business are one of the highest employable sectors in sterling. Using ACS American community survey data of the sterling cdp census designated place we found that 75% commuters drive on their own while only a quarter prefer other modes of commute. Notably less than 2 % of commuters take public transportation, this may be something we want to further research.", style = "padding-top:15px;font-size: 14px;"), 
-                                 
-                                 p("The visualization for healthcare tells us that private health insurance is the most popular type of health insurance. Private health insurance mainly consists of insurance plans provided through the employer. Coming in second place is the public insurance type which mainly consists of low-cost government backed programs such as medicare, medicaid, blue cross blue shield and Virginia Cover. However, there is a chunk of population of about 16.5% that does not have any kind of health insurance this might be an area where we can research more to figure out the possible opportunities in the community.", style = "padding-top:15px;font-size: 14px;"),
-                                 
-                          )
+                                   ))
                  ),
                  
                  
