@@ -26,11 +26,14 @@ Teachers <- c(32, 52, 66, 55, 59, 35)
 Staff <- c(49, 22, 27, 20, 29, 19)
 dataSTAFF <- data.frame(Schools, Teachers, Staff)
 
-figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = 'Teachers', marker = list(color = 'rgb(255, 2, 2 )'))
-figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(20, 252, 241 )'))
-figSTM <- figSTM %>% layout(yaxis = list(title = 'Total Number'), barmode = 'stack')
+figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = 'Teachers', marker = list(color = 'rgb(255, 2, 2 )'), textinfo = "total",
+                  hoverinfo = 'text')
+                  #text = ~paste('Total:',))
 
-figSTM
+figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(253, 151, 12 )'))
+cteacher <- figSTM %>% layout(title = "Teachers/Staff by Schools", yaxis = list(title = 'Total Educators'), xaxis = list(title = ''), barmode = 'stack')
+
+cteacher
 ```
 
 #Number of Staff Members by schools based on the school websites    

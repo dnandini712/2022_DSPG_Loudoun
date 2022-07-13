@@ -144,7 +144,7 @@ valuesG = c(15282, 14989)
 
 figG <- plot_ly(type='pie', labels=labelsG, values=valuesG, 
                textinfo='label+percent',
-               insidetextorientation='radial', marker = list(colors = c('20AFCC', 'F56D4F'))) %>% layout(title ='', legend=list(title=list(text='')))
+               insidetextorientation='radial', hoverinfo = 'text', text = ~paste('Total:', valuesG), marker = list(colors = c('20AFCC', 'F56D4F'))) %>% layout(title ='Gender', legend=list(title=list(text='')))
 
 figG
 ```

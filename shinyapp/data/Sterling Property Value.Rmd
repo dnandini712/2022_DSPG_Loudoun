@@ -52,11 +52,23 @@ slices.HOUSING = c(6839, 2412)
 
 figHOUSING <- plot_ly(type='pie', labels=lbls.HOUSING, values=slices.HOUSING, 
                textinfo='label+percent',
-               insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Occupants')))
+               hoverinfo = 'text', 
+              text = ~paste('Total:', slices.HOUSING),
+               insidetextorientation='') %>% layout(title ='Home Ownership In Sterling', legend=list(title=list(text='')))
 
 figHOUSING 
 
 dfpv <- data.frame(Valuepv=c('Less than $50,000', '$50,000 to $99,000', '$100,000 to $149,999', '$150,000 to $199,999', '$200,000 to $299,999', '$300,000 to $499,999', '$500,000 to $999,999', '$1,000,000 or more'), Numberpv=c(58,6,46,204,1137,4653,709,26))
+
+
+#dfpv = c('Less than $50,000', '$50,000 to $99,000', '$100,000 to $149,999', '$150,000 to $199,999', '$200,000 to $299,999', '$300,000 to $499,999', '$500,000 to $999,999', '$1,000,000 or more')
+#Numberpv = c(58,6,46,204,1137,4653,709,26)
+
+#figPV <- plot_ly(type='funnelarea', labels=dfpv, values=Numberpv, sort = FALSE, direction = "",
+               #textinfo='percent',
+               #insidetextorientation='radial') %>% layout(title ='', showlegend=TRUE, legend=list(x=1, y=0.5))
+
+#figPV
 
 #dfpv <- plot_ly(dfpv, 
         #labels = ~Valuepv, 
@@ -70,17 +82,31 @@ dfpv <- data.frame(Valuepv=c('Less than $50,000', '$50,000 to $99,000', '$100,00
 #dfpv
 
 #Donute Chart
-dfpv <- read_excel("Property_Value.xlsx",col_names=TRUE)
+#dfpv <- read_excel("Property_Value.xlsx",col_names=TRUE)
 #dfpv <- dfpv %>% group_by(`HOUSING OCCUPANCY`)
 #dfpv <- dfpv %>% summarise(count = count)
 
-figpv <- dfpv %>% plot_ly(labels = ~`HOUSING OCCUPANCY`, values = ~dfpv$count, sort = FALSE, direction = "clockwise")
+yaxis <- list(automargin = TRUE)
+
+figpv <- dfpv %>% plot_ly(labels = ~Valuepv, values = ~Numberpv, sort = FALSE, textinfo = "percent", direction = "anitclockwise",hoverinfo = 'text', text = ~paste('Total:', Numberpv))
 figpv <- figpv %>% add_pie(hole = 0.5)
-figpv <- figpv %>% layout(title = "", showlegend = T,
-                      xaxis = list(showgrid = TRUE, zeroline = FALSE, showticklabels = TRUE),
-                      yaxis = list(showgrid = TRUE, zeroline = FALSE, showticklabels = TRUE))
+figpv <- figpv %>% layout(title = "Property Value", showlegend = T, autosize = FALSE,
+                      xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                      yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 
 figpv
+
+dfpv <- read_excel(paste0(getwd(), "/Property_Value.xlsx"), col_names = TRUE)
+Numberpv=c(58,6,46,204,1137,4653,709,26)
+
+figpv <- dfpv %>% plot_ly(labels = ~`HOUSING OCCUPANCY`, values = ~dfpv$count, sort = FALSE, direction = "counterclockwise", marker = list(line = list(width = 1, pull = 3)), hoverinfo = 'text', text = ~paste('Number of Property Values:', Numberpv), textinfo = "percent")
+figpv <- figpv %>% add_pie(hole = 0.5, domain = list(x = c(0.25, 0.9), y = c(0.75, 0.6)))
+property <- figpv %>% layout(title = "Residential Property Value", showlegend = TRUE, 
+                             legend=list(title=list(text='Select Value')),
+                             xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                             yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+property
 ```
 This pie chart shows, in percentage, how many occupied homes in Sterling,VA are occupied by the owner themselves, or renters. As displayed, Owner-occupied homes are significantly larger than renter-occupied homes. Owner-occupied homes make up about 6,839 or 73.9% of the total estimated 9,548 occupied homes in Sterling,VA. Renter-occupied homes come in at a low 2,412 or 26.1% out of the total estimated 9,548 homes. 
 

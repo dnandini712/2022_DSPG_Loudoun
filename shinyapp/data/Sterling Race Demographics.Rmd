@@ -49,11 +49,6 @@ Here is a bar graph that displays the race population in Sterling,VA. The races 
 
 #Pie Chart visualizations ^ 
 ```{r}
-# Sample Pie Chart
-slices.Races <- c(59.9, 10.34, 1.4, 17.6, 0.5, 15.1)
-lbls.Races <- c("White 59.9%", "Black 10.34%", "Am.Indian 1.4%", "Asian 17.6%","Hawaiian .5%","Other 15.1%")
-pie(slices.Races, labels = lbls.Races, main="Percentage of Races", sub = "Source: DP05 ACS data 2016-2020")
-
 library(plotly)
 
 labelsR = c("White", "Black", "Am.Indian", "Asian","Hawaiian","Other")
@@ -61,7 +56,9 @@ valuesR = c(18138, 3132, 418, 5313, 144, 4570)
 
 figR <- plot_ly(type='pie', labels=labelsR, values=valuesR, 
                textinfo='label+percent',
-               insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Race/Ethnicity')))
+               hoverinfo = 'text', 
+               text = ~paste('Total:', valuesR),
+               insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Select Race')))
 
 figR
 ```

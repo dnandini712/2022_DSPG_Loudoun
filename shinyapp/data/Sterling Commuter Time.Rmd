@@ -25,17 +25,18 @@ vars <- load_variables(year = 2019,
 #Pie chart for commuter times of population
 
 ```{r}
-#Best Pie chart?
 library(plotly)
 
 labelsCT = c("Less than 10 minutes","10 to 14 minutes","15 to 19 minutes","20 to 24 minutes", "25 to 29 minutes", "30 to 34 minutes", "35 to 44 minutes", "45 to 59 minutes", "60 or more minutes")
-valuesCT = c(5.99, 18.0, 16.9, 13.2, 4.8, 13.1, 7.09, 10.2, 10.8)
+valuesCT = c(6, 18, 17, 13, 5, 13, 7, 10, 11)
+valuestotalCT = c(989,2968,2787,2177,792,2160,1154,1649,1813.9)
 
-figCT <- plot_ly(type='funnelarea', labels=labelsCT, values=valuesCT, sort = FALSE, direction = "",
+commutertime <- plot_ly(type='funnelarea', labels=labelsCT, values=valuesCT, sort = FALSE, direction = "",
                textinfo='percent',
-               insidetextorientation='radial') %>% layout(title ='', showlegend=TRUE, legend=list(x=1, y=0.5))
+               hoverinfo = 'text', text = ~paste('Total Number of Commuters:', valuestotalCT),
+               insidetextorientation='radial') %>% layout(title ='Commuter Time to Work', showlegend=TRUE, legend=list(title=list(text='Select Value')), legend=list(x=1, y=0.5))
 
-figCT
+commutertime
 ```
 
 ```{r}
