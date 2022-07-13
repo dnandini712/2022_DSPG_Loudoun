@@ -158,10 +158,10 @@ va_20_CDP <- va20_2 %>% filter (NAME %in% blocks_CDP)
 ```{r}
 
 mapyouth <- read_excel(paste0(getwd(), "/Sterling_Youth_Development.xlsx"))
-subset_mapyouth <- mapyouth[1:18,c(1,4:5)]
+subset_mapyouth <- mapyouth[1:19,c(1,4:5)]
 
 subset_mapyouth$Longitude <- as.numeric(subset_mapyouth$Longitude)
-subset_mapyouth$`Latitude ` <- as.numeric(subset_mapyouth$`Latitude `)
+subset_mapyouth$Latitude <- as.numeric(subset_mapyouth$Latitude)
 
 
 # Show first 20 rows from the `quakes` dataset
@@ -171,12 +171,12 @@ color="yellow",
 weight = 0.5,
 smoothFactor = 0.2,
 fillOpacity = 0.5) %>%
-  addMarkers(~Longitude, ~subset_mapyouth$`Latitude `, popup = ~as.character(Name), label = ~as.character(Name)) %>% addPolygons(data = va_20_CDP,
+  addMarkers(~Longitude, ~subset_mapyouth$Latitude, popup = ~as.character(Name), label = ~as.character(Name)) %>% addPolygons(data = va_20_CDP,
 color="red",
 weight = 0.5,
 smoothFactor = 0.2,
 fillOpacity = 0.5) %>%
-  addMarkers(~Longitude, ~subset_mapyouth$`Latitude `, popup = ~as.character(Name), label = ~as.character(Name)) 
+  addMarkers(~Longitude, ~subset_mapyouth$Latitude, popup = ~as.character(Name), label = ~as.character(Name)) 
 
 
 #library(ggplot2)

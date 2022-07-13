@@ -50,6 +50,16 @@ library(ggpubr)
 library(lubridate)
 library(shinyWidgets)
 library(viridis)
+library(traveltime)
+library(nycflights13)
+library(osmdata)
+library(purrr)
+library(mapview)
+library(osrm)
+library(rmapzen)
+library(scales)
+library(ggwordcloud)
+library(wordcloud2)
 
 
 prettyblue <- "#232D4B"
@@ -67,8 +77,26 @@ colors <- c("#232d4b","#2c4f6b","#0e879c","#60999a","#d1e0bf","#d9e12b","#e6ce3a
 readRenviron("~/.Renviron")
 Sys.getenv("CENSUS_API_KEY")
 
-blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
-
+blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia",
+          "Block Group 3, Census Tract 6112.05, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia",
+          "Block Group 3, Census Tract 6112.04, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia",
+          "Block Group 3, Census Tract 6115.02, Loudoun County, Virginia",
+          "Block Group 1, Census Tract 6113, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6113, Loudoun County, Virginia",
+          "Block Group 3, Census Tract 6113, Loudoun County, Virginia",
+          "Block Group 1, Census Tract 6114, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6114, Loudoun County, Virginia",
+          "Block Group 3, Census Tract 6114, Loudoun County, Virginia",
+          "Block Group 1, Census Tract 6117.01, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6117.01, Loudoun County, Virginia",
+          "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6116.02, Loudoun County, Virginia",
+          "Block Group 1, Census Tract 6116.01, Loudoun County, Virginia",
+          "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia", 
+          "Block Group 3, Census Tract 6112.02, Loudoun County, Virginia")
 va20_2 <- get_acs(geography = "block group",
                   variables = c(hispanic = "B03002_012"),
                   state = "VA",
@@ -339,6 +367,14 @@ hispanicschool <- leaflet(data = total) %>%
             values = ~va20_2$estimate,
             opacity = 0.5, title = "Hispanic Population") %>%
   addMarkers( ~Longitudes, ~Latitudes, popup = ~as.character(Address), label = ~as.character(School), labelOptions = TRUE)
+#-----------enrollment-----------------
+
+enrollment <- read_excel(paste0(getwd(),"/data/Enrollment16-20.xlsx"))
+enr_total <- enrollment$Total
+School <- enrollment$Schools
+Year <- enrollment$Year
+enroll <- ggplot(enrollment,aes(x=Year, y = enr_total, group = School, color = School)) + geom_point()+geom_line()+labs(caption= "Source: LCPS Dashboard 2021-2022",x="School",y="Number of Students") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
+enroll<- ggplotly(enroll)
 
 #attendance --------------
 
@@ -351,7 +387,7 @@ attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))
 
 #---------------Number of Teachers/Staff--------------------------
 
-Schools <- c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
+Schools = c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
 Teachers <- c(32, 52, 66, 55, 59, 35)
 Staff <- c(49, 22, 27, 20, 29, 19)
 dataSTAFF <- data.frame(Schools, Teachers, Staff)
@@ -369,6 +405,252 @@ chronic<- ggplot(data=chronic, aes(x=schools, y=number, fill=schools,  width=0.8
   geom_bar(stat="identity")  + labs(y="", x="", fill="")+ggtitle("Percentage of Chronic absenteeism") 
 
 chronic<-ggplotly(chronic)
+
+#---------------map_health and isochrones-----------------------------------------
+
+YourAPIKey <- "103eac37d04686a8b0104d96d983c612"
+YourAppId <- "ad147923"
+
+traveltime10 <- traveltime_map(appId=YourAppId,
+                               apiKey=YourAPIKey,
+                               location=c(39.009006,-77.4029155),
+                               traveltime=600,
+                               type="driving",
+                               departure="2022-08-09T08:00:00+01:00")
+# ... and within 60 minutes?
+traveltime20 <- traveltime_map(appId=YourAppId,
+                               apiKey=YourAPIKey,
+                               location=c(39.009006,-77.4029155),
+                               traveltime=1200,
+                               type="driving",
+                               departure="2022-08-09T08:00:00+01:00")
+traveltime45 <- traveltime_map(appId = YourAppId,
+                               apiKey = YourAPIKey,
+                               location = c(39.009006,-77.4029155),
+                               traveltime= 2700,
+                               type = "driving",
+                               departure = "2022-08-09T08:00:00+01:00")
+map<- read_excel(paste0(getwd(),"/data/school_locations.xlsx"))
+
+subset_map <- map[1,c(1,4,5)]
+
+healthsep <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(healthsep$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        healthsep$Description ,
+        "<br />",
+        "<strong>Serves:</strong>",
+        healthsep$Serves, 
+        "<br />",
+        "<strong>Hours:</strong>",
+        healthsep$Hours,
+        "<br />",
+        "<strong>Language:</strong>",
+        healthsep$Language,
+        "<br />",
+        "<strong>Address:</strong>",
+        healthsep$Address),
+  
+  htmltools::HTML
+)
+
+foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"),sheet="Food")
+clothes <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"),sheet = "Clothing")
+counseling <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Counseling")
+dental <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Dental Care")
+vision <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Vision Care")
+medical <-  read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Medical Services")
+speech <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Speech and Hearing")
+physical <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Physical Therapy")
+
+
+blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
+va20_2 <- get_acs(geography = "block group",
+                  variables = c(hispanic = "B03002_012"),
+                  state = "VA",
+                  year = 2020,
+                  geometry = TRUE) %>%
+  filter(NAME %in% blocks)
+leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=foods,~Longitudes,~Latitudes,popup=~popups,label=~as.character(Name),color="#2e850c",group = "Food",weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addCircleMarkers(data=clothes,~Longitudes,~Latitudes,popup=~popups,label=~as.character(Name),color=         "#0a31a5",group="Clothing",weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)  %>%
+  addCircleMarkers(data=counseling,~Longitudes,~Latitudes,popup =~popups,label=~as.character(Name),color="#ec1c1c",group = "Counseling", weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addCircleMarkers(data=dental,~Longitudes,~Latitudes,popup = ~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addCircleMarkers(data=vision,~Longitudes,~Latitudes,popup =~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addCircleMarkers(data=medical,~Longitudes,~Latitudes,popup = ~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addCircleMarkers(data=speech,~Longitudes,~Latitudes,popup =~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addCircleMarkers(data=physical,~Longitudes,~Latitudes,popup = ~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addLayersControl(overlayGroups = c("Food", "Clothing", "Counseling","Medical Services")) %>% addMarkers(data=subset_map,~Longitudes,~Latitudes,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_health
+
+
+#--------------youth development map ----------------
+
+youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 2.xlsx"))
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(youth$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        youth$Description ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        youth$Hours, 
+        "<br />",
+        "<strong>Address:</strong>",
+        youth$Address),
+  
+  
+  htmltools::HTML
+)
+leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=youth,~Longitudes,~Latitudes,popup=~popups,label=~as.character(Name),color="#8310b0",weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addMarkers(data=subset_map,~Longitudes,~Latitudes,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
+
+
+#---------mental health resources map------------------------
+
+ment <- read_excel(paste0(getwd(),"/data/mentalhealthres.xlsx"),sheet = "Mental")
+
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(ment$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        ment$Description ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        ment$Hours, 
+        "<br />",
+        "<strong>Address:</strong>",
+        ment$Address),
+  
+  
+  htmltools::HTML
+)
+leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=ment,~Longitudes,~Latitudes,popup=~popups,label=~as.character(Name),color="#54cbd0",weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addMarkers(data=subset_map,~Longitudes,~Latitudes,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
+
+
+
+#-------------word clouds--------------------
+#------------cloud_1-------------------------
+
+#install.packages("tm")  # for text mining
+#install.packages("SnowballC") # for text stemming
+#install.packages("wordcloud") # word-cloud generator 
+#install.packages("RColorBrewer") # color palettes
+# Load
+library("tm")
+library("SnowballC")
+library("wordcloud")
+library("RColorBrewer")
+
+
+text1 <- "Internet needs were very overwhelming in our community, virtual presence of students created difficulties with individual telecounseling, student engagement in school an ongoing concern time to provide for the basic needs; finding mental health providers for elementary aged students (this was a huge challenge); medical care for undocumented and uninsured Parent involvement internet access; monetary stressors - rent, food, hygiene and cleanliness supplies needs and health (COVID) and mental health needs Maintaining the same level of connectedness with families in the DL model as those attending in person.parent engagement, parent attendance, finding medical care for undocumented and uninsured, finding housing assistance for undocumented Our challenge is the overall transiency of our student population turnover; community mental health and medical supports; undocumented and uninsured medical care parent involvement Youth development activities We would like to continue to diversify our community partner list community mental health and medical supports, undocumented and uninsured medical care"
+
+#docs <- Corpus(VectorSource(text))
+
+
+Clean_String <- function(string){
+  # Lowercase
+  temp <- tolower(string)
+  # Remove everything that is not a number or letter (may want to keep more 
+  # stuff in your actual analyses). 
+  temp <- stringr::str_replace_all(temp,"[^a-zA-Z\\s]", " ")
+  # Shrink down to just one white space
+  temp <- stringr::str_replace_all(temp,"[\\s]+", " ")
+  temp <- stringr::str_replace_all(temp,";", " ")
+  # Split it
+  temp <- stringr::str_split(temp, " ")[[1]]
+  # Get rid of trailing "" if necessary
+  indexes <- which(temp == "")
+  if(length(indexes) > 0){
+    temp <- temp[-indexes]
+  } 
+  return(temp)
+}
+
+clean1 <- Clean_String(text1)
+
+docs1 <- Corpus(VectorSource(clean1))
+
+docs1 <- tm_map(docs1, removeWords, c("to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "continue"))
+
+
+dtm1 <- TermDocumentMatrix(docs1) 
+matrix1 <- as.matrix(dtm1) 
+words1 <- sort(rowSums(matrix1),decreasing=TRUE) 
+df1 <- data.frame(word = names(words1),freq=words1)
+
+
+
+set.seed(1234) # for reproducibility 
+cloud1 <- wordcloud2(df1, size=0.5)
+
+#---------Cloud 2-----------------------
+
+text2 <- "Many families attended our family outreach and engagement initiatives, teaching families how to operate Schoology.  Families are now very adept at using technology to help their students and support teachers and instruction
+student attendance and active engagement; virtual home visits
+Reduction of gaggle reports
+Virtual Home Visits and United Mental Health screening; hot spots, 1-1 technology
+Staying connected with families and working to empower families to be active in the school community. We offered support to families throughout the year and were responsive to needs as they arose. We worked together collaboratively.
+We have the Principal of the Year, School is a warm and welcoming place - Principal and VP tell students every day that they are loved and wanted, staff have risen to the occasion to offer quality instruction in this challenging time Excellent teachers and supportive and caring administration, cohesive working environment. positive climate, PEP, Parent Liaison always actively engaged and helping all families with many needs
+family involvement; welcoming environment
+Students feel safe and supported at school, equity is promoted throughout the school building, teamwork among staff 
+UMHT initiatives (MTSS tiered support)
+Collaboration and a warm atmosphere. Care for our community
+vision, teamwork, the people who work here "
+
+clean2 <- Clean_String(text2)
+
+docs2 <- Corpus(VectorSource(clean2))
+
+docs2 <- tm_map(docs2, removeWords, c("to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "hot"))
+
+
+dtm2 <- TermDocumentMatrix(docs2) 
+matrix2 <- as.matrix(dtm2) 
+words2 <- sort(rowSums(matrix2),decreasing=TRUE) 
+df2 <- data.frame(word = names(words2),freq=words2)
+
+
+cloud2 <- wordcloud2(df2, size=0.5)
+
 
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
@@ -464,32 +746,50 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                  
                  ## Sterling Area--------------------------------------------
                  tabPanel("Sterling Area", value = "overview",
-                          fluidRow(style = "margin: 6px;",
+                          fluidRow(style = "margin: 2px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(12, align = "justify",h4(strong("Map of Sterling")),
+                                   column(8, h4(strong("Map of Sterling")),
                                           p("This map shows the six schools and the area of Sterling. The orange area is the Census Designated Place of Sterling. It can be observed that Sugarland Elementary is outside the CDP of Sterling. Hence, the team considered to mimic the school zone of this school by selecting respective blocks as assigned by the US Census Bureau. It is shown by the yellow area. For this project, we have defined Sterling as both the orange area and the yellow area as seen in the map."),
                                           br("")
                                           
                                           
                                           
-                                   )),
+                                   ),
+                                   
+                                   
+                                   
+                                   
+                          ),
                           
-                          fluidPage(
-                            column(12, align = "center", leafletOutput("map1", width = "50%")
-                                   #fluidRow(align = "center",
-                                   #    p(tags$small(em('Last updated: August 2021'))))
-                            ) 
+                          fluidPage(style = "margin: 2px;",
+                                    column(8, leafletOutput("map1", width = "100%")
+                                           #fluidRow(align = "center",
+                                           #    p(tags$small(em('Last updated: August 2021'))))
+                                    ),
+                                    
+                                    column(4,
+                                           h4(strong("Schools")),
+                                           tags$ul(
+                                             tags$li("Forest Grove Elementary"),
+                                             tags$li("Guilford Elementary"),
+                                             tags$li("Rolling Ridge Elementary"),
+                                             tags$li("Sterling Elementary"), 
+                                             tags$li("Sugarland Elementary"), 
+                                             tags$li("Sully Elementary")
+                                           ),
+                                           br("")
+                                    )
                           )
                  ), 
                  tabPanel("Sociodemographics",
-                          fluidRow(style = "margin: 6px;",
+                          fluidRow(style = "margin: 2px;",
                                    h1(strong("Sterling"), align = "center"),
                                    p("", style = "padding-top:10px;"), 
                                    #column(4, 
                                    #      h4(strong("Education")),
                                    #     p("These are demographics"),
                                    #) ,
-                                   column(8, 
+                                   column(7, 
                                           h4(strong("Sterling, CDP")),
                                           selectInput("demosdrop", "Select Variable:", width = "60%", choices = c(
                                             "Gender" = "gender",
@@ -508,8 +808,8 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                                           ),
                                           ),
                                           
-                                          withSpinner(plotlyOutput("ageplot2", height = "500px", width ="80%")),
-                                          withSpinner(plotOutput("ageplot1", height = "500px", width = "60%")),
+                                          withSpinner(plotlyOutput("ageplot2", height = "500px", width ="100%")),
+                                          withSpinner(plotOutput("ageplot1", height = "500px", width = "100%")),
                                           
                                           #if ( == "age"){
                                           #withSpinner(plotOutput("ageplot1", height = "500px", width = "60%"))
@@ -517,7 +817,7 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                                           #withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%"))
                                    ),
                                    
-                                   column(8,
+                                   column(5,
                                           h2(strong("Analysis")), align = "justify",
                                           p("To access the possible opportunities within the six title 1 community schools in Sterling, VA, it is important to understand the neighborhood and area in which these schools are located. By looking at the graph, it appears to be almost an equal split of male’s and females in Sterling, VA. The total population in sterling is 30,271. 15,282 members of the population are male, while the remaining 14,989 are female. There are only 293 more males than females so that gives us almost a one to one ratio - so that’s good.", style = "padding-top:15px;font-size: 14px;"),
                                           p("So, once the team looked at the gender distribution, we were curious to look at the age distribution of the individuals of Sterling. The largest age group in Sterling are Adults (ages 35 to 44) which is represented by the blue green block, and then the older millennials (25 to 34) which is represented by the light green block. The age groups are fitting for the high median income within the area. ", style = "padding-top:15px;font-size: 14px;"),
@@ -525,6 +825,7 @@ The Community schools are centers for neighborhood enrichment, uniting families,
 Another important determinant that might impact someone’s availability of opportunities is their race or ethnicity. So, our logical next step was to look at the ethnicity/race distribution of the people of Sterling. Collecting the Race and Ethnicity demographic proved to be a little challenging at first. While the team was observing the data, we kept noticing that the number of individuals in each race population kept exceeding the total population of Sterling. For example, when we would add up all of the white, hispanic, asian, Hawaiian, and  African American population’s, the total number would exceed 30,271, the population of Sterling, VA. We later learned that this is because the American Community Survey does not recognize hispanic as a race. To the American Community Survey, Hispanic is an ethnicity so People can identify as white or asian and still be of hispanic decent, or they could select “other” as there is a separate category for them to mark hispanic. Knowing that disclaimer, we had to create a separate visualization for the hispanic population so we could best represent them. As you can see, majority of the Sterling population is white. When you look at the ethnicity visualization, almost half of the sterling CDP population identifies as being hispanic or latino.
 ", style = "padding-top:15px;font-size: 14px;"),
                                           p("Now that we looked at the ethnic groups, we wanted to look at the educational attainment levels. The data was collected from the individuals who are ages 25 and over. It seems that a large number of the population are educated with that of a bachelors agree or higher, which is fitting for the county’s high median income. 
+
 so a reasonable population has achieved high education - how much is Sterling making? Thus, we looked at family income levels. This data was collected looking at family households in the last 12 months of the ACS collected data (2020). It has also been adjusted for inflation. Interestingly enough, the largest income bracket lies within the range of $100,000 to $149,999 which is represented by the dark purple area however we do acknowledge that this may not apply our families of interest.
 ", style = "padding-top:15px;font-size: 14px;"),
                                           p("So we wondered if the high-income levels also affect the housing market so this can help us to understand housing needs and availability of the children’s families. Looking at this visualization, we see that this area has a high property value with a large percentage of properties being worth $300,000 to $499,999, shown by the blue part of the circle. This is important to take into consideration considering our targeted title1 area. Once we looked at the high property values, we were intrigued to find out how many occupants own their homes. As expected, majority housing residents are home owners, while a little over a quarter housing residents are renters. This could be because of families high incomes.", style = "padding-top:15px;font-size: 14px;"),  
@@ -543,14 +844,14 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                           )), 
                  navbarMenu("Community Schools",
                             tabPanel("Demographics", 
-                                     fluidRow(style = "margin: 6px;",
+                                     fluidRow(style = "margin: 2px;",
                                               h1(strong("Demographics of Community Schools"), align = "center"),
-                                              p("", style = "padding-top:10px;"), 
+                                              
                                               #column(4, 
                                               #      h4(strong("Education")),
                                               #     p("These are demographics"),
                                               #  ) ,
-                                              column(12, 
+                                              column(10, align ="center",
                                                      h4(strong("Community Schools")),
                                                      selectInput("schooldrop", "Select Variable:", width = "60%", choices = c(
                                                        "Gender" = "cgender",
@@ -565,6 +866,12 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                                                      withSpinner(plotlyOutput("ocuplot1", height = "500px", width = "60%")),
                                                      withSpinner(leafletOutput("ocuplot2", height = "500px", width = "60%")),
                                               ),
+                                              
+                                              
+                                              
+                                              
+                                              
+                                              
                                               # column(12, 
                                               #       h4("References: "), 
                                               #       p(tags$small("[1] Groundwater: Groundwater sustainability. (2021). Retrieved July 27, 2021, from https://www.ngwa.org/what-is-groundwater/groundwater-issues/groundwater-sustainability")) ,
@@ -575,12 +882,14 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                                               #h1(strong("Analysis"), align = "center"),
                                               #p("", style = "padding-top:15px;font-size: 35px;"), 
                                               
-                                              column(8,
+                                              column(12,
                                                      h2(strong("Analysis")), align = "justify",
                                                      p("After understanding the demographics of the areas that feed into the community schools, next we began to look at the demographics of our specific populations, the 6 schools. For this, we used data from the Virginia Department of Education as well as the Loudoun County Public Schools dashboard and staff directory.", style = "padding-top:15px;font-size: 14px;"),
                                                      p("To further understand our population, we wanted to compare the race and ethnicity demographics we visualized from the Sterling CDP and our 6 community schools.   In this graph, we visualized data from all 6 schools together and found that overall, Hispanic students, represented by the light purple bar, make up the greatest percentage of students which differs from the general make-up of the Sterling CDP where White people made up the majority of residents. After seeing this, we wanted to look at the breakdown of the Hispanic population within the greater Sterling area.   Using data from the American Community Survey of Greater Sterling between the years 2016 to 2020, we found that the area where Rolling Ridge is located, represented by the light yellow area of the map, has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary, the area of the map shaded mustard yellow,  and Forest Grove Elementary, the dark orange, lower area of the map.   This information will help us to identify possible opportunities within the schools and neighborhoods specifically surrounding language services.", style = "padding-top:15px;font-size: 14px;"),
                                                      p("Once we felt we understood the demographics of those attending the schools, we switched our focus to the data within the schools themselves. Beginning with the number of teachers and staff employed at each school, we used data from the 2022 school directory, which revealed that at most of the schools, there are more teachers than staff except for Sterling Elementary, which has a larger amount of staff than teachers which may suggest possible possible opportunities in service.    Also notable was the lower total number of staff and teachers employed at Sully Elementary, seen in the last bar on the graph, which led us to visualize the total enrollment for each of the schools to better understand these differences.
+
  
+
 Using data from the Virginia Department of Education’s Fall Membership Reports for the years 2016 to 2020,   we found that Guilford, seen in the bottom left graph,   Sugarland, the top right graph,   and Rolling Ridge, the bottom right graph,  all maintained a total enrollment of between 550 and 600 students with only slight variations between years. For Forest Grove, the top left graph,   enrollment remained steady between 2016 and 2020 hovering right at 575 students.   On the other hand, Sterling Elementary, the top right graph,   had an enrollment of 450 to 500 students with a slight decline from 2016 to 2020   and Sully Elementary, has only between 400 to 475 students enrolled.   Since the implementation of the Community School Initiative, there has been an increase in enrollment at Sully and Guilford,   while we are not saying that this program is the cause of this increase, it was noticed and may be worth looking into further. Additionally, the differences in enrollment between schools may suggest possible opportunities to look into surrounding youth engagement resources.
 ", style = "padding-top:15px;font-size: 14px;"),
                                                      p("To further breakdown the enrollment statistics, we used the LCPS Dashboard data to visualize the student’s absences by quarter at each school during the 2021 to 2022 school year.   While Rolling Ridge, the green line,   Sugarland, the dark blue line,   and Guilford, the yellow line,   all saw spikes in absences during quarter two,   it was Sully, the pink line,   Sterling, the light blue line,   and Forest Grove, the orange line,   that had a steady increase in absences over the 4 quarters. However it is important to note that this data came from the school year during the COVID-19 pandemic.
@@ -603,49 +912,121 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                      
                                               )),
                                      
-                            )
-                 ),
+                            ),
+                            
+                            tabPanel("School Reports",
+                                     fluidRow(style = "margin: 2px;",
+                                              p("", style = "padding-top:5px;"),
+                                              column(12, align = "center",h4(strong("Representatives' responses"))),
+                                              tabPanel("Weaknesses and biggest challenges",
+                                                       br(""),
+                                                       
+                                                       
+                                                       
+                                                       
+                                                       column(12, align = "center",
+                                                              wordcloud2Output("cloud1")
+                                                       ))),
+                                     
+                                     fluidRow(style = "margin: 2px;",
+                                              p("", style = "padding-top:5px;"),
+                                              column(12, align = "center",h4(strong("")),
+                                                     h4("Strengths and Biggest Successes"),
+                                                     br("")
+                                                     
+                                                     
+                                                     
+                                              ),
+                                              
+                                              column(12, align = "center",
+                                                     wordcloud2Output("cloud2")
+                                                     
+                                              ))
+                                     
+                                     
+                                     
+                            )),
+                 
                  navbarMenu("Availability of Resources",
-                            tabPanel("Health and Social Services"),
-                            fluidRow(style = "margin: 6px;",
-                                     p("", style = "padding-top:10px;"),
-                                     column(12, align = "center",h4(strong("")),
-                                            p(""),
-                                            br("")
-                                            
-                                            
-                                            
+                            tabPanel("Health and Social Services",
+                                     fluidRow(style = "margin: 6px;",
+                                              p("", style = "padding-top:10px;"),
+                                              column(12, align = "center",h4(strong("Health and Social Services")),
+                                                     p(""),
+                                                     br("")
+                                                     
+                                                     
+                                                     
+                                                     
+                                                     
+                                                     
+                                              )),
+                                     
+                                     fluidPage(style = "margin: 2px;", 
+                                               column(12, 
+                                                      leafletOutput("map_health", width = "100%")
+                                                      #fluidRow(align = "center",
+                                                      #    p(tags$small(em('Last updated: August 2021'))))
+                                               )
                                      )),
                             
-                            tabPanel("Mental Health"),
-                            fluidRow(style = "margin: 6px;",
-                                     p("", style = "padding-top:10px;"),
-                                     column(12, align = "center",h4(strong("")),
-                                            p(""),
-                                            br("")
-                                            
-                                            
-                                            
-                                     )),
-                            tabPanel("Family Engagement"),
-                            fluidRow(style = "margin: 6px;",
-                                     p("", style = "padding-top:10px;"),
-                                     column(12, align = "center",h4(strong("")),
-                                            p(""),
-                                            br("")
-                                            
-                                            
-                                            
-                                     )),
-                            tabPanel("Youth Development Opportunities"),
-                            fluidRow(style = "margin: 6px;",
-                                     p("", style = "padding-top:10px;"),
-                                     column(12, align = "center",h4(strong("")),
-                                            p(""),
-                                            br("")
-                                            
-                                            
-                                            
+                            
+                            
+                            tabPanel("Mental Health",
+                                     fluidRow(style = "margin: 6px;",
+                                              p("", style = "padding-top:10px;"),
+                                              column(12, align = "center",h4(strong("")),
+                                                     p(""),
+                                                     br("")
+                                                     
+                                                     
+                                                     
+                                              )),
+                                     fluidPage(style = "margin: 2px;", 
+                                               column(12, 
+                                                      leafletOutput("map_mental", width = "100%")
+                                                      #fluidRow(align = "center",
+                                                      #    p(tags$small(em('Last updated: August 2021'))))
+                                               )
+                                     )
+                                     
+                            ),
+                            tabPanel("Family Engagement",
+                                     fluidRow(style = "margin: 6px;",
+                                              p("", style = "padding-top:10px;"),
+                                              column(12, align = "center",h4(strong("")),
+                                                     p(""),
+                                                     br("")
+                                                     
+                                                     
+                                                     
+                                              )),
+                                     
+                                     
+                                     
+                                     
+                            ),
+                            tabPanel("Youth Development Opportunities",
+                                     fluidRow(style = "margin: 6px;",
+                                              p("", style = "padding-top:10px;"),
+                                              column(12, align = "center",h4(strong("Youth Development Opportunities")),
+                                                     p(""),
+                                                     br("")
+                                                     
+                                                     
+                                                     
+                                              )
+                                              
+                                     ),
+                                     
+                                     
+                                     
+                                     fluidPage(style = "margin: 2px;", 
+                                               column(12, 
+                                                      leafletOutput("map_youth", width = "100%")
+                                                      #fluidRow(align = "center",
+                                                      #    p(tags$small(em('Last updated: August 2021'))))
+                                               )
                                      )),
                             
                  ),
@@ -701,6 +1082,23 @@ server <- function(input, output, session) {
   output$map1 <- renderLeaflet({
     map1
   })
+  
+  output$map_health <- renderLeaflet({
+    map_health
+  })
+  
+  output$map_youth <- renderLeaflet({
+    map_youth
+  })
+  
+  output$map_mental <- renderLeaflet({
+    map_mental
+  })
+  
+  output$cloud2 <- renderWordcloud2(
+    cloud2
+  )
+  
   
   Var <- reactive({
     input$demosdrop
@@ -802,6 +1200,9 @@ server <- function(input, output, session) {
       
       
     }
+    else if (Var2() == "cenrol") {
+      enroll
+    }
   })
   
   
@@ -809,11 +1210,23 @@ server <- function(input, output, session) {
     if (Var2() == "chispanic") {
       
       hispanicschool
-    }  
+    }
+    
     
   })
   
+  
+  #---------word clouds-----------------
+  
+  output$cloud1 <- renderWordcloud2(
+    cloud1
+  )
+  
+  
 }
-#sociodemo tabset ----------------------------------------------------
-
 shinyApp(ui = ui, server = server)
+
+
+
+
+

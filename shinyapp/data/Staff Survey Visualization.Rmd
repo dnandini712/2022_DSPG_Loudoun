@@ -16,7 +16,7 @@ library(tidycensus)
 
 Q1: visualization
 ```{r}
-staffsurvey <- read_excel("~/Downloads/2022_DSPG_Loudoun/loudoun_staffsurvey.xlsx", col_names=TRUE)
+staffsurvey <- read_excel(paste0(getwd(), "/Loudoun_staffsurvey.xlsx"), col_names = TRUE)
 subset_staffsurveyQ1 <- staffsurvey[1:6,1:2]
 
 staffschools1 <- subset_staffsurveyQ1$Schools
@@ -34,7 +34,7 @@ ggplotly(uno)
 
 Q2: visualization
 ```{r}
-staffsurvey <- read_excel("~/Downloads/2022_DSPG_Loudoun/loudoun_staffsurvey.xlsx", col_names=TRUE)
+staffsurvey <- read_excel(paste0(getwd(), "/Loudoun_staffsurvey.xlsx"), col_names = TRUE)
 subset_staffsurveyQ2 <- staffsurvey[1:6,c(1,3)]
 
 staffschools2 <- subset_staffsurveyQ2$Schools
@@ -52,7 +52,7 @@ ggplotly(dos)
 
 Q3: visualization
 ```{r}
-staffsurvey <- read_excel("~/Downloads/2022_DSPG_Loudoun/loudoun_staffsurvey.xlsx", col_names=TRUE)
+staffsurvey <- read_excel(paste0(getwd(), "/Loudoun_staffsurvey.xlsx"), col_names = TRUE)
 subset_staffsurveyQ3 <- staffsurvey[1:6,c(1,4)]
 
 staffschools3 <- subset_staffsurveyQ3$Schools
@@ -70,7 +70,7 @@ only 3 out of the six schools have over 80 percent of teachers who feel comfotra
 
 Q4: visualization
 ```{r}
-staffsurvey <- read_excel("~/Downloads/2022_DSPG_Loudoun/loudoun_staffsurvey.xlsx", col_names=TRUE)
+staffsurvey <- read_excel(paste0(getwd(), "/Loudoun_staffsurvey.xlsx"), col_names = TRUE)
 subset_staffsurveyQ4 <- staffsurvey[1:6,c(1,5)]
 
 staffschools4 <- subset_staffsurveyQ4$Schools
@@ -88,7 +88,7 @@ most of the schools have over 90 percent of staff who feel like their school adm
 
 Q5: visualization
 ```{r}
-staffsurvey <- read_excel("~/Downloads/2022_DSPG_Loudoun/loudoun_staffsurvey.xlsx", col_names=TRUE)
+staffsurvey <- read_excel(paste0(getwd(), "/Loudoun_staffsurvey.xlsx"), col_names = TRUE)
 subset_staffsurveyQ5 <- staffsurvey[1:6,c(1,6)]
 
 staffschools5 <- subset_staffsurveyQ5$Schools
@@ -106,7 +106,7 @@ almost 90 percent of staff at all schools feel as though their they and their pe
 
 Q6: visualization
 ```{r}
-staffsurvey <- read_excel("~/Downloads/2022_DSPG_Loudoun/loudoun_staffsurvey.xlsx", col_names=TRUE)
+staffsurvey <- read_excel(paste0(getwd(), "/Loudoun_staffsurvey.xlsx"), col_names = TRUE)
 subset_staffsurveyQ6 <- staffsurvey[1:6,c(1,7)]
 
 staffschools6 <- subset_staffsurveyQ6$Schools
@@ -124,7 +124,7 @@ At Sterling, 90% of staff agree that class sizes are reasonable while only 81% a
 
 Q7: visualization
 ```{r}
-staffsurvey <- read_excel("~/Downloads/2022_DSPG_Loudoun/loudoun_staffsurvey.xlsx", col_names=TRUE)
+staffsurvey <- read_excel(paste0(getwd(), "/Loudoun_staffsurvey.xlsx"), col_names = TRUE)
 subset_staffsurveyQ7 <- staffsurvey[1:6,c(1,8)]
 
 staffschools7 <- subset_staffsurveyQ7$Schools
