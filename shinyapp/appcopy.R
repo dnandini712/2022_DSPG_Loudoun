@@ -114,18 +114,28 @@ map$Longitude <- as.numeric(map$Longitude)
 map$Latitude <- as.numeric(map$Latitude)
 
 
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(map$Name),
+        "<br />",
+        "<strong>Address:</strong>",
+        map$Address ,
+        "<br />",
+        "<a href = ",map$Website, "> Website </a>",
+        "<br />"),
+  
+  
+  htmltools::HTML
+)
+
+
 map1<-leaflet(data = map) %>% addTiles() %>%
   addPolygons(data = va20_2,
               color="yellow",
               weight = 0.5,
               smoothFactor = 0.2,
-              fillOpacity = 0.5) %>%
-  addMarkers(~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(Address)) %>% addPolygons(data = va_20_CDP,
-                                                                                                                    color="red",
-                                                                                                                    weight = 0.5,
-                                                                                                                    smoothFactor = 0.2,
-                                                                                                                    fillOpacity = 0.5) %>%
-  addMarkers(~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(School))
+              fillOpacity = 0.5)  %>% addPolygons(data = va_20_CDP,color="red",weight = 0.5,smoothFactor = 0.2,fillOpacity = 0.5) %>%
+  addMarkers(~Longitude, ~Latitude, popup = popups, label = ~as.character(Name))
 
 
 #----------Gender---------------------------------------------
@@ -514,26 +524,6 @@ leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addLayersControl(overlayGroups = c("Food", "Clothing", "Counseling","Medical Services"),options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_health
 
 
-blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
-va20_2 <- get_acs(geography = "block group",
-                  variables = c(hispanic = "B03002_012"),
-                  state = "VA",
-                  year = 2020,
-                  geometry = TRUE) %>%
-  filter(NAME %in% blocks)
-
-leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=ment,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal(Resources),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
-  addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE))
 
 #--------------youth development map ----------------
 
@@ -777,7 +767,7 @@ ui <- navbarPage(title = "DSPG",
                                    # br("", style = "padding-top:2px;"),
                                    # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                    br(""),
-                                   h1(strong("Evaulating Family Needs in Community Schools in Loudoun"),
+                                   h1(strong("Illustrating Potential Opportunities for Community Schools in Loudoun County"),
                                       #h2("") ,
                                       br(""),
                                       h4("Data Science for the Public Good Program"),
@@ -814,29 +804,18 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                  ),
                  
                  ## Sterling Area--------------------------------------------
-                 tabPanel("Sterling Area", value = "overview",
+                 tabPanel("Community School Initiative", value = "overview",
                           fluidRow(style = "margin: 2px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(8, h4(strong("Map of Sterling")),
-                                          p("This map shows the six schools and the area of Sterling. The orange area is the Census Designated Place of Sterling. It can be observed that Sugarland Elementary is outside the CDP of Sterling. Hence, the team considered to mimic the school zone of this school by selecting respective blocks as assigned by the US Census Bureau. It is shown by the yellow area. For this project, we have defined Sterling as both the orange area and the yellow area as seen in the map."),
-                                          br("")
-                                          
-                                          
-                                          
-                                   ),
-                                   
-                                   
-                                   
-                                   
+                                   column(12, align = "center", h1(strong("Sterling’s Elementary Community Schools"))),
                           ),
                           
-                          fluidPage(style = "margin: 2px;",
-                                    column(8, leafletOutput("map1", width = "100%")
-                                           #fluidRow(align = "center",
-                                           #    p(tags$small(em('Last updated: August 2021'))))
-                                    ),
+                          fluidPage(style = "margin: 12px;",
                                     
-                                    column(4,
+                                    column(6, align = "justify", 
+                                           
+                                           p("This map shows the six schools and the area of Sterling. The orange area is the Census Designated Place of Sterling. It can be observed that Sugarland Elementary is outside the CDP of Sterling. Hence, the team considered to mimic the school zone of this school by selecting respective blocks as assigned by the US Census Bureau. It is shown by the yellow area. For this project, we have defined Sterling as both the orange area and the yellow area as seen in the map."),
+                                           br(""),
                                            h4(strong("Schools")),
                                            tags$ul(
                                              tags$li("Forest Grove Elementary"),
@@ -847,7 +826,16 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                                              tags$li("Sully Elementary")
                                            ),
                                            br("")
-                                    )
+                                    ),
+                                    
+                                    
+                                    
+                                    column(6, align ="right", leafletOutput("map1", width = "80%")
+                                           #fluidRow(align = "center",
+                                           #    p(tags$small(em('Last updated: August 2021'))))
+                                    ),
+                                    
+                                    
                           )
                  ), 
                  tabPanel("Sociodemographics",
