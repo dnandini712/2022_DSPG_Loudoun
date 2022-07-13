@@ -114,18 +114,28 @@ map$Longitude <- as.numeric(map$Longitude)
 map$Latitude <- as.numeric(map$Latitude)
 
 
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(map$Name),
+        "<br />",
+        "<strong>Address:</strong>",
+        map$Address ,
+        "<br />",
+        "<a href = ",map$Website, "> Website </a>",
+        "<br />"),
+  
+  
+  htmltools::HTML
+)
+
+
 map1<-leaflet(data = map) %>% addTiles() %>%
   addPolygons(data = va20_2,
               color="yellow",
               weight = 0.5,
               smoothFactor = 0.2,
-              fillOpacity = 0.5) %>%
-  addMarkers(~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(Address)) %>% addPolygons(data = va_20_CDP,
-                                                                                                                    color="red",
-                                                                                                                    weight = 0.5,
-                                                                                                                    smoothFactor = 0.2,
-                                                                                                                    fillOpacity = 0.5) %>%
-  addMarkers(~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(School))
+              fillOpacity = 0.5)  %>% addPolygons(data = va_20_CDP,color="red",weight = 0.5,smoothFactor = 0.2,fillOpacity = 0.5) %>%
+  addMarkers(~Longitude, ~Latitude, popup = popups, label = ~as.character(Name))
 
 
 #----------Gender---------------------------------------------
@@ -155,11 +165,11 @@ age_percent <- as.numeric(age_estimate)
 age_cat <- (subset_sterling$Label)
 #this is how to subset the data
 #turn categories into factors 
-age<-ggplot(subset_sterling,aes(x=age_cat,y=age_percent, fill=age_cat))+geom_col()+theme(axis.text.x=element_blank(), axis.title.x = element_blank(), axis.text.y = element_blank(),axis.ticks.y=element_blank())+scale_x_discrete(limits=age_cat)+labs(caption= "Source: S0101 ACS 5-year data 2016-2020",y="Percent",)+ coord_polar()+guides(fill = guide_legend(title = "Age Group")) + geom_text(aes(label = age_percent, y = age_percent), size = 3, position = position_stack(vjust = 0.8))
+Age <- age_cat
+Percent <- age_percent
 
+age<- plot_ly(subset_sterling,x=~Age, y=~Percent,type = "bar", color = ~Age, hoverinfo = "text",text = ~paste("Age:",Age,"<br>","Percent:",Percent,"%" )) %>% layout(title = "Age Distribution",xaxis = list(title=""))
 #-----------Race/Ethnicity--------------------
-
-library(plotly)
 
 labelsR = c("White", "Black", "Am.Indian", "Asian","Hawaiian","Other")
 valuesR = c(18138, 3132, 418, 5313, 144, 4570)
@@ -183,8 +193,7 @@ mi_cat.fac <- factor(mi_cat, levels = c(mi_cat))
 subset_medianin$new_pop<-gsub("%$","",subset_medianin$...4)
 pop_nop <- subset_medianin$new_pop
 pop_num <- as.numeric(pop_nop)
-income <- ggplot(subset_medianin,aes(x=mi_cat.fac,y=pop_num, fill=mi_cat.fac))+geom_col(stat="identity")+theme(axis.text.x=element_blank(),axis.ticks.y=element_blank(),axis.title.x = element_blank()+scale_x_discrete(limits=mi_cat.fac),axis.text.y=element_blank())+labs(caption= "Source: S1901 ACS 5-year data 2016-2020",x="Income", y="Percent") + coord_polar() + guides(fill = guide_legend(title = "Income Level ($)")) + geom_text(aes(label=pop_num,y=pop_num), size = 3, position = position_stack(vjust = 1.1))
-
+income <- plot_ly(subset_medianin,x=~mi_cat.fac,y=~pop_num,color = ~mi_cat.fac,type = "bar", hoverinfo = "text",text = ~paste("Income Level:",mi_cat.fac,"<br>","Percent:",pop_num,"%")) %>% layout(title = "Median Income Distribution",xaxis = list(title="") ,yaxis= list(title = "Percent"))
 #---------Property Value---------------------------------
 
 dfpv <- read_excel(paste0(getwd(), "/data/Property_Value.xlsx"), col_names = TRUE)
@@ -197,22 +206,16 @@ property <- figpv %>% layout(title = "Residential Property Value", showlegend = 
                              xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                              yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 
-property
-
 #------------Housing Occupancy---------------------------
 
 lbls.HOUSING = c("Owners", "Renters")
 slices.HOUSING = c(6839, 2412)
 
-housing <-  plot_ly(type='pie', labels=lbls.HOUSING, values=slices.HOUSING, 
-                    textinfo='label+percent',
-                    hoverinfo = 'text', 
-                    text = ~paste('Total:', slices.HOUSING),
-                    insidetextorientation='') %>% layout(title ='Home Ownership In Sterling', legend=list(title=list(text='')))
+housing <- plot_ly(type='pie', labels=lbls.HOUSING, values=slices.HOUSING, 
+                   textinfo='label+percent',
+                   insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Occupants')))
 
 #-------------Commuter Time------------------------------
-
-library(plotly)
 
 labelsCT = c("Less than 10 minutes","10 to 14 minutes","15 to 19 minutes","20 to 24 minutes", "25 to 29 minutes", "30 to 34 minutes", "35 to 44 minutes", "45 to 59 minutes", "60 or more minutes")
 valuesCT = c(6, 18, 17, 13, 5, 13, 7, 10, 11)
@@ -248,13 +251,11 @@ povas_pop <- subset_poverty_as$Estimate
 povas_pop <- as.numeric(povas_pop)
 povas_cat <- subset_poverty_as$Label
 
-ggplot(subset_poverty_as, aes(x=povas_cat,y=povas_pop,fill=Sex)) + 
-  geom_bar(stat = "identity",position=position_dodge(),width=.6)   + coord_flip() + theme(axis.text.x=element_text(angle=90)) +scale_fill_manual(values=c("tomato2", "darkblue"))+labs(title="Poverty by Age and Sex in Sterling, VA",subtitle="2020",caption= "Source: ACS data 2016-2020",x="Age",y="Estimated Population") +scale_x_discrete(limits=c("Under 5 years", "5 years","6 to 11 years","12 to 14 years","15 years","16 to 17 years","18 to 24 years","25 to 34 years","35 to 44 years","45 to 54 years","55 to 64 years","65 to 74 years","75 years and older")) 
+Total <- povas_pop
 
+cat <- as.character(povas_cat)
 
-pov <- ggplot(subset_poverty_as,aes(x=povas_cat,y=povas_pop, fill=Sex))+geom_col(position="dodge",width=1.5)+theme(axis.text.x=element_text(angle=90, size=7.5, face="bold"),axis.title.x = element_blank())+scale_x_discrete(limits=povas_cat[1:length(povas_cat)/2])+labs(caption= "Source: B17001 ACS 5-year data 2016-2020",x="Age",y="Total Population")+ scale_fill_discrete(name = "", labels = c("Female", "Male")) 
-
-
+pov <- plot_ly(subset_poverty_as, x = ~cat, y = ~Total, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat,"<br>","Total:",Total,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = ~cat))
 #--------gender by school
 
 
@@ -423,6 +424,17 @@ chronic<- ggplot(data=chronic, aes(x=schools, y=number, fill=schools,  width=0.8
 
 chronic<-ggplotly(chronic)
 
+#--------------free or not free resources ---------------------------------------
+
+costs <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"))
+foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"),sheet="Food")
+clothes <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"),sheet = "Clothing")
+counseling <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Counseling")
+dental <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Dental Care")
+vision <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Vision Care")
+medical <-  read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Medical Services")
+speech <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Speech and Hearing")
+physical <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Physical Therapy")
 #---------------map_health and isochrones-----------------------------------------
 
 YourAPIKey <- "103eac37d04686a8b0104d96d983c612"
@@ -517,12 +529,13 @@ leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
                    stroke = F, fillOpacity = 1) %>%
   addCircleMarkers(data=physical,~Longitude,~Latitude,popup = ~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1) %>%
-  addLayersControl(overlayGroups = c("Food", "Clothing", "Counseling","Medical Services")) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_health
+  addLayersControl(overlayGroups = c("Food", "Clothing", "Counseling","Medical Services"),options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_health
+
 
 
 #--------------youth development map ----------------
 
-youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 2.xlsx"))
+youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 3.xlsx"))
 popups <- lapply(
   paste("<strong>Name: </strong>",
         str_to_title(youth$Name),
@@ -534,11 +547,16 @@ popups <- lapply(
         youth$Hours, 
         "<br />",
         "<strong>Address:</strong>",
-        youth$Address),
+        youth$Address,
+        "<a href = ",youth$Website, "> Website </a>",
+        "<br />"),
   
   
   htmltools::HTML
 )
+
+pal <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
+
 leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(data = va20_2,
               color="#5f308f",
@@ -547,8 +565,9 @@ leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=youth,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),color="#8310b0",weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
+  addCircleMarkers(data=youth,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),color= ~pal(Type),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1,group = ~Type)%>%
+  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
 
 
@@ -567,11 +586,16 @@ popups <- lapply(
         ment$Hours, 
         "<br />",
         "<strong>Address:</strong>",
-        ment$Address),
+        ment$Address,
+        "<a href = ",ment$Website, "> Website </a>",
+        "<br />"),
   
   
   htmltools::HTML
 )
+
+pal <- colorFactor(c("red", "blue", "green"), domain = c("Family Therapy", "Family Counseling", "Bereavement"))
+
 leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(data = va20_2,
               color="#5f308f",
@@ -580,8 +604,9 @@ leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=ment,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),color="#54cbd0",weight = 7, radius=7, 
+  addCircleMarkers(data=ment,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal(Resources),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
 
 
@@ -733,7 +758,7 @@ jscode <- "function getUrlVars() {
            "
 
 
-#------------------plotly vs plot variable--------------------------
+#plotly vs plot variable----
 
 var <- c("ageplot1","ageplot2")
 
@@ -907,7 +932,7 @@ ui <- navbarPage(title = "DSPG",
                                    # br("", style = "padding-top:2px;"),
                                    # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                    br(""),
-                                   h1(strong("Evaulating Family Needs in Community Schools in Loudoun"),
+                                   h1(strong("Illustrating Potential Opportunities for Community Schools in Loudoun County"),
                                       #h2("") ,
                                       br(""),
                                       h4("Data Science for the Public Good Program"),
@@ -947,74 +972,115 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                  tabPanel("Community School Initiative", value = "overview",
                           fluidRow(style = "margin: 2px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(8, h4(strong("Map of Sterling")),
-                                          p("This map shows the six schools and the area of Sterling. The orange area is the Census Designated Place of Sterling. It can be observed that Sugarland Elementary is outside the CDP of Sterling. Hence, the team considered to mimic the school zone of this school by selecting respective blocks as assigned by the US Census Bureau. It is shown by the yellow area. For this project, we have defined Sterling as both the orange area and the yellow area as seen in the map."),
-                                          br("")
-                                          
-                                          
-                                          
-                                   ),
-                                   
-                                   
-                                   
-                                   
+                                   column(12, align = "center", h1(strong("Sterling’s Elementary Community Schools"))),
                           ),
                           
-                          fluidPage(style = "margin: 2px;",
-                                    column(8, leafletOutput("map1", width = "100%")
+                          fluidPage(style = "margin: 12px;",
+                                    
+                                    column(6, align = "justify", h4(strong("What are Community Schools?")),
+                                           
+                                           p("Community Schools is a term that describes schools that brings educators, families, community partners, and local government together to address the comprehensive needs of students, families, and communities. The U.S. Department of Education states that the primary purpose of community schools is to “provide comprehensive academic, social, and health services for students, student's family members, and community members that will result in improved educational outcomes for children. Community Schools are expanding across the United States – in 2020, around 10,000 schools have been transformed into community schools (Quinn & Blank, 2020). This is also evident in Virginia, where", a(href = " https://www.cisofva.org/", strong("Community Schools"), target = "_blank"), "served over 58,000 students in 2021, an increase from over 45,000 students in 2019."),
+                                           
+                                           h4(strong("The Sterling Region")),
+                                           
+                                           p("The", a(href = "https://www.lcps.org/Page/236420s",strong("Community School Initiative"), target = "_blank"), "in the Loudoun County Public School started in 2016 with Sterling Elementary, a Title 1 school, due to the generous support of 100WomenStrong. According to the Virginia Department of Education, Title 1 schools are provided “financial assistance through state educational agencies to school divisions and public schools with high numbers or percentages of children from low-income families to help ensure that all children meet challenging state academic content and achievement standards.”"),
+                                           p("The Community School program in Loudoun focuses on four key areas to promote academic achievement: "),
+                                           tags$ol(
+                                             tags$li("Health and Social Services"),
+                                             tags$li("Mental Health"),
+                                             tags$li("Family Engagement"),
+                                             tags$li("Youth Development Opportunities")
+                                             
+                                           ),
+                                           p("Over the past several years, the Community School initiative has grown to include six Title 1 elementary schools from the Sterling area of Loudoun County in 2022."),
+                                           p("The interactive map shows the location of the six elementary schools in Sterling. Most schools are in the Sterling Census Designated Place (shaded orange). Sugarland Elementary, however, falls in the Greater Sterling region. We estimated, shown in yellow, by selecting the respective blocks assigned by the US Census Bureau."),
+                                    ),
+                                    
+                                    
+                                    
+                                    column(6, align ="right", leafletOutput("map1", width = "90%", height = 500)
                                            #fluidRow(align = "center",
                                            #    p(tags$small(em('Last updated: August 2021'))))
                                     ),
                                     
-                                    column(4,
-                                           h4(strong("Schools")),
-                                           tags$ul(
-                                             tags$li("Forest Grove Elementary"),
-                                             tags$li("Guilford Elementary"),
-                                             tags$li("Rolling Ridge Elementary"),
-                                             tags$li("Sterling Elementary"), 
-                                             tags$li("Sugarland Elementary"), 
-                                             tags$li("Sully Elementary")
-                                           ),
-                                           br("")
-                                    )
-                          )
+                                    
+                          ),
+                          
+                          fluidRow(style = "margin: 12px;",
+                                   column(8, h3(strong("When did schools join the Community Schools Initiative?"))),
+                                   column(12, align ="center", 
+                                          img(src='sterlingmascot.png', width = "80%")
+                                          
+                                          
+                                   ), 
+                                   column(12, 
+                                          h4("References: "),
+                                          p("[1] U.S Department of Education, Office of Elementary and Secondary Education. Full-Service Community Schools Program (FSCS). Retrieved from:", a(href =  "https://oese.ed.gov/offices/office-of-discretionary-grants-support-services/school-choice-improvement-programs/full-service-community-schools-program-fscs/", "https://oese.ed.gov/offices/office-of-discretionary-grants-support-services/school-choice-improvement-programs/full-service-community-schools-program-fscs/"), style = "font-size:12px;"),
+                                          p("[2] Quinn, J., & Blank, M. J. (2020). Twenty years, ten lessons: Community schools as an equitable school improvement strategy.", em("Voices in Urban Education (VUE)."), style = "font-size:12px;")),
+                                   
+                          ),
                  ), 
-                 tabPanel("Sociodemographics",
-                          fluidRow(style = "margin: 2px;",
+                 
+                 
+                 tabPanel("Sterling Sociodemographics",
+                          fluidRow(style = "margin: 4px;",
                                    h1(strong("Sterling"), align = "center"),
                                    p("", style = "padding-top:10px;"), 
-                                   #column(4, 
-                                   #      h4(strong("Education")),
-                                   #     p("These are demographics"),
-                                   #) ,
-                                   column(7, 
-                                          h4(strong("Sterling, CDP")),
-                                          selectInput("demosdrop", "Select Variable:", width = "60%", choices = c(
-                                            "Gender" = "gender",
-                                            "Age" = "age",
-                                            "Race/ethnicity" = "race", 
-                                            "Educational Attainment" = "edu",
-                                            "Family Income" = "faminc",
-                                            "Property Value" = "property",
-                                            "Housing Occupancy" = "housing",
-                                            "Employment" = "employment",
-                                            "Work Occupation" = "workoccu",
-                                            "Commuter Time" = "commutertime",
-                                            "Commuter Mode" = "commutermode",
-                                            "Poverty by Age and Sex" = "pov", 
-                                            "Health Coverage" = "health"
-                                          ),
-                                          ),
+                                   column(6, 
+                                          h4(strong("Sterling Residents' Characteristics")),
                                           
-                                          withSpinner(plotlyOutput("ageplot2", height = "500px", width ="100%")),
-                                          withSpinner(plotOutput("ageplot1", height = "500px", width = "100%")),
-                                          
-                                          #if ( == "age"){
-                                          #withSpinner(plotOutput("ageplot1", height = "500px", width = "60%"))
-                                          #} else {
-                                          #withSpinner(plotlyOutput("ageplot2", height = "500px", width ="60%"))
-                                   ),
+                                          tabsetPanel(
+                                            
+                                            tabPanel("Demographic",
+                                                     fluidRow(style = "margin: 4px;",
+                                                              p("", style = "padding-top:10px;"),
+                                                              column(10, align = "left",
+                                                                     selectInput("demos1drop", "Select Socioeconomic Characteristic:", width = "100%", choices = c(
+                                                                       "Gender" = "gender",
+                                                                       "Age" = "age",
+                                                                       "Race/ethnicity" = "race"
+                                                                       
+                                                                     ),
+                                                                     ),   
+                                                                     
+                                                                     withSpinner(plotlyOutput("demo1", height = "500px", width ="100%")),
+                                                                     
+                                                                     
+                                                              ))),
+                                            
+                                            tabPanel("Income",
+                                                     fluidRow(style = "margin: 4px;",
+                                                              p("", style = "padding-top:10px;"),
+                                                              column(10, align = "left",
+                                                                     selectInput("demos2drop", "Select Socioeconomic Characteristic:", width = "60%", choices = c(
+                                                                       "Educational Attainment" = "edu",
+                                                                       "Family Income" = "faminc",
+                                                                       "Poverty by Age and Sex" = "pov", 
+                                                                       "Health Coverage" = "health"
+                                                                     ),
+                                                                     ),     
+                                                                     
+                                                                     withSpinner(plotlyOutput("demo2", height = "500px", width ="100%")),
+                                                                     
+                                                              ))),
+                                            tabPanel("Occupation/Work",
+                                                     fluidRow(style = "margin: 4px;",
+                                                              p("", style = "padding-top:10px;"),
+                                                              column(10, align = "left",
+                                                                     selectInput("demos3drop", "Select Socioeconomic Characteristic:", width = "60%", choices = c(
+                                                                       "Employment" = "employment",
+                                                                       "Work Occupation" = "workoccu",
+                                                                       "Commuter Time" = "commutertime",
+                                                                       "Commuter Mode" = "commutermode"
+                                                                     ),
+                                                                     ),         
+                                                                     
+                                                                     withSpinner(plotlyOutput("demo3", height = "500px", width ="100%")),
+                                                              ))),
+                                            
+                                            
+                                            
+                                          )),
                                    
                                    column(5,
                                           h2(strong("Analysis")), align = "justify",
@@ -1033,13 +1099,10 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                                           
                                           p("The visualization for healthcare tells us that private health insurance is the most popular type of health insurance. Private health insurance mainly consists of insurance plans provided through the employer. Coming in second place is the public insurance type which mainly consists of low-cost government backed programs such as medicare, medicaid, blue cross blue shield and Virginia Cover. However, there is a chunk of population of about 16.5% that does not have any kind of health insurance this might be an area where we can research more to figure out the possible opportunities in the community.", style = "padding-top:15px;font-size: 14px;"),
                                           
-                                   )
-                                   
-                                   # column(14, 
-                                   #      h4("References: "), 
-                                   #     p(tags$small("[1] Groundwater: Groundwater sustainability. (2021). Retrieved July 27, 2021, from https://www.ngwa.org/what-is-groundwater/groundwater-issues/groundwater-sustainability")) ,
-                                   #     p("", style = "padding-top:10px;")) 
-                          )), 
+                                   ))
+                 ),
+                 
+                 
                  navbarMenu("Community Schools",
                             tabPanel("Demographics", 
                                      fluidRow(style = "margin: 2px;",
@@ -1154,7 +1217,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                          
                                                                   ),
                                                          )
-                                                                  ),
+                                                ),
                                                 tabPanel("Student Climate Survey",
                                                          p("", style = "padding-top:10px;"),
                                                          column(6, align = "center",h4(strong("Student Survey")),
@@ -1205,7 +1268,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                 
                                                                 
                                                          ),
-                                                         ), 
+                                                ), 
                                                 
                                                 tabPanel("Teacher/Staff Climate Survey",
                                                          p("", style = "padding-top:10px;"),
@@ -1261,7 +1324,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                 
                                                                 
                                                          )))
-                                                ),
+                                     ),
                                      
                             ),
                             
@@ -1469,6 +1532,94 @@ server <- function(input, output, session) {
   })
   
   
+  Var3 <- reactive({
+    input$demos1drop
+  })
+  
+  output$demo1 <- renderPlotly({
+    
+    if (Var3() == "gender") {
+      
+      gender
+      
+    }
+    
+    else if (Var3() == "race") {
+      
+      race
+    }
+    
+    else if (Var3() == "age") {
+      
+      age
+    }
+    
+  })
+  
+  Var4 <- reactive({
+    input$demos2drop
+  })
+  
+  output$demo2  <- renderPlotly({
+    
+    if (Var4() == "edu") {
+      
+      education
+      
+    }
+    
+    else if (Var4() == "faminc") {
+      
+      income
+    }
+    
+    else if (Var4() == "pov") {
+      
+      pov
+    }
+    
+    else if (Var4() == "health") {
+      
+      healthin
+      
+      
+    }
+    
+  })
+  
+  Var5 <- reactive({
+    input$demos3drop
+  })
+  
+  output$demo3  <- renderPlotly({
+    
+    if (Var5() == "commutertime") {
+      
+      commutertime
+      
+    }
+    
+    else if (Var5() == "commutermode") {
+      
+      commutermode
+    }
+    
+    else if (Var5() == "workoccu") {
+      
+      occuplot
+    }
+    
+    else if (Var5() == "employment") {
+      
+      employment
+      
+      
+    }
+    
+    
+  })
+  
+  
   output$ageplot1 <- renderPlot({
     if (Var() == "age") {
       
@@ -1589,7 +1740,6 @@ server <- function(input, output, session) {
   
 }
 shinyApp(ui = ui, server = server)
-
 
 
 
