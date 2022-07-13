@@ -165,8 +165,10 @@ age_percent <- as.numeric(age_estimate)
 age_cat <- (subset_sterling$Label)
 #this is how to subset the data
 #turn categories into factors 
-age<-ggplot(subset_sterling,aes(x=age_cat,y=age_percent, fill=age_cat))+geom_col()+theme(axis.text.x=element_blank(), axis.title.x = element_blank(), axis.text.y = element_blank(),axis.ticks.y=element_blank())+scale_x_discrete(limits=age_cat)+labs(caption= "Source: S0101 ACS 5-year data 2016-2020",y="Percent",)+ coord_polar()+guides(fill = guide_legend(title = "Age Group")) + geom_text(aes(label = age_percent, y = age_percent), size = 3, position = position_stack(vjust = 0.8))
+Age <- age_cat
+Percent <- age_percent
 
+age<- plot_ly(subset_sterling,x=~Age, y=~Percent,type = "bar", color = ~Age, hoverinfo = "text",text = ~paste("Age:",Age,"<br>","Percent:",Percent,"%" )) %>% layout(title = "Age Distribution",xaxis = list(title=""))
 #-----------Race/Ethnicity--------------------
 
 library(plotly)
@@ -191,8 +193,7 @@ mi_cat.fac <- factor(mi_cat, levels = c(mi_cat))
 subset_medianin$new_pop<-gsub("%$","",subset_medianin$...4)
 pop_nop <- subset_medianin$new_pop
 pop_num <- as.numeric(pop_nop)
-income <- ggplot(subset_medianin,aes(x=mi_cat.fac,y=pop_num, fill=mi_cat.fac))+geom_col(stat="identity")+theme(axis.text.x=element_blank(),axis.ticks.y=element_blank(),axis.title.x = element_blank()+scale_x_discrete(limits=mi_cat.fac),axis.text.y=element_blank())+labs(caption= "Source: S1901 ACS 5-year data 2016-2020",x="Income", y="Percent") + coord_polar() + guides(fill = guide_legend(title = "Income Level ($)")) + geom_text(aes(label=pop_num,y=pop_num), size = 3, position = position_stack(vjust = 1.1))
-
+income <- plot_ly(subset_medianin,x=~mi_cat.fac,y=~pop_num,color = ~mi_cat.fac,type = "bar", hoverinfo = "text",text = ~paste("Income Level:",mi_cat.fac,"<br>","Percent:",pop_num,"%")) %>% layout(title = "Median Income Distribution",xaxis = list(title="") ,yaxis= list(title = "Percent"))
 #---------Property Value---------------------------------
 
 dfpv <- read_excel(paste0(getwd(), "/data/Property_Value.xlsx"), col_names = TRUE)
@@ -245,13 +246,11 @@ povas_pop <- subset_poverty_as$Estimate
 povas_pop <- as.numeric(povas_pop)
 povas_cat <- subset_poverty_as$Label
 
-ggplot(subset_poverty_as, aes(x=povas_cat,y=povas_pop,fill=Sex)) + 
-  geom_bar(stat = "identity",position=position_dodge(),width=.6)   + coord_flip() + theme(axis.text.x=element_text(angle=90)) +scale_fill_manual(values=c("tomato2", "darkblue"))+labs(title="Poverty by Age and Sex in Sterling, VA",subtitle="2020",caption= "Source: ACS data 2016-2020",x="Age",y="Estimated Population") +scale_x_discrete(limits=c("Under 5 years", "5 years","6 to 11 years","12 to 14 years","15 years","16 to 17 years","18 to 24 years","25 to 34 years","35 to 44 years","45 to 54 years","55 to 64 years","65 to 74 years","75 years and older")) 
+Total <- povas_pop
 
+cat <- as.character(povas_cat)
 
-pov <- ggplot(subset_poverty_as,aes(x=povas_cat,y=povas_pop, fill=Sex))+geom_col(position="dodge",width=1.5)+theme(axis.text.x=element_text(angle=90, size=7.5, face="bold"),axis.title.x = element_blank())+scale_x_discrete(limits=povas_cat[1:length(povas_cat)/2])+labs(caption= "Source: B17001 ACS 5-year data 2016-2020",x="Age",y="Total Population")+ scale_fill_discrete(name = "", labels = c("Female", "Male")) 
-
-
+pov <- plot_ly(subset_poverty_as, x = ~cat, y = ~Total, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat,"<br>","Total:",Total,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = ~cat))
 #--------gender by school
 
 
@@ -855,7 +854,7 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                                    
                           ),
                  ), 
-                 tabPanel("Sociodemographics",
+                 tabPanel("Sterling Sociodemographics",
                           fluidRow(style = "margin: 2px;",
                                    h1(strong("Sterling"), align = "center"),
                                    p("", style = "padding-top:10px;"), 
@@ -864,7 +863,7 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                                    #     p("These are demographics"),
                                    #) ,
                                    column(7, 
-                                          h4(strong("Sterling, CDP")),
+                                          h4(strong("Sterling Residents' Characteristics")),
                                           selectInput("demosdrop", "Select Variable:", width = "60%", choices = c(
                                             "Gender" = "gender",
                                             "Age" = "age",
@@ -916,6 +915,89 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                                    #     p(tags$small("[1] Groundwater: Groundwater sustainability. (2021). Retrieved July 27, 2021, from https://www.ngwa.org/what-is-groundwater/groundwater-issues/groundwater-sustainability")) ,
                                    #     p("", style = "padding-top:10px;")) 
                           )), 
+                 
+                 tabPanel("Sterling Sociodemographics",
+                          fluidRow(style = "margin: 2px;",
+                                   h1(strong("Sterling"), align = "center"),
+                                   p("", style = "padding-top:10px;"), 
+                                   column(7, 
+                                          h4(strong("Sterling Residents' Characteristics")))),
+                          
+                          tabsetPanel(
+                            
+                            tabPanel("Demographic",
+                                     fluidRow(style = "margin: 2px;",
+                                              p("", style = "padding-top:10px;"),
+                                              column(6, align = "left",
+                                                     selectInput("demos1drop", "Select Socioeconomic Characteristic:", width = "60%", choices = c(
+                                                       "Gender" = "gender",
+                                                       "Age" = "age",
+                                                       "Race/ethnicity" = "race"
+                                                       
+                                                     ),
+                                                     ),   
+                                                     
+                                                     withSpinner(plotlyOutput("demo1", height = "500px", width ="100%")),
+                                                     
+                                                     
+                                              ))),
+                            
+                            tabPanel("Income",
+                                     fluidRow(style = "margin: 2px;",
+                                              p("", style = "padding-top:10px;"),
+                                              column(6, align = "left",
+                                                     selectInput("demos2drop", "Select Socioeconomic Characteristic:", width = "60%", choices = c(
+                                                       "Educational Attainment" = "edu",
+                                                       "Family Income" = "faminc",
+                                                       "Poverty by Age and Sex" = "pov", 
+                                                       "Health Coverage" = "health"
+                                                     ),
+                                                     ),     
+                                                     
+                                                     withSpinner(plotlyOutput("demo2", height = "500px", width ="100%")),
+                                                     
+                                              ))),
+                            tabPanel("Occupation/Work",
+                                     fluidRow(style = "margin: 2px;",
+                                              p("", style = "padding-top:10px;"),
+                                              column(6, align = "left",
+                                                     selectInput("demos3drop", "Select Socioeconomic Characteristic:", width = "60%", choices = c(
+                                                       "Employment" = "employment",
+                                                       "Work Occupation" = "workoccu",
+                                                       "Commuter Time" = "commutertime",
+                                                       "Commuter Mode" = "commutermode"
+                                                     ),
+                                                     ),         
+                                                     
+                                                     withSpinner(plotlyOutput("demo3", height = "500px", width ="100%")),
+                                              ))),
+                            
+                            
+                            
+                          ),
+                          
+                          column(4,
+                                 h2(strong("Analysis")), align = "justify",
+                                 p("To access the possible opportunities within the six title 1 community schools in Sterling, VA, it is important to understand the neighborhood and area in which these schools are located. By looking at the graph, it appears to be almost an equal split of male’s and females in Sterling, VA. The total population in sterling is 30,271. 15,282 members of the population are male, while the remaining 14,989 are female. There are only 293 more males than females so that gives us almost a one to one ratio - so that’s good.", style = "padding-top:15px;font-size: 14px;"),
+                                 p("So, once the team looked at the gender distribution, we were curious to look at the age distribution of the individuals of Sterling. The largest age group in Sterling are Adults (ages 35 to 44) which is represented by the blue green block, and then the older millennials (25 to 34) which is represented by the light green block. The age groups are fitting for the high median income within the area. ", style = "padding-top:15px;font-size: 14px;"),
+                                 p("
+Another important determinant that might impact someone’s availability of opportunities is their race or ethnicity. So, our logical next step was to look at the ethnicity/race distribution of the people of Sterling. Collecting the Race and Ethnicity demographic proved to be a little challenging at first. While the team was observing the data, we kept noticing that the number of individuals in each race population kept exceeding the total population of Sterling. For example, when we would add up all of the white, hispanic, asian, Hawaiian, and  African American population’s, the total number would exceed 30,271, the population of Sterling, VA. We later learned that this is because the American Community Survey does not recognize hispanic as a race. To the American Community Survey, Hispanic is an ethnicity so People can identify as white or asian and still be of hispanic decent, or they could select “other” as there is a separate category for them to mark hispanic. Knowing that disclaimer, we had to create a separate visualization for the hispanic population so we could best represent them. As you can see, majority of the Sterling population is white. When you look at the ethnicity visualization, almost half of the sterling CDP population identifies as being hispanic or latino.
+", style = "padding-top:15px;font-size: 14px;"),
+                                 p("Now that we looked at the ethnic groups, we wanted to look at the educational attainment levels. The data was collected from the individuals who are ages 25 and over. It seems that a large number of the population are educated with that of a bachelors agree or higher, which is fitting for the county’s high median income. 
+
+so a reasonable population has achieved high education - how much is Sterling making? Thus, we looked at family income levels. This data was collected looking at family households in the last 12 months of the ACS collected data (2020). It has also been adjusted for inflation. Interestingly enough, the largest income bracket lies within the range of $100,000 to $149,999 which is represented by the dark purple area however we do acknowledge that this may not apply our families of interest.
+", style = "padding-top:15px;font-size: 14px;"),
+                                 p("So we wondered if the high-income levels also affect the housing market so this can help us to understand housing needs and availability of the children’s families. Looking at this visualization, we see that this area has a high property value with a large percentage of properties being worth $300,000 to $499,999, shown by the blue part of the circle. This is important to take into consideration considering our targeted title1 area. Once we looked at the high property values, we were intrigued to find out how many occupants own their homes. As expected, majority housing residents are home owners, while a little over a quarter housing residents are renters. This could be because of families high incomes.", style = "padding-top:15px;font-size: 14px;"),  
+                                 p("Next, we visualized the data for employment in the sterling area. Pink is used to show the Employed Percentage whereas Aqua blue shows the unemployed percentage of the population. One thing to note is that this percentage is from within the labor force not the total population of the area. One key take away from this graph is that the majority of sterling is employed at a remarkably
+high rate higher than the national average. 71.8% employment rate.", style = "padding-top:15px;font-size: 14px;"), 
+                                 p("The next best thing to do was to look at what groups are being employed so we saw that the majority of them are being employed in the management, business, and science industry with a total number of 6,380 individuals. The service industry comes in second place at around 25% which makes it upto 4,122 individuals. The graph shows that one of the smallest occupations is the production industry which suggests that sterling is not an industrial area but has more corporate jobs to offer as management and business are one of the highest employable sectors in sterling. Using ACS American community survey data of the sterling cdp census designated place we found that 75% commuters drive on their own while only a quarter prefer other modes of commute. Notably less than 2 % of commuters take public transportation, this may be something we want to further research.", style = "padding-top:15px;font-size: 14px;"), 
+                                 
+                                 p("The visualization for healthcare tells us that private health insurance is the most popular type of health insurance. Private health insurance mainly consists of insurance plans provided through the employer. Coming in second place is the public insurance type which mainly consists of low-cost government backed programs such as medicare, medicaid, blue cross blue shield and Virginia Cover. However, there is a chunk of population of about 16.5% that does not have any kind of health insurance this might be an area where we can research more to figure out the possible opportunities in the community.", style = "padding-top:15px;font-size: 14px;"),
+                                 
+                          )
+                 ),
+                 
+                 
                  navbarMenu("Community Schools",
                             tabPanel("Demographics", 
                                      fluidRow(style = "margin: 2px;",
@@ -1189,6 +1271,94 @@ server <- function(input, output, session) {
   
   Var <- reactive({
     input$demosdrop
+  })
+  
+  
+  Var3 <- reactive({
+    input$demos1drop
+  })
+  
+  output$demo1 <- renderPlotly({
+    
+    if (Var3() == "gender") {
+      
+      gender
+      
+    }
+    
+    else if (Var3() == "race") {
+      
+      race
+    }
+    
+    else if (Var3() == "age") {
+      
+      age
+    }
+    
+  })
+  
+  Var4 <- reactive({
+    input$demos2drop
+  })
+  
+  output$demo2  <- renderPlotly({
+    
+    if (Var4() == "edu") {
+      
+      education
+      
+    }
+    
+    else if (Var4() == "faminc") {
+      
+      income
+    }
+    
+    else if (Var4() == "pov") {
+      
+      pov
+    }
+    
+    else if (Var4() == "health") {
+      
+      healthin
+      
+      
+    }
+    
+  })
+  
+  Var5 <- reactive({
+    input$demos3drop
+  })
+  
+  output$demo3  <- renderPlotly({
+    
+    if (Var5() == "commutertime") {
+      
+      commutertime
+      
+    }
+    
+    else if (Var5() == "commutermode") {
+      
+      commutermode
+    }
+    
+    else if (Var5() == "workoccu") {
+      
+      occuplot
+    }
+    
+    else if (Var5() == "employment") {
+      
+      employment
+      
+      
+    }
+    
+    
   })
   
   
