@@ -406,6 +406,18 @@ chronic<- ggplot(data=chronic, aes(x=schools, y=number, fill=schools,  width=0.8
 
 chronic<-ggplotly(chronic)
 
+#--------------free or not free resources ---------------------------------------
+
+costs <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx")
+healthfree <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet = "Health Free")
+healthpay <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx", sheet = "Health")
+youthfree <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx", sheet = "Youth Free")
+youthpay <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet="Youth")
+mentfree <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet= "Mental Free")
+mentpay <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet = "Mental")
+famfree <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet = "Family Free")
+fampay <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet = "Family")
+
 #---------------map_health and isochrones-----------------------------------------
 
 YourAPIKey <- "103eac37d04686a8b0104d96d983c612"
@@ -502,6 +514,27 @@ leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
                    stroke = F, fillOpacity = 1) %>%
   addLayersControl(overlayGroups = c("Food", "Clothing", "Counseling","Medical Services"),options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_health
 
+
+blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
+va20_2 <- get_acs(geography = "block group",
+                  variables = c(hispanic = "B03002_012"),
+                  state = "VA",
+                  year = 2020,
+                  geometry = TRUE) %>%
+  filter(NAME %in% blocks)
+
+leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=ment,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal(Resources),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
+  addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE))
 
 #--------------youth development map ----------------
 
