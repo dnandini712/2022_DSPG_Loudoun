@@ -651,6 +651,29 @@ df2 <- data.frame(word = names(words2),freq=words2)
 
 cloud2 <- wordcloud2(df2, size=0.5)
 
+#---------------cloud3------------------
+
+text3 <- "Continue working with our excellent business partners and community agencies.  Utilize the support of many agencies and local people interested in supporting our students and families.   Provide in-person assistance to families and students
+seek resources for the areas listed above; streamline supports for the most needy
+Increase parent involvement, more youth development opportunities, and resuming after school clubs and programs 
+Continuation of services provided pre-COVID and expansion of Youth Development Activities
+I would like to increase opportunities for after-school youth development programs at Rolling Ridge. We also hope to continue to offer virtual opportunities in addition to our in-person programs to offer working parents flexibility. As always, we will seek feedback from families to better meet their needs.
+community partnerships, return to PEP, engage parents in meaningful and timely ways, create opportunities for stakeholder input 4 times per year.  "
+
+clean3 <- Clean_String(text3)
+
+docs3 <- Corpus(VectorSource(clean3))
+
+docs3 <- tm_map(docs3, removeWords, c("to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "umht", "hot", "to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding"))
+
+
+dtm3 <- TermDocumentMatrix(docs3) 
+matrix3 <- as.matrix(dtm3) 
+words3 <- sort(rowSums(matrix3),decreasing=TRUE) 
+df3 <- data.frame(word = names(words3),freq=words3)
+
+cloud3<- wordcloud2(df3, size=0.5)
+
 
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
@@ -915,37 +938,46 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                         ),
                         
                         tabPanel("School Reports",
-                                 fluidRow(style = "margin: 2px;",
-                                          p("", style = "padding-top:5px;"),
-                                          column(12, align = "center",h4(strong("Representatives' responses"))),
-                                          tabPanel("Weaknesses and biggest challenges",
-                                                 br(""),
-                                                 
-                                                 
-                                              
-                                  
-                                           column(12, align = "center",
-                                                  wordcloud2Output("cloud1")
-                                            ))),
-                                 
-                                 fluidRow(style = "margin: 2px;",
-                                          p("", style = "padding-top:5px;"),
-                                          column(12, align = "center",h4(strong("")),
-                                                 h4("Strengths and Biggest Successes"),
-                                                 br("")
-                                                 
-                                                 
-                                                 
-                                          ),
+                                 fluidPage(style = "margin: 2px;",
+                                          p(h4("Representatives' responses"), style = "padding-top:5px;"),
                                           
-                                          column(12, align = "center",
-                                                 wordcloud2Output("cloud2")
-                                                 
-                                          ))
+                                       tabsetPanel(
+                                         tabPanel("Challenges and Weaknesses",
+                                                  fluidRow(style = "margin: 2px;",
+                                                            p("", style = "padding-top:10px;"),
+                                                            column(12, align = "center",
+                                                                   wordcloud2Output("cloud1")
+                                                            )
+                                                  
+                                         )),
+                                         tabPanel("Strengths and Successes",
+                                                  p("", style = "padding-top:10px;"),
+                                                  column(12, align = "center",
+                                                         wordcloud2Output("cloud2")
+                                                  ),
+                                                  
+                                         ), 
+                                         
+                                         tabPanel("Future Goals",
+                                                  p("", style = "padding-top:10px;"),
+                                                  column(12, align = "center",
+                                                         wordcloud2Output("cloud3")
+                                                  ),
+                                                  
+                                         )
+                                       
+                                          
+                                          
+                                       
+                                       )))
+                                 
+                                 #tabPanel(h4("Weaknesses and biggest challenges")),
+                                 
+                                 
                        
                                  
                                  
-                                 )),
+                                 ),
                       
                  navbarMenu("Availability of Resources",
                           tabPanel("Health and Social Services",
@@ -1097,6 +1129,10 @@ server <- function(input, output, session) {
   
   output$cloud2 <- renderWordcloud2(
     cloud2
+  )
+  
+  output$cloud3 <- renderWordcloud2(
+    cloud3
   )
   
   

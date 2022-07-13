@@ -917,7 +917,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                         tabPanel("School Reports",
                                  fluidRow(style = "margin: 2px;",
                                           p("", style = "padding-top:5px;"),
-                                          column(12, align = "center",h4(strong("Representatives' responses")),
+                                          column(4, align = "center",h4(strong("Representatives' responses")),
                                                  h4("Weaknesses and biggest challenges"),
                                                  br("")
                                                  
@@ -925,7 +925,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                  
                                           ),
                                   
-                                           column(12, align = "center",
+                                           column(4, align = "center",
                                                   wordcloud2Output("cloud1")
                                             )),
                                  
