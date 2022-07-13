@@ -812,31 +812,48 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                           
                           fluidPage(style = "margin: 12px;",
                                     
-                                    column(6, align = "justify", 
+                                    column(6, align = "justify", h4(strong("What are Community Schools?")),
                                            
-                                           p("This map shows the six schools and the area of Sterling. The orange area is the Census Designated Place of Sterling. It can be observed that Sugarland Elementary is outside the CDP of Sterling. Hence, the team considered to mimic the school zone of this school by selecting respective blocks as assigned by the US Census Bureau. It is shown by the yellow area. For this project, we have defined Sterling as both the orange area and the yellow area as seen in the map."),
-                                           br(""),
-                                           h4(strong("Schools")),
-                                           tags$ul(
-                                             tags$li("Forest Grove Elementary"),
-                                             tags$li("Guilford Elementary"),
-                                             tags$li("Rolling Ridge Elementary"),
-                                             tags$li("Sterling Elementary"), 
-                                             tags$li("Sugarland Elementary"), 
-                                             tags$li("Sully Elementary")
+                                           p("Community Schools is a term that describes schools that brings educators, families, community partners, and local government together to address the comprehensive needs of students, families, and communities. The U.S. Department of Education states that the primary purpose of community schools is to “provide comprehensive academic, social, and health services for students, student's family members, and community members that will result in improved educational outcomes for children. Community Schools are expanding across the United States – in 2020, around 10,000 schools have been transformed into community schools (Quinn & Blank, 2020). This is also evident in Virginia, where", a(href = " https://www.cisofva.org/", strong("Community Schools"), target = "_blank"), "served over 58,000 students in 2021, an increase from over 45,000 students in 2019."),
+                                          
+                                           h4(strong("The Sterling Region")),
+                                           
+                                           p("The", a(href = "https://www.lcps.org/Page/236420s",strong("Community School Initiative"), target = "_blank"), "in the Loudoun County Public School started in 2016 with Sterling Elementary, a Title 1 school, due to the generous support of 100WomenStrong. According to the Virginia Department of Education, Title 1 schools are provided “financial assistance through state educational agencies to school divisions and public schools with high numbers or percentages of children from low-income families to help ensure that all children meet challenging state academic content and achievement standards.”"),
+                                           p("The Community School program in Loudoun focuses on four key areas to promote academic achievement: "),
+                                           tags$ol(
+                                             tags$li("Health and Social Services"),
+                                             tags$li("Mental Health"),
+                                             tags$li("Family Engagement"),
+                                             tags$li("Youth Development Opportunities")
+                                             
                                            ),
-                                           br("")
+                                           p("Over the past several years, the Community School initiative has grown to include six Title 1 elementary schools from the Sterling area of Loudoun County in 2022."),
+                                           p("The interactive map shows the location of the six elementary schools in Sterling. Most schools are in the Sterling Census Designated Place (shaded orange). Sugarland Elementary, however, falls in the Greater Sterling region. We estimated, shown in yellow, by selecting the respective blocks assigned by the US Census Bureau."),
                                     ),
                                     
+                                   
                                     
-                                    
-                                    column(6, align ="right", leafletOutput("map1", width = "80%")
+                                    column(6, align ="right", leafletOutput("map1", width = "90%", height = 500)
                                            #fluidRow(align = "center",
                                            #    p(tags$small(em('Last updated: August 2021'))))
                                     ),
                                     
                                     
-                          )
+                          ),
+                          
+                          fluidRow(style = "margin: 12px;",
+                                   column(8, h3(strong("When did schools join the Community Schools Initiative?"))),
+                                   column(12, align ="center", 
+                                          img(src='sterlingmascot.png', width = "80%")
+                                   
+                                   
+                                   ), 
+                                   column(12, 
+                                          h4("References: "),
+                                          p("[1] U.S Department of Education, Office of Elementary and Secondary Education. Full-Service Community Schools Program (FSCS). Retrieved from:", a(href =  "https://oese.ed.gov/offices/office-of-discretionary-grants-support-services/school-choice-improvement-programs/full-service-community-schools-program-fscs/", "https://oese.ed.gov/offices/office-of-discretionary-grants-support-services/school-choice-improvement-programs/full-service-community-schools-program-fscs/"), style = "font-size:12px;"),
+                                          p("[2] Quinn, J., & Blank, M. J. (2020). Twenty years, ten lessons: Community schools as an equitable school improvement strategy.", em("Voices in Urban Education (VUE)."), style = "font-size:12px;")),
+                                  
+                                   ),
                  ), 
                  tabPanel("Sociodemographics",
                           fluidRow(style = "margin: 2px;",
@@ -1285,7 +1302,7 @@ server <- function(input, output, session) {
     
   })
   
-  
+
   #---------word clouds-----------------
   
   output$cloud1 <- renderWordcloud2(
