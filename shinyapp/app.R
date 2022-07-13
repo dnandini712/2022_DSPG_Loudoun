@@ -500,7 +500,7 @@ leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
                    stroke = F, fillOpacity = 1) %>%
   addCircleMarkers(data=physical,~Longitude,~Latitude,popup = ~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1) %>%
-  addLayersControl(overlayGroups = c("Food", "Clothing", "Counseling","Medical Services")) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_health
+  addLayersControl(overlayGroups = c("Food", "Clothing", "Counseling","Medical Services"),options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_health
 
 
 #--------------youth development map ----------------
@@ -550,11 +550,16 @@ popups <- lapply(
         ment$Hours, 
         "<br />",
         "<strong>Address:</strong>",
-        ment$Address),
+        ment$Address,
+        "<a href = ",ment$Website, "> Website </a>",
+        "<br />"),
   
   
   htmltools::HTML
 )
+
+pal <- colorFactor(c("red", "blue", "green"), domain = c("Family Therapy", "Family Counseling", "Bereavement"))
+
 leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(data = va20_2,
               color="#5f308f",
@@ -563,8 +568,9 @@ leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=ment,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),color="#54cbd0",weight = 7, radius=7, 
+  addCircleMarkers(data=ment,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal(Resources),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
 
 
