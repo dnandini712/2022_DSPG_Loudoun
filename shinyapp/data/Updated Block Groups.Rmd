@@ -1,0 +1,192 @@
+---
+title: "Updated Block Groups"
+author: "NDP"
+date: '2022-06-14'
+output: html_document
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+
+* Number of teachers by schools based on the school websites
+    * Sterling Elementary - 81 staff members; 32 teachers
+    * Sugarland Elementary - 74 staff members; 52 teachers
+    * Rolling Ridge Elementary - 93 staff members; 66 teachers
+    * Forest Grove Elementary - 75 staff members; 55 teachers
+    * Guilford Elementary - 88 staff members; 59 teachers
+    * Sully Elementary - 54 staff members; 35 teachers???
+
+#Staff Members vs Teachers    
+```{r}
+library(plotly)
+
+Schools <- c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
+Teachers <- c(32, 52, 66, 55, 59, 35)
+Staff <- c(49, 22, 27, 20, 29, 19)
+dataSTAFF <- data.frame(Schools, Teachers, Staff)
+
+figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = 'Teachers', marker = list(color = 'rgb(255, 2, 2 )'), textinfo = "total",
+                  hoverinfo = 'text')
+                  #text = ~paste('Total:',))
+
+figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(253, 151, 12 )'))
+cteacher <- figSTM %>% layout(title = "Teachers/Staff by Schools", yaxis = list(title = 'Total Educators'), xaxis = list(title = ''), barmode = 'stack')
+
+cteacher
+```
+
+#Number of Staff Members by schools based on the school websites    
+```{r}
+labelsSTAFF = c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
+valuesSTAFF = c(81, 74, 93, 75, 88, 54)
+
+figSTAFF <- plot_ly(type='pie', labels=labelsSTAFF, values=valuesSTAFF, 
+               textinfo='label+percent',
+               insidetextorientation='radial') %>% layout(title ='Staff Percentage', legend=list(title=list(text='Elementary Schools')))
+
+figSTAFF
+```
+    
+#Number of Teachers by schools based on the school websites    
+```{r}
+library(plotly)
+
+labelsT = c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
+valuesT = c(32, 52, 66, 55, 59, 35)
+
+figT <- plot_ly(type='pie', labels=labelsT, values=valuesT, 
+               textinfo='label+percent',
+               insidetextorientation='radial') %>% layout(title ='Teacher Percentage', legend=list(title=list(text='Elementary Schools')))
+
+figT
+```
+    
+    
+```{r}
+library(shiny)
+library(shinythemes)
+library(shinyjs)
+library(ggplot2)
+library(maps)
+library(plotly)
+library(DT)
+library(dplyr)
+library(tigris)
+library(tidyverse)
+library(tidycensus)
+library(readxl)
+library(collapsibleTree)
+library(shinycssloaders)
+library(leaflet)
+library(leaflet.extras)
+library(rvest)
+library(sf)
+library(shinydashboard)
+library(shinydashboardPlus)
+library(tidygeocoder)
+library(janitor)
+library(dplyr)
+library(ggplot2)
+library(magrittr)
+options(tigris_use_cache = TRUE)
+
+library(rstudioapi)
+```
+
+```{r set_up_API, }
+readRenviron("~/.Renviron")
+Sys.getenv("CENSUS_API_KEY")
+```
+
+```{r}
+blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6112.05, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6112.05, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6112.04, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6112.04, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6115.02, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6115.02, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6113, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6113, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6113, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6114, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6114, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6114, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6117.01, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6117.01, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6116.02, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6116.02, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6116.01, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6116.01, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6112.02, Loudoun County, Virginia")
+
+va20_2 <- get_acs(geography = "block group",
+                  variables = c(hispanics = "B03002_012"),
+                state = "VA",
+                year = 2020,
+                geometry = TRUE) %>%
+filter(NAME %in% blocks)
+```
+
+```{r}
+
+blocks_CDP<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6112.05, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6112.05, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6112.04, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6112.04, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6115.02, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6115.02, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6113, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6113, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6113, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6114, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6114, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6114, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6117.01, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6117.01, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6116.02, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6116.02, Loudoun County, Virginia",
+"Block Group 1, Census Tract 6116.01, Loudoun County, Virginia",
+"Block Group 2, Census Tract 6116.01, Loudoun County, Virginia",
+"Block Group 3, Census Tract 6112.02, Loudoun County, Virginia")
+
+va_20_CDP <- va20_2 %>% filter (NAME %in% blocks_CDP)
+
+```
+
+
+
+```{r}
+
+mapyouth <- read_excel(paste0(getwd(), "/Sterling_Youth_Development.xlsx"))
+subset_mapyouth <- mapyouth[1:19,c(1,4:5)]
+
+subset_mapyouth$Longitude <- as.numeric(subset_mapyouth$Longitude)
+subset_mapyouth$Latitude <- as.numeric(subset_mapyouth$Latitude)
+
+
+# Show first 20 rows from the `quakes` dataset
+leaflet(data = subset_mapyouth) %>% addTiles() %>%
+  addPolygons(data = va20_2,
+color="yellow",
+weight = 0.5,
+smoothFactor = 0.2,
+fillOpacity = 0.5) %>%
+  addMarkers(~Longitude, ~subset_mapyouth$Latitude, popup = ~as.character(Name), label = ~as.character(Name)) %>% addPolygons(data = va_20_CDP,
+color="red",
+weight = 0.5,
+smoothFactor = 0.2,
+fillOpacity = 0.5) %>%
+  addMarkers(~Longitude, ~subset_mapyouth$Latitude, popup = ~as.character(Name), label = ~as.character(Name)) 
+
+
+#library(ggplot2)
+#ggplot() +
+  #geom_polygon(data = spdf_fortified, aes( x = long, y = lat, group = group), fill="#69b3a2", color="white") +
+ # theme_void() 
+```
+```
+    
+    
