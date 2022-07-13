@@ -453,7 +453,7 @@ popups <- lapply(
         "<br />",
         "<strong>Address:</strong>",
         healthsep$Address,
-        "<a href = ",ment$Website, "> Website </a>",
+        "<a href = ",healthsep$Website, "> Website </a>",
         "<br />"),
   
   htmltools::HTML
