@@ -664,7 +664,7 @@ clean3 <- Clean_String(text3)
 
 docs3 <- Corpus(VectorSource(clean3))
 
-docs3 <- tm_map(docs3, removeWords, c("to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "umht", "hot", "to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding"))
+docs3 <- tm_map(docs3, removeWords, c("to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "umht", "hot", "to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "their", "from", "always"))
 
 
 dtm3 <- TermDocumentMatrix(docs3) 
