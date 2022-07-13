@@ -505,7 +505,7 @@ leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
 
 #--------------youth development map ----------------
 
-youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 2.xlsx"))
+youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 3.xlsx"))
 popups <- lapply(
   paste("<strong>Name: </strong>",
         str_to_title(youth$Name),
@@ -517,11 +517,16 @@ popups <- lapply(
         youth$Hours, 
         "<br />",
         "<strong>Address:</strong>",
-        youth$Address),
+        youth$Address,
+        "<a href = ",youth$Website, "> Website </a>",
+        "<br />"),
   
   
   htmltools::HTML
 )
+
+pal <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
+
 leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(data = va20_2,
               color="#5f308f",
@@ -530,8 +535,9 @@ leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=youth,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),color="#8310b0",weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
+  addCircleMarkers(data=youth,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),color= ~pal(Type),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1,group = ~Type)%>%
+  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
 
 
