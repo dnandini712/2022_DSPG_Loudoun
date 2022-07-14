@@ -149,28 +149,23 @@ gender <- plot_ly(type='pie', labels=labelsG, values=valuesG,
                   insidetextorientation='radial', hoverinfo = 'text', text = ~paste('Total:', valuesG), marker = list(colors = c('20AFCC', 'F56D4F'))) %>% layout(title ='Gender', legend=list(title=list(text='')))
 gender
 
-#---------Age pie chart---------------------------------------
+#---------Age chart---------------------------------------
 
-this.year = 2020
-vars <- load_variables(year = 2020,
-                       dataset = "acs5",
-                       cache = TRUE)
-dim(vars)
 
-sterling <- read_excel(paste0(getwd(),"/data/sterlingdata.xlsx"),skip=1,col_names=TRUE)
-subset_sterling <- sterling[6:18,c(1, 10:13)]
-subset_sterling
-sterling$Percent...12[6:18]
-age_estimate <- sterling$Percent...12[6:18]
-age_estimate <- gsub("%","",age_estimate)
-age_percent <- as.numeric(age_estimate)
-age_cat <- (subset_sterling$Label)
+sterling1 <- read_excel(paste0(getwd(),"/data/sterlingdata.xlsx"),skip=1,col_names=TRUE)
+subset_sterling1 <- sterling1[6:18,c(1, 10:13)]
+age_estimate1 <- sterling1$Percent...12[6:18]
+age_estimate1 <- gsub("%","",age_estimate1)
+age_percent1 <- as.numeric(age_estimate1)
+age_cat1 <- (subset_sterling1$Label)
 #this is how to subset the data
 #turn categories into factors 
-Age <- age_cat
-Percent <- age_percent
+Age1 <- age_cat1
+Percent1 <- age_percent1
 
-age<- plot_ly(subset_sterling,x=~Age, y=~Percent,type = "bar", color = ~Age, hoverinfo = "text",text = ~paste("Age:",Age,"<br>","Percent:",Percent,"%" )) %>% layout(title = "Age Distribution",xaxis = list(title=""))
+agesterling<- plot_ly(subset_sterling1,x=~Age1, y=~Percent1,type = "bar", color = ~Age1, hoverinfo = "text",text = ~paste("Age:",Age1,"<br>","Percent:",Percent1,"%" )) %>% layout(title = "Age Distribution",xaxis = list(title=""))
+
+
 #-----------Race/Ethnicity--------------------
 
 labelsR = c("White", "Black", "Am.Indian", "Asian","Hawaiian","Other")
@@ -1566,7 +1561,7 @@ server <- function(input, output, session) {
     
     else if (Var3() == "age") {
       
-      age
+      agesterling
     }
     
   })
