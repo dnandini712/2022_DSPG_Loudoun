@@ -618,6 +618,47 @@ leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
 
+#----------------------family engagement map-------------------
+
+familyengage <- read_excel(paste0(getwd(),"/data/ListOfResources.xlsx"),sheet = "Family Engagement")
+
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(familyengage$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        familyengage$Description ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        familyengage$Hours, 
+        "<br />",
+        "<strong>Address:</strong>",
+        familyengage$Address,
+        "<br />",
+        "<a href = ",familyengage$Website, "> Website </a>",
+        "<br />",
+        "<strong>Serves:</strong>",
+        familyengage$Serves),
+  
+  
+  htmltools::HTML
+)
+
+pal <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Housing", "Holiday Help", "Education", "Essentials supply", "Employment help", "Other"))
+
+leaflet(data = familyengage) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=familyengage,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal(Resources),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_family
+
 
 
 #-------------word clouds--------------------
@@ -1479,7 +1520,13 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                      
                                               )),
                                      
-                                     
+                                     fluidPage(style = "margin: 2px;", 
+                                               column(12, 
+                                                      leafletOutput("map_family", width = "100%")
+                                                      #fluidRow(align = "center",
+                                                      #    p(tags$small(em('Last updated: August 2021'))))
+                                               )
+                                     )
                                      
                                      
                             ),
@@ -1570,6 +1617,10 @@ server <- function(input, output, session) {
   
   output$map_mental <- renderLeaflet({
     map_mental
+  })
+  
+  output$map_family <- renderLeaflet({
+    map_family
   })
   
   output$cloud2 <- renderWordcloud2(
