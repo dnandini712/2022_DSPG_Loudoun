@@ -437,8 +437,11 @@ speech <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Speech and
 physical <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Physical Therapy")
 #---------------map_health and isochrones-----------------------------------------
 
-YourAPIKey <- "103eac37d04686a8b0104d96d983c612"
-YourAppId <- "ad147923"
+#YourAPIKey <- "103eac37d04686a8b0104d96d983c612"
+#YourAppId <- "ad147923"
+
+YourAPIKey <- "73ad15c60d8fe57014b574b4fc428ec0"
+YourAppId <- "afe3f1af"
 
 traveltime10 <- traveltime_map(appId=YourAppId,
                                apiKey=YourAPIKey,
@@ -772,8 +775,8 @@ question1 <- staffquestion1$SCHOOLS
 staffquestion1percentage <- staffquestion1$`Question 1`
 staffquestion1percentage <- as.numeric(staffquestion1percentage)
 staffquestion1percentage <- staffquestion1percentage*100
-one <- ggplot(staffquestion1,aes(x=question1,y=staffquestion1percentage,fill=question1)) +geom_col()+labs(title="Staff Collegiality",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion1percentage, y = staffquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
-ggplotly(one)
+one <- ggplot(staffquestion1,aes(x=question1,y=staffquestion1percentage,fill=question1)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion1$SCHOOLS)))+labs(title="Staff Collegiality",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion1percentage, y = staffquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer1 <- ggplotly(one, tooltip = c("text"))
 
 #Teacher & Staff Survey Q2 - Academic Environment
 staffquestion2 <- subsetnewsurveydataSTAFF[1:6,c(1,3)]
@@ -781,8 +784,8 @@ question2 <- staffquestion2$SCHOOLS
 staffquestion2percentage <- staffquestion2$`Question 2`
 staffquestion2percentage <- as.numeric(staffquestion2percentage)
 staffquestion2percentage <- staffquestion2percentage*100
-two <- ggplot(staffquestion2,aes(x=question2,y=staffquestion2percentage,fill=question2)) +geom_col()+labs(title="Academic Environment",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion2percentage, y = staffquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
-ggplotly(two)
+two <- ggplot(staffquestion2,aes(x=question2,y=staffquestion2percentage,fill=question2)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion2$SCHOOLS)))+labs(title="Academic Environment",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion2percentage, y = staffquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer2 <- ggplotly(two, tooltip = c("text"))
 
 #Teacher & Staff Survey Q3 - School Leadership
 staffquestion3 <- subsetnewsurveydataSTAFF[1:6,c(1,4)]
@@ -790,8 +793,8 @@ question3 <- staffquestion3$SCHOOLS
 staffquestion3percentage <- staffquestion3$`Question 3`
 staffquestion3percentage <- as.numeric(staffquestion3percentage)
 staffquestion3percentage <- staffquestion3percentage*100
-three <- ggplot(staffquestion3,aes(x=question3,y=staffquestion3percentage,fill=question3)) +geom_col()+labs(title="School Leadership",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion3percentage, y = staffquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
-ggplotly(three)
+three <- ggplot(staffquestion3,aes(x=question3,y=staffquestion3percentage,fill=question3)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion3$SCHOOLS)))+labs(title="School Leadership",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion3percentage, y = staffquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer3 <- ggplotly(three, tooltip = c("text"))
 
 #Teacher & Staff Survey Q4 - Managing Student Behavior
 staffquestion4 <- subsetnewsurveydataSTAFF[1:6,c(1,5)]
@@ -799,8 +802,8 @@ question4 <- staffquestion4$SCHOOLS
 staffquestion4percentage <- staffquestion4$`Question 4`
 staffquestion4percentage <- as.numeric(staffquestion4percentage)
 staffquestion4percentage <- staffquestion4percentage*100
-four <- ggplot(staffquestion4,aes(x=question4,y=staffquestion4percentage,fill=question4)) +geom_col()+labs(title="Managing Student Behavior",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion4percentage, y = staffquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
-ggplotly(four)
+four <- ggplot(staffquestion4,aes(x=question4,y=staffquestion4percentage,fill=question4)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion4$SCHOOLS)))+labs(title="Managing Student Behavior",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion4percentage, y = staffquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer4 <- ggplotly(four, tooltip = c("text"))
 
 #Teacher & Staff Survey Q5 - School Parent Communication
 staffquestion5 <- subsetnewsurveydataSTAFF[1:6,c(1,6)]
@@ -808,8 +811,8 @@ question5 <- staffquestion5$SCHOOLS
 staffquestion5percentage <- staffquestion5$`Question 5`
 staffquestion5percentage <- as.numeric(staffquestion5percentage)
 staffquestion5percentage <- staffquestion5percentage*100
-five <- ggplot(staffquestion5,aes(x=question5,y=staffquestion5percentage,fill=question5)) +geom_col()+labs(title="School Parent Communication",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion5percentage, y = staffquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
-ggplotly(five)
+five <- ggplot(staffquestion5,aes(x=question5,y=staffquestion5percentage,fill=question5)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion5$SCHOOLS)))+labs(title="School Parent Communication",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion5percentage, y = staffquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer5 <- ggplotly(five, tooltip = c("text"))
 
 #Teacher & Staff Survey Q6 - Workplace Environment
 staffquestion6 <- subsetnewsurveydataSTAFF[1:6,c(1,7)]
@@ -817,8 +820,8 @@ question6 <- staffquestion6$SCHOOLS
 staffquestion6percentage <- staffquestion6$`Question 6`
 staffquestion6percentage <- as.numeric(staffquestion6percentage)
 staffquestion6percentage <- staffquestion6percentage*100
-six <- ggplot(staffquestion6,aes(x=question6,y=staffquestion6percentage,fill=question6)) +geom_col()+labs(title="Workplace Environment",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion6percentage, y = staffquestion6percentage), size = 3, position = position_stack(vjust = 1.02))
-ggplotly(six)
+six <- ggplot(staffquestion6,aes(x=question6,y=staffquestion6percentage,fill=question6)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion6$SCHOOLS)))+labs(title="Workplace Environment",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion6percentage, y = staffquestion6percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer6 <- ggplotly(six, tooltip = c("text"))
 
 #Teacher & Staff Survey Q7 - Instructional Practices 
 staffquestion7 <- subsetnewsurveydataSTAFF[1:6,c(1,8)]
@@ -826,8 +829,8 @@ question7 <- staffquestion7$SCHOOLS
 staffquestion7percentage <- staffquestion7$`Question 7`
 staffquestion7percentage <- as.numeric(staffquestion7percentage)
 staffquestion7percentage <- staffquestion7percentage*100
-seven <- ggplot(staffquestion7,aes(x=question7,y=staffquestion7percentage,fill=question7)) +geom_col()+labs(title="Instructional Practices",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion7percentage, y = staffquestion7percentage), size = 3, position = position_stack(vjust = 1.02))
-ggplotly(seven)
+seven <- ggplot(staffquestion7,aes(x=question7,y=staffquestion7percentage,fill=question7)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion7$SCHOOLS)))+labs(title="Instructional Practices",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion7percentage, y = staffquestion7percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer7 <- ggplotly(seven, tooltip = c("text"))
 
 #--------------Parent Climate Surveys--------------------------------
 newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
@@ -839,8 +842,8 @@ question8 <- parentquestion1$SCHOOLS
 parentquestion1percentage <- parentquestion1$`Question 1`
 parentquestion1percentage <- as.numeric(parentquestion1percentage)
 parentquestion1percentage <- parentquestion1percentage*100
-eight <- ggplot(parentquestion1,aes(x=question8,y=parentquestion1percentage,fill=question8)) +geom_col()+labs(title="Academic Support",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion1percentage, y = parentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
-ggplotly(eight)
+eight <- ggplot(parentquestion1,aes(x=question8,y=parentquestion1percentage,fill=question8)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion1$SCHOOLS)))+labs(title="Academic Support",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion1percentage, y = parentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+parentanswer1 <- ggplotly(eight, tooltip = c("text"))
 
 #Parent Survey Q2 - Communications
 parentquestion2 <- subsetnewsurveydataPARENT[1:6,c(1,3)]
@@ -848,8 +851,8 @@ question9 <- parentquestion2$SCHOOLS
 parentquestion2percentage <- parentquestion2$`Question 2`
 parentquestion2percentage <- as.numeric(parentquestion2percentage)
 parentquestion2percentage <- parentquestion2percentage*100
-nine <- ggplot(parentquestion2,aes(x=question9,y=parentquestion2percentage,fill=question9)) +geom_col()+labs(title="Communications",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion2percentage, y = parentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
-ggplotly(nine)
+nine <- ggplot(parentquestion2,aes(x=question9,y=parentquestion2percentage,fill=question9)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion2$SCHOOLS)))+labs(title="Communications",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion2percentage, y = parentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+parentanswer2 <- ggplotly(nine, tooltip = c("text"))
 
 #Parent Survey Q3 - Relationships
 parentquestion3 <- subsetnewsurveydataPARENT[1:6,c(1,4)]
@@ -857,8 +860,8 @@ question10 <- parentquestion3$SCHOOLS
 parentquestion3percentage <- parentquestion3$`Question 3`
 parentquestion3percentage <- as.numeric(parentquestion3percentage)
 parentquestion3percentage <- parentquestion3percentage*100
-ten <- ggplot(parentquestion3,aes(x=question10,y=parentquestion3percentage,fill=question10)) +geom_col()+labs(title="Relationships",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion3percentage, y = parentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
-ggplotly(ten)
+ten <- ggplot(parentquestion3,aes(x=question10,y=parentquestion3percentage,fill=question10)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion3$SCHOOLS)))+labs(title="Relationships",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion3percentage, y = parentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+parentanswer3 <- ggplotly(ten, tooltip = c("text"))
 
 #Parent Survey Q4 - Instructions
 parentquestion4 <- subsetnewsurveydataPARENT[1:6,c(1,5)]
@@ -866,8 +869,8 @@ question11 <- parentquestion4$SCHOOLS
 parentquestion4percentage <- parentquestion4$`Question 4`
 parentquestion4percentage <- as.numeric(parentquestion4percentage)
 parentquestion4percentage <- parentquestion4percentage*100
-eleven <- ggplot(parentquestion4,aes(x=question11,y=parentquestion4percentage,fill=question11)) +geom_col()+labs(title="Instructions",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion4percentage, y = parentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
-ggplotly(eleven)
+eleven <- ggplot(parentquestion4,aes(x=question11,y=parentquestion4percentage,fill=question11)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion4$SCHOOLS)))+labs(title="Instructions",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion4percentage, y = parentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+parentanswer4 <- ggplotly(eleven, tooltip = c("text"))
 
 #--------------Student Climate Surveys-------------------------------
 newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
@@ -879,8 +882,8 @@ question12 <- studentquestion1$SCHOOLS
 studentquestion1percentage <- studentquestion1$`Question 1`
 studentquestion1percentage <- as.numeric(studentquestion1percentage)
 studentquestion1percentage <- studentquestion1percentage*100
-twelve <- ggplot(studentquestion1,aes(x=question12,y=studentquestion1percentage,fill=question12)) +geom_col()+labs(title="Student Engagement",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion1percentage, y = studentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
-ggplotly(twelve)
+twelve <- ggplot(studentquestion1,aes(x=question12,y=studentquestion1percentage,fill=question12)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion1$SCHOOLS)))+labs(title="Student Engagement",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion1percentage, y = studentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+studentanswer1 <- ggplotly(twelve, tooltip = c("text"))
 
 #Student Survey Q2 - Teacher Relationship
 studentquestion2 <- subsetnewsurveydataSTUDENT[1:6,c(1,3)]
@@ -888,8 +891,8 @@ question13 <- studentquestion2$SCHOOLS
 studentquestion2percentage <- studentquestion2$`Question 2`
 studentquestion2percentage <- as.numeric(studentquestion2percentage)
 studentquestion2percentage <- studentquestion2percentage*100
-thirteen <- ggplot(studentquestion2,aes(x=question13,y=studentquestion2percentage,fill=question13)) +geom_col()+labs(title="Teacher Relationship",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion2percentage, y = studentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
-ggplotly(thirteen)
+thirteen <- ggplot(studentquestion2,aes(x=question13,y=studentquestion2percentage,fill=question13)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion2$SCHOOLS)))+labs(title="Teacher Relationship",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion2percentage, y = studentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+studentanswer2 <- ggplotly(thirteen, tooltip = c("text"))
 
 #Student Survey Q3 - Social-Emotional Wellbeing
 studentquestion3 <- subsetnewsurveydataSTUDENT[1:6,c(1,4)]
@@ -897,8 +900,8 @@ question14 <- studentquestion3$SCHOOLS
 studentquestion3percentage <- studentquestion3$`Question 3`
 studentquestion3percentage <- as.numeric(studentquestion3percentage)
 studentquestion3percentage <- studentquestion3percentage*100
-fourteen <- ggplot(studentquestion3,aes(x=question14,y=studentquestion3percentage,fill=question14)) +geom_col()+labs(title="Social-Emotional Wellbeing",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion3percentage, y = studentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
-ggplotly(fourteen)
+fourteen <- ggplot(studentquestion3,aes(x=question14,y=studentquestion3percentage,fill=question14)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion3$SCHOOLS)))+labs(title="Social-Emotional Wellbeing",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion3percentage, y = studentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+studentanswer3 <- ggplotly(fourteen, tooltip = c("text"))
 
 #Student Survey Q4 - Student Behavior
 studentquestion4 <- subsetnewsurveydataSTUDENT[1:6,c(1,5)]
@@ -906,8 +909,8 @@ question15 <- studentquestion4$SCHOOLS
 studentquestion4percentage <- studentquestion4$`Question 4`
 studentquestion4percentage <- as.numeric(studentquestion4percentage)
 studentquestion4percentage <- studentquestion4percentage*100
-fifteen <- ggplot(studentquestion4,aes(x=question15,y=studentquestion4percentage,fill=question15)) +geom_col()+labs(title="Student Behavior",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion4percentage, y = studentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
-ggplotly(fifteen)
+fifteen <- ggplot(studentquestion4,aes(x=question15,y=studentquestion4percentage,fill=question15)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion4$SCHOOLS)))+labs(title="Student Behavior",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion4percentage, y = studentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+studentanswer4 <- ggplotly(fifteen, tooltip = c("text"))
 
 #Student Survey Q5 - Bullying
 studentquestion5 <- subsetnewsurveydataSTUDENT[1:6,c(1,6)]
@@ -915,8 +918,8 @@ question16 <- studentquestion5$SCHOOLS
 studentquestion5percentage <- studentquestion5$`Question 5`
 studentquestion5percentage <- as.numeric(studentquestion5percentage)
 studentquestion5percentage <- studentquestion5percentage*100
-sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16)) +geom_col()+labs(title="Bullying",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
-ggplotly(sixteen)
+sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
+studentanswer5 <- ggplotly(sixteen, tooltip = c("text"))
 
 # user -------------------------------------------------------------
 ui <- navbarPage(title = "DSPG",
@@ -1164,55 +1167,78 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
                                               
+                                              
+                                              
                                               tabsetPanel(
                                                 tabPanel("Parent Climate Survey",
                                                          fluidRow(style = "margin: 2px;",
+                                                                  fluidRow(style = "margin: 2px;",
+                                                                           align = "center",
+                                                                           # br("", style = "padding-top:2px;"),
+                                                                           # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
+                                                                           br(""),
+                                                                           h1(strong("Parent Climate Survey"),
+                                                                              #h2("") ,
+                                                                              h4("Parent Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                              h4(""),
+                                                                              #h4("[updat this]"),
+                                                                              br()
+                                                                           )
+                                                                  ),
                                                                   p("", style = "padding-top:10px;"),
-                                                                  column(6, align = "center",h4(strong("Parent Survey")),
-                                                                         p("Parent Climate Survey Results From The 2019 to 2020 School Year"),
-                                                                         selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
-                                                                           "Parent Survey",
-                                                                           "Student Survey",
-                                                                           "Teacher/Staff Survey"
+                                                                  column(6, align = "center",h4(strong("")),
+                                                                         p(""),
+                                                                         selectInput("surveydrop1", "Select Survey Question", width = "60%", choices = c(
+                                                                           "Academic Support" = "parentanswer1",
+                                                                           "Communications" = "parentanswer2",
+                                                                           "Relationships" = "parentanswer3",
+                                                                           "Instructions" = "parentanswer4"
                                                                          ),
                                                                          ),
-                                                                         br("")
+                                                                         withSpinner(plotlyOutput("survo1", height = "500px", width ="100%")),
+
                                                                          
                                                                          
                                                                   ),
-                                                                  column(6, align = "center",h4(strong("Parent Survey")),
-                                                                         p("Parent Climate Survey Results From The 2019 to 2020 School Year"),
-                                                                         selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
-                                                                           "Parent Survey",
-                                                                           "Student Survey",
-                                                                           "Teacher/Staff Survey"
+                                                                  column(6, align = "center",h4(strong("")),
+                                                                         p(""),
+                                                                         selectInput("surveydrop2", "Select Survey Question", width = "60%", choices = c(
+                                                                           "Academic Support" = "parentanswer1",
+                                                                           "Communications" = "parentanswer2",
+                                                                           "Relationships" = "parentanswer3",
+                                                                           "Instructions" = "parentanswer4"
                                                                          ),
                                                                          ),
-                                                                         br("")
+                                                                         withSpinner(plotlyOutput("survo2", height = "500px", width ="100%")),
+
                                                                          
                                                                          
                                                                   ),
-                                                                  column(6, align = "center",h4(strong("Parent Survey")),
-                                                                         p("Parent Climate Survey Results From The 2019 to 2020 School Year"),
-                                                                         selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
-                                                                           "Parent Survey",
-                                                                           "Student Survey",
-                                                                           "Teacher/Staff Survey"
+                                                                  column(6, align = "center",h4(strong("")),
+                                                                         p(""),
+                                                                         selectInput("surveydrop3", "Select Survey Question", width = "60%", choices = c(
+                                                                           "Academic Support" = "parentanswer1",
+                                                                           "Communications" = "parentanswer2",
+                                                                           "Relationships" = "parentanswer3",
+                                                                           "Instructions" = "parentanswer4"
                                                                          ),
                                                                          ),
-                                                                         br("")
+                                                                         withSpinner(plotlyOutput("survo3", height = "500px", width ="100%")),
+
                                                                          
                                                                          
                                                                   ),
-                                                                  column(6, align = "center",h4(strong("Parent Survey")),
-                                                                         p("Parent Climate Survey Results From The 2019 to 2020 School Year"),
-                                                                         selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
-                                                                           "Parent Survey",
-                                                                           "Student Survey",
-                                                                           "Teacher/Staff Survey"
+                                                                  column(6, align = "center",h4(strong("")),
+                                                                         p(""),
+                                                                         selectInput("surveydrop4", "Select Survey Question", width = "60%", choices = c(
+                                                                           "Academic Support" = "parentanswer1",
+                                                                           "Communications" = "parentanswer2",
+                                                                           "Relationships" = "parentanswer3",
+                                                                           "Instructions" = "parentanswer4"
                                                                          ),
                                                                          ),
-                                                                         br("")
+                                                                         withSpinner(plotlyOutput("survo4", height = "500px", width ="100%")),
+
                                                                          
                                                                          
                                                                   ),
@@ -1220,51 +1246,76 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                 ),
                                                 tabPanel("Student Climate Survey",
                                                          p("", style = "padding-top:10px;"),
-                                                         column(6, align = "center",h4(strong("Student Survey")),
-                                                                p("Student Climate Survey Results From The 2019 to 2020 School Year"),
-                                                                selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
-                                                                  "Parent Survey",
-                                                                  "Student Survey",
-                                                                  "Teacher/Staff Survey"
+                                                         fluidRow(style = "margin: 2px;",
+                                                                  align = "center",
+                                                                  # br("", style = "padding-top:2px;"),
+                                                                  # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
+                                                                  br(""),
+                                                                  h1(strong("Student Climate Survey"),
+                                                                     #h2("") ,
+                                                                     h4("Student Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                     h4(""),
+                                                                     #h4("[updat this]"),
+                                                                     br()
+                                                                  )
+                                                         ),
+                                                         column(6, align = "center",h4(strong("")),
+                                                                p(""),
+                                                                selectInput("surveydrop5", "Select Survey Question", width = "60%", choices = c(
+                                                                  "Student Engagement" = "studentanswer1",
+                                                                  "Teacher Relationship" = "studentanswer2",
+                                                                  "Social-Emotional Wellbeing" = "studentanswer3",
+                                                                  "Student Behavior" = "studentanswer4",
+                                                                  "Bullying" = "studentanswer5"
                                                                 ),
                                                                 ),
-                                                                br("")
+                                                                withSpinner(plotlyOutput("survo5", height = "500px", width ="100%")),
+
                                                                 
                                                                 
                                                          ),
-                                                         column(6, align = "center",h4(strong("Student Survey")),
-                                                                p("Student Climate Survey Results From The 2019 to 2020 School Year"),
-                                                                selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
-                                                                  "Parent Survey",
-                                                                  "Student Survey",
-                                                                  "Teacher/Staff Survey"
+                                                         column(6, align = "center",h4(strong("")),
+                                                                p(""),
+                                                                selectInput("surveydrop6", "Select Survey Question", width = "60%", choices = c(
+                                                                  "Student Engagement" = "studentanswer1",
+                                                                  "Teacher Relationship" = "studentanswer2",
+                                                                  "Social-Emotional Wellbeing" = "studentanswer3",
+                                                                  "Student Behavior" = "studentanswer4",
+                                                                  "Bullying" = "studentanswer5"
                                                                 ),
                                                                 ),
-                                                                br("")
+                                                                withSpinner(plotlyOutput("survo6", height = "500px", width ="100%")),
+
                                                                 
                                                                 
                                                          ),
-                                                         column(6, align = "center",h4(strong("Student Survey")),
-                                                                p("Student Climate Survey Results From The 2019 to 2020 School Year"),
-                                                                selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
-                                                                  "Parent Survey",
-                                                                  "Student Survey",
-                                                                  "Teacher/Staff Survey"
+                                                         column(6, align = "center",h4(strong("")),
+                                                                p(""),
+                                                                selectInput("surveydrop7", "Select Survey Question", width = "60%", choices = c(
+                                                                  "Student Engagement" = "studentanswer1",
+                                                                  "Teacher Relationship" = "studentanswer2",
+                                                                  "Social-Emotional Wellbeing" = "studentanswer3",
+                                                                  "Student Behavior" = "studentanswer4",
+                                                                  "Bullying" = "studentanswer5"
                                                                 ),
                                                                 ),
-                                                                br("")
+                                                                withSpinner(plotlyOutput("survo7", height = "500px", width ="100%")),
+
                                                                 
                                                                 
                                                          ),
-                                                         column(6, align = "center",h4(strong("Student Survey")),
-                                                                p("Student Climate Survey Results From The 2019 to 2020 School Year"),
-                                                                selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
-                                                                  "Parent Survey",
-                                                                  "Student Survey",
-                                                                  "Teacher/Staff Survey"
+                                                         column(6, align = "center",h4(strong()),
+                                                                p(""),
+                                                                selectInput("surveydrop8", "Select Survey Question", width = "60%", choices = c(
+                                                                  "Student Engagement" = "studentanswer1",
+                                                                  "Teacher Relationship" = "studentanswer2",
+                                                                  "Social-Emotional Wellbeing" = "studentanswer3",
+                                                                  "Student Behavior" = "studentanswer4",
+                                                                  "Bullying" = "studentanswer5"
                                                                 ),
                                                                 ),
-                                                                br("")
+                                                                withSpinner(plotlyOutput("survo8", height = "500px", width ="100%")),
+
                                                                 
                                                                 
                                                          ),
@@ -1272,54 +1323,87 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                 
                                                 tabPanel("Teacher/Staff Climate Survey",
                                                          p("", style = "padding-top:10px;"),
-                                                         column(6, align = "center",h4(strong("Teacher/Staff Survey")),
-                                                                p("Teacher/Staff Climate Survey Results From The 2019 to 2020 School Year"),
-                                                                selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
-                                                                  "Parent Survey",
-                                                                  "Student Survey",
-                                                                  "Teacher/Staff Survey"
+                                                         fluidRow(style = "margin: 2px;",
+                                                                  align = "center",
+                                                                  # br("", style = "padding-top:2px;"),
+                                                                  # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
+                                                                  br(""),
+                                                                  h1(strong("Teacher/Staff Climate Survey"),
+                                                                     #h2("") ,
+                                                                     h4("Teacher/Staff Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                     h4(""),
+                                                                     #h4("[updat this]"),
+                                                                     br()
+                                                                  )
+                                                         ),
+                                                         column(6, align = "center",h4(strong("")),
+                                                                p(""),
+                                                                selectInput("surveydrop9", "Select Survey Question", width = "60%", choices = c(
+                                                                  "Staff Collegiality" = "teacherandstaffanswer1",
+                                                                  "Academic Environment" = "teacherandstaffanswer2",
+                                                                  "School Leadership" = "teacherandstaffanswer3",
+                                                                  "Managing Student Behavior" = "teacherandstaffanswer4",
+                                                                  "School Parent Communication" = "teacherandstaffanswer5",
+                                                                  "Workplace Environment" = "teacherandstaffanswer6",
+                                                                  "Instructional Practices" = "teacherandstaffanswer7"
                                                                 ),
                                                                 ),
-                                                                br("")
+                                                                withSpinner(plotlyOutput("survo9", height = "500px", width ="100%")),
+
                                                                 
                                                                 
                                                                 
                                                          ),
-                                                         column(6, align = "center",h4(strong("Teacher/Staff Survey")),
-                                                                p("Teacher/Staff Climate Survey Results From The 2019 to 2020 School Year"),
-                                                                selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
-                                                                  "Parent Survey",
-                                                                  "Student Survey",
-                                                                  "Teacher/Staff Survey"
+                                                         column(6, align = "center",h4(strong("")),
+                                                                p(""),
+                                                                selectInput("surveydrop10", "Select Survey Question", width = "60%", choices = c(
+                                                                  "Staff Collegiality" = "teacherandstaffanswer1",
+                                                                  "Academic Environment" = "teacherandstaffanswer2",
+                                                                  "School Leadership" = "teacherandstaffanswer3",
+                                                                  "Managing Student Behavior" = "teacherandstaffanswer4",
+                                                                  "School Parent Communication" = "teacherandstaffanswer5",
+                                                                  "Workplace Environment" = "teacherandstaffanswer6",
+                                                                  "Instructional Practices" = "teacherandstaffanswer7"
                                                                 ),
                                                                 ),
-                                                                br("")
+                                                                withSpinner(plotlyOutput("survo10", height = "500px", width ="100%")),
+
                                                                 
                                                                 
                                                                 
                                                          ),
-                                                         column(6, align = "center",h4(strong("Teacher/Staff Survey")),
-                                                                p("Teacher/Staff Climate Survey Results From The 2019 to 2020 School Year"),
-                                                                selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
-                                                                  "Parent Survey",
-                                                                  "Student Survey",
-                                                                  "Teacher/Staff Survey"
+                                                         column(6, align = "center",h4(strong("")),
+                                                                p(""),
+                                                                selectInput("surveydrop11", "Select Survey Question", width = "60%", choices = c(
+                                                                  "Staff Collegiality" = "teacherandstaffanswer1",
+                                                                  "Academic Environment" = "teacherandstaffanswer2",
+                                                                  "School Leadership" = "teacherandstaffanswer3",
+                                                                  "Managing Student Behavior" = "teacherandstaffanswer4",
+                                                                  "School Parent Communication" = "teacherandstaffanswer5",
+                                                                  "Workplace Environment" = "teacherandstaffanswer6",
+                                                                  "Instructional Practices" = "teacherandstaffanswer7"
                                                                 ),
                                                                 ),
-                                                                br("")
+                                                                withSpinner(plotlyOutput("survo11", height = "500px", width ="100%")),
+
                                                                 
                                                                 
                                                                 
                                                          ),
-                                                         column(6, align = "center",h4(strong("Teacher/Staff Survey")),
-                                                                p("Teacher/Staff Climate Survey Results From The 2019 to 2020 School Year"),
-                                                                selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
-                                                                  "Parent Survey",
-                                                                  "Student Survey",
-                                                                  "Teacher/Staff Survey"
+                                                         column(6, align = "center",h4(strong("")),
+                                                                p(""),
+                                                                selectInput("surveydrop12", "Select Survey Question", width = "60%", choices = c(
+                                                                  "Staff Collegiality" = "teacherandstaffanswer1",
+                                                                  "Academic Environment" = "teacherandstaffanswer2",
+                                                                  "School Leadership" = "teacherandstaffanswer3",
+                                                                  "Managing Student Behavior" = "teacherandstaffanswer4",
+                                                                  "School Parent Communication" = "teacherandstaffanswer5",
+                                                                  "Workplace Environment" = "teacherandstaffanswer6",
+                                                                  "Instructional Practices" = "teacherandstaffanswer7"
                                                                 ),
                                                                 ),
-                                                                br("")
+                                                                withSpinner(plotlyOutput("survo12", height = "500px", width ="100%")),
+
                                                                 
                                                                 
                                                                 
@@ -1536,6 +1620,7 @@ server <- function(input, output, session) {
     input$demos1drop
   })
   
+  
   output$demo1 <- renderPlotly({
     
     if (Var3() == "gender") {
@@ -1728,6 +1813,396 @@ server <- function(input, output, session) {
     }
     
     
+  })
+  
+  #------------Climate Surveys-----------
+  
+  Answer1 <- reactive({
+    input$surveydrop1
+  })
+  
+  output$survo1 <- renderPlotly({
+    
+    if (Answer1() == "parentanswer1") {
+      
+      parentanswer1
+      
+    }
+    
+    else if (Answer1() == "parentanswer2") {
+      
+      parentanswer2
+    }
+    
+    else if (Answer1() == "parentanswer3") {
+      
+      parentanswer3
+    }
+    
+    else if (Answer1() == "parentanswer4") {
+      parentanswer4
+    }
+ })
+  
+  Answer2 <- reactive({
+    input$surveydrop2
+  })
+  
+  output$survo2 <- renderPlotly({
+    
+    if (Answer2() == "parentanswer1") {
+      
+      parentanswer1
+      
+    }
+    
+    else if (Answer2() == "parentanswer2") {
+      
+      parentanswer2
+    }
+    
+    else if (Answer2() == "parentanswer3") {
+      
+      parentanswer3
+    }
+    
+    else if (Answer2() == "parentanswer4") {
+      parentanswer4
+    }
+  })
+  
+  Answer3 <- reactive({
+    input$surveydrop3
+  })
+  
+  output$survo3 <- renderPlotly({
+    
+    if (Answer3() == "parentanswer1") {
+      
+      parentanswer1
+      
+    }
+    
+    else if (Answer3() == "parentanswer2") {
+      
+      parentanswer2
+    }
+    
+    else if (Answer3() == "parentanswer3") {
+      
+      parentanswer3
+    }
+    
+    else if (Answer3() == "parentanswer4") {
+      parentanswer4
+    }
+  })
+  
+  Answer4 <- reactive({
+    input$surveydrop4
+  })
+  
+  output$survo4 <- renderPlotly({
+    
+    if (Answer4() == "parentanswer1") {
+      
+      parentanswer1
+      
+    }
+    
+    else if (Answer4() == "parentanswer2") {
+      
+      parentanswer2
+    }
+    
+    else if (Answer4() == "parentanswer3") {
+      
+      parentanswer3
+    }
+    
+    else if (Answer4() == "parentanswer4") {
+      parentanswer4
+    }
+  })
+  
+  Answer5 <- reactive({
+    input$surveydrop5
+  }) 
+  
+  output$survo5 <- renderPlotly({
+    
+    if (Answer5() == "studentanswer1") {
+      
+      studentanswer1
+      
+    }
+    
+    else if (Answer5() == "studentanswer2") {
+      
+      studentanswer2
+    }
+    
+    else if (Answer5() == "studentanswer3") {
+      
+      studentanswer3
+    }
+    
+    else if (Answer5() == "studentanswer4") {
+      studentanswer4
+    }
+    
+    else if (Answer5() == "studentanswer5") {
+      studentanswer5
+    }
+  })
+  
+  Answer6 <- reactive({
+    input$surveydrop6
+  }) 
+  
+  output$survo6 <- renderPlotly({
+    
+    if (Answer6() == "studentanswer1") {
+      
+      studentanswer1
+      
+    }
+    
+    else if (Answer6() == "studentanswer2") {
+      
+      studentanswer2
+    }
+    
+    else if (Answer6() == "studentanswer3") {
+      
+      studentanswer3
+    }
+    
+    else if (Answer6() == "studentanswer4") {
+      studentanswer4
+    }
+    
+    else if (Answer6() == "studentanswer5") {
+      studentanswer5
+    }
+  })
+  
+  Answer7 <- reactive({
+    input$surveydrop7
+  }) 
+  
+  output$survo7 <- renderPlotly({
+    
+    if (Answer7() == "studentanswer1") {
+      
+      studentanswer1
+      
+    }
+    
+    else if (Answer7() == "studentanswer2") {
+      
+      studentanswer2
+    }
+    
+    else if (Answer7() == "studentanswer3") {
+      
+      studentanswer3
+    }
+    
+    else if (Answer7() == "studentanswer4") {
+      studentanswer4
+    }
+    
+    else if (Answer7() == "studentanswer5") {
+      studentanswer5
+    }
+  })
+  
+  Answer8 <- reactive({
+    input$surveydrop8
+  }) 
+  
+  output$survo8 <- renderPlotly({
+    
+    if (Answer8() == "studentanswer1") {
+      
+      studentanswer1
+      
+    }
+    
+    else if (Answer8() == "studentanswer2") {
+      
+      studentanswer2
+    }
+    
+    else if (Answer8() == "studentanswer3") {
+      
+      studentanswer3
+    }
+    
+    else if (Answer8() == "studentanswer4") {
+      studentanswer4
+    }
+    
+    else if (Answer8() == "studentanswer5") {
+      studentanswer5
+    }
+  })
+  
+  Answer9 <- reactive({
+    input$surveydrop9
+  })
+  
+  output$survo9 <- renderPlotly({
+    
+    if (Answer9() == "teacherandstaffanswer1") {
+      
+      teacherandstaffanswer1
+      
+    }
+    
+    else if (Answer9() == "teacherandstaffanswer2") {
+      
+      teacherandstaffanswer2
+    }
+    
+    else if (Answer9() == "teacherandstaffanswer3") {
+      
+      teacherandstaffanswer3
+    }
+    
+    else if (Answer9() == "teacherandstaffanswer4") {
+      teacherandstaffanswer4
+    }
+    
+    else if (Answer9() == "teacherandstaffanswer5") {
+      teacherandstaffanswer5
+    }
+    
+    else if (Answer9() == "teacherandstaffanswer6") {
+      teacherandstaffanswer6
+    }
+    
+    else if (Answer9() == "teacherandstaffanswer7") {
+      teacherandstaffanswer7
+    }
+  })
+  
+  Answer10 <- reactive({
+    input$surveydrop10
+  })
+  
+  output$survo10 <- renderPlotly({
+    
+    if (Answer10() == "teacherandstaffanswer1") {
+      
+      teacherandstaffanswer1
+      
+    }
+    
+    else if (Answer10() == "teacherandstaffanswer2") {
+      
+      teacherandstaffanswer2
+    }
+    
+    else if (Answer10() == "teacherandstaffanswer3") {
+      
+      teacherandstaffanswer3
+    }
+    
+    else if (Answer10() == "teacherandstaffanswer4") {
+      teacherandstaffanswer4
+    }
+    
+    else if (Answer10() == "teacherandstaffanswer5") {
+      teacherandstaffanswer5
+    }
+    
+    else if (Answer10() == "teacherandstaffanswer6") {
+      teacherandstaffanswer6
+    }
+    
+    else if (Answer10() == "teacherandstaffanswer7") {
+      teacherandstaffanswer7
+    }
+  })
+  
+  Answer11 <- reactive({
+    input$surveydrop11
+  })
+  
+  output$survo11 <- renderPlotly({
+    
+    if (Answer11() == "teacherandstaffanswer1") {
+      
+      teacherandstaffanswer1
+      
+    }
+    
+    else if (Answer11() == "teacherandstaffanswer2") {
+      
+      teacherandstaffanswer2
+    }
+    
+    else if (Answer11() == "teacherandstaffanswer3") {
+      
+      teacherandstaffanswer3
+    }
+    
+    else if (Answer11() == "teacherandstaffanswer4") {
+      teacherandstaffanswer4
+    }
+    
+    else if (Answer11() == "teacherandstaffanswer5") {
+      teacherandstaffanswer5
+    }
+    
+    else if (Answer11() == "teacherandstaffanswer6") {
+      teacherandstaffanswer6
+    }
+    
+    else if (Answer11() == "teacherandstaffanswer7") {
+      teacherandstaffanswer7
+    }
+  })
+  
+  Answer12 <- reactive({
+    input$surveydrop12
+  })
+  
+  output$survo12 <- renderPlotly({
+    
+    if (Answer12() == "teacherandstaffanswer1") {
+      
+      teacherandstaffanswer1
+      
+    }
+    
+    else if (Answer12() == "teacherandstaffanswer2") {
+      
+      teacherandstaffanswer2
+    }
+    
+    else if (Answer12() == "teacherandstaffanswer3") {
+      
+      teacherandstaffanswer3
+    }
+    
+    else if (Answer12() == "teacherandstaffanswer4") {
+      teacherandstaffanswer4
+    }
+    
+    else if (Answer12() == "teacherandstaffanswer5") {
+      teacherandstaffanswer5
+    }
+    
+    else if (Answer12() == "teacherandstaffanswer6") {
+      teacherandstaffanswer6
+    }
+    
+    else if (Answer12() == "teacherandstaffanswer7") {
+      teacherandstaffanswer7
+    }
   })
   
   
