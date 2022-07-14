@@ -1043,7 +1043,7 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                                             tabPanel("Demographic",
                                                      fluidRow(style = "margin: 4px;",
                                                               p("", style = "padding-top:10px;"),
-                                                              column(8, align = "left",
+                                                              column(7, align = "left",
                                                                      selectInput("demos1drop", "Select Socioeconomic Characteristic:", width = "100%", choices = c(
                                                                        "Gender" = "gender",
                                                                        "Age" = "age",
@@ -1058,7 +1058,7 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                                                                      
                                                               ),
                                                               
-                                                              column(4, 
+                                                              column(5, 
                                                                      
                                                                      p("To access the possible opportunities within the six title 1 community schools in Sterling, VA, it is important to understand the neighborhood and area in which these schools are located. By looking at the graph, it appears to be almost an equal split of male’s and females in Sterling, VA. The total population in sterling is 30,271. 15,282 members of the population are male, while the remaining 14,989 are female. There are only 293 more males than females so that gives us almost a one to one ratio - so that’s good.", style = "padding-top:15px;font-size: 14px;"),
                                                                      p("So, once the team looked at the gender distribution, we were curious to look at the age distribution of the individuals of Sterling. The largest age group in Sterling are Adults (ages 35 to 44) which is represented by the blue green block, and then the older millennials (25 to 34) which is represented by the light green block. The age groups are fitting for the high median income within the area. ", style = "padding-top:15px;font-size: 14px;"),
@@ -1074,7 +1074,7 @@ Another important determinant that might impact someone’s availability of oppo
                                             tabPanel("Income",
                                                      fluidRow(style = "margin: 4px;",
                                                               p("", style = "padding-top:10px;"),
-                                                              column(8, align = "left",
+                                                              column(7, align = "left",
                                                                      selectInput("demos2drop", "Select Socioeconomic Characteristic:", width = "100%", choices = c(
                                                                        "Educational Attainment" = "edu",
                                                                        "Family Income" = "faminc",
@@ -1087,7 +1087,7 @@ Another important determinant that might impact someone’s availability of oppo
                                                                      
                                                               ),
                                                               
-                                                              column(4, align = "justify",
+                                                              column(5, align = "justify",
                                                               p("Now that we looked at the ethnic groups, we wanted to look at the educational attainment levels. The data was collected from the individuals who are ages 25 and over. It seems that a large number of the population are educated with that of a bachelors agree or higher, which is fitting for the county’s high median income. 
 so a reasonable population has achieved high education - how much is Sterling making? Thus, we looked at family income levels. This data was collected looking at family households in the last 12 months of the ACS collected data (2020). It has also been adjusted for inflation. Interestingly enough, the largest income bracket lies within the range of $100,000 to $149,999 which is represented by the dark purple area however we do acknowledge that this may not apply our families of interest.
 ", style = "padding-top:15px;font-size: 14px;"),
@@ -1104,7 +1104,7 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                                             tabPanel("Occupation/Work",
                                                      fluidRow(style = "margin: 4px;",
                                                               p("", style = "padding-top:10px;"),
-                                                              column(8, align = "left",
+                                                              column(7, align = "left",
                                                                      selectInput("demos3drop", "Select Socioeconomic Characteristic:", width = "100%", choices = c(
                                                                        "Employment" = "employment",
                                                                        "Work Occupation" = "workoccu",
