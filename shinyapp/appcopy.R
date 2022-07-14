@@ -1,4 +1,6 @@
-# Load Packages ---------------------------------------------------------------
+#==========DSPG 2022============LOUDOUN
+
+#Load Packages ---------------------------------------------------------------
 library(dplyr)
 library(tidycensus)
 library(ggplot2)
@@ -144,7 +146,7 @@ labelsG = c("Male", "Female")
 valuesG = c(15282, 14989)
 gender <- plot_ly(type='pie', labels=labelsG, values=valuesG, 
                   textinfo='label+percent',
-                  insidetextorientation='radial', marker = list(colors = c('20AFCC', 'F56D4F'))) %>% layout(title ='', legend=list(title=list(text='')))
+                  insidetextorientation='radial', hoverinfo = 'text', text = ~paste('Total:', valuesG), marker = list(colors = c('20AFCC', 'F56D4F'))) %>% layout(title ='Gender', legend=list(title=list(text='')))
 gender
 
 #---------Age pie chart---------------------------------------
@@ -171,14 +173,14 @@ Percent <- age_percent
 age<- plot_ly(subset_sterling,x=~Age, y=~Percent,type = "bar", color = ~Age, hoverinfo = "text",text = ~paste("Age:",Age,"<br>","Percent:",Percent,"%" )) %>% layout(title = "Age Distribution",xaxis = list(title=""))
 #-----------Race/Ethnicity--------------------
 
-library(plotly)
-
 labelsR = c("White", "Black", "Am.Indian", "Asian","Hawaiian","Other")
 valuesR = c(18138, 3132, 418, 5313, 144, 4570)
 
 race <- plot_ly(type='pie', labels=labelsR, values=valuesR, 
                 textinfo='label+percent',
-                insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Race/Ethnicity')))
+                hoverinfo = 'text', 
+                text = ~paste('Total:', valuesR),
+                insidetextorientation='radial') %>% layout(title ='Race/Ethnicity Composition', legend=list(title=list(text='Select Race')))
 
 #-------income--------------------------------
 medianin <- read_excel(paste0(getwd(),"/data/incomemedian.xlsx"))
@@ -197,12 +199,14 @@ income <- plot_ly(subset_medianin,x=~mi_cat.fac,y=~pop_num,color = ~mi_cat.fac,t
 #---------Property Value---------------------------------
 
 dfpv <- read_excel(paste0(getwd(), "/data/Property_Value.xlsx"), col_names = TRUE)
+Numberpv=c(58,6,46,204,1137,4653,709,26)
 
-figpv <- dfpv %>% plot_ly(labels = ~`HOUSING OCCUPANCY`, values = ~dfpv$count, sort = FALSE, direction = "clockwise")
-figpv <- figpv %>% add_pie(hole = 0.5)
-property <- figpv %>% layout(title = "", showlegend = T,
-                             xaxis = list(showgrid = TRUE, zeroline = FALSE, showticklabels = TRUE),
-                             yaxis = list(showgrid = TRUE, zeroline = FALSE, showticklabels = TRUE))
+figpv <- dfpv %>% plot_ly(labels = ~`HOUSING OCCUPANCY`, values = ~dfpv$count, sort = FALSE, direction = "counterclockwise", marker = list(line = list(width = 1, pull = 3)), hoverinfo = 'text', text = ~paste('Number of Property Values:', Numberpv), textinfo = "percent")
+figpv <- figpv %>% add_pie(hole = 0.5, domain = list(x = c(0.25, 0.9), y = c(0.75, 0.6)))
+property <- figpv %>% layout(title = "Residential Property Value", showlegend = TRUE, 
+                             legend=list(title=list(text='Select Value')),
+                             xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                             yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 
 #------------Housing Occupancy---------------------------
 
@@ -216,24 +220,28 @@ housing <- plot_ly(type='pie', labels=lbls.HOUSING, values=slices.HOUSING,
 #-------------Commuter Time------------------------------
 
 labelsCT = c("Less than 10 minutes","10 to 14 minutes","15 to 19 minutes","20 to 24 minutes", "25 to 29 minutes", "30 to 34 minutes", "35 to 44 minutes", "45 to 59 minutes", "60 or more minutes")
-valuesCT = c(5.99, 18.0, 16.9, 13.2, 4.8, 13.1, 7.09, 10.2, 10.8)
+valuesCT = c(6, 18, 17, 13, 5, 13, 7, 10, 11)
+valuestotalCT = c(989,2968,2787,2177,792,2160,1154,1649,1813.9)
 
 commutertime <- plot_ly(type='funnelarea', labels=labelsCT, values=valuesCT, sort = FALSE, direction = "",
                         textinfo='percent',
-                        insidetextorientation='radial') %>% layout(title ='', showlegend=TRUE, legend=list(x=1, y=0.5))
+                        hoverinfo = 'text', text = ~paste('Total Number of Commuters:', valuestotalCT),
+                        insidetextorientation='radial') %>% layout(title ='Commuter Time to Work', showlegend=TRUE, legend=list(title=list(text='Select Value')), legend=list(x=1, y=0.5))
+
 #-----------------Commuter mode--------------------------
 my_colors <- c("#CA001B", "#1D28B0", "#D71DA4", "#00A3AD", "#FF8200", "#753BBD", "#00B5E2", "#008578", "#EB6FBD", "#FE5000", "#6CC24A", "#D9D9D6", "#AD0C27", "#950078")
-slices.Races <- c(75.0, 14.9, 1.8, 0.4, 3.5, 4.3)
+#subset_sterling$`...2` <- gsub(",", "", subset_sterling$`...2`)
+slices.Races <- c(75.0, 14.9, 1.8, 0.5, 3.5, 4.3)
 lbls.Races <- c("Drove Alone 75.0%", "Carpooled 14.9%", "Public Transport 1.8%", "Walked 0.4%","Other means 3.5%","Worked from home 4.3%")
 pie(slices.Races, labels = lbls.Races, main="", sub = "Source: DP03 ACS data 2016-2020")
+
+library(plotly)
 labelsR = c("Drove Alone", "Carpooled", "Public Transport", "Walked","Other means","Worked from home")
 valuesR = c(12922, 2574, 308, 77, 609, 741)
-
-commutermode <- plot_ly(type='pie', labels=labelsR, values=valuesR,
-                        textinfo='label+percent',
-                        insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='')))
-
-
+perc <- round(valuesR / sum(valuesR)*100, 1)
+commutermode <- plot_ly(type='pie', labels=~labelsR, values=~valuesR, hoverinfo = "none", 
+                        text = ~paste0(labelsR, "\n", perc, "%"), 
+                        textinfo='text') %>% layout(title ='', legend=list(title=list(text='')), hoverinfo = "none")
 #------------------poverty-------------------------------
 
 poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
@@ -251,19 +259,22 @@ Total <- povas_pop
 cat <- as.character(povas_cat)
 
 pov <- plot_ly(subset_poverty_as, x = ~cat, y = ~Total, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat,"<br>","Total:",Total,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = ~cat))
-#--------gender by school
+#--------gender by school-------------------------------------------------
 
 
-genders <- data.frame(sex=rep(c("Male", "Female"), each=6),
-                      schools=c("Sugarland","Rolling Ridge","Guilford","Sterling","Sully","Forest Grove"),
-                      number=c(268, 273, 278, 237,221, 282, 255, 259, 272, 200, 217, 278))
+genders <- data.frame(Sex=rep(c("Male", "Female"), each=6),
+                      School=c("Sugarland","Rolling Ridge","Guilford","Sterling","Sully","Forest Grove"),
+                      Total=c(268, 273, 278, 237,221, 282, 255, 259, 272, 200, 217, 278),
+                      Percentage = c(51.2, 51.3, 50.5, 54.2, 50.5, 50.4, 48.8, 48.7, 49.5, 45.8, 49.5, 49.6)
+)
 
-genders<- ggplot(data=genders, aes(x=schools, y=number, fill=sex,  width=0.9)) +
-  geom_bar(stat="identity", position="stack") +
-  scale_fill_manual(values = c('#F56D4F', "#20AFCC")) + labs(y="", x="", fill="")+ggtitle("Gender by Schools") + theme_minimal() + 
-  geom_text(aes(label = number, y = number), size = 3, position = position_stack(vjust = 0.5))
 
-genders <-ggplotly(genders)
+
+genders<- ggplot(data=genders, aes(x=School, y=Total, fill=Sex,  width=0.9)) +
+  geom_bar(stat="identity", position="stack", hoverinfo = "text", aes(text = paste("Percentage :",Percentage,"%\n", "Total :", Total))) +
+  scale_fill_manual(values = c('#F56D4F', "#20AFCC")) + labs(y="Total Students", x="", fill="")+ggtitle("Gender by Schools") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+
+genders <-ggplotly(genders, tooltip = c("text"))
 #race by school ----------------------------
 
 races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
@@ -288,55 +299,64 @@ attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))
 
 #------------------employment-----------------
 sterling <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
-subset_sterling <- sterling[(4:5), c(1,4)]
+subset_sterling <- sterling[(4:5), c(1:2,4)]
 employed <- as.numeric(sub("%", "", subset_sterling[1, "...4"]))
 unemployed <- as.numeric(sub("%", "", subset_sterling[2, "...4"]))
 subset_sterling[, "...4"] <- c(employed, unemployed)
 
 
-labor <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.25) + labs(x = "Employment Status", y= "Percentage population", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment")+ guides(fill = guide_legend(title = "Employment"))+ scale_y_continuous(limits = c(0,80.0))
-employment <- ggplotly(labor)
+labor <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + 
+  
+  geom_bar(position = "stack", stat="identity", width = 0.25, aes(text = paste0("Percentage: ",...4, "%\n", "Total: ",...2))) + 
+  
+  labs(x = "", y= "Percentage", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment Status")+ guides(fill = guide_legend(title = ""))+ scale_y_continuous(limits = c(0,85))
+employment <- ggplotly(labor, tooltip = c("text"))
 
 
 #-------------------work occupation----------------------
 
 subset_sterling <- sterling[c(29:33),]
+subset_sterling$`EMPLOYMENT STATUS` <- gsub(" occupations", "", subset_sterling$`EMPLOYMENT STATUS`)
+subset_sterling$`...2` <- gsub(",", "", subset_sterling$`...2`)
 percNum <- c()
 for(i in 1:5){
   percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
 }
 subset_sterling[, "...4"] <- percNum
-employmento <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = `...4`, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
-occuplot <- ggplotly(employmento)
+occupation <- ggplot(subset_sterling, aes(x = reorder(`EMPLOYMENT STATUS`,...4), y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5, aes(text = paste0("Percentage: ",...4, "%\n", "Total: ", ...2)))+ theme(axis.text.x = element_text(angle=0), legend.position="none") + labs(x = "", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment by Sector") + coord_flip()
+
+occuplot <- ggplotly(occupation, tooltip = c("text"))
+
 
 #------------------education-------------------------
 
-sterling <- read_excel(paste0(getwd(),"/data/Loudouncountyeducation.xlsx"),skip=2,col_names=TRUE)
-subset_sterling <- sterling[2:28,c(1, 2:5)]
-subset_sterling$Label <- as.factor(subset_sterling$Label)
+#sterling <- read_excel(paste0(getwd(),"/data/Loudouncountyeducation.xlsx"),skip=2,col_names=TRUE)
 df2 <- data.frame(
   levels=c("Less than 9th grade",
            "9th to 12th grade, no diploma","High School graduate",
            "Some college or no degree","Associate's degree",
            "Bachelor's Degree",
-           
            "Graduate or professional"),
-  number=c(2193, 1943, 4050, 3094, 1396, 4706, 2402))
-
-
+  Total=c(2193, 1943, 4050, 3094, 1396, 4706, 2402))
 
 df2$levels <- factor(df2$levels, levels = df2$levels)
-education <- ggplot(df2,aes(levels, number)) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "", y = "Number of population", caption = " Source : S1501 ACS 5-yr data 2016-2020", title = "") + coord_flip() 
-education <- ggplotly(education)
+p<-ggplot(df2,aes(levels, Total, )) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "", y = "Total Population", caption = " Source : S1501 ACS 5-yr data 2016-2020", title = "Population 25 and Over Educational Attainment by Degree") + coord_flip()
+
+education <- ggplotly(p, tooltip = c("", "Total"))
 #---------------------health insurance----------------------------
 
 
-health <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
+sterling <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
+subset_sterling <- sterling[c(103:105),]
+subset_sterling$...4 <- as.numeric(gsub("%", "", subset_sterling$...4) )
+subset_sterling$`EMPLOYMENT STATUS` <- reorder(subset_sterling$`EMPLOYMENT STATUS`, subset_sterling$...4)
+health <- ggplot(subset_sterling, aes(x =`EMPLOYMENT STATUS`,y = (subset_sterling$...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5, aes(text = paste0(...4, "%"))) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020", titlel = "Distribution of Health Insurance") + guides(fill = guide_legend(title = ""))+ theme(axis.text.y = element_text(angle=0), axis.ticks.y= element_blank())+ coord_flip()#
 
-subset_health <- health[c(103:105),]
-healthin <- ggplot(subset_health, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020", titlel = "Distribution of Health Insurance") + guides(fill = guide_legend(title = "Health Insurance Type"))+ theme(axis.text.x = element_text(angle=0))+ coord_flip()
-healthin <- ggplotly(healthin)
-#race by school ----------------------------
+
+healthin <- ggplotly(health, tooltip = c("text"))
+
+
+#-------------------------------race by school ----------------------------
 
 races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
 
@@ -382,38 +402,41 @@ enrollment <- read_excel(paste0(getwd(),"/data/Enrollment16-20.xlsx"))
 enr_total <- enrollment$Total
 School <- enrollment$Schools
 Year <- enrollment$Year
-enroll <- ggplot(enrollment,aes(x=Year, y = enr_total, group = School, color = School)) + geom_point()+geom_line()+labs(caption= "Source: LCPS Dashboard 2021-2022",x="School",y="Number of Students") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
-enroll<- ggplotly(enroll)
+enroll <- plot_ly(enrollment, x = ~Year,y = ~Total, color = ~School, type = 'scatter',mode = 'lines', hoverinfo="text", text = ~paste("Total:", Total)) %>% layout(title= " Total Enrollment by Schools", xaxis = list(title = ""))
 
-#attendance --------------
+#-------------------attendance --------------
 
-attendance <- read_excel(paste0(getwd(),"/data/absencerate.xlsx"))
 att_per <- attendance$`Absence Rate`
-att_rate <- att_per*100
-quarter <- attendance$`School Quarter`
+Percent <- att_per*100
+Quarter <- attendance$`School Quarter`
 School <- attendance$`School Name`
-attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
-
+ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(title = "Student Absences by 2020-2021 Quarter",caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",
+                                                                                                                                                                                                                                      plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
+attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("School:",School,"<br>","Percent:",Percent)) %>% layout(title = "Student Absences by 2020-2021 Quarter",xaxis = list(title = ""))
 #---------------Number of Teachers/Staff--------------------------
 
-Schools = c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
+Schools <- c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
 Teachers <- c(32, 52, 66, 55, 59, 35)
 Staff <- c(49, 22, 27, 20, 29, 19)
 dataSTAFF <- data.frame(Schools, Teachers, Staff)
 
-figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = 'Teachers', marker = list(color = 'rgb(255, 2, 2 )'))
-figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(20, 252, 241 )'))
-cteacher <- figSTM %>% layout(yaxis = list(title = 'Total Number'), barmode = 'stack')
+figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = 'Teachers', marker = list(color = 'rgb(255, 2, 2 )'), textinfo = "total",
+                  hoverinfo = 'text')
+#text = ~paste('Total:',))
+
+figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(253, 151, 12 )'))
+cteacher <- figSTM %>% layout(title = "Teachers/Staff by Schools", yaxis = list(title = 'Total Educators'), xaxis = list(title = ''), barmode = 'stack')
+
 #--------Chronic absenteeism------------------
 
 chronic <- data.frame(sex=rep(c("Missed less than 10%"), each=6),
-                      schools=c("Sugarland","Rolling Ridge","Guilford","Sterling Elementary","Sully","Forest Grove"),
-                      number=c(11.1, 10.1, 6.7, 5.8, 9.7,7.9))
+                      School=c("Sugarland","Rolling Ridge","Guilford","Sterling","Sully","Forest Grove"),
+                      Percent=c(11.1, 10.1, 6.7, 5.8, 9.7,7.9))
 
-chronic<- ggplot(data=chronic, aes(x=schools, y=number, fill=schools,  width=0.8)) +
-  geom_bar(stat="identity")  + labs(y="", x="", fill="")+ggtitle("Percentage of Chronic absenteeism") 
+chronic<- ggplot(data=chronic, aes(x=School, y=Percent, fill=School,  width=0.8)) +
+  geom_bar(stat="identity",hoverinfo = "text", aes(text = paste("School :",School,"\n", "Percent :", Percent, "%")))  + labs(y="", x="", fill="")+ggtitle("Chronic Absenteeism by Schools") 
 
-chronic<-ggplotly(chronic)
+chronic<-ggplotly(chronic, tooltip = c("text"))
 
 #--------------free or not free resources ---------------------------------------
 
@@ -428,8 +451,8 @@ speech <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Speech and
 physical <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Physical Therapy")
 #---------------map_health and isochrones-----------------------------------------
 
-YourAPIKey <- "103eac37d04686a8b0104d96d983c612"
-YourAppId <- "ad147923"
+YourAPIKey <- "73ad15c60d8fe57014b574b4fc428ec0"
+YourAppId <- "afe3f1af"
 
 traveltime10 <- traveltime_map(appId=YourAppId,
                                apiKey=YourAPIKey,
@@ -752,6 +775,163 @@ jscode <- "function getUrlVars() {
 #plotly vs plot variable----
 
 var <- c("ageplot1","ageplot2")
+
+#--------------Teacher/Staff Climate Surveys------------------------
+newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
+subsetnewsurveydataSTAFF <- newsurveydata[3:8,c(1,2:8)]
+
+#Teacher & Staff Survey Q1 - Staff Collegiality
+staffquestion1 <- subsetnewsurveydataSTAFF[1:6,1:2]
+question1 <- staffquestion1$SCHOOLS
+staffquestion1percentage <- staffquestion1$`Question 1`
+staffquestion1percentage <- as.numeric(staffquestion1percentage)
+staffquestion1percentage <- staffquestion1percentage*100
+one <- ggplot(staffquestion1,aes(x=question1,y=staffquestion1percentage,fill=question1)) +geom_col()+labs(title="Staff Collegiality",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion1percentage, y = staffquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(one)
+
+#Teacher & Staff Survey Q2 - Academic Environment
+staffquestion2 <- subsetnewsurveydataSTAFF[1:6,c(1,3)]
+question2 <- staffquestion2$SCHOOLS
+staffquestion2percentage <- staffquestion2$`Question 2`
+staffquestion2percentage <- as.numeric(staffquestion2percentage)
+staffquestion2percentage <- staffquestion2percentage*100
+two <- ggplot(staffquestion2,aes(x=question2,y=staffquestion2percentage,fill=question2)) +geom_col()+labs(title="Academic Environment",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion2percentage, y = staffquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(two)
+
+#Teacher & Staff Survey Q3 - School Leadership
+staffquestion3 <- subsetnewsurveydataSTAFF[1:6,c(1,4)]
+question3 <- staffquestion3$SCHOOLS
+staffquestion3percentage <- staffquestion3$`Question 3`
+staffquestion3percentage <- as.numeric(staffquestion3percentage)
+staffquestion3percentage <- staffquestion3percentage*100
+three <- ggplot(staffquestion3,aes(x=question3,y=staffquestion3percentage,fill=question3)) +geom_col()+labs(title="School Leadership",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion3percentage, y = staffquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(three)
+
+#Teacher & Staff Survey Q4 - Managing Student Behavior
+staffquestion4 <- subsetnewsurveydataSTAFF[1:6,c(1,5)]
+question4 <- staffquestion4$SCHOOLS
+staffquestion4percentage <- staffquestion4$`Question 4`
+staffquestion4percentage <- as.numeric(staffquestion4percentage)
+staffquestion4percentage <- staffquestion4percentage*100
+four <- ggplot(staffquestion4,aes(x=question4,y=staffquestion4percentage,fill=question4)) +geom_col()+labs(title="Managing Student Behavior",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion4percentage, y = staffquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(four)
+
+#Teacher & Staff Survey Q5 - School Parent Communication
+staffquestion5 <- subsetnewsurveydataSTAFF[1:6,c(1,6)]
+question5 <- staffquestion5$SCHOOLS
+staffquestion5percentage <- staffquestion5$`Question 5`
+staffquestion5percentage <- as.numeric(staffquestion5percentage)
+staffquestion5percentage <- staffquestion5percentage*100
+five <- ggplot(staffquestion5,aes(x=question5,y=staffquestion5percentage,fill=question5)) +geom_col()+labs(title="School Parent Communication",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion5percentage, y = staffquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(five)
+
+#Teacher & Staff Survey Q6 - Workplace Environment
+staffquestion6 <- subsetnewsurveydataSTAFF[1:6,c(1,7)]
+question6 <- staffquestion6$SCHOOLS
+staffquestion6percentage <- staffquestion6$`Question 6`
+staffquestion6percentage <- as.numeric(staffquestion6percentage)
+staffquestion6percentage <- staffquestion6percentage*100
+six <- ggplot(staffquestion6,aes(x=question6,y=staffquestion6percentage,fill=question6)) +geom_col()+labs(title="Workplace Environment",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion6percentage, y = staffquestion6percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(six)
+
+#Teacher & Staff Survey Q7 - Instructional Practices 
+staffquestion7 <- subsetnewsurveydataSTAFF[1:6,c(1,8)]
+question7 <- staffquestion7$SCHOOLS
+staffquestion7percentage <- staffquestion7$`Question 7`
+staffquestion7percentage <- as.numeric(staffquestion7percentage)
+staffquestion7percentage <- staffquestion7percentage*100
+seven <- ggplot(staffquestion7,aes(x=question7,y=staffquestion7percentage,fill=question7)) +geom_col()+labs(title="Instructional Practices",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion7percentage, y = staffquestion7percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(seven)
+
+#--------------Parent Climate Surveys--------------------------------
+newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
+subsetnewsurveydataPARENT <- newsurveydata[19:24,c(1,2:5)]
+
+#Parent Survey Q1 - Academic Support 
+parentquestion1 <- subsetnewsurveydataPARENT[1:6,1:2]
+question8 <- parentquestion1$SCHOOLS
+parentquestion1percentage <- parentquestion1$`Question 1`
+parentquestion1percentage <- as.numeric(parentquestion1percentage)
+parentquestion1percentage <- parentquestion1percentage*100
+eight <- ggplot(parentquestion1,aes(x=question8,y=parentquestion1percentage,fill=question8)) +geom_col()+labs(title="Academic Support",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion1percentage, y = parentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(eight)
+
+#Parent Survey Q2 - Communications
+parentquestion2 <- subsetnewsurveydataPARENT[1:6,c(1,3)]
+question9 <- parentquestion2$SCHOOLS
+parentquestion2percentage <- parentquestion2$`Question 2`
+parentquestion2percentage <- as.numeric(parentquestion2percentage)
+parentquestion2percentage <- parentquestion2percentage*100
+nine <- ggplot(parentquestion2,aes(x=question9,y=parentquestion2percentage,fill=question9)) +geom_col()+labs(title="Communications",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion2percentage, y = parentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(nine)
+
+#Parent Survey Q3 - Relationships
+parentquestion3 <- subsetnewsurveydataPARENT[1:6,c(1,4)]
+question10 <- parentquestion3$SCHOOLS
+parentquestion3percentage <- parentquestion3$`Question 3`
+parentquestion3percentage <- as.numeric(parentquestion3percentage)
+parentquestion3percentage <- parentquestion3percentage*100
+ten <- ggplot(parentquestion3,aes(x=question10,y=parentquestion3percentage,fill=question10)) +geom_col()+labs(title="Relationships",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion3percentage, y = parentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(ten)
+
+#Parent Survey Q4 - Instructions
+parentquestion4 <- subsetnewsurveydataPARENT[1:6,c(1,5)]
+question11 <- parentquestion4$SCHOOLS
+parentquestion4percentage <- parentquestion4$`Question 4`
+parentquestion4percentage <- as.numeric(parentquestion4percentage)
+parentquestion4percentage <- parentquestion4percentage*100
+eleven <- ggplot(parentquestion4,aes(x=question11,y=parentquestion4percentage,fill=question11)) +geom_col()+labs(title="Instructions",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion4percentage, y = parentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(eleven)
+
+#--------------Student Climate Surveys-------------------------------
+newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
+subsetnewsurveydataSTUDENT <- newsurveydata[11:16,c(1,2:6)]
+
+#Student Survey Q1 - Student Engagement
+studentquestion1 <- subsetnewsurveydataSTUDENT[1:6,1:2]
+question12 <- studentquestion1$SCHOOLS
+studentquestion1percentage <- studentquestion1$`Question 1`
+studentquestion1percentage <- as.numeric(studentquestion1percentage)
+studentquestion1percentage <- studentquestion1percentage*100
+twelve <- ggplot(studentquestion1,aes(x=question12,y=studentquestion1percentage,fill=question12)) +geom_col()+labs(title="Student Engagement",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion1percentage, y = studentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(twelve)
+
+#Student Survey Q2 - Teacher Relationship
+studentquestion2 <- subsetnewsurveydataSTUDENT[1:6,c(1,3)]
+question13 <- studentquestion2$SCHOOLS
+studentquestion2percentage <- studentquestion2$`Question 2`
+studentquestion2percentage <- as.numeric(studentquestion2percentage)
+studentquestion2percentage <- studentquestion2percentage*100
+thirteen <- ggplot(studentquestion2,aes(x=question13,y=studentquestion2percentage,fill=question13)) +geom_col()+labs(title="Teacher Relationship",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion2percentage, y = studentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(thirteen)
+
+#Student Survey Q3 - Social-Emotional Wellbeing
+studentquestion3 <- subsetnewsurveydataSTUDENT[1:6,c(1,4)]
+question14 <- studentquestion3$SCHOOLS
+studentquestion3percentage <- studentquestion3$`Question 3`
+studentquestion3percentage <- as.numeric(studentquestion3percentage)
+studentquestion3percentage <- studentquestion3percentage*100
+fourteen <- ggplot(studentquestion3,aes(x=question14,y=studentquestion3percentage,fill=question14)) +geom_col()+labs(title="Social-Emotional Wellbeing",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion3percentage, y = studentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(fourteen)
+
+#Student Survey Q4 - Student Behavior
+studentquestion4 <- subsetnewsurveydataSTUDENT[1:6,c(1,5)]
+question15 <- studentquestion4$SCHOOLS
+studentquestion4percentage <- studentquestion4$`Question 4`
+studentquestion4percentage <- as.numeric(studentquestion4percentage)
+studentquestion4percentage <- studentquestion4percentage*100
+fifteen <- ggplot(studentquestion4,aes(x=question15,y=studentquestion4percentage,fill=question15)) +geom_col()+labs(title="Student Behavior",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion4percentage, y = studentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(fifteen)
+
+#Student Survey Q5 - Bullying
+studentquestion5 <- subsetnewsurveydataSTUDENT[1:6,c(1,6)]
+question16 <- studentquestion5$SCHOOLS
+studentquestion5percentage <- studentquestion5$`Question 5`
+studentquestion5percentage <- as.numeric(studentquestion5percentage)
+studentquestion5percentage <- studentquestion5percentage*100
+sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16)) +geom_col()+labs(title="Bullying",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(sixteen)
+
 # user -------------------------------------------------------------
 ui <- navbarPage(title = "DSPG",
                  selected = "overview",
@@ -924,7 +1104,6 @@ The Community schools are centers for neighborhood enrichment, uniting families,
 Another important determinant that might impact someone’s availability of opportunities is their race or ethnicity. So, our logical next step was to look at the ethnicity/race distribution of the people of Sterling. Collecting the Race and Ethnicity demographic proved to be a little challenging at first. While the team was observing the data, we kept noticing that the number of individuals in each race population kept exceeding the total population of Sterling. For example, when we would add up all of the white, hispanic, asian, Hawaiian, and  African American population’s, the total number would exceed 30,271, the population of Sterling, VA. We later learned that this is because the American Community Survey does not recognize hispanic as a race. To the American Community Survey, Hispanic is an ethnicity so People can identify as white or asian and still be of hispanic decent, or they could select “other” as there is a separate category for them to mark hispanic. Knowing that disclaimer, we had to create a separate visualization for the hispanic population so we could best represent them. As you can see, majority of the Sterling population is white. When you look at the ethnicity visualization, almost half of the sterling CDP population identifies as being hispanic or latino.
 ", style = "padding-top:15px;font-size: 14px;"),
                                           p("Now that we looked at the ethnic groups, we wanted to look at the educational attainment levels. The data was collected from the individuals who are ages 25 and over. It seems that a large number of the population are educated with that of a bachelors agree or higher, which is fitting for the county’s high median income. 
-
 so a reasonable population has achieved high education - how much is Sterling making? Thus, we looked at family income levels. This data was collected looking at family households in the last 12 months of the ACS collected data (2020). It has also been adjusted for inflation. Interestingly enough, the largest income bracket lies within the range of $100,000 to $149,999 which is represented by the dark purple area however we do acknowledge that this may not apply our families of interest.
 ", style = "padding-top:15px;font-size: 14px;"),
                                           p("So we wondered if the high-income levels also affect the housing market so this can help us to understand housing needs and availability of the children’s families. Looking at this visualization, we see that this area has a high property value with a large percentage of properties being worth $300,000 to $499,999, shown by the blue part of the circle. This is important to take into consideration considering our targeted title1 area. Once we looked at the high property values, we were intrigued to find out how many occupants own their homes. As expected, majority housing residents are home owners, while a little over a quarter housing residents are renters. This could be because of families high incomes.", style = "padding-top:15px;font-size: 14px;"),  
@@ -941,21 +1120,22 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                  navbarMenu("Community Schools",
                             tabPanel("Demographics", 
                                      fluidRow(style = "margin: 2px;",
-                                              h1(strong("Demographics of Community Schools"), align = "center"),
                                               
-                                              #column(4, 
-                                              #      h4(strong("Education")),
-                                              #     p("These are demographics"),
-                                              #  ) ,
-                                              column(10, align ="center",
+                                              h1(strong("Demographics of Community Schools"), align = "center"),
+                                              column(6, 
+                                                     #column(4, 
+                                                     #      h4(strong("Education")),
+                                                     #     p("These are demographics"),
+                                                     #  ) ,
+                                                     
                                                      h4(strong("Community Schools")),
                                                      selectInput("schooldrop", "Select Variable:", width = "60%", choices = c(
                                                        "Gender" = "cgender",
                                                        "Race/Ethnicity" ="raceehtn", 
                                                        "Hispanic Population" = "chispanic",
-                                                       "No. of teacher/Staff" = "cteacher",
+                                                       "Educators" = "cteacher",
                                                        "Enrollment" = "cenrol", 
-                                                       "Absences By Quarter" = "attend", 
+                                                       "Absences" = "attend", 
                                                        "Chronic Absenteeism" = "chronic"
                                                      ),
                                                      ), 
@@ -978,14 +1158,12 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                                               #h1(strong("Analysis"), align = "center"),
                                               #p("", style = "padding-top:15px;font-size: 35px;"), 
                                               
-                                              column(12,
+                                              column(6,
                                                      h2(strong("Analysis")), align = "justify",
                                                      p("After understanding the demographics of the areas that feed into the community schools, next we began to look at the demographics of our specific populations, the 6 schools. For this, we used data from the Virginia Department of Education as well as the Loudoun County Public Schools dashboard and staff directory.", style = "padding-top:15px;font-size: 14px;"),
                                                      p("To further understand our population, we wanted to compare the race and ethnicity demographics we visualized from the Sterling CDP and our 6 community schools.   In this graph, we visualized data from all 6 schools together and found that overall, Hispanic students, represented by the light purple bar, make up the greatest percentage of students which differs from the general make-up of the Sterling CDP where White people made up the majority of residents. After seeing this, we wanted to look at the breakdown of the Hispanic population within the greater Sterling area.   Using data from the American Community Survey of Greater Sterling between the years 2016 to 2020, we found that the area where Rolling Ridge is located, represented by the light yellow area of the map, has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary, the area of the map shaded mustard yellow,  and Forest Grove Elementary, the dark orange, lower area of the map.   This information will help us to identify possible opportunities within the schools and neighborhoods specifically surrounding language services.", style = "padding-top:15px;font-size: 14px;"),
                                                      p("Once we felt we understood the demographics of those attending the schools, we switched our focus to the data within the schools themselves. Beginning with the number of teachers and staff employed at each school, we used data from the 2022 school directory, which revealed that at most of the schools, there are more teachers than staff except for Sterling Elementary, which has a larger amount of staff than teachers which may suggest possible possible opportunities in service.    Also notable was the lower total number of staff and teachers employed at Sully Elementary, seen in the last bar on the graph, which led us to visualize the total enrollment for each of the schools to better understand these differences.
-
  
-
 Using data from the Virginia Department of Education’s Fall Membership Reports for the years 2016 to 2020,   we found that Guilford, seen in the bottom left graph,   Sugarland, the top right graph,   and Rolling Ridge, the bottom right graph,  all maintained a total enrollment of between 550 and 600 students with only slight variations between years. For Forest Grove, the top left graph,   enrollment remained steady between 2016 and 2020 hovering right at 575 students.   On the other hand, Sterling Elementary, the top right graph,   had an enrollment of 450 to 500 students with a slight decline from 2016 to 2020   and Sully Elementary, has only between 400 to 475 students enrolled.   Since the implementation of the Community School Initiative, there has been an increase in enrollment at Sully and Guilford,   while we are not saying that this program is the cause of this increase, it was noticed and may be worth looking into further. Additionally, the differences in enrollment between schools may suggest possible opportunities to look into surrounding youth engagement resources.
 ", style = "padding-top:15px;font-size: 14px;"),
                                                      p("To further breakdown the enrollment statistics, we used the LCPS Dashboard data to visualize the student’s absences by quarter at each school during the 2021 to 2022 school year.   While Rolling Ridge, the green line,   Sugarland, the dark blue line,   and Guilford, the yellow line,   all saw spikes in absences during quarter two,   it was Sully, the pink line,   Sterling, the light blue line,   and Forest Grove, the orange line,   that had a steady increase in absences over the 4 quarters. However it is important to note that this data came from the school year during the COVID-19 pandemic.
@@ -1000,13 +1178,168 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                             tabPanel("Climate Survey Reports",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
-                                              column(12, align = "center",h4(strong("Climate Survey")),
-                                                     p("Parent, Student and Staff"),
-                                                     br("")
-                                                     
-                                                     
-                                                     
-                                              )),
+                                              
+                                              tabsetPanel(
+                                                tabPanel("Parent Climate Survey",
+                                                         fluidRow(style = "margin: 2px;",
+                                                                  p("", style = "padding-top:10px;"),
+                                                                  column(6, align = "center",h4(strong("Parent Survey")),
+                                                                         p("Parent Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                         selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
+                                                                           "Parent Survey",
+                                                                           "Student Survey",
+                                                                           "Teacher/Staff Survey"
+                                                                         ),
+                                                                         ),
+                                                                         br("")
+                                                                         
+                                                                         
+                                                                  ),
+                                                                  column(6, align = "center",h4(strong("Parent Survey")),
+                                                                         p("Parent Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                         selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
+                                                                           "Parent Survey",
+                                                                           "Student Survey",
+                                                                           "Teacher/Staff Survey"
+                                                                         ),
+                                                                         ),
+                                                                         br("")
+                                                                         
+                                                                         
+                                                                  ),
+                                                                  column(6, align = "center",h4(strong("Parent Survey")),
+                                                                         p("Parent Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                         selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
+                                                                           "Parent Survey",
+                                                                           "Student Survey",
+                                                                           "Teacher/Staff Survey"
+                                                                         ),
+                                                                         ),
+                                                                         br("")
+                                                                         
+                                                                         
+                                                                  ),
+                                                                  column(6, align = "center",h4(strong("Parent Survey")),
+                                                                         p("Parent Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                         selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
+                                                                           "Parent Survey",
+                                                                           "Student Survey",
+                                                                           "Teacher/Staff Survey"
+                                                                         ),
+                                                                         ),
+                                                                         br("")
+                                                                         
+                                                                         
+                                                                  ),
+                                                         )
+                                                ),
+                                                tabPanel("Student Climate Survey",
+                                                         p("", style = "padding-top:10px;"),
+                                                         column(6, align = "center",h4(strong("Student Survey")),
+                                                                p("Student Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
+                                                                  "Parent Survey",
+                                                                  "Student Survey",
+                                                                  "Teacher/Staff Survey"
+                                                                ),
+                                                                ),
+                                                                br("")
+                                                                
+                                                                
+                                                         ),
+                                                         column(6, align = "center",h4(strong("Student Survey")),
+                                                                p("Student Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
+                                                                  "Parent Survey",
+                                                                  "Student Survey",
+                                                                  "Teacher/Staff Survey"
+                                                                ),
+                                                                ),
+                                                                br("")
+                                                                
+                                                                
+                                                         ),
+                                                         column(6, align = "center",h4(strong("Student Survey")),
+                                                                p("Student Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
+                                                                  "Parent Survey",
+                                                                  "Student Survey",
+                                                                  "Teacher/Staff Survey"
+                                                                ),
+                                                                ),
+                                                                br("")
+                                                                
+                                                                
+                                                         ),
+                                                         column(6, align = "center",h4(strong("Student Survey")),
+                                                                p("Student Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
+                                                                  "Parent Survey",
+                                                                  "Student Survey",
+                                                                  "Teacher/Staff Survey"
+                                                                ),
+                                                                ),
+                                                                br("")
+                                                                
+                                                                
+                                                         ),
+                                                ), 
+                                                
+                                                tabPanel("Teacher/Staff Climate Survey",
+                                                         p("", style = "padding-top:10px;"),
+                                                         column(6, align = "center",h4(strong("Teacher/Staff Survey")),
+                                                                p("Teacher/Staff Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
+                                                                  "Parent Survey",
+                                                                  "Student Survey",
+                                                                  "Teacher/Staff Survey"
+                                                                ),
+                                                                ),
+                                                                br("")
+                                                                
+                                                                
+                                                                
+                                                         ),
+                                                         column(6, align = "center",h4(strong("Teacher/Staff Survey")),
+                                                                p("Teacher/Staff Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
+                                                                  "Parent Survey",
+                                                                  "Student Survey",
+                                                                  "Teacher/Staff Survey"
+                                                                ),
+                                                                ),
+                                                                br("")
+                                                                
+                                                                
+                                                                
+                                                         ),
+                                                         column(6, align = "center",h4(strong("Teacher/Staff Survey")),
+                                                                p("Teacher/Staff Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
+                                                                  "Parent Survey",
+                                                                  "Student Survey",
+                                                                  "Teacher/Staff Survey"
+                                                                ),
+                                                                ),
+                                                                br("")
+                                                                
+                                                                
+                                                                
+                                                         ),
+                                                         column(6, align = "center",h4(strong("Teacher/Staff Survey")),
+                                                                p("Teacher/Staff Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                selectInput("surveydrop", "Select Survey Question", width = "60%", choices = c(
+                                                                  "Parent Survey",
+                                                                  "Student Survey",
+                                                                  "Teacher/Staff Survey"
+                                                                ),
+                                                                ),
+                                                                br("")
+                                                                
+                                                                
+                                                                
+                                                         )))
+                                     ),
                                      
                             ),
                             
@@ -1302,71 +1635,6 @@ server <- function(input, output, session) {
   })
   
   
-  output$ageplot1 <- renderPlot({
-    if (Var() == "age") {
-      
-      age
-    }
-    else if (Var() == "faminc") {
-      income
-    }
-    else if (Var() == "health") {
-      
-      healthin 
-    }
-    
-  })
-  
-  output$ageplot2 <- renderPlotly({
-    if (Var() == "pov") {
-      
-      pov
-    }
-    
-    else if (Var() == "gender") {
-      gender
-    }
-    else if (Var() == "race") {
-      
-      race
-    }
-    
-    else if (Var() == "property") {
-      
-      property
-    }
-    
-    else if (Var() == "housing") {
-      
-      housing
-    }
-    
-    else if (Var() == "commutertime") {
-      
-      commutertime
-    }
-    else if (Var() == "commutermode") {
-      
-      commutermode
-    }
-    else if (Var() == "workoccu"){
-      occuplot
-    }
-    
-    else if (Var() == "health"){
-      healthin
-    }
-    else if (Var() == "education"){
-      education
-    }
-    else if (Var() == "employment"){
-      employment
-    }
-    else if (Var() == "edu"){
-      education
-    }
-  })
-  
   
   #School Demos
   Var2 <- reactive({
@@ -1422,3 +1690,5 @@ server <- function(input, output, session) {
   
 }
 shinyApp(ui = ui, server = server)
+
+

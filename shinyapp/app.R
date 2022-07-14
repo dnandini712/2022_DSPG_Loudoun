@@ -1119,7 +1119,7 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                  
                  navbarMenu("Community Schools",
                             tabPanel("Demographics", 
-                                     fluidRow(style = "margin: 2px;",
+                                     fluidRow(style = "margin: 6px;",
                                               
                                               h1(strong("Demographics of Community Schools"), align = "center"),
                                               column(6, 
@@ -1129,7 +1129,7 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                                               #  ) ,
                                               
                                                      h4(strong("Community Schools")),
-                                                     selectInput("schooldrop", "Select Variable:", width = "60%", choices = c(
+                                                     selectInput("schooldrop", "Select Variable:", width = "100%", choices = c(
                                                        "Gender" = "cgender",
                                                        "Race/Ethnicity" ="raceehtn", 
                                                        "Hispanic Population" = "chispanic",
@@ -1139,7 +1139,7 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                                                        "Chronic Absenteeism" = "chronic"
                                                      ),
                                                      ), 
-                                                     withSpinner(plotlyOutput("ocuplot1", height = "500px", width = "60%")),
+                                                     withSpinner(plotlyOutput("ocuplot1", height = "500px", width = "100%")),
                                                      withSpinner(leafletOutput("ocuplot2", height = "500px", width = "60%")),
                                               ),
                                               
