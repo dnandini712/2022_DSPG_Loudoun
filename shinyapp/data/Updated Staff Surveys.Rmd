@@ -1,0 +1,91 @@
+---
+title: "surveys again"
+author: "NDP"
+date: '2022-07-11'
+output: html_document
+---
+```{r}
+library(ggplot2)
+library(dplyr)
+library(plotly)
+library(readxl)
+newsurveydata <- read_excel(paste0(getwd(), "/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
+subsetnewsurveydataSTAFF <- newsurveydata[3:8,c(1,2:8)]
+```
+
+#Teacher & Staff Survey Q1 - Staff Collegiality
+```{r}
+staffquestion1 <- subsetnewsurveydataSTAFF[1:6,1:2]
+question1 <- staffquestion1$SCHOOLS
+staffquestion1percentage <- staffquestion1$`Question 1`
+staffquestion1percentage <- as.numeric(staffquestion1percentage)
+staffquestion1percentage <- staffquestion1percentage*100
+one <- ggplot(staffquestion1,aes(x=question1,y=staffquestion1percentage,fill=question1)) +geom_col()+labs(title="Staff Collegiality",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion1percentage, y = staffquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(one)
+```
+
+#Teacher & Staff Survey Q2 - Academic Environment
+```{r}
+staffquestion2 <- subsetnewsurveydataSTAFF[1:6,c(1,3)]
+question2 <- staffquestion2$SCHOOLS
+staffquestion2percentage <- staffquestion2$`Question 2`
+staffquestion2percentage <- as.numeric(staffquestion2percentage)
+staffquestion2percentage <- staffquestion2percentage*100
+two <- ggplot(staffquestion2,aes(x=question2,y=staffquestion2percentage,fill=question2)) +geom_col()+labs(title="Academic Environment",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion2percentage, y = staffquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(two)
+```
+
+#Teacher & Staff Survey Q3 - School Leadership
+```{r}
+staffquestion3 <- subsetnewsurveydataSTAFF[1:6,c(1,4)]
+question3 <- staffquestion3$SCHOOLS
+staffquestion3percentage <- staffquestion3$`Question 3`
+staffquestion3percentage <- as.numeric(staffquestion3percentage)
+staffquestion3percentage <- staffquestion3percentage*100
+three <- ggplot(staffquestion3,aes(x=question3,y=staffquestion3percentage,fill=question3)) +geom_col()+labs(title="School Leadership",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion3percentage, y = staffquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(three)
+```
+
+#Teacher & Staff Survey Q4 - Managing Student Behavior
+```{r}
+staffquestion4 <- subsetnewsurveydataSTAFF[1:6,c(1,5)]
+question4 <- staffquestion4$SCHOOLS
+staffquestion4percentage <- staffquestion4$`Question 4`
+staffquestion4percentage <- as.numeric(staffquestion4percentage)
+staffquestion4percentage <- staffquestion4percentage*100
+four <- ggplot(staffquestion4,aes(x=question4,y=staffquestion4percentage,fill=question4)) +geom_col()+labs(title="Managing Student Behavior",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion4percentage, y = staffquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(four)
+```
+
+#Teacher & Staff Survey Q5 - School Parent Communication
+```{r}
+staffquestion5 <- subsetnewsurveydataSTAFF[1:6,c(1,6)]
+question5 <- staffquestion5$SCHOOLS
+staffquestion5percentage <- staffquestion5$`Question 5`
+staffquestion5percentage <- as.numeric(staffquestion5percentage)
+staffquestion5percentage <- staffquestion5percentage*100
+five <- ggplot(staffquestion5,aes(x=question5,y=staffquestion5percentage,fill=question5)) +geom_col()+labs(title="School Parent Communication",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion5percentage, y = staffquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(five)
+```
+
+#Teacher & Staff Survey Q6 - Workplace Environment
+```{r}
+staffquestion6 <- subsetnewsurveydataSTAFF[1:6,c(1,7)]
+question6 <- staffquestion6$SCHOOLS
+staffquestion6percentage <- staffquestion6$`Question 6`
+staffquestion6percentage <- as.numeric(staffquestion6percentage)
+staffquestion6percentage <- staffquestion6percentage*100
+six <- ggplot(staffquestion6,aes(x=question6,y=staffquestion6percentage,fill=question6)) +geom_col()+labs(title="Workplace Environment",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion6percentage, y = staffquestion6percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(six)
+```
+
+#Teacher & Staff Survey Q7 - Instructional Practices 
+```{r}
+staffquestion7 <- subsetnewsurveydataSTAFF[1:6,c(1,8)]
+question7 <- staffquestion7$SCHOOLS
+staffquestion7percentage <- staffquestion7$`Question 7`
+staffquestion7percentage <- as.numeric(staffquestion7percentage)
+staffquestion7percentage <- staffquestion7percentage*100
+seven <- ggplot(staffquestion7,aes(x=question7,y=staffquestion7percentage,fill=question7)) +geom_col()+labs(title="Instructional Practices",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion7percentage, y = staffquestion7percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(seven)
+```

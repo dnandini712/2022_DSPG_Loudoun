@@ -1,0 +1,73 @@
+---
+title: "Com. Schools Race Demographics"
+author: "Amanda E. Ljuba"
+date: '2022-06-14'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+read_excel("racedems.xlsx")
+races <- read_excel("racedems.xlsx")
+race_subset <- races[(1:120),c(1,5,6,7)]
+```
+
+```{r}
+School <- race_subset$`School Name`
+race <- race_subset$Race
+total <- race_subset$`Full Time Count (All Grades)`
+raceehtn <- ggplot(race_subset,aes(x=race,y=total,fill=School))+ geom_col()+labs(title="Race/Ethnicity of Community Schools",subtitle="2016 to 2020 school years",x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
+        plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
+
+```
+Across all 6 community schools, the race/ethnicity of Hispanic significantly makes up the largest proportion of students with White and Asian students as the next largest groups. Notably, there was not enough students of both American Indian and Pacific Islander ethnicity to be represented in the data.
+
+
+
+```{r}
+library(plotly)
+race_subset %>% count("race","School","total")  %>% plot_ly(x =~race, y =~total,color=~race)%>%  add_bars()%>%  layout(barmode ="stack") %>% layout(xaxis = list(title = ''),
+         yaxis = list(title = 'Number of Students'),legend=list(title=list(text='')), title ='Race/Ethnicity Demographics of Community Schools 2016-2020 \n VDOE Fall Membership Report', add_annotations='VDOE Fall Membership Report 2016-2020')
+```
+
+
+
+
+x shift and y shift in annotation 
+
+
+```{r}
+School <- race_subset$`School Name`
+race <- race_subset$Race
+total <- race_subset$`Full Time Count (All Grades)`
+raceehtn <- ggplot(race_subset,aes(x=race,y=total,fill=School))+ geom_col()+labs(title="Race/Ethnicity of Community Schools",subtitle="2016 to 2020 school years",x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
+        plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
+```
+
+
+
+
+
+```{r}
+library(plotly)
+race_subset %>% count("race","School","total")  %>% plot_ly(x =~race, y =~total,color=~race)%>%  add_bars()%>%  layout(barmode ="stack") %>% layout(xaxis = list(title = ''),
+         yaxis = list(title = 'Number of Students'),legend=list(title=list(text='')))
+```
+
+
+
+
+
+
+
+      
+      
+ggplotly(raceehtn)
+```
+

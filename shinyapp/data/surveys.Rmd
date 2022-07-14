@@ -1,0 +1,80 @@
+---
+title: "Parent and Student Surveys"
+author: "Amanda E. Ljuba"
+date: '2022-06-29'
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(plotly)
+library(readxl)
+read_excel("school_survey.xlsx")
+pars <- read_excel("school_survey.xlsx",sheet="Parents")
+stu <- read_excel("school_survey.xlsx",sheet="Students")
+```
+
+Student Survey Q1
+```{r}
+subset_one <- stu[1:6,1:2]
+school1 <- subset_one$Variables
+per1 <- subset_one$`Q1: I feel like I belong at this school`
+per1 <- per1*100
+one <- ggplot(subset_one,aes(x=school1,y=per1,fill=school1)) +geom_col()+labs(title="I feel like I belong at this school",x="School",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = per1, y = per1), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(one)
+```
+91% of students at Forest Grove, Sugarland, and Sully agree that they feel like they belong at their school while at Guilford and Rolling Ridge, only 87% and 89% of students agree, respectively. At Sterling, only 82% of students agree that they feel like they belong at their school. 
+
+Student Survey Q2
+```{r}
+subset_two <- stu[1:6,c(1,3)]
+school2 <- subset_two$Variables
+per2 <- subset_two$`Q2: I learn about people who are different from me.`
+per2 <- per2*100
+two <- ggplot(subset_two,aes(x=school2,y=per2,fill=school2)) +geom_col()+labs(title="I learn about people who are different from me",x="School",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = per2, y = per2), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(two)
+```
+Only 81% and 82% of students at Guilford and Rolling Ridge agreed that they learn about people who are different from them at school while all other schools are between 89% and 93%.
+
+Parent Survey Q7
+```{r}
+subset_seven <- pars[1:6,c(1,8)]
+school7 <- subset_seven$School
+per7 <- subset_seven$`3g. My child has access to social-emotional support in this school.`
+per7 <- per7*100
+seven <- ggplot(subset_seven,aes(x=school7,y=per7,fill=school7)) +geom_col()+labs(title="My child has access to social-emotional support in this school",x="School",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = per7, y = per7), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(seven)
+```
+At all schools except Guilford and Sugarland, over 95% of parents agree that their student has access to social-emotional support compared to 94% and 93%, respectively.
+```{r}
+subset_eight <- pars[1:6,c(1,9)]
+school8 <- subset_eight$School
+per8 <- subset_eight$`3h. This school provides multiple opportunities for family engagement in school activities.`
+per8 <- per8*100
+eight <- ggplot(subset_eight,aes(x=school8,y=per8,fill=school8)) +geom_col()+labs(title="This school provides multiple opportunities \n for family engagement in school activities",x="School",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = per8, y = per8), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(eight)
+```
+90% of parents at Forest Grove and 89% of parents at Sugarland agree that there multiple opportunities for parent enaggement in school activities. All other school's parents agree at over 95%.
+```{r}
+subset_nine <- pars[1:6,c(1,10)]
+school9 <- subset_nine$School
+per9 <- subset_nine$`4a. This school provides a safe and orderly place for students to learn.`
+per9 <- per9*100
+nine <- ggplot(subset_nine,aes(x=school9,y=per9,fill=school9)) +geom_col()+labs(title="This school provides a safe and orderly place for students to learn",x="School",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = per9, y = per9), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(nine)
+```
+
+Parents at all schools agree over 92% that this school provides a safe and orderly place for students to learn.
+```{r}
+subset_ten <- pars[1:6,c(1,11)]
+school10 <- subset_ten$School
+per10 <- subset_ten$`4d. My child is being taught to respect people of different cultural, ethnic, and racial backgrounds`
+per10 <- per10*100
+ten <- ggplot(subset_ten,aes(x=school10,y=per10,fill=school10)) +geom_col()+labs(title="My child is being taught to respect people of different \n cultural, ethnic, and racial backgrounds",x="School",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = per10, y = per10), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(ten)
+```
+Parents at all schools except Sugarland agree over 95% that their child is being taught to respect people of different cultural, ethnic, and racial backgrounds. At Sugarland, only 91% of parents agree.
