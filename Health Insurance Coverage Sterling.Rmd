@@ -35,19 +35,43 @@ health_name <- subset_sterling$`EMPLOYMENT STATUS`
 ```
 
 ```{r}
-ggplot(subset_sterling, aes(emp_name, health_estimate, fill = emp_name))+geom_col()#+ #theme(axis.text.x = element_text(angle=30))
+ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`))+geom_col()+theme(axis.text.x = element_text(angle=30))
 ```
 
 ```{r}
 
-ggplot(subset_sterling,aes(emp_name, health_estimate, fill=emp_name)) + geom_col() +
-  theme(axis.text.x = element_text(angle=90)) + coord_polar() + scale_y_log10()
+ ggplot(subset_sterling,aes(health_name, health_estimate, fill=health_name)) + geom_col() +
+   theme(axis.text.x = element_text(angle=90)) + coord_polar() + scale_y_log10()
 ```
 bar graph for health insurance 
 ```{r}
 subset_sterling <- sterling[c(103:105),]
-health <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`,y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020", titlel = "Distribution of Health Insurance") + guides(fill = guide_legend(title = "Health Insurance Type"))+ theme(axis.text.y = element_text(angle=0), axis.ticks.y= element_blank())#+ coord_flip()
-ggplotly(health)
+subset_sterling$...4 <- as.numeric(gsub("%", "", subset_sterling$...4) )
+subset_sterling$`EMPLOYMENT STATUS` <- reorder(subset_sterling$`EMPLOYMENT STATUS`, subset_sterling$...4)
+health <- ggplot(subset_sterling, aes(x =`EMPLOYMENT STATUS`,y = (subset_sterling$...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5, aes(text = paste0(...4, "%"))) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020", titlel = "Distribution of Health Insurance") + guides(fill = guide_legend(title = ""))+ theme(axis.text.y = element_text(angle=0), axis.ticks.y= element_blank())+ coord_flip()#
+#+ scale_y_continuous(limits = c(0,100))
+
+#ggplot(health,aes(x=Position))+geom_bar(binwidth=1)
+#health <- factor(subset_sterling$`EMPLOYMENT STATUS`, levels = c("No coverage", "Public", "Private"))
+
+ggplotly(health, tooltip = c("text"))
+```
+
+
+
+```{r}
+# library(plotly)
+# 
+# fig <- plot_ly(
+#   x = c("No coverage", "Public", "Private"),
+#   y = c(16.5, 23.1, 68.2), 
+#   name = "",
+#   sort = TRUE,
+#   type = "funnelarea",
+#   textinfor = "percent"
+# )
+# 
+# fig
 ```
 
 The bar graph shows that the greatest percentage of population in the sterling area have private insurance. There is only a small percentage of 16.5% that do not have any health insurance coverage. Private insurance is more common in the population compared to public health insurance.
