@@ -10,7 +10,7 @@ library(dplyr)
 library(plotly)
 library(readxl)
 newsurveydata <- read_excel(paste0(getwd(), "/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
-subsetnewsurveydataSTAFF <- newsurveydata[3:8,c(1,2:8)]
+subsetnewsurveydataSTAFF <- newsurveydata[3:8,c(1,2:5,7:8)]
 ```
 
 #Teacher & Staff Survey Q1 - Staff Collegiality
@@ -20,7 +20,7 @@ question1 <- staffquestion1$SCHOOLS
 staffquestion1percentage <- staffquestion1$`Question 1`
 staffquestion1percentage <- as.numeric(staffquestion1percentage)
 staffquestion1percentage <- staffquestion1percentage*100
-one <- ggplot(staffquestion1,aes(x=question1,y=staffquestion1percentage,fill=question1)) +geom_col()+labs(title="Staff Collegiality",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion1percentage, y = staffquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+one <- ggplot(staffquestion1,aes(x=question1,y=staffquestion1percentage,fill=question1, width = 0.70)) +geom_col()+labs(title="Staff Collegiality",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion1percentage, y = staffquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
 ggplotly(one)
 ```
 

@@ -226,7 +226,7 @@ valuestotalCT = c(989,2968,2787,2177,792,2160,1154,1649,1813.9)
 commutertime <- plot_ly(type='funnelarea', labels=labelsCT, values=valuesCT, sort = FALSE, direction = "",
                         textinfo='percent',
                         hoverinfo = 'text', text = ~paste('Total Number of Commuters:', valuestotalCT),
-                        insidetextorientation='radial') %>% layout(title ='Commuter Time to Work', showlegend=TRUE, legend=list(title=list(text='Select Value')), legend=list(x=1, y=0.5))
+                        insidetextorientation='radial') %>% layout(title ='Commuter Time to Work', showlegend=TRUE, legend=list(title=list(text='')), legend=list(x=1, y=0.5))
 
 #-----------------Commuter mode--------------------------
 my_colors <- c("#CA001B", "#1D28B0", "#D71DA4", "#00A3AD", "#FF8200", "#753BBD", "#00B5E2", "#008578", "#EB6FBD", "#FE5000", "#6CC24A", "#D9D9D6", "#AD0C27", "#950078")
@@ -670,7 +670,7 @@ clean1 <- Clean_String(text1)
 
 docs1 <- Corpus(VectorSource(clean1))
 
-docs1 <- tm_map(docs1, removeWords, c("to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "continue"))
+docs1 <- tm_map(docs1, removeWords, c("to", "challenge", "concern", "level", "aged", "created", "elementary", "basic", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "continue"))
 
 
 dtm1 <- TermDocumentMatrix(docs1) 
@@ -701,7 +701,7 @@ clean2 <- Clean_String(text2)
 
 docs2 <- Corpus(VectorSource(clean2))
 
-docs2 <- tm_map(docs2, removeWords, c("to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "hot"))
+docs2 <- tm_map(docs2, removeWords, c("day", "now", "help", "pep", "people", "arose", "to", "risen", "offer", "offered", "warm", "spots", "their", "every", "they", "tell", "that", "who", "are", "all", "many", "gaggle", "here", "always", "among", "mtss", "umht", "how", "feel", "adept", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "hot"))
 
 
 dtm2 <- TermDocumentMatrix(docs2) 
@@ -725,7 +725,7 @@ clean3 <- Clean_String(text3)
 
 docs3 <- Corpus(VectorSource(clean3))
 
-docs3 <- tm_map(docs3, removeWords, c("to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "umht", "hot", "to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "their", "from", "always"))
+docs3 <- tm_map(docs3, removeWords, c("will", "covid", "areas", "listed", "input", "to", "per", "pre", "utilize", "most", "also", "more", "many", "ways", "local", "pep", "times", "ridge", "year", "needy", "people", "after", "person", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "umht", "hot", "to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "their", "from", "always"))
 
 
 dtm3 <- TermDocumentMatrix(docs3) 
@@ -781,7 +781,7 @@ var <- c("ageplot1","ageplot2")
 
 #--------------Teacher/Staff Climate Surveys------------------------
 newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
-subsetnewsurveydataSTAFF <- newsurveydata[3:8,c(1,2:8)]
+subsetnewsurveydataSTAFF <- newsurveydata[3:8,c(1,2:5,7:8)]
 
 #Teacher & Staff Survey Q1 - Staff Collegiality
 staffquestion1 <- subsetnewsurveydataSTAFF[1:6,1:2]
@@ -789,7 +789,7 @@ question1 <- staffquestion1$SCHOOLS
 staffquestion1percentage <- staffquestion1$`Question 1`
 staffquestion1percentage <- as.numeric(staffquestion1percentage)
 staffquestion1percentage <- staffquestion1percentage*100
-one <- ggplot(staffquestion1,aes(x=question1,y=staffquestion1percentage,fill=question1)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion1$SCHOOLS)))+labs(title="Staff Collegiality",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion1percentage, y = staffquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+one <- ggplot(staffquestion1,aes(x=question1,y=staffquestion1percentage,fill=question1, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion1$SCHOOLS)))+labs(title="Staff Collegiality",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion1percentage, y = staffquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer1 <- ggplotly(one, tooltip = c("text"))
 
 #Teacher & Staff Survey Q2 - Academic Environment
@@ -798,7 +798,7 @@ question2 <- staffquestion2$SCHOOLS
 staffquestion2percentage <- staffquestion2$`Question 2`
 staffquestion2percentage <- as.numeric(staffquestion2percentage)
 staffquestion2percentage <- staffquestion2percentage*100
-two <- ggplot(staffquestion2,aes(x=question2,y=staffquestion2percentage,fill=question2)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion2$SCHOOLS)))+labs(title="Academic Environment",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion2percentage, y = staffquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+two <- ggplot(staffquestion2,aes(x=question2,y=staffquestion2percentage,fill=question2, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion2$SCHOOLS)))+labs(title="Academic Environment",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion2percentage, y = staffquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer2 <- ggplotly(two, tooltip = c("text"))
 
 #Teacher & Staff Survey Q3 - School Leadership
@@ -807,7 +807,7 @@ question3 <- staffquestion3$SCHOOLS
 staffquestion3percentage <- staffquestion3$`Question 3`
 staffquestion3percentage <- as.numeric(staffquestion3percentage)
 staffquestion3percentage <- staffquestion3percentage*100
-three <- ggplot(staffquestion3,aes(x=question3,y=staffquestion3percentage,fill=question3)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion3$SCHOOLS)))+labs(title="School Leadership",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion3percentage, y = staffquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+three <- ggplot(staffquestion3,aes(x=question3,y=staffquestion3percentage,fill=question3, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion3$SCHOOLS)))+labs(title="School Leadership",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion3percentage, y = staffquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer3 <- ggplotly(three, tooltip = c("text"))
 
 #Teacher & Staff Survey Q4 - Managing Student Behavior
@@ -816,34 +816,25 @@ question4 <- staffquestion4$SCHOOLS
 staffquestion4percentage <- staffquestion4$`Question 4`
 staffquestion4percentage <- as.numeric(staffquestion4percentage)
 staffquestion4percentage <- staffquestion4percentage*100
-four <- ggplot(staffquestion4,aes(x=question4,y=staffquestion4percentage,fill=question4)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion4$SCHOOLS)))+labs(title="Managing Student Behavior",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion4percentage, y = staffquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+four <- ggplot(staffquestion4,aes(x=question4,y=staffquestion4percentage,fill=question4, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion4$SCHOOLS)))+labs(title="Managing Student Behavior",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion4percentage, y = staffquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer4 <- ggplotly(four, tooltip = c("text"))
 
-#Teacher & Staff Survey Q5 - School Parent Communication
-staffquestion5 <- subsetnewsurveydataSTAFF[1:6,c(1,6)]
-question5 <- staffquestion5$SCHOOLS
-staffquestion5percentage <- staffquestion5$`Question 5`
-staffquestion5percentage <- as.numeric(staffquestion5percentage)
-staffquestion5percentage <- staffquestion5percentage*100
-five <- ggplot(staffquestion5,aes(x=question5,y=staffquestion5percentage,fill=question5)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion5$SCHOOLS)))+labs(title="School Parent Communication",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion5percentage, y = staffquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
-teacherandstaffanswer5 <- ggplotly(five, tooltip = c("text"))
-
 #Teacher & Staff Survey Q6 - Workplace Environment
-staffquestion6 <- subsetnewsurveydataSTAFF[1:6,c(1,7)]
+staffquestion6 <- subsetnewsurveydataSTAFF[1:6,c(1,6)]
 question6 <- staffquestion6$SCHOOLS
 staffquestion6percentage <- staffquestion6$`Question 6`
 staffquestion6percentage <- as.numeric(staffquestion6percentage)
 staffquestion6percentage <- staffquestion6percentage*100
-six <- ggplot(staffquestion6,aes(x=question6,y=staffquestion6percentage,fill=question6)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion6$SCHOOLS)))+labs(title="Workplace Environment",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion6percentage, y = staffquestion6percentage), size = 3, position = position_stack(vjust = 1.02))
+six <- ggplot(staffquestion6,aes(x=question6,y=staffquestion6percentage,fill=question6, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion6$SCHOOLS)))+labs(title="Workplace Environment",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion6percentage, y = staffquestion6percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer6 <- ggplotly(six, tooltip = c("text"))
 
 #Teacher & Staff Survey Q7 - Instructional Practices 
-staffquestion7 <- subsetnewsurveydataSTAFF[1:6,c(1,8)]
+staffquestion7 <- subsetnewsurveydataSTAFF[1:6,c(1,7)]
 question7 <- staffquestion7$SCHOOLS
 staffquestion7percentage <- staffquestion7$`Question 7`
 staffquestion7percentage <- as.numeric(staffquestion7percentage)
 staffquestion7percentage <- staffquestion7percentage*100
-seven <- ggplot(staffquestion7,aes(x=question7,y=staffquestion7percentage,fill=question7)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion7$SCHOOLS)))+labs(title="Instructional Practices",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion7percentage, y = staffquestion7percentage), size = 3, position = position_stack(vjust = 1.02))
+seven <- ggplot(staffquestion7,aes(x=question7,y=staffquestion7percentage,fill=question7, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion7$SCHOOLS)))+labs(title="Instructional Environment",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion7percentage, y = staffquestion7percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer7 <- ggplotly(seven, tooltip = c("text"))
 
 #--------------Parent Climate Surveys--------------------------------
@@ -856,7 +847,7 @@ question8 <- parentquestion1$SCHOOLS
 parentquestion1percentage <- parentquestion1$`Question 1`
 parentquestion1percentage <- as.numeric(parentquestion1percentage)
 parentquestion1percentage <- parentquestion1percentage*100
-eight <- ggplot(parentquestion1,aes(x=question8,y=parentquestion1percentage,fill=question8)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion1$SCHOOLS)))+labs(title="Academic Support",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion1percentage, y = parentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+eight <- ggplot(parentquestion1,aes(x=question8,y=parentquestion1percentage,fill=question8, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion1$SCHOOLS)))+labs(title="Academic Support",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion1percentage, y = parentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
 parentanswer1 <- ggplotly(eight, tooltip = c("text"))
 
 #Parent Survey Q2 - Communications
@@ -865,7 +856,7 @@ question9 <- parentquestion2$SCHOOLS
 parentquestion2percentage <- parentquestion2$`Question 2`
 parentquestion2percentage <- as.numeric(parentquestion2percentage)
 parentquestion2percentage <- parentquestion2percentage*100
-nine <- ggplot(parentquestion2,aes(x=question9,y=parentquestion2percentage,fill=question9)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion2$SCHOOLS)))+labs(title="Communications",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion2percentage, y = parentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+nine <- ggplot(parentquestion2,aes(x=question9,y=parentquestion2percentage,fill=question9, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion2$SCHOOLS)))+labs(title="Communications",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion2percentage, y = parentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
 parentanswer2 <- ggplotly(nine, tooltip = c("text"))
 
 #Parent Survey Q3 - Relationships
@@ -874,7 +865,7 @@ question10 <- parentquestion3$SCHOOLS
 parentquestion3percentage <- parentquestion3$`Question 3`
 parentquestion3percentage <- as.numeric(parentquestion3percentage)
 parentquestion3percentage <- parentquestion3percentage*100
-ten <- ggplot(parentquestion3,aes(x=question10,y=parentquestion3percentage,fill=question10)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion3$SCHOOLS)))+labs(title="Relationships",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion3percentage, y = parentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+ten <- ggplot(parentquestion3,aes(x=question10,y=parentquestion3percentage,fill=question10, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion3$SCHOOLS)))+labs(title="Relationships",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion3percentage, y = parentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
 parentanswer3 <- ggplotly(ten, tooltip = c("text"))
 
 #Parent Survey Q4 - Instructions
@@ -883,12 +874,12 @@ question11 <- parentquestion4$SCHOOLS
 parentquestion4percentage <- parentquestion4$`Question 4`
 parentquestion4percentage <- as.numeric(parentquestion4percentage)
 parentquestion4percentage <- parentquestion4percentage*100
-eleven <- ggplot(parentquestion4,aes(x=question11,y=parentquestion4percentage,fill=question11)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion4$SCHOOLS)))+labs(title="Instructions",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion4percentage, y = parentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+eleven <- ggplot(parentquestion4,aes(x=question11,y=parentquestion4percentage,fill=question11, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion4$SCHOOLS)))+labs(title="Instructions",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion4percentage, y = parentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
 parentanswer4 <- ggplotly(eleven, tooltip = c("text"))
 
 #--------------Student Climate Surveys-------------------------------
 newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
-subsetnewsurveydataSTUDENT <- newsurveydata[11:16,c(1,2:6)]
+subsetnewsurveydataSTUDENT <- newsurveydata[11:16,c(1,2:4,6)]
 
 #Student Survey Q1 - Student Engagement
 studentquestion1 <- subsetnewsurveydataSTUDENT[1:6,1:2]
@@ -896,7 +887,7 @@ question12 <- studentquestion1$SCHOOLS
 studentquestion1percentage <- studentquestion1$`Question 1`
 studentquestion1percentage <- as.numeric(studentquestion1percentage)
 studentquestion1percentage <- studentquestion1percentage*100
-twelve <- ggplot(studentquestion1,aes(x=question12,y=studentquestion1percentage,fill=question12)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion1$SCHOOLS)))+labs(title="Student Engagement",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion1percentage, y = studentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+twelve <- ggplot(studentquestion1,aes(x=question12,y=studentquestion1percentage,fill=question12, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion1$SCHOOLS)))+labs(title="Student Engagement",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion1percentage, y = studentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer1 <- ggplotly(twelve, tooltip = c("text"))
 
 #Student Survey Q2 - Teacher Relationship
@@ -905,7 +896,7 @@ question13 <- studentquestion2$SCHOOLS
 studentquestion2percentage <- studentquestion2$`Question 2`
 studentquestion2percentage <- as.numeric(studentquestion2percentage)
 studentquestion2percentage <- studentquestion2percentage*100
-thirteen <- ggplot(studentquestion2,aes(x=question13,y=studentquestion2percentage,fill=question13)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion2$SCHOOLS)))+labs(title="Teacher Relationship",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion2percentage, y = studentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+thirteen <- ggplot(studentquestion2,aes(x=question13,y=studentquestion2percentage,fill=question13, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion2$SCHOOLS)))+labs(title="Teacher Relationship",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion2percentage, y = studentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer2 <- ggplotly(thirteen, tooltip = c("text"))
 
 #Student Survey Q3 - Social-Emotional Wellbeing
@@ -914,25 +905,16 @@ question14 <- studentquestion3$SCHOOLS
 studentquestion3percentage <- studentquestion3$`Question 3`
 studentquestion3percentage <- as.numeric(studentquestion3percentage)
 studentquestion3percentage <- studentquestion3percentage*100
-fourteen <- ggplot(studentquestion3,aes(x=question14,y=studentquestion3percentage,fill=question14)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion3$SCHOOLS)))+labs(title="Social-Emotional Wellbeing",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion3percentage, y = studentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+fourteen <- ggplot(studentquestion3,aes(x=question14,y=studentquestion3percentage,fill=question14, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion3$SCHOOLS)))+labs(title="Social-Emotional Wellbeing",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion3percentage, y = studentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer3 <- ggplotly(fourteen, tooltip = c("text"))
 
-#Student Survey Q4 - Student Behavior
-studentquestion4 <- subsetnewsurveydataSTUDENT[1:6,c(1,5)]
-question15 <- studentquestion4$SCHOOLS
-studentquestion4percentage <- studentquestion4$`Question 4`
-studentquestion4percentage <- as.numeric(studentquestion4percentage)
-studentquestion4percentage <- studentquestion4percentage*100
-fifteen <- ggplot(studentquestion4,aes(x=question15,y=studentquestion4percentage,fill=question15)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion4$SCHOOLS)))+labs(title="Student Behavior",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion4percentage, y = studentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
-studentanswer4 <- ggplotly(fifteen, tooltip = c("text"))
-
 #Student Survey Q5 - Bullying
-studentquestion5 <- subsetnewsurveydataSTUDENT[1:6,c(1,6)]
+studentquestion5 <- subsetnewsurveydataSTUDENT[1:6,c(1,5)]
 question16 <- studentquestion5$SCHOOLS
 studentquestion5percentage <- studentquestion5$`Question 5`
 studentquestion5percentage <- as.numeric(studentquestion5percentage)
 studentquestion5percentage <- studentquestion5percentage*100
-sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
+sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer5 <- ggplotly(sixteen, tooltip = c("text"))
 
 # user -------------------------------------------------------------
@@ -1210,7 +1192,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                            "Instructions" = "parentanswer4"
                                                                          ),
                                                                          ),
-                                                                         withSpinner(plotlyOutput("survo1", height = "500px", width ="100%")),
+                                                                         withSpinner(plotlyOutput("survo1", height = "275px", width ="100%")),
                                                                          
                                                                          
                                                                          
@@ -1224,7 +1206,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                            "Instructions" = "parentanswer4"
                                                                          ),
                                                                          ),
-                                                                         withSpinner(plotlyOutput("survo2", height = "500px", width ="100%")),
+                                                                         withSpinner(plotlyOutput("survo2", height = "275px", width ="100%")),
                                                                          
                                                                          
                                                                          
@@ -1238,7 +1220,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                            "Instructions" = "parentanswer4"
                                                                          ),
                                                                          ),
-                                                                         withSpinner(plotlyOutput("survo3", height = "500px", width ="100%")),
+                                                                         withSpinner(plotlyOutput("survo3", height = "275px", width ="100%")),
                                                                          
                                                                          
                                                                          
@@ -1252,7 +1234,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                            "Instructions" = "parentanswer4"
                                                                          ),
                                                                          ),
-                                                                         withSpinner(plotlyOutput("survo4", height = "500px", width ="100%")),
+                                                                         withSpinner(plotlyOutput("survo4", height = "275px", width ="100%")),
                                                                          
                                                                          
                                                                          
@@ -1280,11 +1262,10 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                   "Student Engagement" = "studentanswer1",
                                                                   "Teacher Relationship" = "studentanswer2",
                                                                   "Social-Emotional Wellbeing" = "studentanswer3",
-                                                                  "Student Behavior" = "studentanswer4",
                                                                   "Bullying" = "studentanswer5"
                                                                 ),
                                                                 ),
-                                                                withSpinner(plotlyOutput("survo5", height = "500px", width ="100%")),
+                                                                withSpinner(plotlyOutput("survo5", height = "275px", width ="100%")),
                                                                 
                                                                 
                                                                 
@@ -1295,11 +1276,10 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                   "Student Engagement" = "studentanswer1",
                                                                   "Teacher Relationship" = "studentanswer2",
                                                                   "Social-Emotional Wellbeing" = "studentanswer3",
-                                                                  "Student Behavior" = "studentanswer4",
                                                                   "Bullying" = "studentanswer5"
                                                                 ),
                                                                 ),
-                                                                withSpinner(plotlyOutput("survo6", height = "500px", width ="100%")),
+                                                                withSpinner(plotlyOutput("survo6", height = "275px", width ="100%")),
                                                                 
                                                                 
                                                                 
@@ -1310,11 +1290,10 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                   "Student Engagement" = "studentanswer1",
                                                                   "Teacher Relationship" = "studentanswer2",
                                                                   "Social-Emotional Wellbeing" = "studentanswer3",
-                                                                  "Student Behavior" = "studentanswer4",
                                                                   "Bullying" = "studentanswer5"
                                                                 ),
                                                                 ),
-                                                                withSpinner(plotlyOutput("survo7", height = "500px", width ="100%")),
+                                                                withSpinner(plotlyOutput("survo7", height = "275px", width ="100%")),
                                                                 
                                                                 
                                                                 
@@ -1325,11 +1304,10 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                   "Student Engagement" = "studentanswer1",
                                                                   "Teacher Relationship" = "studentanswer2",
                                                                   "Social-Emotional Wellbeing" = "studentanswer3",
-                                                                  "Student Behavior" = "studentanswer4",
                                                                   "Bullying" = "studentanswer5"
                                                                 ),
                                                                 ),
-                                                                withSpinner(plotlyOutput("survo8", height = "500px", width ="100%")),
+                                                                withSpinner(plotlyOutput("survo8", height = "275px", width ="100%")),
                                                                 
                                                                 
                                                                 
@@ -1358,12 +1336,11 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                   "Academic Environment" = "teacherandstaffanswer2",
                                                                   "School Leadership" = "teacherandstaffanswer3",
                                                                   "Managing Student Behavior" = "teacherandstaffanswer4",
-                                                                  "School Parent Communication" = "teacherandstaffanswer5",
                                                                   "Workplace Environment" = "teacherandstaffanswer6",
-                                                                  "Instructional Practices" = "teacherandstaffanswer7"
+                                                                  "Instructional Environment" = "teacherandstaffanswer7"
                                                                 ),
                                                                 ),
-                                                                withSpinner(plotlyOutput("survo9", height = "500px", width ="100%")),
+                                                                withSpinner(plotlyOutput("survo9", height = "275px", width ="100%")),
                                                                 
                                                                 
                                                                 
@@ -1376,12 +1353,11 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                   "Academic Environment" = "teacherandstaffanswer2",
                                                                   "School Leadership" = "teacherandstaffanswer3",
                                                                   "Managing Student Behavior" = "teacherandstaffanswer4",
-                                                                  "School Parent Communication" = "teacherandstaffanswer5",
                                                                   "Workplace Environment" = "teacherandstaffanswer6",
-                                                                  "Instructional Practices" = "teacherandstaffanswer7"
+                                                                  "Instructional Environment" = "teacherandstaffanswer7"
                                                                 ),
                                                                 ),
-                                                                withSpinner(plotlyOutput("survo10", height = "500px", width ="100%")),
+                                                                withSpinner(plotlyOutput("survo10", height = "275px", width ="100%")),
                                                                 
                                                                 
                                                                 
@@ -1394,12 +1370,11 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                   "Academic Environment" = "teacherandstaffanswer2",
                                                                   "School Leadership" = "teacherandstaffanswer3",
                                                                   "Managing Student Behavior" = "teacherandstaffanswer4",
-                                                                  "School Parent Communication" = "teacherandstaffanswer5",
                                                                   "Workplace Environment" = "teacherandstaffanswer6",
-                                                                  "Instructional Practices" = "teacherandstaffanswer7"
+                                                                  "Instructional Environment" = "teacherandstaffanswer7"
                                                                 ),
                                                                 ),
-                                                                withSpinner(plotlyOutput("survo11", height = "500px", width ="100%")),
+                                                                withSpinner(plotlyOutput("survo11", height = "275px", width ="100%")),
                                                                 
                                                                 
                                                                 
@@ -1412,17 +1387,20 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                   "Academic Environment" = "teacherandstaffanswer2",
                                                                   "School Leadership" = "teacherandstaffanswer3",
                                                                   "Managing Student Behavior" = "teacherandstaffanswer4",
-                                                                  "School Parent Communication" = "teacherandstaffanswer5",
                                                                   "Workplace Environment" = "teacherandstaffanswer6",
-                                                                  "Instructional Practices" = "teacherandstaffanswer7"
+                                                                  "Instructional Environment" = "teacherandstaffanswer7"
                                                                 ),
                                                                 ),
-                                                                withSpinner(plotlyOutput("survo12", height = "500px", width ="100%")),
+                                                                withSpinner(plotlyOutput("survo12", height = "275px", width ="100%")),
                                                                 
                                                                 
                                                                 
                                                                 
-                                                         )))
+                                                         ))),
+                                             # column(12, 
+                                                    # h4("References: "),
+                                                    # p("[1] U.S Department of Education, Office of Elementary and Secondary Education. Full-Service Community Schools Program (FSCS). Retrieved from:", a(href =  "https://oese.ed.gov/offices/office-of-discretionary-grants-support-services/school-choice-improvement-programs/full-service-community-schools-program-fscs/", "https://oese.ed.gov/offices/office-of-discretionary-grants-support-services/school-choice-improvement-programs/full-service-community-schools-program-fscs/"), style = "font-size:12px;"),
+                                                    # p("[2] Quinn, J., & Blank, M. J. (2020). Twenty years, ten lessons: Community schools as an equitable school improvement strategy.", em("Voices in Urban Education (VUE)."), style = "font-size:12px;")),
                                      ),
                                      
                             ),
@@ -1896,10 +1874,6 @@ server <- function(input, output, session) {
       studentanswer3
     }
     
-    else if (Answer5() == "studentanswer4") {
-      studentanswer4
-    }
-    
     else if (Answer5() == "studentanswer5") {
       studentanswer5
     }
@@ -1925,10 +1899,6 @@ server <- function(input, output, session) {
     else if (Answer6() == "studentanswer3") {
       
       studentanswer3
-    }
-    
-    else if (Answer6() == "studentanswer4") {
-      studentanswer4
     }
     
     else if (Answer6() == "studentanswer5") {
@@ -1958,10 +1928,6 @@ server <- function(input, output, session) {
       studentanswer3
     }
     
-    else if (Answer7() == "studentanswer4") {
-      studentanswer4
-    }
-    
     else if (Answer7() == "studentanswer5") {
       studentanswer5
     }
@@ -1987,10 +1953,6 @@ server <- function(input, output, session) {
     else if (Answer8() == "studentanswer3") {
       
       studentanswer3
-    }
-    
-    else if (Answer8() == "studentanswer4") {
-      studentanswer4
     }
     
     else if (Answer8() == "studentanswer5") {
@@ -2023,11 +1985,7 @@ server <- function(input, output, session) {
     else if (Answer9() == "teacherandstaffanswer4") {
       teacherandstaffanswer4
     }
-    
-    else if (Answer9() == "teacherandstaffanswer5") {
-      teacherandstaffanswer5
-    }
-    
+  
     else if (Answer9() == "teacherandstaffanswer6") {
       teacherandstaffanswer6
     }
@@ -2062,11 +2020,7 @@ server <- function(input, output, session) {
     else if (Answer10() == "teacherandstaffanswer4") {
       teacherandstaffanswer4
     }
-    
-    else if (Answer10() == "teacherandstaffanswer5") {
-      teacherandstaffanswer5
-    }
-    
+
     else if (Answer10() == "teacherandstaffanswer6") {
       teacherandstaffanswer6
     }
@@ -2101,11 +2055,7 @@ server <- function(input, output, session) {
     else if (Answer11() == "teacherandstaffanswer4") {
       teacherandstaffanswer4
     }
-    
-    else if (Answer11() == "teacherandstaffanswer5") {
-      teacherandstaffanswer5
-    }
-    
+
     else if (Answer11() == "teacherandstaffanswer6") {
       teacherandstaffanswer6
     }
@@ -2140,11 +2090,7 @@ server <- function(input, output, session) {
     else if (Answer12() == "teacherandstaffanswer4") {
       teacherandstaffanswer4
     }
-    
-    else if (Answer12() == "teacherandstaffanswer5") {
-      teacherandstaffanswer5
-    }
-    
+ 
     else if (Answer12() == "teacherandstaffanswer6") {
       teacherandstaffanswer6
     }
