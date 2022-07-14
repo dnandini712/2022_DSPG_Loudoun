@@ -969,13 +969,13 @@ ui <- navbarPage(title = "DSPG",
                                    column(4,
                                           h2(strong("Project Background")), align = "justify",
                                           
-                                          p("Community Schools is a term that describes schools that brings educators, families, community partners, and local government 
-                                            together to address the comprehensive needs of students, families, and communities. The U.S. Department of Education states that
-                                            the primary purpose of community schools is to “provide comprehensive academic, social, and health services for students, 
-                                            students family members, and community members that will result in improved educational outcomes for children. Community Schools
-                                            are expanding across the United States – in 2020, around 10,000 schools have been transformed into community schools 
-                                            (Quinn & Blank, 2020). This is also evident in Virginia, where", a(href = "https://www.cisofva.org/", strong("Community Schools"), target = "_blank", "served over 58,000 students in 2021, an increase from over 45,000 students in 2019.")),
-                                   ),
+                                          p("The Supervisor of Outreach Services for the Department of Education in the Loudoun County Public School
+                                            System as well as the Virginia Cooperative Extension seek to understand areas of opportunity to further
+                                            assist low-income families within Sterling."),
+                                          p("We will use publicly available data including the American Community Survey and Virginia Department of Education to 
+                                            provide our stakeholders with a comprehensive understanding of the factors impacting the Sterling area. We focus on 
+                                            sociodemographic indicators, community school characteristics, and resource proximity to support our analysis."),
+                                   ),  
                                    
                                    column(4,
                                           h2(strong("Project Goals")),
@@ -983,9 +983,6 @@ ui <- navbarPage(title = "DSPG",
                                             involved in the Loudoun County Community School Initiative. This dashboard will allow stakeholders to understand the main needs of 
                                             the community and provide insights into potential opportunities for improvement to increase the quality of life for those impacted 
                                             by the Community School Initiative."),
-                                          p("We will use publicly available data including the American Community Survey and Virginia Department of Education to provide our
-                                            stakeholders with a comprehensive understanding of the factors impacting the Sterling area. We focus on 
-                                            sociodemographic indicators, community school characteristics, and resource proximity to support our analysis."),
                                           p("Our dashboard will contain our findings and analysis, which will allow both our stakeholders and all those interested to understand this 
                                             information in a comprehensive and dynamic manner"), 
                                           #p(""),
