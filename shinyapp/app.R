@@ -954,21 +954,40 @@ ui <- navbarPage(title = "DSPG",
                                    column(4,
                                           h2(strong("The Setting")),align = "justify",
                                           
-                                          p("                     
-The Community schools are centers for neighborhood enrichment, uniting families, educators and community partners to provide world class education, enrichment, health services, and other opportunities to succeed in school and life. Loudoun County atarted the community school initiative back in 2016. The first community school was Sterling Elementary School. Throughout the past several years, there's been a big community effort to build key connections in Loudoun County’s six Title 1 elementary schools, which serve under-resourced neighborhoods in Sterling. It’s called the Community Schools Initiative and its goal is to provide additional resources for Sugarland, Sterling, Rolling Ridge, Sully, Guilford, and Forest Grove elementary schools.
-"),
+                                          p("Loudoun County",a(href = "https://www.loudoun.gov/Loudoun County"), target = "_blank", "is located in the Northern Neck of Virginia 
+                                          within the D.C. metropolitan area. With a population of 413,538 and a median income of $147,111 in 2020, Loudoun County is 
+                                          fast growing and has remained the richest county with a population over 65,000 in the United States. The bulk of the 
+                                          population resides in the Eastern half of Loudoun County with many high-tech companies located in and around the region 
+                                          while Western Loudoun retains many of its rural roots. Loudoun County Public Schools claims the top employer with 
+                                          over 10,000 employees followed by Verizon and the Loudoun County Government."),
+                                          p("Sterling",a(href = "https://en.wikipedia.org/wiki/Sterling,_Virginia Sterling"), target = "_blank", "Virginia, located in the 
+                                              Eastern most section of Loudoun County, had a population of 30,872 in 2020. Sterling is situated next to Washington Dulles 
+                                              International Airport and is home to many federal agencies and tech companies allowing for rapid growth."),
                                           #p("During the 2018 – 2019 school year, the Community school model provided the families with clothes, shoes, and other basic supplies 538 times; enabled 135 families to receive weekend meals throughout the school year; supported 6 academic programs for 323 students; and provided 9 after-school enrichment programs for 373 students. Funds have provided these Community Schools with additional resources, such as full-time parent liaisons, a full-time social worker, and programs that keep families engaged in their child’s education. The Community Schools initiative focuses on bolstering these schools in six areas: academies, health and social services, youth and community engagement, building stronger families, and healthier communities."),
                                           
                                    ),
                                    column(4,
                                           h2(strong("Project Background")), align = "justify",
                                           
-                                          p("During the 2018 – 2019 school year, the Community school model provided the families with clothes, shoes, and other basic supplies 538 times; enabled 135 families to receive weekend meals throughout the school year; supported 6 academic programs for 323 students; and provided 9 after-school enrichment programs for 373 students. Funds have provided these Community Schools with additional resources, such as full-time parent liaisons, a full-time social worker, and programs that keep families engaged in their child’s education. The Community Schools initiative focuses on bolstering these schools in six areas: academies, health and social services, youth and community engagement, building stronger families, and healthier communities."),
+                                          p("Community Schools is a term that describes schools that brings educators, families, community partners, and local government 
+                                            together to address the comprehensive needs of students, families, and communities. The U.S. Department of Education states that
+                                            the primary purpose of community schools is to “provide comprehensive academic, social, and health services for students, 
+                                            students family members, and community members that will result in improved educational outcomes for children. Community Schools
+                                            are expanding across the United States – in 2020, around 10,000 schools have been transformed into community schools 
+                                            (Quinn & Blank, 2020). This is also evident in Virginia, where", a(href = "https://www.cisofva.org/", strong("Community Schools"), target = "_blank", "served over 58,000 students in 2021, an increase from over 45,000 students in 2019.")),
                                    ),
                                    
                                    column(4,
                                           h2(strong("Project Goals")),
-                                          p("Identifying possible opportunities in services in the Community Schools"),
+                                          p("Our team seeks to design an interactive dashboard that visualizes the resources and services available to the students and families
+                                            involved in the Loudoun County Community School Initiative. This dashboard will allow stakeholders to understand the main needs of 
+                                            the community and provide insights into potential opportunities for improvement to increase the quality of life for those impacted 
+                                            by the Community School Initiative."),
+                                          p("We will use publicly available data including the American Community Survey and Virginia Department of Education to provide our
+                                            stakeholders with a comprehensive understanding of the factors impacting the Sterling area. We focus on 
+                                            sociodemographic indicators, community school characteristics, and resource proximity to support our analysis."),
+                                          p("Our dashboard will contain our findings and analysis, which will allow both our stakeholders and all those interested to understand this 
+                                            information in a comprehensive and dynamic manner"), 
                                           #p(""),
                                           #p("")
                                    )
