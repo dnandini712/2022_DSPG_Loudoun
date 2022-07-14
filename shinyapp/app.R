@@ -1,4 +1,6 @@
-# Load Packages ---------------------------------------------------------------
+#==========DSPG 2022============LOUDOUN
+
+#Load Packages ---------------------------------------------------------------
 library(dplyr)
 library(tidycensus)
 library(ggplot2)
@@ -228,17 +230,18 @@ commutertime <- plot_ly(type='funnelarea', labels=labelsCT, values=valuesCT, sor
 
 #-----------------Commuter mode--------------------------
 my_colors <- c("#CA001B", "#1D28B0", "#D71DA4", "#00A3AD", "#FF8200", "#753BBD", "#00B5E2", "#008578", "#EB6FBD", "#FE5000", "#6CC24A", "#D9D9D6", "#AD0C27", "#950078")
-slices.Races <- c(75.0, 14.9, 1.8, 0.4, 3.5, 4.3)
+#subset_sterling$`...2` <- gsub(",", "", subset_sterling$`...2`)
+slices.Races <- c(75.0, 14.9, 1.8, 0.5, 3.5, 4.3)
 lbls.Races <- c("Drove Alone 75.0%", "Carpooled 14.9%", "Public Transport 1.8%", "Walked 0.4%","Other means 3.5%","Worked from home 4.3%")
 pie(slices.Races, labels = lbls.Races, main="", sub = "Source: DP03 ACS data 2016-2020")
+
+library(plotly)
 labelsR = c("Drove Alone", "Carpooled", "Public Transport", "Walked","Other means","Worked from home")
 valuesR = c(12922, 2574, 308, 77, 609, 741)
-
-commutermode <- plot_ly(type='pie', labels=labelsR, values=valuesR,
-                        textinfo='label+percent',
-                        insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='')))
-
-
+perc <- round(valuesR / sum(valuesR)*100, 1)
+commutermode <- plot_ly(type='pie', labels=~labelsR, values=~valuesR, hoverinfo = "none", 
+                        text = ~paste0(labelsR, "\n", perc, "%"), 
+                        textinfo='text') %>% layout(title ='', legend=list(title=list(text='')), hoverinfo = "none")
 #------------------poverty-------------------------------
 
 poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
@@ -256,19 +259,22 @@ Total <- povas_pop
 cat <- as.character(povas_cat)
 
 pov <- plot_ly(subset_poverty_as, x = ~cat, y = ~Total, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat,"<br>","Total:",Total,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = ~cat))
-#--------gender by school
+#--------gender by school-------------------------------------------------
 
 
-genders <- data.frame(sex=rep(c("Male", "Female"), each=6),
-                      schools=c("Sugarland","Rolling Ridge","Guilford","Sterling","Sully","Forest Grove"),
-                      number=c(268, 273, 278, 237,221, 282, 255, 259, 272, 200, 217, 278))
+genders <- data.frame(Sex=rep(c("Male", "Female"), each=6),
+                      School=c("Sugarland","Rolling Ridge","Guilford","Sterling","Sully","Forest Grove"),
+                      Total=c(268, 273, 278, 237,221, 282, 255, 259, 272, 200, 217, 278),
+                      Percentage = c(51.2, 51.3, 50.5, 54.2, 50.5, 50.4, 48.8, 48.7, 49.5, 45.8, 49.5, 49.6)
+)
 
-genders<- ggplot(data=genders, aes(x=schools, y=number, fill=sex,  width=0.9)) +
-  geom_bar(stat="identity", position="stack") +
-  scale_fill_manual(values = c('#F56D4F', "#20AFCC")) + labs(y="", x="", fill="")+ggtitle("Gender by Schools") + theme_minimal() + 
-  geom_text(aes(label = number, y = number), size = 3, position = position_stack(vjust = 0.5))
 
-genders <-ggplotly(genders)
+
+genders<- ggplot(data=genders, aes(x=School, y=Total, fill=Sex,  width=0.9)) +
+  geom_bar(stat="identity", position="stack", hoverinfo = "text", aes(text = paste("Percentage :",Percentage,"%\n", "Total :", Total))) +
+  scale_fill_manual(values = c('#F56D4F', "#20AFCC")) + labs(y="Total Students", x="", fill="")+ggtitle("Gender by Schools") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+
+genders <-ggplotly(genders, tooltip = c("text"))
 #race by school ----------------------------
 
 races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
@@ -293,55 +299,64 @@ attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))
 
 #------------------employment-----------------
 sterling <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
-subset_sterling <- sterling[(4:5), c(1,4)]
+subset_sterling <- sterling[(4:5), c(1:2,4)]
 employed <- as.numeric(sub("%", "", subset_sterling[1, "...4"]))
 unemployed <- as.numeric(sub("%", "", subset_sterling[2, "...4"]))
 subset_sterling[, "...4"] <- c(employed, unemployed)
 
 
-labor <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.25) + labs(x = "Employment Status", y= "Percentage population", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment")+ guides(fill = guide_legend(title = "Employment"))+ scale_y_continuous(limits = c(0,80.0))
-employment <- ggplotly(labor)
+labor <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + 
+  
+  geom_bar(position = "stack", stat="identity", width = 0.25, aes(text = paste0("Percentage: ",...4, "%\n", "Total: ",...2))) + 
+  
+  labs(x = "", y= "Percentage", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment Status")+ guides(fill = guide_legend(title = ""))+ scale_y_continuous(limits = c(0,85))
+employment <- ggplotly(labor, tooltip = c("text"))
 
 
 #-------------------work occupation----------------------
 
 subset_sterling <- sterling[c(29:33),]
+subset_sterling$`EMPLOYMENT STATUS` <- gsub(" occupations", "", subset_sterling$`EMPLOYMENT STATUS`)
+subset_sterling$`...2` <- gsub(",", "", subset_sterling$`...2`)
 percNum <- c()
 for(i in 1:5){
   percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
 }
 subset_sterling[, "...4"] <- percNum
-employmento <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = `...4`, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
-occuplot <- ggplotly(employmento)
+occupation <- ggplot(subset_sterling, aes(x = reorder(`EMPLOYMENT STATUS`,...4), y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5, aes(text = paste0("Percentage: ",...4, "%\n", "Total: ", ...2)))+ theme(axis.text.x = element_text(angle=0), legend.position="none") + labs(x = "", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment by Sector") + coord_flip()
+
+occuplot <- ggplotly(occupation, tooltip = c("text"))
+
 
 #------------------education-------------------------
 
-sterling <- read_excel(paste0(getwd(),"/data/Loudouncountyeducation.xlsx"),skip=2,col_names=TRUE)
-subset_sterling <- sterling[2:28,c(1, 2:5)]
-subset_sterling$Label <- as.factor(subset_sterling$Label)
+#sterling <- read_excel(paste0(getwd(),"/data/Loudouncountyeducation.xlsx"),skip=2,col_names=TRUE)
 df2 <- data.frame(
   levels=c("Less than 9th grade",
            "9th to 12th grade, no diploma","High School graduate",
            "Some college or no degree","Associate's degree",
            "Bachelor's Degree",
-           
            "Graduate or professional"),
-  number=c(2193, 1943, 4050, 3094, 1396, 4706, 2402))
-
-
+  Total=c(2193, 1943, 4050, 3094, 1396, 4706, 2402))
 
 df2$levels <- factor(df2$levels, levels = df2$levels)
-education <- ggplot(df2,aes(levels, number)) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "", y = "Number of population", caption = " Source : S1501 ACS 5-yr data 2016-2020", title = "") + coord_flip() 
-education <- ggplotly(education)
+p<-ggplot(df2,aes(levels, Total, )) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "", y = "Total Population", caption = " Source : S1501 ACS 5-yr data 2016-2020", title = "Population 25 and Over Educational Attainment by Degree") + coord_flip()
+
+education <- ggplotly(p, tooltip = c("", "Total"))
 #---------------------health insurance----------------------------
 
 
-health <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
+sterling <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
+subset_sterling <- sterling[c(103:105),]
+subset_sterling$...4 <- as.numeric(gsub("%", "", subset_sterling$...4) )
+subset_sterling$`EMPLOYMENT STATUS` <- reorder(subset_sterling$`EMPLOYMENT STATUS`, subset_sterling$...4)
+health <- ggplot(subset_sterling, aes(x =`EMPLOYMENT STATUS`,y = (subset_sterling$...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5, aes(text = paste0(...4, "%"))) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020", titlel = "Distribution of Health Insurance") + guides(fill = guide_legend(title = ""))+ theme(axis.text.y = element_text(angle=0), axis.ticks.y= element_blank())+ coord_flip()#
 
-subset_health <- health[c(103:105),]
-healthin <- ggplot(subset_health, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020", titlel = "Distribution of Health Insurance") + guides(fill = guide_legend(title = "Health Insurance Type"))+ theme(axis.text.x = element_text(angle=0))+ coord_flip()
-healthin <- ggplotly(healthin)
-#race by school ----------------------------
+
+healthin <- ggplotly(health, tooltip = c("text"))
+
+
+#-------------------------------race by school ----------------------------
 
 races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
 
@@ -387,18 +402,17 @@ enrollment <- read_excel(paste0(getwd(),"/data/Enrollment16-20.xlsx"))
 enr_total <- enrollment$Total
 School <- enrollment$Schools
 Year <- enrollment$Year
-enroll <- ggplot(enrollment,aes(x=Year, y = enr_total, group = School, color = School)) + geom_point()+geom_line()+labs(caption= "Source: LCPS Dashboard 2021-2022",x="School",y="Number of Students") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
-enroll<- ggplotly(enroll)
+enroll <- plot_ly(enrollment, x = ~Year,y = ~Total, color = ~School, type = 'scatter',mode = 'lines', hoverinfo="text", text = ~paste("Total:", Total)) %>% layout(title= " Total Enrollment by Schools", xaxis = list(title = ""))
 
-#attendance --------------
+#-------------------attendance --------------
 
-attendance <- read_excel(paste0(getwd(),"/data/absencerate.xlsx"))
 att_per <- attendance$`Absence Rate`
-att_rate <- att_per*100
-quarter <- attendance$`School Quarter`
+Percent <- att_per*100
+Quarter <- attendance$`School Quarter`
 School <- attendance$`School Name`
-attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
-
+ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(title = "Student Absences by 2020-2021 Quarter",caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",
+                                                                                                                                                                                                                                      plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
+attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("School:",School,"<br>","Percent:",Percent)) %>% layout(title = "Student Absences by 2020-2021 Quarter",xaxis = list(title = ""))
 #---------------Number of Teachers/Staff--------------------------
 
 Schools <- c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
@@ -416,13 +430,13 @@ cteacher <- figSTM %>% layout(title = "Teachers/Staff by Schools", yaxis = list(
 #--------Chronic absenteeism------------------
 
 chronic <- data.frame(sex=rep(c("Missed less than 10%"), each=6),
-                      schools=c("Sugarland","Rolling Ridge","Guilford","Sterling Elementary","Sully","Forest Grove"),
-                      number=c(11.1, 10.1, 6.7, 5.8, 9.7,7.9))
+                      School=c("Sugarland","Rolling Ridge","Guilford","Sterling","Sully","Forest Grove"),
+                      Percent=c(11.1, 10.1, 6.7, 5.8, 9.7,7.9))
 
-chronic<- ggplot(data=chronic, aes(x=schools, y=number, fill=schools,  width=0.8)) +
-  geom_bar(stat="identity")  + labs(y="", x="", fill="")+ggtitle("Percentage of Chronic absenteeism") 
+chronic<- ggplot(data=chronic, aes(x=School, y=Percent, fill=School,  width=0.8)) +
+  geom_bar(stat="identity",hoverinfo = "text", aes(text = paste("School :",School,"\n", "Percent :", Percent, "%")))  + labs(y="", x="", fill="")+ggtitle("Chronic Absenteeism by Schools") 
 
-chronic<-ggplotly(chronic)
+chronic<-ggplotly(chronic, tooltip = c("text"))
 
 #--------------free or not free resources ---------------------------------------
 
@@ -1108,26 +1122,27 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                  
                  navbarMenu("Community Schools",
                             tabPanel("Demographics", 
-                                     fluidRow(style = "margin: 2px;",
-                                              h1(strong("Demographics of Community Schools"), align = "center"),
+                                     fluidRow(style = "margin: 6px;",
                                               
-                                              #column(4, 
-                                              #      h4(strong("Education")),
-                                              #     p("These are demographics"),
-                                              #  ) ,
-                                              column(10, align ="center",
+                                              h1(strong("Demographics of Community Schools"), align = "center"),
+                                              column(6, 
+                                                     #column(4, 
+                                                     #      h4(strong("Education")),
+                                                     #     p("These are demographics"),
+                                                     #  ) ,
+                                                     
                                                      h4(strong("Community Schools")),
-                                                     selectInput("schooldrop", "Select Variable:", width = "60%", choices = c(
+                                                     selectInput("schooldrop", "Select Variable:", width = "100%", choices = c(
                                                        "Gender" = "cgender",
                                                        "Race/Ethnicity" ="raceehtn", 
                                                        "Hispanic Population" = "chispanic",
-                                                       "No. of teacher/Staff" = "cteacher",
+                                                       "Educators" = "cteacher",
                                                        "Enrollment" = "cenrol", 
-                                                       "Absences By Quarter" = "attend", 
+                                                       "Absences" = "attend", 
                                                        "Chronic Absenteeism" = "chronic"
                                                      ),
                                                      ), 
-                                                     withSpinner(plotlyOutput("ocuplot1", height = "500px", width = "60%")),
+                                                     withSpinner(plotlyOutput("ocuplot1", height = "500px", width = "100%")),
                                                      withSpinner(leafletOutput("ocuplot2", height = "500px", width = "60%")),
                                               ),
                                               
@@ -1146,7 +1161,7 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                                               #h1(strong("Analysis"), align = "center"),
                                               #p("", style = "padding-top:15px;font-size: 35px;"), 
                                               
-                                              column(12,
+                                              column(6,
                                                      h2(strong("Analysis")), align = "justify",
                                                      p("After understanding the demographics of the areas that feed into the community schools, next we began to look at the demographics of our specific populations, the 6 schools. For this, we used data from the Virginia Department of Education as well as the Loudoun County Public Schools dashboard and staff directory.", style = "padding-top:15px;font-size: 14px;"),
                                                      p("To further understand our population, we wanted to compare the race and ethnicity demographics we visualized from the Sterling CDP and our 6 community schools.   In this graph, we visualized data from all 6 schools together and found that overall, Hispanic students, represented by the light purple bar, make up the greatest percentage of students which differs from the general make-up of the Sterling CDP where White people made up the majority of residents. After seeing this, we wanted to look at the breakdown of the Hispanic population within the greater Sterling area.   Using data from the American Community Survey of Greater Sterling between the years 2016 to 2020, we found that the area where Rolling Ridge is located, represented by the light yellow area of the map, has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary, the area of the map shaded mustard yellow,  and Forest Grove Elementary, the dark orange, lower area of the map.   This information will help us to identify possible opportunities within the schools and neighborhoods specifically surrounding language services.", style = "padding-top:15px;font-size: 14px;"),
@@ -1196,7 +1211,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                          ),
                                                                          ),
                                                                          withSpinner(plotlyOutput("survo1", height = "500px", width ="100%")),
-
+                                                                         
                                                                          
                                                                          
                                                                   ),
@@ -1210,7 +1225,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                          ),
                                                                          ),
                                                                          withSpinner(plotlyOutput("survo2", height = "500px", width ="100%")),
-
+                                                                         
                                                                          
                                                                          
                                                                   ),
@@ -1224,7 +1239,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                          ),
                                                                          ),
                                                                          withSpinner(plotlyOutput("survo3", height = "500px", width ="100%")),
-
+                                                                         
                                                                          
                                                                          
                                                                   ),
@@ -1238,7 +1253,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                          ),
                                                                          ),
                                                                          withSpinner(plotlyOutput("survo4", height = "500px", width ="100%")),
-
+                                                                         
                                                                          
                                                                          
                                                                   ),
@@ -1270,7 +1285,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                 ),
                                                                 ),
                                                                 withSpinner(plotlyOutput("survo5", height = "500px", width ="100%")),
-
+                                                                
                                                                 
                                                                 
                                                          ),
@@ -1285,7 +1300,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                 ),
                                                                 ),
                                                                 withSpinner(plotlyOutput("survo6", height = "500px", width ="100%")),
-
+                                                                
                                                                 
                                                                 
                                                          ),
@@ -1300,7 +1315,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                 ),
                                                                 ),
                                                                 withSpinner(plotlyOutput("survo7", height = "500px", width ="100%")),
-
+                                                                
                                                                 
                                                                 
                                                          ),
@@ -1315,7 +1330,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                 ),
                                                                 ),
                                                                 withSpinner(plotlyOutput("survo8", height = "500px", width ="100%")),
-
+                                                                
                                                                 
                                                                 
                                                          ),
@@ -1349,7 +1364,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                 ),
                                                                 ),
                                                                 withSpinner(plotlyOutput("survo9", height = "500px", width ="100%")),
-
+                                                                
                                                                 
                                                                 
                                                                 
@@ -1367,7 +1382,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                 ),
                                                                 ),
                                                                 withSpinner(plotlyOutput("survo10", height = "500px", width ="100%")),
-
+                                                                
                                                                 
                                                                 
                                                                 
@@ -1385,7 +1400,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                 ),
                                                                 ),
                                                                 withSpinner(plotlyOutput("survo11", height = "500px", width ="100%")),
-
+                                                                
                                                                 
                                                                 
                                                                 
@@ -1403,7 +1418,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                 ),
                                                                 ),
                                                                 withSpinner(plotlyOutput("survo12", height = "500px", width ="100%")),
-
+                                                                
                                                                 
                                                                 
                                                                 
@@ -1620,7 +1635,6 @@ server <- function(input, output, session) {
     input$demos1drop
   })
   
-  
   output$demo1 <- renderPlotly({
     
     if (Var3() == "gender") {
@@ -1705,71 +1719,6 @@ server <- function(input, output, session) {
   })
   
   
-  output$ageplot1 <- renderPlot({
-    if (Var() == "age") {
-      
-      age
-    }
-    else if (Var() == "faminc") {
-      income
-    }
-    else if (Var() == "health") {
-      
-      healthin 
-    }
-    
-  })
-  
-  output$ageplot2 <- renderPlotly({
-    if (Var() == "pov") {
-      
-      pov
-    }
-    
-    else if (Var() == "gender") {
-      gender
-    }
-    else if (Var() == "race") {
-      
-      race
-    }
-    
-    else if (Var() == "property") {
-      
-      property
-    }
-    
-    else if (Var() == "housing") {
-      
-      housing
-    }
-    
-    else if (Var() == "commutertime") {
-      
-      commutertime
-    }
-    else if (Var() == "commutermode") {
-      
-      commutermode
-    }
-    else if (Var() == "workoccu"){
-      occuplot
-    }
-    
-    else if (Var() == "health"){
-      healthin
-    }
-    else if (Var() == "education"){
-      education
-    }
-    else if (Var() == "employment"){
-      employment
-    }
-    else if (Var() == "edu"){
-      education
-    }
-  })
-  
   
   #School Demos
   Var2 <- reactive({
@@ -1842,7 +1791,7 @@ server <- function(input, output, session) {
     else if (Answer1() == "parentanswer4") {
       parentanswer4
     }
- })
+  })
   
   Answer2 <- reactive({
     input$surveydrop2
@@ -2205,7 +2154,6 @@ server <- function(input, output, session) {
     }
   })
   
-  
   #---------word clouds-----------------
   
   output$cloud1 <- renderWordcloud2(
@@ -2215,6 +2163,5 @@ server <- function(input, output, session) {
   
 }
 shinyApp(ui = ui, server = server)
-
 
 
