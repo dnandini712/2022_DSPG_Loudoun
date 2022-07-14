@@ -1031,9 +1031,9 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                  ), 
                  
                  
-                 tabPanel("Sterling Sociodemographics",
+                 tabPanel("Sociodemographics",
                           fluidRow(style = "margin: 4px;",
-                                   h1(strong("Sterling"), align = "center"),
+                                   h1(strong("Sterling Sociodemographics"), align = "center"),
                                    p("", style = "padding-top:10px;"), 
                                    column(12, 
                                           h4(strong("Sterling Residents' Characteristics")),
@@ -1408,7 +1408,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                             
                  ),
                  
-                 navbarMenu("Availability of Resources",
+                 navbarMenu("Availabile Resources",
                             tabPanel("Health and Social Services",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
@@ -1492,10 +1492,10 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                             
                  ),
                  
-                 tabPanel("Service possible opportunities",
+                 tabPanel("Opportunities",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("Service possible opportunities")),
+                                   column(12, align = "center",h4(strong("Possible Service Opportunities")),
                                           p(""),
                                           br("")
                                           
