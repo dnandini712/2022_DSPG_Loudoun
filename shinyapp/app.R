@@ -383,14 +383,14 @@ hispanicschool <- leaflet(data = total) %>%
     smoothFactor = 0.2,
     opacity = 1.0,
     fillOpacity = 0.7, 
-    label=paste("County: ",va20_2$GEOID, ", Value: ",va20_2$estimate),
+    label=paste("Total Hispanic Population: ",va20_2$estimate),
     highlightOptions = highlightOptions(color = "white",
                                         weight = 2,
                                         bringToFront = TRUE)) %>%
   addLegend(pal=mypalette, position = "bottomright",
             values = ~va20_2$estimate,
             opacity = 0.5, title = "Hispanic Population") %>%
-  addMarkers( ~Longitude, ~Latitude, popup = ~as.character(Address), label = ~as.character(School), labelOptions = TRUE)
+  addMarkers( ~Longitude, ~Latitude, popup = popups, label = ~as.character(School), labelOptions = FALSE) 
 #-----------enrollment-----------------
 
 enrollment <- read_excel(paste0(getwd(),"/data/Enrollment16-20.xlsx"))
