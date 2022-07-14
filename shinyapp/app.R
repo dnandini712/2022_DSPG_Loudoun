@@ -995,10 +995,10 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                                            p("The", a(href = "https://www.lcps.org/Page/236420s",strong("Community School Initiative"), target = "_blank"), "in the Loudoun County Public School started in 2016 with Sterling Elementary, a Title 1 school, due to the generous support of 100WomenStrong. According to the Virginia Department of Education, Title 1 schools are provided “financial assistance through state educational agencies to school divisions and public schools with high numbers or percentages of children from low-income families to help ensure that all children meet challenging state academic content and achievement standards.”"),
                                            p("The Community School program in Loudoun focuses on four key areas to promote academic achievement: "),
                                            strong(tags$ol(
-                                             tags$li(("Health and Social Services")),
-                                             tags$li(("Mental Health")),
-                                             tags$li(("Family Engagement")),
-                                             tags$li(("Youth Development Opportunities"))
+                                             tags$li(("Health and Social Services" ), style = "font-size:18px;"),
+                                             tags$li(("Mental Health"), style = "font-size:18px;"),
+                                             tags$li(("Family Engagement"), style = "font-size:18px;"),
+                                             tags$li(("Youth Development Opportunities"), style = "font-size:18px;")
                                              
                                            )),
                                            p("Over the past several years, the Community School initiative has grown to include six Title 1 elementary schools from the Sterling area of Loudoun County in 2022."),
@@ -1018,7 +1018,7 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                           fluidRow(style = "margin: 12px;",
                                    column(8, h3(strong("When did schools join the Community Schools Initiative?"))),
                                    column(12, align ="center", 
-                                          img(src='sterlingmascot.png', width = "70%", height = 300)
+                                          img(src='sterlingmascot.png', width = "60%", height = 250)
                                           
                                           
                                    ), 
@@ -1053,9 +1053,10 @@ The Community schools are centers for neighborhood enrichment, uniting families,
                                                                      ),   
                                                                      br(""),
                                                                      withSpinner(plotlyOutput("demo1", height = "500px", width ="100%")),
-                                                                     
-                                                                     
-                                                                     
+                                                                     column(12, align = "right",
+                                                                     p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
+                                                                     p("*Note: Data is nill for missing bars", style = "font-size:12px;")
+                                                                     )
                                                               ),
                                                               
                                                               column(5, 
@@ -1078,7 +1079,7 @@ Another important determinant that might impact someone’s availability of oppo
                                                                      selectInput("demos2drop", "Select Socioeconomic Characteristic:", width = "100%", choices = c(
                                                                        "Educational Attainment" = "edu",
                                                                        "Family Income" = "faminc",
-                                                                       "Poverty by Age and Sex" = "pov", 
+                                                                       "Poverty Status" = "pov", 
                                                                        "Health Coverage" = "health"
                                                                      ),
                                                                      ),     
