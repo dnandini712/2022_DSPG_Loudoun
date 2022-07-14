@@ -1,4 +1,6 @@
-# Load Packages ---------------------------------------------------------------
+#==========DSPG 2022============LOUDOUN
+
+#Load Packages ---------------------------------------------------------------
 library(dplyr)
 library(tidycensus)
 library(ggplot2)
@@ -228,17 +230,18 @@ commutertime <- plot_ly(type='funnelarea', labels=labelsCT, values=valuesCT, sor
 
 #-----------------Commuter mode--------------------------
 my_colors <- c("#CA001B", "#1D28B0", "#D71DA4", "#00A3AD", "#FF8200", "#753BBD", "#00B5E2", "#008578", "#EB6FBD", "#FE5000", "#6CC24A", "#D9D9D6", "#AD0C27", "#950078")
-slices.Races <- c(75.0, 14.9, 1.8, 0.4, 3.5, 4.3)
+#subset_sterling$`...2` <- gsub(",", "", subset_sterling$`...2`)
+slices.Races <- c(75.0, 14.9, 1.8, 0.5, 3.5, 4.3)
 lbls.Races <- c("Drove Alone 75.0%", "Carpooled 14.9%", "Public Transport 1.8%", "Walked 0.4%","Other means 3.5%","Worked from home 4.3%")
 pie(slices.Races, labels = lbls.Races, main="", sub = "Source: DP03 ACS data 2016-2020")
+
+library(plotly)
 labelsR = c("Drove Alone", "Carpooled", "Public Transport", "Walked","Other means","Worked from home")
 valuesR = c(12922, 2574, 308, 77, 609, 741)
-
-commutermode <- plot_ly(type='pie', labels=labelsR, values=valuesR,
-                        textinfo='label+percent',
-                        insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='')))
-
-
+perc <- round(valuesR / sum(valuesR)*100, 1)
+commutermode <- plot_ly(type='pie', labels=~labelsR, values=~valuesR, hoverinfo = "none", 
+                text = ~paste0(labelsR, "\n", perc, "%"), 
+                textinfo='text') %>% layout(title ='', legend=list(title=list(text='')), hoverinfo = "none")
 #------------------poverty-------------------------------
 
 poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
@@ -299,20 +302,28 @@ unemployed <- as.numeric(sub("%", "", subset_sterling[2, "...4"]))
 subset_sterling[, "...4"] <- c(employed, unemployed)
 
 
-labor <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.25) + labs(x = "Employment Status", y= "Percentage population", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment")+ guides(fill = guide_legend(title = "Employment"))+ scale_y_continuous(limits = c(0,80.0))
-employment <- ggplotly(labor)
+labor <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + 
+  
+  geom_bar(position = "stack", stat="identity", width = 0.25, aes(text = paste0(...4, "%"))) + 
+  
+  labs(x = "", y= "Percentage", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment Status")+ guides(fill = guide_legend(title = ""))+ scale_y_continuous(limits = c(0,85))
+employment <- ggplotly(labor, tooltip = c("text"))
 
 
 #-------------------work occupation----------------------
 
 subset_sterling <- sterling[c(29:33),]
+subset_sterling$`EMPLOYMENT STATUS` <- gsub(" occupations", "", subset_sterling$`EMPLOYMENT STATUS`)
+subset_sterling$`...2` <- gsub(",", "", subset_sterling$`...2`)
 percNum <- c()
 for(i in 1:5){
   percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
 }
 subset_sterling[, "...4"] <- percNum
-employmento <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = `...4`, fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5)+ theme(axis.text.x = element_text(angle=90), legend.position="none") + labs(x = "Occupations", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Work Occupations") + coord_flip()
-occuplot <- ggplotly(employmento)
+occupation <- ggplot(subset_sterling, aes(x = reorder(`EMPLOYMENT STATUS`,...4), y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5, aes(text = paste0("Percentage: ",...4, "%\n", "Total: ", ...2)))+ theme(axis.text.x = element_text(angle=0), legend.position="none") + labs(x = "", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment by Sector") + coord_flip()
+
+occuplot <- ggplotly(occupation, tooltip = c("text"))
+
 
 #------------------education-------------------------
 
@@ -437,8 +448,8 @@ speech <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Speech and
 physical <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Physical Therapy")
 #---------------map_health and isochrones-----------------------------------------
 
-YourAPIKey <- "103eac37d04686a8b0104d96d983c612"
-YourAppId <- "ad147923"
+YourAPIKey <- "73ad15c60d8fe57014b574b4fc428ec0"
+YourAppId <- "afe3f1af"
 
 traveltime10 <- traveltime_map(appId=YourAppId,
                                apiKey=YourAPIKey,
@@ -1619,71 +1630,6 @@ server <- function(input, output, session) {
     
   })
   
-  
-  output$ageplot1 <- renderPlot({
-    if (Var() == "age") {
-      
-      age
-    }
-    else if (Var() == "faminc") {
-      income
-    }
-    else if (Var() == "health") {
-      
-      healthin 
-    }
-    
-  })
-  
-  output$ageplot2 <- renderPlotly({
-    if (Var() == "pov") {
-      
-      pov
-    }
-    
-    else if (Var() == "gender") {
-      gender
-    }
-    else if (Var() == "race") {
-      
-      race
-    }
-    
-    else if (Var() == "property") {
-      
-      property
-    }
-    
-    else if (Var() == "housing") {
-      
-      housing
-    }
-    
-    else if (Var() == "commutertime") {
-      
-      commutertime
-    }
-    else if (Var() == "commutermode") {
-      
-      commutermode
-    }
-    else if (Var() == "workoccu"){
-      occuplot
-    }
-    
-    else if (Var() == "health"){
-      healthin
-    }
-    else if (Var() == "education"){
-      education
-    }
-    else if (Var() == "employment"){
-      employment
-    }
-    else if (Var() == "edu"){
-      education
-    }
-  })
   
   
   #School Demos
