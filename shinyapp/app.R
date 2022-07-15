@@ -235,7 +235,7 @@ valuesR = c(12922, 2574, 308, 77, 609, 741)
 perc <- round(valuesR / sum(valuesR)*100, 1)
 commutermode <- plot_ly(type='pie', labels=~labelsR, values=~valuesR, hoverinfo = "none", 
                         text = ~paste0(labelsR, "\n", perc, "%"), 
-                        textinfo='text') %>% layout(title ='', legend=list(title=list(text='Mode of Transportation to Work')), hoverinfo = "none")
+                        textinfo='text') %>% layout(title ='Mode of Transportation to Work', legend=list(title=list(text='')), hoverinfo = "none")
 #------------------poverty-------------------------------
 
 poverty_as1<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
@@ -979,31 +979,25 @@ ui <- navbarPage(title = "DSPG",
                                    column(4,
                                           h2(strong("The Setting")),align = "justify",
                                           
-                                          p("Loudoun County",a(href = "https://www.loudoun.gov/Loudoun County"), target = "_blank", "is located in the Northern Neck of Virginia 
-                                          within the D.C. metropolitan area. With a population of 413,538 and a median income of $147,111 in 2020, Loudoun County is 
-                                          fast growing and has remained the richest county with a population over 65,000 in the United States. The bulk of the 
-                                          population resides in the Eastern half of Loudoun County with many high-tech companies located in and around the region 
-                                          while Western Loudoun retains many of its rural roots. Loudoun County Public Schools claims the top employer with 
-                                          over 10,000 employees followed by Verizon and the Loudoun County Government."),
-                                          p("Sterling",a(href = "https://en.wikipedia.org/wiki/Sterling,_Virginia Sterling"), target = "_blank", "Virginia, located in the 
-                                              Eastern most section of Loudoun County, had a population of 30,872 in 2020. Sterling is situated next to Washington Dulles 
-                                              International Airport and is home to many federal agencies and tech companies allowing for rapid growth."),
-                                          #p("During the 2018 – 2019 school year, the Community school model provided the families with clothes, shoes, and other basic supplies 538 times; enabled 135 families to receive weekend meals throughout the school year; supported 6 academic programs for 323 students; and provided 9 after-school enrichment programs for 373 students. Funds have provided these Community Schools with additional resources, such as full-time parent liaisons, a full-time social worker, and programs that keep families engaged in their child’s education. The Community Schools initiative focuses on bolstering these schools in six areas: academies, health and social services, youth and community engagement, building stronger families, and healthier communities."),
-                                          
+                                          p("Founded in 1757, Loudon County is a county located in the Northern part of the state of Virginia. The county was named after John Campbell, a Scottish nobleman who served as the commander-in-chief for all British armed forces in North America and the fourth earl of Loudon. From 1756 to 1759, he was the titular governor of Virginia. The county’s official motto is “I Byde My time”. This was borrowed from the Earl of Loudon’s family coat of arms."),
+                                          p("With an estimated population of 420,959 as of the 2020 Decennial Census, Loudon County is Virginia’s third most populated county. It is also the country’s richest county with a population ocer 65,000 people with a median average household income of $147,111 and has held this title for over ten years. Loudon is a part of the Washington Metropolitan Statistical Area and the 10th Congressional District of Virginia. Located in the eastern time zone, Loudon County, Virginia is a total of 522 square miles with 516 square miles being land and 6 square miles being water."),
+                                          p("Loudon County was traditionally a rural county until the Washington Dulles International Airport was built in 1962. This resulted in a high-tech economic boom and rapid growth in the county. The building of the Washington Dulles International Airport also contributed to the increase of the population in the 1980’s and the heavy suburbanization throughout the 1990’s. Due to the full-fledged service economy in Loudoun County, it has become home to several world headquarters of high-tech companies. These companies include Verizon Business, Orbital Sciences Corporation, and Telos Corporation. With more than 10,000 employees, Loudon County Public Schools is the number one employer in Loudon County. Next is Verizon and the Loudon County Government, both with employees ranging from 2,500 to 5,000."),
+                                          p("Sterling, Virginia is a census-designated place (CDP) in Loudoun County, Virginia. However, the “Sterling, Virginia” mailing address applies to a much wider region including other localities such as Arcola, Cascades, Dulles, Countryside, and Sugarland Run. Sugarland Run in a portion of Sterling with zip code 20164. As of the 2020 Decennial Census, Sterling has an estimated population of 30,271 and a median household income of $97,647. Located in Sterling, Virginia are the six title 1 schools that will be discussed throughout this project. The six title 1 schools in Sterling are Sterling Elementary, Sugarland Elementary, Sully Elementary, Guilford Elementary, Rolling Ridge Elementary, and Forest Grove Elementary."),
                                    ),
                                    column(4,
                                           h2(strong("Project Background")), align = "justify",
-                                          
-                                          p("The Supervisor of Outreach Services for the Department of Education in the Loudoun County Public School
-                                            System as well as the Virginia Cooperative Extension seek to understand areas of opportunity to further
-                                            assist low-income families within Sterling."),
-                                          p("We will use publicly available data including the American Community Survey and Virginia Department of Education to 
-                                            provide our stakeholders with a comprehensive understanding of the factors impacting the Sterling area. We focus on 
-                                            sociodemographic indicators, community school characteristics, and resource proximity to support our analysis."),
-                                   ),  
+                                          h4(strong("Loudoun County Public Schools")),
+                                          p("Loudoun County Public Schools (LCPS) is the third largest school division in Virginia. LCPS was established in 1870. LCPS has over 80,000 students in their 97 facilities. There are 18 high schools, 17 middle schools, 60 elementary schools, and two educational centers. The superintendent of the Loudoun County Public Schools is Dr. Scott A. Ziegler. The purpose of LCPS is “for all students to make meaningful contributions to the world"), 
+                                          h4(strong("Sterling")), 
+                                          p("Sterling, Virginia is a census-designated place (CDP) in Loudoun County, Virginia. However, the “Sterling, Virginia” mailing address applies to a much wider region including other localities such as Arcola, Cascades, Dulles, Countryside, and Sugarland Run. Sugarland Run in a portion of Sterling with zip code 20164. As of the 2020 Decennial Census, Sterling has an estimated population of 30,271 and a median household income of $97,647. Located in Sterling, Virginia are the six title 1 schools that will be discussed throughout this [project]. "),
+                                          h4(strong("Our Target Schools")), 
+                                          p("Loudoun County Public Schools started a Community School Initiative in 2015 with Sterling Elementary being the first one to be part of the program. Soon after in 2018, 5 other Elementary Schools joined the program Sugarland Elementary, Sully Elementary, Guilford Elementary, Forest Grove Elementary, and Rolling Ridge Elementary. "),
+                                          h4(strong("What is the question?")), 
+                                          p("Potential partners of Loudoun County Public Schools are eager to provide services to the Community Schools but due to a lack of data, are unclear on what resources would be most beneficial for this region. Scrapping data and visualizing it would help our stakeholders to find potential improvement opportunities that can help improve the lives of the students in our targeted Elementary Schools."),
+                                          ),  
                                    
                                    column(4,
-                                          h2(strong("Project Goals")),
+                                          h2(strong("Project Goals")), align = "justify",
                                           p("Our team seeks to design an interactive dashboard that visualizes the resources and services available to the students and families involved in the Loudoun County Community School Initiative. This dashboard will allow stakeholders to understand the main needs of the community and provide insights into potential opportunities for improvement to increase the quality of life for those impacted by the Community School Initiative. "),
                                           p("We will use publicly available data including the American Community Survey and Virginia Department of Education to provide our stakeholders with a comprehensive understanding of the factors impacting the Sterling area. We focus on sociodemographic indicators such as median income and employment, community school characteristics, and resource proximity to support our analysis. We will utilize public data sources as well as data provided by our stakeholders to map the services and resource’s locations with respect to distance and travel time. These maps will be broken down into 4 resource types: health and social services, mental health, family engagement, and youth development to analyze potential opportunities for service expansion.  "), 
                                           p("Our dashboard will contain our findings and analysis, which will allow both our stakeholders and all those interested to understand this information in a comprehensive and dynamic manner. For those interested in further research, this repository will be useful for investigating possible underlying factors leading to these differences in accessibility. "),
@@ -1055,7 +1049,7 @@ ui <- navbarPage(title = "DSPG",
                           fluidRow(style = "margin: 12px;",
                                    column(8, h3(strong("When did schools join the Community Schools Initiative?"))),
                                    column(12, align ="center", 
-                                          img(src='sterlingmascot.png', width = "60%", height = 250)
+                                          img(src='sterlingmascot.png', width = "50%", height = 250)
                                           
                                           
                                    ), 
@@ -1147,35 +1141,15 @@ ui <- navbarPage(title = "DSPG",
                                             
                                           )),
                                    
-                                  column(5, 
+                                  column(5, align = "justify",
                                          br(""),
                                          br(""),
                                          br(""),
                                           p("Females are about 49.5% of the total population in Sterling. This is marginally in contrast with the Virginia and Loudoun County averages whose populations comprise of more women than men. The national female percentage also stands at 50.7%. Within Sterling, the largest age group are adults (aged 35 to 44 years), closely followed by 25 to 34 years olds, and 45 to 54 years olds. The median age is 34.7. About 27% of the population is under the age of 20 with the largest group being those under 5. From 2016-2020, those identifying as White made up just over half of the Sterling residents followed Asian and Other which may include those who identify as Hispanics as the ACS does not include Hispanic as a race.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
                                           
-                                         p("For the Sterling residents, the majority have attained a high school degree or 
-                                                                       equivalent with the largest group having attained a bachelor’s degree. ", style = "padding-top:15px;font-size: 14px;"),
-                                         p("For families in the past 12 months, the largest income level is the $100,000 to $149,999 bracket 
-                                                                       followed closely by both the $50,000 to $74,999 bracket and $150,000 to $199,999. It should be taken
-                                                                       into consideration however that our data is slightly skewed as the areas of the Sterling CPD includes
-                                                                       those that are highly affluent, outweigh those located in the areas with the schools designated as 
-                                                                       Title 1. ", style = "padding-top:15px;font-size: 14px;"),  
-                                         p("Expanding on that, females ages 18 to 24 years old face the highest level of poverty by sex and age 
-                                                                       overall followed by females ages 35 to 44 years old and males ages 25 to 34 years old. The ACS lacks 
-                                                                       data on males 12 to 14, 15, and 34 to 44 years as well as females ages 16 to 17 years. From the data 
-                                                                       that is available, females tend to have higher levels of poverty than males especially from years 6 to 11. 
-                                                                       While most Sterling residents have private health insurance, 23% are on public insurance such as Medicare 
-                                                                       and Medicaid, and 16.5% of residents have no health insurance at all. ", 
-                                           style = "padding-top:15px;font-size: 14px;"), 
-                                         p("Within Sterling, the majority of residents are employed at 71.8% while only 4.7% 
-                                                                              of the residents are unemployed. The labor force of Sterling has the largest number
-                                                                              of the population working in the management, business, science and art sector followed
-                                                                              by the service sector and sales and office sector. Only 20% of residents in Sterling 
-                                                                              work in the natural resources, construction, and maintenance field as well as the 
-                                                                              production, transportation, and material moving field. ",  style = "padding-top:15px;font-size: 14px;"),
-                                         p("For Sterling residents who commute to work, over half have a commute that is less than 30 
-                                                                              minutes and 75% of said commuters drove alone. Notably, only 2.8% of commuters utilized public 
-                                                                              transportation.",style = "padding-top:15px;font-size: 14px;"),
+                                         p("For the Sterling residents, who are above the age of 25 majority of them have attained a high school diploma with the largest group having attained a bachelor’s degree with a total number of 4,706 people from the Sterling population who are 25 years and above. This implies that a large part of the community is well educated and have attained a college degree. For families in the past 12 months, the largest income level is the $100,000 to $149,999 bracket followed closely by both the $50,000 to $74,999 bracket and $150,000 to $199,999. It should be taken into consideration however that our data is slightly skewed as the areas of the Sterling CPD includes those that are highly affluent, outweigh those located in the areas with the schools designated as Title 1. Expanding on that, females ages 18 to 24 years old face the highest level of poverty by sex and age overall followed by females ages 35 to 44 years old and males ages 25 to 34 years old. Females tend to have higher levels of poverty than males especially from years 6 to 11. While most Sterling residents have private health insurance, which is insurance mostly provided by the employer’s, 23% are on public insurance such as Medicare and Medicaid, and 16.5% of residents have no health insurance at all. This might be due to the undocumented residents in the area. ", style = "padding-top:15px;font-size: 14px;"),
+                                        
+                                         p("Within Sterling, the majority of residents are employed at 71.8% while 4.7% of the residents are unemployed. It is important to note that while 4.7% may seem like a small number, keep in mind that the population of Sterling is 30,271 so 4.7% of the population is 1,423 people. The labor force of Sterling has the largest number of the population working in the management, business, science and art sector followed by the service sector and sales and office sector. Only 20% of residents in Sterling work in the natural resources, construction, and maintenance field as well as the production, transportation, and material moving field. This shows us that Sterling is more of a tech-savy area, and it makes sense because of all the headquarters and big named companies that have moved to the area over the years. For Sterling residents who commute to work, over half have a commute time that is less than 30 minutes and 75% of said commuters drive alone. Notably, only 1.8% of commuters utilized public transportation so this could be a potential area to look into to see why this service isn't being utilized as much. ",style = "padding-top:15px;font-size: 14px;"),
                                          
                                     
                                   )
@@ -1256,6 +1230,10 @@ ui <- navbarPage(title = "DSPG",
                                                                          ),
                                                                          
                                                                          column(5, align = "justify",
+                                                                                br(""),
+                                                                                br(""),
+                                                                                br(""),
+                                                                                
                                                                                 p("To better understand the characteristics of the community schools regarding the classroom 
                                                                                   environment, we pulled data from the Virginia Department of Education to visualize the number
                                                                                   of educators, total enrollment, absences, and suspension rates. Among the six community schools, 
@@ -1534,37 +1512,25 @@ ui <- navbarPage(title = "DSPG",
                             
                             tabPanel("School Reports",
                                      fluidPage(style = "margin: 2px;",
-                                               p(h4("Representatives' responses"), style = "padding-top:5px;"),
+                                               p(h4(strong("Representatives' responses")), style = "padding-top:5px;"),
                                                
-                                               tabsetPanel(
-                                                 tabPanel("Challenges and Weaknesses",
-                                                          fluidRow(style = "margin: 2px;",
-                                                                   p("", style = "padding-top:10px;"),
-                                                                   column(12, align = "center",
-                                                                          wordcloud2Output("cloud1")
-                                                                   )
-                                                                   
-                                                          )),
-                                                 tabPanel("Strengths and Successes",
-                                                          p("", style = "padding-top:10px;"),
-                                                          column(12, align = "center",
-                                                                 wordcloud2Output("cloud2")
-                                                          ),
-                                                          
-                                                 ), 
-                                                 
-                                                 tabPanel("Future Goals",
-                                                          p("", style = "padding-top:10px;"),
-                                                          column(12, align = "center",
-                                                                 wordcloud2Output("cloud3")
-                                                          ),
-                                                          
-                                                 )
-                                                 
-                                                 
-                                                 
-                                                 
-                                               )))
+                                               radioButtons(
+                                                 "category",
+                                                 label = "Select:",
+                                                 choices = c("Challenges and Weaknesses", "Strengths and Successes", "Future Goals"),
+                                               ),
+                                               
+                                               column(8, align = "left",
+                                                      wordcloud2Output("wordcloud")
+                                               ),
+                                               
+                                               column(4, align = "justify",
+                                                      p("The word cloud 'Weaknesses and Challenges' is considering all the responses of all the schools to two questions 'What are your school's biggest challenges?' and 'What are your school's biggest weaknesses?'. The more number of times each word has appeared, the bigger it is on the cloud. If one hovers over a word, it will show the number of times that word came up in the School Representative's response while answering the questions. As evident from the word cloud, the biggest challenges exist in the areas of mental health and ensuring care for the undocumented and uninsured, especially in Forest Grove and Sterling. Parent involvement is a major concern in Sugarland. "),
+                                                      p("The next word cloud are responses to the questions regarding their successes and strengths. While we read through the responses, we found out that, the schools are in general doing well in the Family Engagement pillar, except Sugarland. There is a strong sense of community and teamwork. These schools have a rich human capital, in the sense that the teachers and staff are valued. If there is a negative word, for example, 'gaggle' - it means there has been a decrease in that area in one or many schools, depending on the size of the word: so in this case, one school, Sugarland saw a reduction of gaggle reports. ('Gaggle is a student surveillance application, in which student work and behavior are scrutinized for indicators of violence or a mental health crisis, and profanity and sexuality are policed.'"),
+                                                      p("The Future Goals mostly focus on creating more oppotunities and focusing on development as the schools continue working with the students and their families through the various programs as illustrated the wordcloud.")
+                                                      )
+                                               
+                                               ))
                             
                             #tabPanel(h4("Weaknesses and biggest challenges")),
                             
@@ -1630,22 +1596,57 @@ ui <- navbarPage(title = "DSPG",
                             
                             
                             
-                            tabPanel("Mental Health",
-                                     fluidRow(style = "margin: 6px;",
-                                              p("", style = "padding-top:10px;"),
-                                              column(12, align = "center",h4(strong("Mental Health")),
+                            tabPanel("Mental Health", 
+                                                     fluidRow(style = "margin: 6px;",
+                                                              p("", style = "padding-top:10px;"),
+                                                              column(12, align = "center",h1(strong("Mental Health")),
+                                                                     p(""),
+                                                                     h3(strong("Overview"), align = "left"), 
+                                                                     p(("To understand the services available to those located in Sterling, we used data from our
+                                                        stakeholders as well as publicly available data to provide a general idea of the resources
+                                                        available within the Sterling area for the four pillars of Community Schools. On each map,
+                                                        the legend in the top right corner is interactive allowing the user to select and deselect
+                                                        desired resource groups and each colored marker provides a pop-up with information on that 
+                                                        resource.   "), align = "left"),
+                                                                     
+                                                                     
+                                                                     
+                                                                     
+                                                                     
+                                                                     
+                                                              )),
                                                      p(""),
-                                                     br("")
+                                                     br(""),
                                                      
                                                      
                                                      
-                                              )),
+                                              
                                      fluidPage(style = "margin: 2px;", 
-                                               column(12, 
-                                                      leafletOutput("map_mental", width = "100%")
+                                               column(6, 
+                                                      leafletOutput("map_mental", width = "100%", height = 600)
                                                       #fluidRow(align = "center",
                                                       #    p(tags$small(em('Last updated: August 2021'))))
+                                               ), 
+                                               
+                                               column(6, 
+                                                      h3(strong("Services")), 
+                                                      p("Mental health is equally important as physical health. For a community to flourish it is important that mental health resources be provided and be easily accessible. The mental health resources have been divided into four categories Anger Management, Bereavement, Family Counseling, and Family Therapy. The resources have been mapped within a 45 minutes driving time from Sterling. Anger Management services are not abundant in the sterling surroundings with only 3 available in a 45-minute radius. Bereavement services are the least abundant with only two available around the Sterling area. The most abundant resource is Family therapy, they offer family counseling, relationship counseling, and children counseling. Mental health resources decrease in number and accessibility after the ten minute radius. "),
+                                                      p("Due to Sterling’s unique location within Loudoun County and its proximity to Washington, 
+                                                        D.C., Sterling residents have access to many options when it comes to health and social 
+                                                        services. However, this is not true for all Sterling residents. For those in need of free 
+                                                        or reduced cost services, the number and accessibility decrease with many services falling 
+                                                        outside of a ten-minute drive."),
+                                                      
+                                                      h3(strong("Travel Distance")),
+                                                      p("We included the driving distances from the center location of Sterling Elementary School as 
+                                                        it sits in the middle of the Sterling, CDP. Shown on the map are the driving distances for 10 
+                                                        minutes, 20 minutes, and 45 minutes shaded in green, blue, and red, respectively. Within each 
+                                                        boundary are markers representing different services available within those driving distances.")
+                                                      
+                                                      
                                                )
+                                               
+                                               
                                      )
                                      
                             ),
@@ -2281,12 +2282,34 @@ server <- function(input, output, session) {
     }
   })
   
-  
   #---------word clouds-----------------
   
-  output$cloud1 <- renderWordcloud2(
-    cloud1
-  )
+  category <- reactive({
+    input$category
+  })
+  
+  output$wordcloud <- renderWordcloud2({
+    
+    if (category() == "Challenges and Weaknesses") {
+      
+      cloud1
+      
+    }
+    
+    else if(category() == "Strengths and Successes") {
+      
+      cloud2
+    }
+    
+    else if(category() == "Future Goals") {
+      
+      cloud3
+    }
+    
+  })
+  
+
+  
   
   
 }
