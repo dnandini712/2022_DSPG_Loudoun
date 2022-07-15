@@ -1222,23 +1222,15 @@ ui <- navbarPage(title = "DSPG",
                                                                          ),
                                                                          
                                                                          column(5, align = "justify",
-                                                                                p("After understanding the demographics of the areas that feed into the community schools, 
-                                                                                  next we began to look at the demographics of our specific populations, the 6 schools. For 
-                                                                                  this, we used data from the Virginia Department of Education as well as the Loudoun County 
-                                                                                  Public Schools dashboard and staff directory.", style = "padding-top:15px;font-size: 14px;"),
-                                                                                p("To further understand our population, we wanted to compare the race and ethnicity 
-                                                                                  demographics we visualized from the Sterling CDP and our 6 community schools.  
-                                                                                  In this graph, we visualized data from all 6 schools together and found that overall,
-                                                                                  Hispanic students, represented by the light purple bar, make up the greatest percentage of 
-                                                                                  students which differs from the general make-up of the Sterling CDP where White people made 
-                                                                                  up the majority of residents. After seeing this, we wanted to look at the breakdown of the 
-                                                                                  Hispanic population within the greater Sterling area.   Using data from the American Community
-                                                                                  Survey of Greater Sterling between the years 2016 to 2020, we found that the area where Rolling
-                                                                                  Ridge is located, represented by the light yellow area of the map, has the largest population
-                                                                                  of Hispanic identifying people. This is followed closely by Sterling Elementary, the area of 
-                                                                                  the map shaded mustard yellow,  and Forest Grove Elementary, the dark orange, lower area of 
-                                                                                  the map.   This information will help us to identify possible opportunities within the schools
-                                                                                  and neighborhoods specifically surrounding language services.", 
+                                                                                p("To understand the population of the six elementary schools, we looked at the demographics and 
+                                                                                  compared them to one another. The race and ethnicity demographics in 2019-2020 revealed that overall, 
+                                                                                  Hispanic students, made up the greatest percentage of students attending the six elementary schools 
+                                                                                  in Sterling, which differs from the general make-up of the Sterling area where White residents made
+                                                                                  up the majority of residents. ", style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("To break this down, we mapped the schools, and collected the total Hispanic population between the 
+                                                                                  years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population
+                                                                                  of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove 
+                                                                                  Elementary.", 
                                                                                   style = "padding-top:15px;font-size: 14px;"),
                                                                                 
                                                                                 
