@@ -151,7 +151,6 @@ gender
 
 #---------Age chart---------------------------------------
 
-
 sterling1 <- read_excel(paste0(getwd(),"/data/sterlingdata.xlsx"),skip=1,col_names=TRUE)
 subset_sterling1 <- sterling1[6:18,c(1, 10:13)]
 age_estimate1 <- sterling1$Percent...12[6:18]
@@ -163,7 +162,7 @@ age_cat1 <- (subset_sterling1$Label)
 Age1 <- age_cat1
 Percent1 <- age_percent1
 
-agesterling<- plot_ly(subset_sterling1,x=~Age1, y=~Percent1,type = "bar", color = ~Age1, hoverinfo = "text",text = ~paste("Age:",Age1,"<br>","Percent:",Percent1,"%" )) %>% layout(title = "Age Distribution",xaxis = list(title=""))
+agesterling<- plot_ly(subset_sterling1,x=~Age1, y=~Percent1,type = "bar", color = ~Age1, hoverinfo = "text",text = ~paste("Age:",Age1,"<br>","Percent:",Percent1,"%" )) %>% layout(title = "Age Distribution",xaxis = list(title=""), yaxis = list(title = "Percentage"))
 
 
 #-----------Race/Ethnicity--------------------
@@ -190,7 +189,7 @@ mi_cat.fac <- factor(mi_cat, levels = c(mi_cat))
 subset_medianin$new_pop<-gsub("%$","",subset_medianin$...4)
 pop_nop <- subset_medianin$new_pop
 pop_num <- as.numeric(pop_nop)
-income <- plot_ly(subset_medianin,x=~mi_cat.fac,y=~pop_num,color = ~mi_cat.fac,type = "bar", hoverinfo = "text",text = ~paste("Income Level:",mi_cat.fac,"<br>","Percent:",pop_num,"%")) %>% layout(title = "Median Income Distribution",xaxis = list(title="") ,yaxis= list(title = "Percent"))
+income <- plot_ly(subset_medianin,x=~mi_cat.fac,y=~pop_num,color = ~mi_cat.fac,type = "bar", hoverinfo = "text",text = ~paste("Income Level:",mi_cat.fac,"<br>","Percent:",pop_num,"%")) %>% layout(title = "Median Income Distribution",xaxis = list(title="") ,yaxis= list(title = "Percentage"))
 #---------Property Value---------------------------------
 
 dfpv <- read_excel(paste0(getwd(), "/data/Property_Value.xlsx"), col_names = TRUE)
@@ -221,7 +220,7 @@ valuestotalCT = c(989,2968,2787,2177,792,2160,1154,1649,1813.9)
 commutertime <- plot_ly(type='funnelarea', labels=labelsCT, values=valuesCT, sort = FALSE, direction = "",
                         textinfo='percent',
                         hoverinfo = 'text', text = ~paste('Total Number of Commuters:', valuestotalCT),
-                        insidetextorientation='radial') %>% layout(title ='Commuter Time to Work', showlegend=TRUE, legend=list(title=list(text='Select Value')), legend=list(x=1, y=0.5))
+                        insidetextorientation='radial') %>% layout(title ='Commuter Time to Work', showlegend=TRUE, legend=list(title=list(text='')), legend=list(x=1, y=0.5))
 
 #-----------------Commuter mode--------------------------
 my_colors <- c("#CA001B", "#1D28B0", "#D71DA4", "#00A3AD", "#FF8200", "#753BBD", "#00B5E2", "#008578", "#EB6FBD", "#FE5000", "#6CC24A", "#D9D9D6", "#AD0C27", "#950078")
@@ -236,24 +235,24 @@ valuesR = c(12922, 2574, 308, 77, 609, 741)
 perc <- round(valuesR / sum(valuesR)*100, 1)
 commutermode <- plot_ly(type='pie', labels=~labelsR, values=~valuesR, hoverinfo = "none", 
                         text = ~paste0(labelsR, "\n", perc, "%"), 
-                        textinfo='text') %>% layout(title ='', legend=list(title=list(text='')), hoverinfo = "none")
+                        textinfo='text') %>% layout(title ='', legend=list(title=list(text='Mode of Transportation to Work')), hoverinfo = "none")
 #------------------poverty-------------------------------
 
-poverty_as1<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
+poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
                         sheet = "Data")
 
-subset_poverty_as1 <- poverty_as1[3:28, 1:4]
-
+subset_poverty_as <- poverty_as[3:28, 1:4]
+subset_poverty_as
 #subset_poverty_as$Estimate[1:26]
-povas_pop1 <- subset_poverty_as1$Estimate
-povas_pop1 <- as.numeric(povas_pop1)
-povas_cat1 <- subset_poverty_as1$Label
+povas_pop <- subset_poverty_as$Estimate
+povas_pop <- as.numeric(povas_pop)
+povas_cat <- subset_poverty_as$Label
 
-Total1 <- povas_pop1
+Total <- povas_pop
 
-cat1 <- as.character(povas_cat1)
+cat <- as.character(povas_cat)
 
-pov <- plot_ly(subset_poverty_as1, x = cat1, y = Total1, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat1,"<br>","Total:",Total1,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = cat1))
+pov <- plot_ly(subset_poverty_as, x = ~cat, y = ~Total, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat,"<br>","Total:",Total,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = ~cat))
 #--------gender by school-------------------------------------------------
 
 
@@ -399,7 +398,7 @@ enrollment <- read_excel(paste0(getwd(),"/data/Enrollment16-20.xlsx"))
 enr_total <- enrollment$Total
 School <- enrollment$Schools
 Year <- enrollment$Year
-enroll <- plot_ly(enrollment, x = ~Year,y = ~Total, color = ~School, type = 'scatter',mode = 'lines', hoverinfo="text", text = ~paste("Total:", Total)) %>% layout(title= " Total Enrollment by Schools", xaxis = list(title = ""))
+enroll <- plot_ly(enrollment, x = ~Year,y = ~Total, color = ~School, type = 'scatter',mode = 'lines', hoverinfo="text", text = ~paste("Total:", Total)) %>% layout(title= "Total Enrollment by Schools", xaxis = list(title = ""), yaxis = list(title = "Total Students"), legend=list(title=list(text='Select School')))
 
 #-------------------attendance --------------
 
@@ -409,7 +408,7 @@ Quarter <- attendance$`School Quarter`
 School <- attendance$`School Name`
 ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(title = "Student Absences by 2020-2021 Quarter",caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",
                                                                                                                                                                                                                                       plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
-attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("School:",School,"<br>","Percent:",Percent)) %>% layout(title = "Student Absences by 2020-2021 Quarter",xaxis = list(title = ""))
+attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("School:",School,"<br>","Percent:",Percent)) %>% layout(title = "Student Absences by 2020-2021 Quarter", legend=list(title=list(text='Select School')), yaxis = list(title = "Percentage"), xaxis = list(title = ""))
 #---------------Number of Teachers/Staff--------------------------
 
 Schools <- c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
@@ -424,7 +423,7 @@ figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = '
 figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(253, 151, 12 )'))
 cteacher <- figSTM %>% layout(title = "Teachers/Staff by Schools", yaxis = list(title = 'Total Educators'), xaxis = list(title = ''), barmode = 'stack')
 
-#--------Chronic absenteeism------------------
+##--------Chronic absenteeism------------------
 
 chronic <- data.frame(sex=rep(c("Missed less than 10%"), each=6),
                       School=c("Sugarland","Rolling Ridge","Guilford","Sterling","Sully","Forest Grove"),
@@ -771,6 +770,7 @@ df3 <- data.frame(word = names(words3),freq=words3)
 cloud3<- wordcloud2(df3, size=0.5)
 
 
+
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
                 var vars = {};
@@ -824,7 +824,7 @@ question1 <- staffquestion1$SCHOOLS
 staffquestion1percentage <- staffquestion1$`Question 1`
 staffquestion1percentage <- as.numeric(staffquestion1percentage)
 staffquestion1percentage <- staffquestion1percentage*100
-one <- ggplot(staffquestion1,aes(x=question1,y=staffquestion1percentage,fill=question1, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion1$SCHOOLS)))+labs(title="Staff Collegiality",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion1percentage, y = staffquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+one <- ggplot(staffquestion1,aes(x=question1,y=staffquestion1percentage,fill=question1, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion1$SCHOOLS)))+labs(title="Staff Collegiality",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion1percentage, y = staffquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer1 <- ggplotly(one, tooltip = c("text"))
 
 #Teacher & Staff Survey Q2 - Academic Environment
@@ -833,7 +833,7 @@ question2 <- staffquestion2$SCHOOLS
 staffquestion2percentage <- staffquestion2$`Question 2`
 staffquestion2percentage <- as.numeric(staffquestion2percentage)
 staffquestion2percentage <- staffquestion2percentage*100
-two <- ggplot(staffquestion2,aes(x=question2,y=staffquestion2percentage,fill=question2, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion2$SCHOOLS)))+labs(title="Academic Environment",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion2percentage, y = staffquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+two <- ggplot(staffquestion2,aes(x=question2,y=staffquestion2percentage,fill=question2, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion2$SCHOOLS)))+labs(title="Academic Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion2percentage, y = staffquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer2 <- ggplotly(two, tooltip = c("text"))
 
 #Teacher & Staff Survey Q3 - School Leadership
@@ -842,7 +842,7 @@ question3 <- staffquestion3$SCHOOLS
 staffquestion3percentage <- staffquestion3$`Question 3`
 staffquestion3percentage <- as.numeric(staffquestion3percentage)
 staffquestion3percentage <- staffquestion3percentage*100
-three <- ggplot(staffquestion3,aes(x=question3,y=staffquestion3percentage,fill=question3, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion3$SCHOOLS)))+labs(title="School Leadership",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion3percentage, y = staffquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+three <- ggplot(staffquestion3,aes(x=question3,y=staffquestion3percentage,fill=question3, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion3$SCHOOLS)))+labs(title="School Leadership",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion3percentage, y = staffquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer3 <- ggplotly(three, tooltip = c("text"))
 
 #Teacher & Staff Survey Q4 - Managing Student Behavior
@@ -851,7 +851,7 @@ question4 <- staffquestion4$SCHOOLS
 staffquestion4percentage <- staffquestion4$`Question 4`
 staffquestion4percentage <- as.numeric(staffquestion4percentage)
 staffquestion4percentage <- staffquestion4percentage*100
-four <- ggplot(staffquestion4,aes(x=question4,y=staffquestion4percentage,fill=question4, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion4$SCHOOLS)))+labs(title="Managing Student Behavior",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion4percentage, y = staffquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+four <- ggplot(staffquestion4,aes(x=question4,y=staffquestion4percentage,fill=question4, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion4$SCHOOLS)))+labs(title="Managing Student Behavior",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion4percentage, y = staffquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer4 <- ggplotly(four, tooltip = c("text"))
 
 #Teacher & Staff Survey Q6 - Workplace Environment
@@ -860,7 +860,7 @@ question6 <- staffquestion6$SCHOOLS
 staffquestion6percentage <- staffquestion6$`Question 6`
 staffquestion6percentage <- as.numeric(staffquestion6percentage)
 staffquestion6percentage <- staffquestion6percentage*100
-six <- ggplot(staffquestion6,aes(x=question6,y=staffquestion6percentage,fill=question6, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion6$SCHOOLS)))+labs(title="Workplace Environment",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion6percentage, y = staffquestion6percentage), size = 3, position = position_stack(vjust = 1.02))
+six <- ggplot(staffquestion6,aes(x=question6,y=staffquestion6percentage,fill=question6, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion6$SCHOOLS)))+labs(title="Workplace Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion6percentage, y = staffquestion6percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer6 <- ggplotly(six, tooltip = c("text"))
 
 #Teacher & Staff Survey Q7 - Instructional Practices 
@@ -869,7 +869,7 @@ question7 <- staffquestion7$SCHOOLS
 staffquestion7percentage <- staffquestion7$`Question 7`
 staffquestion7percentage <- as.numeric(staffquestion7percentage)
 staffquestion7percentage <- staffquestion7percentage*100
-seven <- ggplot(staffquestion7,aes(x=question7,y=staffquestion7percentage,fill=question7, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion7$SCHOOLS)))+labs(title="Instructional Environment",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion7percentage, y = staffquestion7percentage), size = 3, position = position_stack(vjust = 1.02))
+seven <- ggplot(staffquestion7,aes(x=question7,y=staffquestion7percentage,fill=question7, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion7$SCHOOLS)))+labs(title="Instructional Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion7percentage, y = staffquestion7percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer7 <- ggplotly(seven, tooltip = c("text"))
 
 #--------------Parent Climate Surveys--------------------------------
@@ -882,7 +882,7 @@ question8 <- parentquestion1$SCHOOLS
 parentquestion1percentage <- parentquestion1$`Question 1`
 parentquestion1percentage <- as.numeric(parentquestion1percentage)
 parentquestion1percentage <- parentquestion1percentage*100
-eight <- ggplot(parentquestion1,aes(x=question8,y=parentquestion1percentage,fill=question8, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion1$SCHOOLS)))+labs(title="Academic Support",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion1percentage, y = parentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+eight <- ggplot(parentquestion1,aes(x=question8,y=parentquestion1percentage,fill=question8, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion1$SCHOOLS)))+labs(title="Academic Support",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion1percentage, y = parentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
 parentanswer1 <- ggplotly(eight, tooltip = c("text"))
 
 #Parent Survey Q2 - Communications
@@ -891,7 +891,7 @@ question9 <- parentquestion2$SCHOOLS
 parentquestion2percentage <- parentquestion2$`Question 2`
 parentquestion2percentage <- as.numeric(parentquestion2percentage)
 parentquestion2percentage <- parentquestion2percentage*100
-nine <- ggplot(parentquestion2,aes(x=question9,y=parentquestion2percentage,fill=question9, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion2$SCHOOLS)))+labs(title="Communications",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion2percentage, y = parentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+nine <- ggplot(parentquestion2,aes(x=question9,y=parentquestion2percentage,fill=question9, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion2$SCHOOLS)))+labs(title="Communications",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion2percentage, y = parentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
 parentanswer2 <- ggplotly(nine, tooltip = c("text"))
 
 #Parent Survey Q3 - Relationships
@@ -900,7 +900,7 @@ question10 <- parentquestion3$SCHOOLS
 parentquestion3percentage <- parentquestion3$`Question 3`
 parentquestion3percentage <- as.numeric(parentquestion3percentage)
 parentquestion3percentage <- parentquestion3percentage*100
-ten <- ggplot(parentquestion3,aes(x=question10,y=parentquestion3percentage,fill=question10, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion3$SCHOOLS)))+labs(title="Relationships",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion3percentage, y = parentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+ten <- ggplot(parentquestion3,aes(x=question10,y=parentquestion3percentage,fill=question10, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion3$SCHOOLS)))+labs(title="Relationships",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion3percentage, y = parentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
 parentanswer3 <- ggplotly(ten, tooltip = c("text"))
 
 #Parent Survey Q4 - Instructions
@@ -909,7 +909,7 @@ question11 <- parentquestion4$SCHOOLS
 parentquestion4percentage <- parentquestion4$`Question 4`
 parentquestion4percentage <- as.numeric(parentquestion4percentage)
 parentquestion4percentage <- parentquestion4percentage*100
-eleven <- ggplot(parentquestion4,aes(x=question11,y=parentquestion4percentage,fill=question11, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion4$SCHOOLS)))+labs(title="Instructions",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion4percentage, y = parentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+eleven <- ggplot(parentquestion4,aes(x=question11,y=parentquestion4percentage,fill=question11, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion4$SCHOOLS)))+labs(title="Instructions",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion4percentage, y = parentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
 parentanswer4 <- ggplotly(eleven, tooltip = c("text"))
 
 #--------------Student Climate Surveys-------------------------------
@@ -922,7 +922,7 @@ question12 <- studentquestion1$SCHOOLS
 studentquestion1percentage <- studentquestion1$`Question 1`
 studentquestion1percentage <- as.numeric(studentquestion1percentage)
 studentquestion1percentage <- studentquestion1percentage*100
-twelve <- ggplot(studentquestion1,aes(x=question12,y=studentquestion1percentage,fill=question12, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion1$SCHOOLS)))+labs(title="Student Engagement",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion1percentage, y = studentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+twelve <- ggplot(studentquestion1,aes(x=question12,y=studentquestion1percentage,fill=question12, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion1$SCHOOLS)))+labs(title="Student Engagement",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion1percentage, y = studentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer1 <- ggplotly(twelve, tooltip = c("text"))
 
 #Student Survey Q2 - Teacher Relationship
@@ -931,7 +931,7 @@ question13 <- studentquestion2$SCHOOLS
 studentquestion2percentage <- studentquestion2$`Question 2`
 studentquestion2percentage <- as.numeric(studentquestion2percentage)
 studentquestion2percentage <- studentquestion2percentage*100
-thirteen <- ggplot(studentquestion2,aes(x=question13,y=studentquestion2percentage,fill=question13, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion2$SCHOOLS)))+labs(title="Teacher Relationship",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion2percentage, y = studentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+thirteen <- ggplot(studentquestion2,aes(x=question13,y=studentquestion2percentage,fill=question13, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion2$SCHOOLS)))+labs(title="Teacher Relationship",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion2percentage, y = studentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer2 <- ggplotly(thirteen, tooltip = c("text"))
 
 #Student Survey Q3 - Social-Emotional Wellbeing
@@ -940,7 +940,7 @@ question14 <- studentquestion3$SCHOOLS
 studentquestion3percentage <- studentquestion3$`Question 3`
 studentquestion3percentage <- as.numeric(studentquestion3percentage)
 studentquestion3percentage <- studentquestion3percentage*100
-fourteen <- ggplot(studentquestion3,aes(x=question14,y=studentquestion3percentage,fill=question14, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion3$SCHOOLS)))+labs(title="Social-Emotional Wellbeing",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion3percentage, y = studentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+fourteen <- ggplot(studentquestion3,aes(x=question14,y=studentquestion3percentage,fill=question14, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion3$SCHOOLS)))+labs(title="Social-Emotional Wellbeing",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion3percentage, y = studentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer3 <- ggplotly(fourteen, tooltip = c("text"))
 
 #Student Survey Q5 - Bullying
@@ -949,7 +949,7 @@ question16 <- studentquestion5$SCHOOLS
 studentquestion5percentage <- studentquestion5$`Question 5`
 studentquestion5percentage <- as.numeric(studentquestion5percentage)
 studentquestion5percentage <- studentquestion5percentage*100
-sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
+sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer5 <- ggplotly(sixteen, tooltip = c("text"))
 
 # user interface-------------------------------------------------------------
@@ -1290,9 +1290,9 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                            # br("", style = "padding-top:2px;"),
                                                                            # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                            br(""),
-                                                                           h1(strong("Parent Climate Survey"),
+                                                                           h1(strong("Parent Survey"),
                                                                               #h2("") ,
-                                                                              h4("Parent Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                              h4("2019 to 2020 Academic School Year"),
                                                                               h4(""),
                                                                               #h4("[updat this]"),
                                                                               br()
@@ -1364,9 +1364,9 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                   # br("", style = "padding-top:2px;"),
                                                                   # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                   br(""),
-                                                                  h1(strong("Student Climate Survey"),
+                                                                  h1(strong("Student Survey"),
                                                                      #h2("") ,
-                                                                     h4("Student Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                     h4("2019 to 2020 Academic School Year"),
                                                                      h4(""),
                                                                      #h4("[updat this]"),
                                                                      br()
@@ -1437,9 +1437,9 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                   # br("", style = "padding-top:2px;"),
                                                                   # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                   br(""),
-                                                                  h1(strong("Teacher/Staff Climate Survey"),
+                                                                  h1(strong("Teacher/Staff Survey"),
                                                                      #h2("") ,
-                                                                     h4("Teacher/Staff Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                     h4("2019 to 2020 Academic School Year"),
                                                                      h4(""),
                                                                      #h4("[updat this]"),
                                                                      br()
