@@ -239,21 +239,21 @@ commutermode <- plot_ly(type='pie', labels=~labelsR, values=~valuesR, hoverinfo 
                         textinfo='text') %>% layout(title ='', legend=list(title=list(text='')), hoverinfo = "none")
 #------------------poverty-------------------------------
 
-poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
+poverty_as1<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
                         sheet = "Data")
 
-subset_poverty_as <- poverty_as[3:28, 1:4]
-subset_poverty_as
+subset_poverty_as1 <- poverty_as1[3:28, 1:4]
+
 #subset_poverty_as$Estimate[1:26]
-povas_pop <- subset_poverty_as$Estimate
-povas_pop <- as.numeric(povas_pop)
-povas_cat <- subset_poverty_as$Label
+povas_pop1 <- subset_poverty_as1$Estimate
+povas_pop1 <- as.numeric(povas_pop1)
+povas_cat1 <- subset_poverty_as1$Label
 
-Total <- povas_pop
+Total1 <- povas_pop1
 
-cat <- as.character(povas_cat)
+cat1 <- as.character(povas_cat1)
 
-pov <- plot_ly(subset_poverty_as, x = ~cat, y = ~Total, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat,"<br>","Total:",Total,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = ~cat))
+pov <- plot_ly(subset_poverty_as1, x = cat1, y = Total1, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat1,"<br>","Total:",Total1,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = cat1))
 #--------gender by school-------------------------------------------------
 
 
@@ -952,7 +952,7 @@ studentquestion5percentage <- studentquestion5percentage*100
 sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer5 <- ggplotly(sixteen, tooltip = c("text"))
 
-# user -------------------------------------------------------------
+# user interface-------------------------------------------------------------
 ui <- navbarPage(title = "DSPG",
                  selected = "overview",
                  theme = shinytheme("lumen"),
@@ -1076,15 +1076,19 @@ ui <- navbarPage(title = "DSPG",
                           fluidRow(style = "margin: 4px;",
                                    h1(strong("Sterling Sociodemographics"), align = "center"),
                                    p("", style = "padding-top:10px;"), 
-                                   column(12, 
-                                          h4(strong("Sterling Residents' Characteristics")),
-                                          
+                                  
+                                          h2(strong("Sterling Residents' Characteristics")),
+                                          column(12, align = "left",
+                                                 h3(strong("Who Makes Up Sterling, Virginia?")), 
+                                                 p("We used the American Community Survey (ACS) 5-year data to understand the socioeconomic demographics of the Sterling Census Designated Place (CDP) from the years 2016 to 2020. The ACS data is a survey collected by the U.S. Census Bureau which gathers sociodemographic information on American households including age, gender, race/ethnicity, income, and employment. ")
+                                          ),
+                                   column(7, 
                                           tabsetPanel(
                                             
                                             tabPanel("Demographic",
                                                      fluidRow(style = "margin: 4px;",
                                                               p("", style = "padding-top:10px;"),
-                                                              column(7, align = "left",
+                                                              column(12, align = "left",
                                                                      selectInput("demos1drop", "Select Socioeconomic Characteristic:", width = "100%", choices = c(
                                                                        "Gender" = "gender",
                                                                        "Age" = "age",
@@ -1099,24 +1103,12 @@ ui <- navbarPage(title = "DSPG",
                                                                            
                                                                      )
                                                               ),
-                                                              
-                                                              column(5, 
-                                                                     
-                                                                     p("Within Sterling, the largest age group are adults aged 35 to 44 years old, closely followed by 
-                                                                       25 to 34 years old, and 45 to 54 years old. About 27% of the population is under the age of 20 
-                                                                       with the largest group being those under 5.", style = "padding-top:15px;font-size: 14px;"),
-                                                                     p("From 2016-2020, those identifying as White made up just over half of the Sterling residents 
-                                                                       followed Asian and Other which may include those who identify as Hispanic as the ACS does not
-                                                                       include Hispanic as a race.", 
-                                                                       style = "padding-top:15px;font-size: 14px;"),
-                                                              
-                                                              
-                                                     ))),
+                                                     )),
                                             
                                             tabPanel("Income",
                                                      fluidRow(style = "margin: 4px;",
                                                               p("", style = "padding-top:10px;"),
-                                                              column(7, align = "left",
+                                                              column(12, align = "left",
                                                                      selectInput("demos2drop", "Select Socioeconomic Characteristic:", width = "100%", choices = c(
                                                                        "Educational Attainment" = "edu",
                                                                        "Family Income" = "faminc",
@@ -1132,29 +1124,11 @@ ui <- navbarPage(title = "DSPG",
                                                                      
                                                               ),
                                                               
-                                                              column(5, align = "justify",
-                                                                     p("For the Sterling residents, the majority have attained a high school degree or 
-                                                                       equivalent with the largest group having attained a bachelor’s degree. ", style = "padding-top:15px;font-size: 14px;"),
-                                                                     p("For families in the past 12 months, the largest income level is the $100,000 to $149,999 bracket 
-                                                                       followed closely by both the $50,000 to $74,999 bracket and $150,000 to $199,999. It should be taken
-                                                                       into consideration however that our data is slightly skewed as the areas of the Sterling CPD includes
-                                                                       those that are highly affluent, outweigh those located in the areas with the schools designated as 
-                                                                       Title 1. ", style = "padding-top:15px;font-size: 14px;"),  
-                                                                     p("Expanding on that, females ages 18 to 24 years old face the highest level of poverty by sex and age 
-                                                                       overall followed by females ages 35 to 44 years old and males ages 25 to 34 years old. The ACS lacks 
-                                                                       data on males 12 to 14, 15, and 34 to 44 years as well as females ages 16 to 17 years. From the data 
-                                                                       that is available, females tend to have higher levels of poverty than males especially from years 6 to 11. 
-                                                                       While most Sterling residents have private health insurance, 23% are on public insurance such as Medicare 
-                                                                       and Medicaid, and 16.5% of residents have no health insurance at all. ", 
-                                                                       style = "padding-top:15px;font-size: 14px;"), 
-                                                                     
-                                                              )
-                                                              
                                                      )),
                                             tabPanel("Occupation/Work",
                                                      fluidRow(style = "margin: 4px;",
                                                               p("", style = "padding-top:10px;"),
-                                                              column(7, align = "left",
+                                                              column(12, align = "left",
                                                                      selectInput("demos3drop", "Select Socioeconomic Characteristic:", width = "100%", choices = c(
                                                                        "Employment" = "employment",
                                                                        "Work Occupation" = "workoccu",
@@ -1167,17 +1141,8 @@ ui <- navbarPage(title = "DSPG",
                                                                      column(12,align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
                                                                           )),
-                                                                     column(5, align = "justify",
-                                                                            p("Within Sterling, the majority of residents are employed at 71.8% while only 4.7% 
-                                                                              of the residents are unemployed. The labor force of Sterling has the largest number
-                                                                              of the population working in the management, business, science and art sector followed
-                                                                              by the service sector and sales and office sector. Only 20% of residents in Sterling 
-                                                                              work in the natural resources, construction, and maintenance field as well as the 
-                                                                              production, transportation, and material moving field. ",  style = "padding-top:15px;font-size: 14px;"),
-                                                                            p("For Sterling residents who commute to work, over half have a commute that is less than 30 
-                                                                              minutes and 75% of said commuters drove alone. Notably, only 2.8% of commuters utilized public 
-                                                                              transportation.",style = "padding-top:15px;font-size: 14px;"),
-                                                                            ),
+                                                                     
+                                                                            
                                                                      
                                                                       )
                                                               ),
@@ -1185,6 +1150,43 @@ ui <- navbarPage(title = "DSPG",
                                             
                                             
                                           )),
+                                   
+                                  column(5, 
+                                         br(""),
+                                         br(""),
+                                         br(""),
+                                          p("Females are about 49.5% of the total population in Sterling. This is marginally in contrast with the Virginia and Loudoun County averages whose populations comprise of more women than men. The national female percentage also stands at 50.7%. Within Sterling, the largest age group are adults (aged 35 to 44 years), closely followed by 25 to 34 years olds, and 45 to 54 years olds. The median age is 34.7. About 27% of the population is under the age of 20 with the largest group being those under 5. From 2016-2020, those identifying as White made up just over half of the Sterling residents followed Asian and Other which may include those who identify as Hispanics as the ACS does not include Hispanic as a race.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                          
+                                         p("For the Sterling residents, the majority have attained a high school degree or 
+                                                                       equivalent with the largest group having attained a bachelor’s degree. ", style = "padding-top:15px;font-size: 14px;"),
+                                         p("For families in the past 12 months, the largest income level is the $100,000 to $149,999 bracket 
+                                                                       followed closely by both the $50,000 to $74,999 bracket and $150,000 to $199,999. It should be taken
+                                                                       into consideration however that our data is slightly skewed as the areas of the Sterling CPD includes
+                                                                       those that are highly affluent, outweigh those located in the areas with the schools designated as 
+                                                                       Title 1. ", style = "padding-top:15px;font-size: 14px;"),  
+                                         p("Expanding on that, females ages 18 to 24 years old face the highest level of poverty by sex and age 
+                                                                       overall followed by females ages 35 to 44 years old and males ages 25 to 34 years old. The ACS lacks 
+                                                                       data on males 12 to 14, 15, and 34 to 44 years as well as females ages 16 to 17 years. From the data 
+                                                                       that is available, females tend to have higher levels of poverty than males especially from years 6 to 11. 
+                                                                       While most Sterling residents have private health insurance, 23% are on public insurance such as Medicare 
+                                                                       and Medicaid, and 16.5% of residents have no health insurance at all. ", 
+                                           style = "padding-top:15px;font-size: 14px;"), 
+                                         p("Within Sterling, the majority of residents are employed at 71.8% while only 4.7% 
+                                                                              of the residents are unemployed. The labor force of Sterling has the largest number
+                                                                              of the population working in the management, business, science and art sector followed
+                                                                              by the service sector and sales and office sector. Only 20% of residents in Sterling 
+                                                                              work in the natural resources, construction, and maintenance field as well as the 
+                                                                              production, transportation, and material moving field. ",  style = "padding-top:15px;font-size: 14px;"),
+                                         p("For Sterling residents who commute to work, over half have a commute that is less than 30 
+                                                                              minutes and 75% of said commuters drove alone. Notably, only 2.8% of commuters utilized public 
+                                                                              transportation.",style = "padding-top:15px;font-size: 14px;"),
+                                         
+                                    
+                                  )
+                                    
+                                   
+                                   
+                                   
                                    
                           )
                  ),
@@ -1195,10 +1197,9 @@ ui <- navbarPage(title = "DSPG",
                                      fluidRow(style = "margin: 6px;",
                                               column(12, 
                                                      h1(strong("Elementary Students in Community Schools Characteristics"), align = "center"),
-                                                     #column(4, 
-                                                     #      h4(strong("Education")),
-                                                     #     p("These are demographics"),
-                                                     #  ) ,
+                                                     h2(strong("What Do Community Schools Look Like?"), align = "left"),
+                                                     p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
+                                                     
                                                      
                                                      tabsetPanel(
                                                        
@@ -1232,8 +1233,7 @@ ui <- navbarPage(title = "DSPG",
                                                                                   of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove 
                                                                                   Elementary.", 
                                                                                   style = "padding-top:15px;font-size: 14px;"),
-                                                                                
-                                                                                
+                                                                               
                                                                          )
                                                                          
                                                                 )
@@ -1567,9 +1567,10 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                             tabPanel("Health and Social Services",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
-                                              column(12, align = "center",h4(strong("Health and Social Services")),
+                                              column(12, align = "center",h1(strong("Health and Social Services")),
                                                      p(""),
-                                                     br("")
+                                                     h3(strong("Overview"), align = "left"), 
+                                                     p(("To understand the services available to those located in Sterling, we used data from our stakeholders as well as publicly available data to provide a general idea of the resources available within the Sterling area. "), align = "left"),
                                                      
                                                      
                                                      
@@ -1579,11 +1580,16 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                               )),
                                      
                                      fluidPage(style = "margin: 2px;", 
-                                               column(12, 
-                                                      leafletOutput("map_health", width = "100%")
+                                               column(6, 
+                                                      leafletOutput("map_health", width = "100%", height = 600)
                                                       #fluidRow(align = "center",
                                                       #    p(tags$small(em('Last updated: August 2021'))))
-                                               )
+                                               ), 
+                                               column(6, 
+                                                      h3("Services"), 
+                                                      
+                                                      
+                                                      )
                                      )),
                             
                             
