@@ -356,11 +356,13 @@ healthin <- ggplotly(health, tooltip = c("text"))
 races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
 
 race_subset <- races[(1:153),c(1,5,6,7)]
-School <- race_subset$`School Name`
-raceS <- race_subset$Race
-total <- race_subset$`Full Time Count (All Grades)`
-raceehtn <- ggplot(race_subset, aes(x=raceS,y=total,fill=School))+ geom_col()+labs(x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1),axis.text.x=element_text(angle=90)) + scale_fill_brewer(palette = "Set1") + scale_fill_discrete(name = "")
-raceehtn<-ggplotly(raceehtn)
+nineteensub <- race_subset[(73:96),(1:4)]
+Race <- nineteensub$Race
+Total <- nineteensub$`Full Time Count (All Grades)`
+School <- nineteensub$`School Name`
+racenine <- ggplot(nineteensub,aes(x=School,y=Total,fill=Race))+ geom_col(position = "dodge")+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Total",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
+                                                                                                                                                                                                                                         plot.caption = element_text(hjust = 1)) + guides(fill=guide_legend(title="Race/Ethnicity"))
+racenine <- ggplotly(racenine)
 
 #-----------hispanic population-----------------
 
@@ -1206,7 +1208,7 @@ ui <- navbarPage(title = "DSPG",
                                                                          column(7, align = "left",
                                                                                 selectInput("schooldrop1", "Select Demographic:", width = "100%", choices = c(
                                                                                   "Gender" = "cgender",
-                                                                                  "Race/Ethnicity" = "raceehtn",
+                                                                                  "Race/Ethnicity" = "racenine",
                                                                                   "Hispanic Population" = "chispanic"
                                                                                   
                                                                                 ),
@@ -1220,8 +1222,24 @@ ui <- navbarPage(title = "DSPG",
                                                                          ),
                                                                          
                                                                          column(5, align = "justify",
-                                                                                p("After understanding the demographics of the areas that feed into the community schools, next we began to look at the demographics of our specific populations, the 6 schools. For this, we used data from the Virginia Department of Education as well as the Loudoun County Public Schools dashboard and staff directory.", style = "padding-top:15px;font-size: 14px;"),
-                                                                                p("To further understand our population, we wanted to compare the race and ethnicity demographics we visualized from the Sterling CDP and our 6 community schools.   In this graph, we visualized data from all 6 schools together and found that overall, Hispanic students, represented by the light purple bar, make up the greatest percentage of students which differs from the general make-up of the Sterling CDP where White people made up the majority of residents. After seeing this, we wanted to look at the breakdown of the Hispanic population within the greater Sterling area.   Using data from the American Community Survey of Greater Sterling between the years 2016 to 2020, we found that the area where Rolling Ridge is located, represented by the light yellow area of the map, has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary, the area of the map shaded mustard yellow,  and Forest Grove Elementary, the dark orange, lower area of the map.   This information will help us to identify possible opportunities within the schools and neighborhoods specifically surrounding language services.", style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("After understanding the demographics of the areas that feed into the community schools, 
+                                                                                  next we began to look at the demographics of our specific populations, the 6 schools. For 
+                                                                                  this, we used data from the Virginia Department of Education as well as the Loudoun County 
+                                                                                  Public Schools dashboard and staff directory.", style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("To further understand our population, we wanted to compare the race and ethnicity 
+                                                                                  demographics we visualized from the Sterling CDP and our 6 community schools.  
+                                                                                  In this graph, we visualized data from all 6 schools together and found that overall,
+                                                                                  Hispanic students, represented by the light purple bar, make up the greatest percentage of 
+                                                                                  students which differs from the general make-up of the Sterling CDP where White people made 
+                                                                                  up the majority of residents. After seeing this, we wanted to look at the breakdown of the 
+                                                                                  Hispanic population within the greater Sterling area.   Using data from the American Community
+                                                                                  Survey of Greater Sterling between the years 2016 to 2020, we found that the area where Rolling
+                                                                                  Ridge is located, represented by the light yellow area of the map, has the largest population
+                                                                                  of Hispanic identifying people. This is followed closely by Sterling Elementary, the area of 
+                                                                                  the map shaded mustard yellow,  and Forest Grove Elementary, the dark orange, lower area of 
+                                                                                  the map.   This information will help us to identify possible opportunities within the schools
+                                                                                  and neighborhoods specifically surrounding language services.", 
+                                                                                  style = "padding-top:15px;font-size: 14px;"),
                                                                                 
                                                                                 
                                                                          )
@@ -1822,8 +1840,8 @@ server <- function(input, output, session) {
   
   output$ocuplot1 <- renderPlotly({
     
-    if(Var2() == "raceehtn"){
-      raceehtn 
+    if(Var2() == "racenine"){
+      racenine 
     }
     else if(Var2() == "cgender"){
       genders 
