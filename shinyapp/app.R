@@ -1570,7 +1570,12 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                               column(12, align = "center",h1(strong("Health and Social Services")),
                                                      p(""),
                                                      h3(strong("Overview"), align = "left"), 
-                                                     p(("To understand the services available to those located in Sterling, we used data from our stakeholders as well as publicly available data to provide a general idea of the resources available within the Sterling area. "), align = "left"),
+                                                     p(("To understand the services available to those located in Sterling, we used data from our
+                                                        stakeholders as well as publicly available data to provide a general idea of the resources
+                                                        available within the Sterling area for the four pillars of Community Schools. On each map,
+                                                        the legend in the top right corner is interactive allowing the user to select and deselect
+                                                        desired resource groups and each colored marker provides a pop-up with information on that 
+                                                        resource.   "), align = "left"),
                                                      
                                                      
                                                      
@@ -1586,7 +1591,27 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                       #    p(tags$small(em('Last updated: August 2021'))))
                                                ), 
                                                column(6, 
-                                                      h3("Services"), 
+                                                      h3(strong("Services")), 
+                                                      p("A key pillar essential to ensuring that a community will thrive is access to 
+                                                        quality health and social services which include nutritious food, weather-appropriate
+                                                        clothing, and medical care including dental care, vision care, comprehensive primary 
+                                                        care, and preventative care. For many, barriers to these services are often a result 
+                                                        of expense and transportation making it vital to provide access to these resources for
+                                                        all members of a community."),
+                                                      p("Due to Sterling’s unique location within Loudoun County and its proximity to Washington, 
+                                                        D.C., Sterling residents have access to many options when it comes to health and social 
+                                                        services. However, this is not true for all Sterling residents. For those in need of free 
+                                                        or reduced cost services, the number and accessibility decrease with many services falling 
+                                                        outside of a ten-minute drive."),
+                                                      p("In terms of free services, there is a wide variety of food pantries available within a 
+                                                        ten-minute drive of Sterling Elementary. However, beyond that, access to medical care and 
+                                                        clothing is not as readily available with many resources falling within the 20- and 45-minute
+                                                        boundaries. "),
+                                                      h3(strong("Travel Distance")),
+                                                      p("We included the driving distances from the center location of Sterling Elementary School as 
+                                                        it sits in the middle of the Sterling, CDP. Shown on the map are the driving distances for 10 
+                                                        minutes, 20 minutes, and 45 minutes shaded in green, blue, and red, respectively. Within each 
+                                                        boundary are markers representing different services available within those driving distances.")
                                                       
                                                       
                                                       )
