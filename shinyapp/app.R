@@ -1077,11 +1077,8 @@ ui <- navbarPage(title = "DSPG",
                                    h1(strong("Sterling Sociodemographics"), align = "center"),
                                    p("", style = "padding-top:10px;"), 
                                    column(12, 
-                                          h2(strong("Sterling Residents' Characteristics")),
-                                   column(12, align = "left",
-                                          h3(strong("Who Makes Up Sterling, Virginia?")), 
-                                          p("We used the American Community Survey (ACS) 5-year data to understand the socioeconomic demographics of the Sterling Census Designated Place (CDP) from the years 2016 to 2020. The ACS data is a survey collected by the U.S. Census Bureau which gathers sociodemographic information on American households including age, gender, race/ethnicity, income, and employment. ")
-                                          ),
+                                          h4(strong("Sterling Residents' Characteristics")),
+                                          
                                           tabsetPanel(
                                             
                                             tabPanel("Demographic",
@@ -1198,9 +1195,6 @@ ui <- navbarPage(title = "DSPG",
                                      fluidRow(style = "margin: 6px;",
                                               column(12, 
                                                      h1(strong("Elementary Students in Community Schools Characteristics"), align = "center"),
-                                                     h2(strong("What Do Community Schools Look Like?"), align = "left"),
-                                                     p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
-                                                     
                                                      #column(4, 
                                                      #      h4(strong("Education")),
                                                      #     p("These are demographics"),
@@ -1264,8 +1258,7 @@ ui <- navbarPage(title = "DSPG",
                                                                          ),
                                                                          
                                                                          column(5, align = "justify",
-                                                                                p("Once we felt we understood the demographics of those attending the schools, we switched our focus to the data within the schools themselves. Beginning with the number of teachers and staff employed at each school, we used data from the 2022 school directory, which revealed that at most of the schools, there are more teachers than staff except for Sterling Elementary, which has a larger amount of staff than teachers which may suggest possible possible opportunities in service.    Also notable was the lower total number of staff and teachers employed at Sully Elementary, seen in the last bar on the graph, which led us to visualize the total enrollment for each of the schools to better understand these differences.Using data from the Virginia Department of Education’s Fall Membership Reports for the years 2016 to 2020,   we found that Guilford, seen in the bottom left graph,   Sugarland, the top right graph,   and Rolling Ridge, the bottom right graph,  all maintained a total enrollment of between 550 and 600 students with only slight variations between years. For Forest Grove, the top left graph,   enrollment remained steady between 2016 and 2020 hovering right at 575 students.   On the other hand, Sterling Elementary, the top right graph,   had an enrollment of 450 to 500 students with a slight decline from 2016 to 2020   and Sully Elementary, has only between 400 to 475 students enrolled.   Since the implementation of the Community School Initiative, there has been an increase in enrollment at Sully and Guilford,   while we are not saying that this program is the cause of this increase, it was noticed and may be worth looking into further. Additionally, the differences in enrollment between schools may suggest possible opportunities to look into surrounding youth engagement resources.
-", style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("", style = "padding-top:15px;font-size: 14px;"),
                                                                                 p("To further breakdown the enrollment statistics, we used the LCPS Dashboard data to visualize the student’s absences by quarter at each school during the 2021 to 2022 school year.   While Rolling Ridge, the green line,   Sugarland, the dark blue line,   and Guilford, the yellow line,   all saw spikes in absences during quarter two,   it was Sully, the pink line,   Sterling, the light blue line,   and Forest Grove, the orange line,   that had a steady increase in absences over the 4 quarters. However it is important to note that this data came from the school year during the COVID-19 pandemic.
 To determine if this issue was chronic,   we used Virginia Department of Education data from prior to the pandemic on chronic absenteeism.   This is defined as the percentage of students who miss more than 10% of total classes throughout the year.   This data revealed to us that Sugarland and Rolling Ridge Elementary continued to have a high number of absences prior to the pandemic, suggesting that this may be an area to look for possible service gaps.
 ", style = "padding-top:15px;font-size: 14px;"),
