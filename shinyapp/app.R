@@ -1063,7 +1063,7 @@ ui <- navbarPage(title = "DSPG",
                                                                      selectInput("demos1drop", "Select Socioeconomic Characteristic:", width = "100%", choices = c(
                                                                        "Gender" = "gender",
                                                                        "Age" = "age",
-                                                                       "Race/ethnicity" = "race"
+                                                                       "Race/Ethnicity" = "race"
                                                                        
                                                                      ),
                                                                      ),   
@@ -1071,22 +1071,22 @@ ui <- navbarPage(title = "DSPG",
                                                                      withSpinner(plotlyOutput("demo1", height = "500px", width ="100%")),
                                                                      column(12, align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
-                                                                            p("*Note: Data is nill for missing bars", style = "font-size:12px;")
+                                                                           
                                                                      )
                                                               ),
                                                               
                                                               column(5, 
                                                                      
-                                                                     p("To access the possible opportunities within the six title 1 community schools in Sterling, VA, it is important to understand the neighborhood and area in which these schools are located. By looking at the graph, it appears to be almost an equal split of male’s and females in Sterling, VA. The total population in sterling is 30,271. 15,282 members of the population are male, while the remaining 14,989 are female. There are only 293 more males than females so that gives us almost a one to one ratio - so that’s good.", style = "padding-top:15px;font-size: 14px;"),
-                                                                     p("So, once the team looked at the gender distribution, we were curious to look at the age distribution of the individuals of Sterling. The largest age group in Sterling are Adults (ages 35 to 44) which is represented by the blue green block, and then the older millennials (25 to 34) which is represented by the light green block. The age groups are fitting for the high median income within the area. ", style = "padding-top:15px;font-size: 14px;"),
-                                                                     p("
-Another important determinant that might impact someone’s availability of opportunities is their race or ethnicity. So, our logical next step was to look at the ethnicity/race distribution of the people of Sterling. Collecting the Race and Ethnicity demographic proved to be a little challenging at first. While the team was observing the data, we kept noticing that the number of individuals in each race population kept exceeding the total population of Sterling. For example, when we would add up all of the white, hispanic, asian, Hawaiian, and  African American population’s, the total number would exceed 30,271, the population of Sterling, VA. We later learned that this is because the American Community Survey does not recognize hispanic as a race. To the American Community Survey, Hispanic is an ethnicity so People can identify as white or asian and still be of hispanic decent, or they could select “other” as there is a separate category for them to mark hispanic. Knowing that disclaimer, we had to create a separate visualization for the hispanic population so we could best represent them. As you can see, majority of the Sterling population is white. When you look at the ethnicity visualization, almost half of the sterling CDP population identifies as being hispanic or latino.
-", style = "padding-top:15px;font-size: 14px;")
-                                                                     
-                                                              )
+                                                                     p("Within Sterling, the largest age group are adults aged 35 to 44 years old, closely followed by 
+                                                                       25 to 34 years old, and 45 to 54 years old. About 27% of the population is under the age of 20 
+                                                                       with the largest group being those under 5.", style = "padding-top:15px;font-size: 14px;"),
+                                                                     p("From 2016-2020, those identifying as White made up just over half of the Sterling residents 
+                                                                       followed Asian and Other which may include those who identify as Hispanic as the ACS does not
+                                                                       include Hispanic as a race.", 
+                                                                       style = "padding-top:15px;font-size: 14px;"),
                                                               
                                                               
-                                                     )),
+                                                     ))),
                                             
                                             tabPanel("Income",
                                                      fluidRow(style = "margin: 4px;",
@@ -1101,19 +1101,27 @@ Another important determinant that might impact someone’s availability of oppo
                                                                      ),     
                                                                      br(""),
                                                                      withSpinner(plotlyOutput("demo2", height = "500px", width ="100%")),
+                                                                     column(12,align = "right",
+                                                                     p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
+                                                                     p("*Note: Data is nill for missing bars", style = "font-size:12px;"))
                                                                      
                                                               ),
                                                               
                                                               column(5, align = "justify",
-                                                                     p("Now that we looked at the ethnic groups, we wanted to look at the educational attainment levels. The data was collected from the individuals who are ages 25 and over. It seems that a large number of the population are educated with that of a bachelors agree or higher, which is fitting for the county’s high median income. 
-so a reasonable population has achieved high education - how much is Sterling making? Thus, we looked at family income levels. This data was collected looking at family households in the last 12 months of the ACS collected data (2020). It has also been adjusted for inflation. Interestingly enough, the largest income bracket lies within the range of $100,000 to $149,999 which is represented by the dark purple area however we do acknowledge that this may not apply our families of interest.
-", style = "padding-top:15px;font-size: 14px;"),
-                                                                     p("So we wondered if the high-income levels also affect the housing market so this can help us to understand housing needs and availability of the children’s families. Looking at this visualization, we see that this area has a high property value with a large percentage of properties being worth $300,000 to $499,999, shown by the blue part of the circle. This is important to take into consideration considering our targeted title1 area. Once we looked at the high property values, we were intrigued to find out how many occupants own their homes. As expected, majority housing residents are home owners, while a little over a quarter housing residents are renters. This could be because of families high incomes.", style = "padding-top:15px;font-size: 14px;"),  
-                                                                     p("Next, we visualized the data for employment in the sterling area. Pink is used to show the Employed Percentage whereas Aqua blue shows the unemployed percentage of the population. One thing to note is that this percentage is from within the labor force not the total population of the area. One key take away from this graph is that the majority of sterling is employed at a remarkably
-high rate higher than the national average. 71.8% employment rate.", style = "padding-top:15px;font-size: 14px;"), 
-                                                                     p("The next best thing to do was to look at what groups are being employed so we saw that the majority of them are being employed in the management, business, and science industry with a total number of 6,380 individuals. The service industry comes in second place at around 25% which makes it upto 4,122 individuals. The graph shows that one of the smallest occupations is the production industry which suggests that sterling is not an industrial area but has more corporate jobs to offer as management and business are one of the highest employable sectors in sterling. Using ACS American community survey data of the sterling cdp census designated place we found that 75% commuters drive on their own while only a quarter prefer other modes of commute. Notably less than 2 % of commuters take public transportation, this may be something we want to further research.", style = "padding-top:15px;font-size: 14px;"), 
-                                                                     
-                                                                     p("The visualization for healthcare tells us that private health insurance is the most popular type of health insurance. Private health insurance mainly consists of insurance plans provided through the employer. Coming in second place is the public insurance type which mainly consists of low-cost government backed programs such as medicare, medicaid, blue cross blue shield and Virginia Cover. However, there is a chunk of population of about 16.5% that does not have any kind of health insurance this might be an area where we can research more to figure out the possible opportunities in the community.", style = "padding-top:15px;font-size: 14px;"),
+                                                                     p("For the Sterling residents, the majority have attained a high school degree or 
+                                                                       equivalent with the largest group having attained a bachelor’s degree. ", style = "padding-top:15px;font-size: 14px;"),
+                                                                     p("For families in the past 12 months, the largest income level is the $100,000 to $149,999 bracket 
+                                                                       followed closely by both the $50,000 to $74,999 bracket and $150,000 to $199,999. It should be taken
+                                                                       into consideration however that our data is slightly skewed as the areas of the Sterling CPD includes
+                                                                       those that are highly affluent, outweigh those located in the areas with the schools designated as 
+                                                                       Title 1. ", style = "padding-top:15px;font-size: 14px;"),  
+                                                                     p("Expanding on that, females ages 18 to 24 years old face the highest level of poverty by sex and age 
+                                                                       overall followed by females ages 35 to 44 years old and males ages 25 to 34 years old. The ACS lacks 
+                                                                       data on males 12 to 14, 15, and 34 to 44 years as well as females ages 16 to 17 years. From the data 
+                                                                       that is available, females tend to have higher levels of poverty than males especially from years 6 to 11. 
+                                                                       While most Sterling residents have private health insurance, 23% are on public insurance such as Medicare 
+                                                                       and Medicaid, and 16.5% of residents have no health insurance at all. ", 
+                                                                       style = "padding-top:15px;font-size: 14px;"), 
                                                                      
                                                               )
                                                               
@@ -1131,7 +1139,23 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                                                                      ),         
                                                                      br(""),
                                                                      withSpinner(plotlyOutput("demo3", height = "500px", width ="100%")),
-                                                              ))),
+                                                                     column(12,align = "right",
+                                                                            p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
+                                                                          ),
+                                                                     column(5, align = "right",
+                                                                            p("Within Sterling, the majority of residents are employed at 71.8% while only 4.7% 
+                                                                              of the residents are unemployed. The labor force of Sterling has the largest number
+                                                                              of the population working in the management, business, science and art sector followed
+                                                                              by the service sector and sales and office sector. Only 20% of residents in Sterling 
+                                                                              work in the natural resources, construction, and maintenance field as well as the 
+                                                                              production, transportation, and material moving field. ",  style = "padding-top:15px;font-size: 14px;"),
+                                                                            p("For Sterling residents who commute to work, over half have a commute that is less than 30 
+                                                                              minutes and 75% of said commuters drove alone. Notably, only 2.8% of commuters utilized public 
+                                                                              transportation.",style = "padding-top:15px;font-size: 14px;"),
+                                                                            )),
+                                                                     
+                                                                      )
+                                                              ),
                                             
                                             
                                             
