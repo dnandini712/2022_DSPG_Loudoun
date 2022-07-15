@@ -1120,7 +1120,7 @@ ui <- navbarPage(title = "DSPG",
                                                                      withSpinner(plotlyOutput("demo2", height = "500px", width ="100%")),
                                                                      column(12,align = "right",
                                                                      p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
-                                                                     p("*Note: Data is nill for missing bars", style = "font-size:12px;"))
+                                                                     p("*Note: Data is zero for missing bars", style = "font-size:12px;"))
                                                                      
                                                               ),
                                                               
