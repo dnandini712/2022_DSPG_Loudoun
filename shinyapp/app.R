@@ -151,7 +151,6 @@ gender
 
 #---------Age chart---------------------------------------
 
-
 sterling1 <- read_excel(paste0(getwd(),"/data/sterlingdata.xlsx"),skip=1,col_names=TRUE)
 subset_sterling1 <- sterling1[6:18,c(1, 10:13)]
 age_estimate1 <- sterling1$Percent...12[6:18]
@@ -163,7 +162,7 @@ age_cat1 <- (subset_sterling1$Label)
 Age1 <- age_cat1
 Percent1 <- age_percent1
 
-agesterling<- plot_ly(subset_sterling1,x=~Age1, y=~Percent1,type = "bar", color = ~Age1, hoverinfo = "text",text = ~paste("Age:",Age1,"<br>","Percent:",Percent1,"%" )) %>% layout(title = "Age Distribution",xaxis = list(title=""))
+agesterling<- plot_ly(subset_sterling1,x=~Age1, y=~Percent1,type = "bar", color = ~Age1, hoverinfo = "text",text = ~paste("Age:",Age1,"<br>","Percent:",Percent1,"%" )) %>% layout(title = "Age Distribution",xaxis = list(title=""), yaxis = list(title = "Percentage"))
 
 
 #-----------Race/Ethnicity--------------------
@@ -190,7 +189,7 @@ mi_cat.fac <- factor(mi_cat, levels = c(mi_cat))
 subset_medianin$new_pop<-gsub("%$","",subset_medianin$...4)
 pop_nop <- subset_medianin$new_pop
 pop_num <- as.numeric(pop_nop)
-income <- plot_ly(subset_medianin,x=~mi_cat.fac,y=~pop_num,color = ~mi_cat.fac,type = "bar", hoverinfo = "text",text = ~paste("Income Level:",mi_cat.fac,"<br>","Percent:",pop_num,"%")) %>% layout(title = "Median Income Distribution",xaxis = list(title="") ,yaxis= list(title = "Percent"))
+income <- plot_ly(subset_medianin,x=~mi_cat.fac,y=~pop_num,color = ~mi_cat.fac,type = "bar", hoverinfo = "text",text = ~paste("Income Level:",mi_cat.fac,"<br>","Percent:",pop_num,"%")) %>% layout(title = "Median Income Distribution",xaxis = list(title="") ,yaxis= list(title = "Percentage"))
 #---------Property Value---------------------------------
 
 dfpv <- read_excel(paste0(getwd(), "/data/Property_Value.xlsx"), col_names = TRUE)
@@ -221,7 +220,7 @@ valuestotalCT = c(989,2968,2787,2177,792,2160,1154,1649,1813.9)
 commutertime <- plot_ly(type='funnelarea', labels=labelsCT, values=valuesCT, sort = FALSE, direction = "",
                         textinfo='percent',
                         hoverinfo = 'text', text = ~paste('Total Number of Commuters:', valuestotalCT),
-                        insidetextorientation='radial') %>% layout(title ='Commuter Time to Work', showlegend=TRUE, legend=list(title=list(text='Select Value')), legend=list(x=1, y=0.5))
+                        insidetextorientation='radial') %>% layout(title ='Commuter Time to Work', showlegend=TRUE, legend=list(title=list(text='')), legend=list(x=1, y=0.5))
 
 #-----------------Commuter mode--------------------------
 my_colors <- c("#CA001B", "#1D28B0", "#D71DA4", "#00A3AD", "#FF8200", "#753BBD", "#00B5E2", "#008578", "#EB6FBD", "#FE5000", "#6CC24A", "#D9D9D6", "#AD0C27", "#950078")
@@ -236,7 +235,7 @@ valuesR = c(12922, 2574, 308, 77, 609, 741)
 perc <- round(valuesR / sum(valuesR)*100, 1)
 commutermode <- plot_ly(type='pie', labels=~labelsR, values=~valuesR, hoverinfo = "none", 
                         text = ~paste0(labelsR, "\n", perc, "%"), 
-                        textinfo='text') %>% layout(title ='', legend=list(title=list(text='')), hoverinfo = "none")
+                        textinfo='text') %>% layout(title ='Mode of Transportation to Work', legend=list(title=list(text='')), hoverinfo = "none")
 #------------------poverty-------------------------------
 
 poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
@@ -356,11 +355,13 @@ healthin <- ggplotly(health, tooltip = c("text"))
 races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
 
 race_subset <- races[(1:153),c(1,5,6,7)]
-School <- race_subset$`School Name`
-raceS <- race_subset$Race
-total <- race_subset$`Full Time Count (All Grades)`
-raceehtn <- ggplot(race_subset, aes(x=raceS,y=total,fill=School))+ geom_col()+labs(x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1),axis.text.x=element_text(angle=90)) + scale_fill_brewer(palette = "Set1") + scale_fill_discrete(name = "")
-raceehtn<-ggplotly(raceehtn)
+nineteensub <- race_subset[(73:96),(1:4)]
+Race <- nineteensub$Race
+Total <- nineteensub$`Full Time Count (All Grades)`
+School <- nineteensub$`School Name`
+racenine <- ggplot(nineteensub,aes(x=School,y=Total,fill=Race))+ geom_col(position = "dodge")+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Total",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
+                                                                                                                                                                                                                                         plot.caption = element_text(hjust = 1)) + guides(fill=guide_legend(title="Race/Ethnicity"))
+racenine <- ggplotly(racenine)
 
 #-----------hispanic population-----------------
 
@@ -397,7 +398,7 @@ enrollment <- read_excel(paste0(getwd(),"/data/Enrollment16-20.xlsx"))
 enr_total <- enrollment$Total
 School <- enrollment$Schools
 Year <- enrollment$Year
-enroll <- plot_ly(enrollment, x = ~Year,y = ~Total, color = ~School, type = 'scatter',mode = 'lines', hoverinfo="text", text = ~paste("Total:", Total)) %>% layout(title= " Total Enrollment by Schools", xaxis = list(title = ""))
+enroll <- plot_ly(enrollment, x = ~Year,y = ~Total, color = ~School, type = 'scatter',mode = 'lines', hoverinfo="text", text = ~paste("Total:", Total)) %>% layout(title= "Total Enrollment by Schools", xaxis = list(title = ""), yaxis = list(title = "Total Students"), legend=list(title=list(text='Select School')))
 
 #-------------------attendance --------------
 
@@ -407,7 +408,7 @@ Quarter <- attendance$`School Quarter`
 School <- attendance$`School Name`
 ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(title = "Student Absences by 2020-2021 Quarter",caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",
                                                                                                                                                                                                                                       plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
-attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("School:",School,"<br>","Percent:",Percent)) %>% layout(title = "Student Absences by 2020-2021 Quarter",xaxis = list(title = ""))
+attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("School:",School,"<br>","Percent:",Percent)) %>% layout(title = "Student Absences by 2020-2021 Quarter", legend=list(title=list(text='Select School')), yaxis = list(title = "Percentage"), xaxis = list(title = ""))
 #---------------Number of Teachers/Staff--------------------------
 
 Schools <- c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
@@ -822,7 +823,7 @@ question1 <- staffquestion1$SCHOOLS
 staffquestion1percentage <- staffquestion1$`Question 1`
 staffquestion1percentage <- as.numeric(staffquestion1percentage)
 staffquestion1percentage <- staffquestion1percentage*100
-one <- ggplot(staffquestion1,aes(x=question1,y=staffquestion1percentage,fill=question1, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion1$SCHOOLS)))+labs(title="Staff Collegiality",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion1percentage, y = staffquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+one <- ggplot(staffquestion1,aes(x=question1,y=staffquestion1percentage,fill=question1, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion1$SCHOOLS)))+labs(title="Staff Collegiality",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion1percentage, y = staffquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer1 <- ggplotly(one, tooltip = c("text"))
 
 #Teacher & Staff Survey Q2 - Academic Environment
@@ -831,7 +832,7 @@ question2 <- staffquestion2$SCHOOLS
 staffquestion2percentage <- staffquestion2$`Question 2`
 staffquestion2percentage <- as.numeric(staffquestion2percentage)
 staffquestion2percentage <- staffquestion2percentage*100
-two <- ggplot(staffquestion2,aes(x=question2,y=staffquestion2percentage,fill=question2, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion2$SCHOOLS)))+labs(title="Academic Environment",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion2percentage, y = staffquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+two <- ggplot(staffquestion2,aes(x=question2,y=staffquestion2percentage,fill=question2, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion2$SCHOOLS)))+labs(title="Academic Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion2percentage, y = staffquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer2 <- ggplotly(two, tooltip = c("text"))
 
 #Teacher & Staff Survey Q3 - School Leadership
@@ -840,7 +841,7 @@ question3 <- staffquestion3$SCHOOLS
 staffquestion3percentage <- staffquestion3$`Question 3`
 staffquestion3percentage <- as.numeric(staffquestion3percentage)
 staffquestion3percentage <- staffquestion3percentage*100
-three <- ggplot(staffquestion3,aes(x=question3,y=staffquestion3percentage,fill=question3, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion3$SCHOOLS)))+labs(title="School Leadership",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion3percentage, y = staffquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+three <- ggplot(staffquestion3,aes(x=question3,y=staffquestion3percentage,fill=question3, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion3$SCHOOLS)))+labs(title="School Leadership",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion3percentage, y = staffquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer3 <- ggplotly(three, tooltip = c("text"))
 
 #Teacher & Staff Survey Q4 - Managing Student Behavior
@@ -849,7 +850,7 @@ question4 <- staffquestion4$SCHOOLS
 staffquestion4percentage <- staffquestion4$`Question 4`
 staffquestion4percentage <- as.numeric(staffquestion4percentage)
 staffquestion4percentage <- staffquestion4percentage*100
-four <- ggplot(staffquestion4,aes(x=question4,y=staffquestion4percentage,fill=question4, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion4$SCHOOLS)))+labs(title="Managing Student Behavior",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion4percentage, y = staffquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+four <- ggplot(staffquestion4,aes(x=question4,y=staffquestion4percentage,fill=question4, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion4$SCHOOLS)))+labs(title="Managing Student Behavior",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion4percentage, y = staffquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer4 <- ggplotly(four, tooltip = c("text"))
 
 #Teacher & Staff Survey Q6 - Workplace Environment
@@ -858,7 +859,7 @@ question6 <- staffquestion6$SCHOOLS
 staffquestion6percentage <- staffquestion6$`Question 6`
 staffquestion6percentage <- as.numeric(staffquestion6percentage)
 staffquestion6percentage <- staffquestion6percentage*100
-six <- ggplot(staffquestion6,aes(x=question6,y=staffquestion6percentage,fill=question6, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion6$SCHOOLS)))+labs(title="Workplace Environment",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion6percentage, y = staffquestion6percentage), size = 3, position = position_stack(vjust = 1.02))
+six <- ggplot(staffquestion6,aes(x=question6,y=staffquestion6percentage,fill=question6, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion6$SCHOOLS)))+labs(title="Workplace Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion6percentage, y = staffquestion6percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer6 <- ggplotly(six, tooltip = c("text"))
 
 #Teacher & Staff Survey Q7 - Instructional Practices 
@@ -867,7 +868,7 @@ question7 <- staffquestion7$SCHOOLS
 staffquestion7percentage <- staffquestion7$`Question 7`
 staffquestion7percentage <- as.numeric(staffquestion7percentage)
 staffquestion7percentage <- staffquestion7percentage*100
-seven <- ggplot(staffquestion7,aes(x=question7,y=staffquestion7percentage,fill=question7, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion7$SCHOOLS)))+labs(title="Instructional Environment",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion7percentage, y = staffquestion7percentage), size = 3, position = position_stack(vjust = 1.02))
+seven <- ggplot(staffquestion7,aes(x=question7,y=staffquestion7percentage,fill=question7, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion7$SCHOOLS)))+labs(title="Instructional Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion7percentage, y = staffquestion7percentage), size = 3, position = position_stack(vjust = 1.02))
 teacherandstaffanswer7 <- ggplotly(seven, tooltip = c("text"))
 
 #--------------Parent Climate Surveys--------------------------------
@@ -880,7 +881,7 @@ question8 <- parentquestion1$SCHOOLS
 parentquestion1percentage <- parentquestion1$`Question 1`
 parentquestion1percentage <- as.numeric(parentquestion1percentage)
 parentquestion1percentage <- parentquestion1percentage*100
-eight <- ggplot(parentquestion1,aes(x=question8,y=parentquestion1percentage,fill=question8, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion1$SCHOOLS)))+labs(title="Academic Support",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion1percentage, y = parentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+eight <- ggplot(parentquestion1,aes(x=question8,y=parentquestion1percentage,fill=question8, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion1$SCHOOLS)))+labs(title="Academic Support",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion1percentage, y = parentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
 parentanswer1 <- ggplotly(eight, tooltip = c("text"))
 
 #Parent Survey Q2 - Communications
@@ -889,7 +890,7 @@ question9 <- parentquestion2$SCHOOLS
 parentquestion2percentage <- parentquestion2$`Question 2`
 parentquestion2percentage <- as.numeric(parentquestion2percentage)
 parentquestion2percentage <- parentquestion2percentage*100
-nine <- ggplot(parentquestion2,aes(x=question9,y=parentquestion2percentage,fill=question9, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion2$SCHOOLS)))+labs(title="Communications",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion2percentage, y = parentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+nine <- ggplot(parentquestion2,aes(x=question9,y=parentquestion2percentage,fill=question9, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion2$SCHOOLS)))+labs(title="Communications",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion2percentage, y = parentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
 parentanswer2 <- ggplotly(nine, tooltip = c("text"))
 
 #Parent Survey Q3 - Relationships
@@ -898,7 +899,7 @@ question10 <- parentquestion3$SCHOOLS
 parentquestion3percentage <- parentquestion3$`Question 3`
 parentquestion3percentage <- as.numeric(parentquestion3percentage)
 parentquestion3percentage <- parentquestion3percentage*100
-ten <- ggplot(parentquestion3,aes(x=question10,y=parentquestion3percentage,fill=question10, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion3$SCHOOLS)))+labs(title="Relationships",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion3percentage, y = parentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+ten <- ggplot(parentquestion3,aes(x=question10,y=parentquestion3percentage,fill=question10, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion3$SCHOOLS)))+labs(title="Relationships",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion3percentage, y = parentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
 parentanswer3 <- ggplotly(ten, tooltip = c("text"))
 
 #Parent Survey Q4 - Instructions
@@ -907,7 +908,7 @@ question11 <- parentquestion4$SCHOOLS
 parentquestion4percentage <- parentquestion4$`Question 4`
 parentquestion4percentage <- as.numeric(parentquestion4percentage)
 parentquestion4percentage <- parentquestion4percentage*100
-eleven <- ggplot(parentquestion4,aes(x=question11,y=parentquestion4percentage,fill=question11, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion4$SCHOOLS)))+labs(title="Instructions",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion4percentage, y = parentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+eleven <- ggplot(parentquestion4,aes(x=question11,y=parentquestion4percentage,fill=question11, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion4$SCHOOLS)))+labs(title="Instructions",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion4percentage, y = parentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
 parentanswer4 <- ggplotly(eleven, tooltip = c("text"))
 
 #--------------Student Climate Surveys-------------------------------
@@ -920,7 +921,7 @@ question12 <- studentquestion1$SCHOOLS
 studentquestion1percentage <- studentquestion1$`Question 1`
 studentquestion1percentage <- as.numeric(studentquestion1percentage)
 studentquestion1percentage <- studentquestion1percentage*100
-twelve <- ggplot(studentquestion1,aes(x=question12,y=studentquestion1percentage,fill=question12, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion1$SCHOOLS)))+labs(title="Student Engagement",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion1percentage, y = studentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+twelve <- ggplot(studentquestion1,aes(x=question12,y=studentquestion1percentage,fill=question12, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion1$SCHOOLS)))+labs(title="Student Engagement",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion1percentage, y = studentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer1 <- ggplotly(twelve, tooltip = c("text"))
 
 #Student Survey Q2 - Teacher Relationship
@@ -929,7 +930,7 @@ question13 <- studentquestion2$SCHOOLS
 studentquestion2percentage <- studentquestion2$`Question 2`
 studentquestion2percentage <- as.numeric(studentquestion2percentage)
 studentquestion2percentage <- studentquestion2percentage*100
-thirteen <- ggplot(studentquestion2,aes(x=question13,y=studentquestion2percentage,fill=question13, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion2$SCHOOLS)))+labs(title="Teacher Relationship",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion2percentage, y = studentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+thirteen <- ggplot(studentquestion2,aes(x=question13,y=studentquestion2percentage,fill=question13, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion2$SCHOOLS)))+labs(title="Teacher Relationship",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion2percentage, y = studentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer2 <- ggplotly(thirteen, tooltip = c("text"))
 
 #Student Survey Q3 - Social-Emotional Wellbeing
@@ -938,7 +939,7 @@ question14 <- studentquestion3$SCHOOLS
 studentquestion3percentage <- studentquestion3$`Question 3`
 studentquestion3percentage <- as.numeric(studentquestion3percentage)
 studentquestion3percentage <- studentquestion3percentage*100
-fourteen <- ggplot(studentquestion3,aes(x=question14,y=studentquestion3percentage,fill=question14, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion3$SCHOOLS)))+labs(title="Social-Emotional Wellbeing",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion3percentage, y = studentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+fourteen <- ggplot(studentquestion3,aes(x=question14,y=studentquestion3percentage,fill=question14, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion3$SCHOOLS)))+labs(title="Social-Emotional Wellbeing",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion3percentage, y = studentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer3 <- ggplotly(fourteen, tooltip = c("text"))
 
 #Student Survey Q5 - Bullying
@@ -947,7 +948,7 @@ question16 <- studentquestion5$SCHOOLS
 studentquestion5percentage <- studentquestion5$`Question 5`
 studentquestion5percentage <- as.numeric(studentquestion5percentage)
 studentquestion5percentage <- studentquestion5percentage*100
-sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
+sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer5 <- ggplotly(sixteen, tooltip = c("text"))
 
 # user -------------------------------------------------------------
@@ -1086,7 +1087,7 @@ ui <- navbarPage(title = "DSPG",
                                                                      selectInput("demos1drop", "Select Socioeconomic Characteristic:", width = "100%", choices = c(
                                                                        "Gender" = "gender",
                                                                        "Age" = "age",
-                                                                       "Race/ethnicity" = "race"
+                                                                       "Race/Ethnicity" = "race"
                                                                        
                                                                      ),
                                                                      ),   
@@ -1094,22 +1095,22 @@ ui <- navbarPage(title = "DSPG",
                                                                      withSpinner(plotlyOutput("demo1", height = "500px", width ="100%")),
                                                                      column(12, align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
-                                                                            p("*Note: Data is nill for missing bars", style = "font-size:12px;")
+                                                                            
                                                                      )
                                                               ),
                                                               
                                                               column(5, 
                                                                      
-                                                                     p("To access the possible opportunities within the six title 1 community schools in Sterling, VA, it is important to understand the neighborhood and area in which these schools are located. By looking at the graph, it appears to be almost an equal split of male’s and females in Sterling, VA. The total population in sterling is 30,271. 15,282 members of the population are male, while the remaining 14,989 are female. There are only 293 more males than females so that gives us almost a one to one ratio - so that’s good.", style = "padding-top:15px;font-size: 14px;"),
-                                                                     p("So, once the team looked at the gender distribution, we were curious to look at the age distribution of the individuals of Sterling. The largest age group in Sterling are Adults (ages 35 to 44) which is represented by the blue green block, and then the older millennials (25 to 34) which is represented by the light green block. The age groups are fitting for the high median income within the area. ", style = "padding-top:15px;font-size: 14px;"),
-                                                                     p("
-Another important determinant that might impact someone’s availability of opportunities is their race or ethnicity. So, our logical next step was to look at the ethnicity/race distribution of the people of Sterling. Collecting the Race and Ethnicity demographic proved to be a little challenging at first. While the team was observing the data, we kept noticing that the number of individuals in each race population kept exceeding the total population of Sterling. For example, when we would add up all of the white, hispanic, asian, Hawaiian, and  African American population’s, the total number would exceed 30,271, the population of Sterling, VA. We later learned that this is because the American Community Survey does not recognize hispanic as a race. To the American Community Survey, Hispanic is an ethnicity so People can identify as white or asian and still be of hispanic decent, or they could select “other” as there is a separate category for them to mark hispanic. Knowing that disclaimer, we had to create a separate visualization for the hispanic population so we could best represent them. As you can see, majority of the Sterling population is white. When you look at the ethnicity visualization, almost half of the sterling CDP population identifies as being hispanic or latino.
-", style = "padding-top:15px;font-size: 14px;")
+                                                                     p("Within Sterling, the largest age group are adults aged 35 to 44 years old, closely followed by 
+                                                                       25 to 34 years old, and 45 to 54 years old. About 27% of the population is under the age of 20 
+                                                                       with the largest group being those under 5.", style = "padding-top:15px;font-size: 14px;"),
+                                                                     p("From 2016-2020, those identifying as White made up just over half of the Sterling residents 
+                                                                       followed Asian and Other which may include those who identify as Hispanic as the ACS does not
+                                                                       include Hispanic as a race.", 
+                                                                       style = "padding-top:15px;font-size: 14px;"),
                                                                      
-                                                              )
-                                                              
-                                                              
-                                                     )),
+                                                                     
+                                                              ))),
                                             
                                             tabPanel("Income",
                                                      fluidRow(style = "margin: 4px;",
@@ -1124,19 +1125,27 @@ Another important determinant that might impact someone’s availability of oppo
                                                                      ),     
                                                                      br(""),
                                                                      withSpinner(plotlyOutput("demo2", height = "500px", width ="100%")),
+                                                                     column(12,align = "right",
+                                                                            p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
+                                                                            p("*Note: Data is nill for missing bars", style = "font-size:12px;"))
                                                                      
                                                               ),
                                                               
                                                               column(5, align = "justify",
-                                                                     p("Now that we looked at the ethnic groups, we wanted to look at the educational attainment levels. The data was collected from the individuals who are ages 25 and over. It seems that a large number of the population are educated with that of a bachelors agree or higher, which is fitting for the county’s high median income. 
-so a reasonable population has achieved high education - how much is Sterling making? Thus, we looked at family income levels. This data was collected looking at family households in the last 12 months of the ACS collected data (2020). It has also been adjusted for inflation. Interestingly enough, the largest income bracket lies within the range of $100,000 to $149,999 which is represented by the dark purple area however we do acknowledge that this may not apply our families of interest.
-", style = "padding-top:15px;font-size: 14px;"),
-                                                                     p("So we wondered if the high-income levels also affect the housing market so this can help us to understand housing needs and availability of the children’s families. Looking at this visualization, we see that this area has a high property value with a large percentage of properties being worth $300,000 to $499,999, shown by the blue part of the circle. This is important to take into consideration considering our targeted title1 area. Once we looked at the high property values, we were intrigued to find out how many occupants own their homes. As expected, majority housing residents are home owners, while a little over a quarter housing residents are renters. This could be because of families high incomes.", style = "padding-top:15px;font-size: 14px;"),  
-                                                                     p("Next, we visualized the data for employment in the sterling area. Pink is used to show the Employed Percentage whereas Aqua blue shows the unemployed percentage of the population. One thing to note is that this percentage is from within the labor force not the total population of the area. One key take away from this graph is that the majority of sterling is employed at a remarkably
-high rate higher than the national average. 71.8% employment rate.", style = "padding-top:15px;font-size: 14px;"), 
-                                                                     p("The next best thing to do was to look at what groups are being employed so we saw that the majority of them are being employed in the management, business, and science industry with a total number of 6,380 individuals. The service industry comes in second place at around 25% which makes it upto 4,122 individuals. The graph shows that one of the smallest occupations is the production industry which suggests that sterling is not an industrial area but has more corporate jobs to offer as management and business are one of the highest employable sectors in sterling. Using ACS American community survey data of the sterling cdp census designated place we found that 75% commuters drive on their own while only a quarter prefer other modes of commute. Notably less than 2 % of commuters take public transportation, this may be something we want to further research.", style = "padding-top:15px;font-size: 14px;"), 
-                                                                     
-                                                                     p("The visualization for healthcare tells us that private health insurance is the most popular type of health insurance. Private health insurance mainly consists of insurance plans provided through the employer. Coming in second place is the public insurance type which mainly consists of low-cost government backed programs such as medicare, medicaid, blue cross blue shield and Virginia Cover. However, there is a chunk of population of about 16.5% that does not have any kind of health insurance this might be an area where we can research more to figure out the possible opportunities in the community.", style = "padding-top:15px;font-size: 14px;"),
+                                                                     p("For the Sterling residents, the majority have attained a high school degree or 
+                                                                       equivalent with the largest group having attained a bachelor’s degree. ", style = "padding-top:15px;font-size: 14px;"),
+                                                                     p("For families in the past 12 months, the largest income level is the $100,000 to $149,999 bracket 
+                                                                       followed closely by both the $50,000 to $74,999 bracket and $150,000 to $199,999. It should be taken
+                                                                       into consideration however that our data is slightly skewed as the areas of the Sterling CPD includes
+                                                                       those that are highly affluent, outweigh those located in the areas with the schools designated as 
+                                                                       Title 1. ", style = "padding-top:15px;font-size: 14px;"),  
+                                                                     p("Expanding on that, females ages 18 to 24 years old face the highest level of poverty by sex and age 
+                                                                       overall followed by females ages 35 to 44 years old and males ages 25 to 34 years old. The ACS lacks 
+                                                                       data on males 12 to 14, 15, and 34 to 44 years as well as females ages 16 to 17 years. From the data 
+                                                                       that is available, females tend to have higher levels of poverty than males especially from years 6 to 11. 
+                                                                       While most Sterling residents have private health insurance, 23% are on public insurance such as Medicare 
+                                                                       and Medicaid, and 16.5% of residents have no health insurance at all. ", 
+                                                                       style = "padding-top:15px;font-size: 14px;"), 
                                                                      
                                                               )
                                                               
@@ -1154,7 +1163,23 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                                                                      ),         
                                                                      br(""),
                                                                      withSpinner(plotlyOutput("demo3", height = "500px", width ="100%")),
-                                                              ))),
+                                                                     column(12,align = "right",
+                                                                            p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
+                                                                     )),
+                                                              column(5, align = "justify",
+                                                                     p("Within Sterling, the majority of residents are employed at 71.8% while only 4.7% 
+                                                                              of the residents are unemployed. The labor force of Sterling has the largest number
+                                                                              of the population working in the management, business, science and art sector followed
+                                                                              by the service sector and sales and office sector. Only 20% of residents in Sterling 
+                                                                              work in the natural resources, construction, and maintenance field as well as the 
+                                                                              production, transportation, and material moving field. ",  style = "padding-top:15px;font-size: 14px;"),
+                                                                     p("For Sterling residents who commute to work, over half have a commute that is less than 30 
+                                                                              minutes and 75% of said commuters drove alone. Notably, only 2.8% of commuters utilized public 
+                                                                              transportation.",style = "padding-top:15px;font-size: 14px;"),
+                                                              ),
+                                                              
+                                                     )
+                                            ),
                                             
                                             
                                             
@@ -1182,7 +1207,7 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                                                                          column(7, align = "left",
                                                                                 selectInput("schooldrop1", "Select Demographic:", width = "100%", choices = c(
                                                                                   "Gender" = "cgender",
-                                                                                  "Race/Ethnicity" = "raceehtn",
+                                                                                  "Race/Ethnicity" = "racenine",
                                                                                   "Hispanic Population" = "chispanic"
                                                                                   
                                                                                 ),
@@ -1190,14 +1215,31 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                                                                                 
                                                                                 withSpinner(plotlyOutput("ocuplot1", height = "500px", width = "100%")),
                                                                                 withSpinner(leafletOutput("ocuplot3", height = "500px", width = "60%")),
-                                                                                
+                                                                                column(12,align = "right",
+                                                                                       p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
+                                                                                )
                                                                          ),
                                                                          
                                                                          column(5, align = "justify",
-                                                                                p("After understanding the demographics of the areas that feed into the community schools, next we began to look at the demographics of our specific populations, the 6 schools. For this, we used data from the Virginia Department of Education as well as the Loudoun County Public Schools dashboard and staff directory.", style = "padding-top:15px;font-size: 14px;"),
-                                                                                p("To further understand our population, we wanted to compare the race and ethnicity demographics we visualized from the Sterling CDP and our 6 community schools.   In this graph, we visualized data from all 6 schools together and found that overall, Hispanic students, represented by the light purple bar, make up the greatest percentage of students which differs from the general make-up of the Sterling CDP where White people made up the majority of residents. After seeing this, we wanted to look at the breakdown of the Hispanic population within the greater Sterling area.   Using data from the American Community Survey of Greater Sterling between the years 2016 to 2020, we found that the area where Rolling Ridge is located, represented by the light yellow area of the map, has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary, the area of the map shaded mustard yellow,  and Forest Grove Elementary, the dark orange, lower area of the map.   This information will help us to identify possible opportunities within the schools and neighborhoods specifically surrounding language services.", style = "padding-top:15px;font-size: 14px;"),
-                                                                                p("Once we felt we understood the demographics of those attending the schools, we switched our focus to the data within the schools themselves. Beginning with the number of teachers and staff employed at each school, we used data from the 2022 school directory, which revealed that at most of the schools, there are more teachers than staff except for Sterling Elementary, which has a larger amount of staff than teachers which may suggest possible possible opportunities in service.    Also notable was the lower total number of staff and teachers employed at Sully Elementary, seen in the last bar on the graph, which led us to visualize the total enrollment for each of the schools to better understand these differences.Using data from the Virginia Department of Education’s Fall Membership Reports for the years 2016 to 2020,   we found that Guilford, seen in the bottom left graph,   Sugarland, the top right graph,   and Rolling Ridge, the bottom right graph,  all maintained a total enrollment of between 550 and 600 students with only slight variations between years. For Forest Grove, the top left graph,   enrollment remained steady between 2016 and 2020 hovering right at 575 students.   On the other hand, Sterling Elementary, the top right graph,   had an enrollment of 450 to 500 students with a slight decline from 2016 to 2020   and Sully Elementary, has only between 400 to 475 students enrolled.   Since the implementation of the Community School Initiative, there has been an increase in enrollment at Sully and Guilford,   while we are not saying that this program is the cause of this increase, it was noticed and may be worth looking into further. Additionally, the differences in enrollment between schools may suggest possible opportunities to look into surrounding youth engagement resources.
-", style = "padding-top:15px;font-size: 14px;")
+                                                                                p("After understanding the demographics of the areas that feed into the community schools, 
+                                                                                  next we began to look at the demographics of our specific populations, the 6 schools. For 
+                                                                                  this, we used data from the Virginia Department of Education as well as the Loudoun County 
+                                                                                  Public Schools dashboard and staff directory.", style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("To further understand our population, we wanted to compare the race and ethnicity 
+                                                                                  demographics we visualized from the Sterling CDP and our 6 community schools.  
+                                                                                  In this graph, we visualized data from all 6 schools together and found that overall,
+                                                                                  Hispanic students, represented by the light purple bar, make up the greatest percentage of 
+                                                                                  students which differs from the general make-up of the Sterling CDP where White people made 
+                                                                                  up the majority of residents. After seeing this, we wanted to look at the breakdown of the 
+                                                                                  Hispanic population within the greater Sterling area.   Using data from the American Community
+                                                                                  Survey of Greater Sterling between the years 2016 to 2020, we found that the area where Rolling
+                                                                                  Ridge is located, represented by the light yellow area of the map, has the largest population
+                                                                                  of Hispanic identifying people. This is followed closely by Sterling Elementary, the area of 
+                                                                                  the map shaded mustard yellow,  and Forest Grove Elementary, the dark orange, lower area of 
+                                                                                  the map.   This information will help us to identify possible opportunities within the schools
+                                                                                  and neighborhoods specifically surrounding language services.", 
+                                                                                  style = "padding-top:15px;font-size: 14px;"),
+                                                                                
                                                                                 
                                                                          )
                                                                          
@@ -1216,14 +1258,19 @@ high rate higher than the national average. 71.8% employment rate.", style = "pa
                                                                                 ),
                                                                                 
                                                                                 withSpinner(plotlyOutput("ocuplot2", height = "500px", width = "100%")),
-                                                                                
+                                                                                column(12,align = "right",
+                                                                                       p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
+                                                                                )
                                                                                 
                                                                          ),
                                                                          
                                                                          column(5, align = "justify",
+                                                                                p("Once we felt we understood the demographics of those attending the schools, we switched our focus to the data within the schools themselves. Beginning with the number of teachers and staff employed at each school, we used data from the 2022 school directory, which revealed that at most of the schools, there are more teachers than staff except for Sterling Elementary, which has a larger amount of staff than teachers which may suggest possible possible opportunities in service.    Also notable was the lower total number of staff and teachers employed at Sully Elementary, seen in the last bar on the graph, which led us to visualize the total enrollment for each of the schools to better understand these differences.Using data from the Virginia Department of Education’s Fall Membership Reports for the years 2016 to 2020,   we found that Guilford, seen in the bottom left graph,   Sugarland, the top right graph,   and Rolling Ridge, the bottom right graph,  all maintained a total enrollment of between 550 and 600 students with only slight variations between years. For Forest Grove, the top left graph,   enrollment remained steady between 2016 and 2020 hovering right at 575 students.   On the other hand, Sterling Elementary, the top right graph,   had an enrollment of 450 to 500 students with a slight decline from 2016 to 2020   and Sully Elementary, has only between 400 to 475 students enrolled.   Since the implementation of the Community School Initiative, there has been an increase in enrollment at Sully and Guilford,   while we are not saying that this program is the cause of this increase, it was noticed and may be worth looking into further. Additionally, the differences in enrollment between schools may suggest possible opportunities to look into surrounding youth engagement resources.
+", style = "padding-top:15px;font-size: 14px;"),
                                                                                 p("To further breakdown the enrollment statistics, we used the LCPS Dashboard data to visualize the student’s absences by quarter at each school during the 2021 to 2022 school year.   While Rolling Ridge, the green line,   Sugarland, the dark blue line,   and Guilford, the yellow line,   all saw spikes in absences during quarter two,   it was Sully, the pink line,   Sterling, the light blue line,   and Forest Grove, the orange line,   that had a steady increase in absences over the 4 quarters. However it is important to note that this data came from the school year during the COVID-19 pandemic.
 To determine if this issue was chronic,   we used Virginia Department of Education data from prior to the pandemic on chronic absenteeism.   This is defined as the percentage of students who miss more than 10% of total classes throughout the year.   This data revealed to us that Sugarland and Rolling Ridge Elementary continued to have a high number of absences prior to the pandemic, suggesting that this may be an area to look for possible service gaps.
 ", style = "padding-top:15px;font-size: 14px;"),
+                                                                                
                                                                                 
                                                                          )
                                                                          
@@ -1251,9 +1298,9 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                            # br("", style = "padding-top:2px;"),
                                                                            # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                            br(""),
-                                                                           h1(strong("Parent Climate Survey"),
+                                                                           h1(strong("Parent Survey"),
                                                                               #h2("") ,
-                                                                              h4("Parent Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                              h4("2019 to 2020 Academic School Year"),
                                                                               h4(""),
                                                                               #h4("[updat this]"),
                                                                               br()
@@ -1325,9 +1372,9 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                   # br("", style = "padding-top:2px;"),
                                                                   # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                   br(""),
-                                                                  h1(strong("Student Climate Survey"),
+                                                                  h1(strong("Student Survey"),
                                                                      #h2("") ,
-                                                                     h4("Student Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                     h4("2019 to 2020 Academic School Year"),
                                                                      h4(""),
                                                                      #h4("[updat this]"),
                                                                      br()
@@ -1398,9 +1445,9 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                                                   # br("", style = "padding-top:2px;"),
                                                                   # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                   br(""),
-                                                                  h1(strong("Teacher/Staff Climate Survey"),
+                                                                  h1(strong("Teacher/Staff Survey"),
                                                                      #h2("") ,
-                                                                     h4("Teacher/Staff Climate Survey Results From The 2019 to 2020 School Year"),
+                                                                     h4("2019 to 2020 Academic School Year"),
                                                                      h4(""),
                                                                      #h4("[updat this]"),
                                                                      br()
@@ -1552,7 +1599,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                             tabPanel("Mental Health",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
-                                              column(12, align = "center",h4(strong("")),
+                                              column(12, align = "center",h4(strong("Mental Health")),
                                                      p(""),
                                                      br("")
                                                      
@@ -1571,7 +1618,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                             tabPanel("Family Engagement",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
-                                              column(12, align = "center",h4(strong("")),
+                                              column(12, align = "center",h4(strong("Family Engagement")),
                                                      p(""),
                                                      br("")
                                                      
@@ -1792,8 +1839,8 @@ server <- function(input, output, session) {
   
   output$ocuplot1 <- renderPlotly({
     
-    if(Var2() == "raceehtn"){
-      raceehtn 
+    if(Var2() == "racenine"){
+      racenine 
     }
     else if(Var2() == "cgender"){
       genders 
@@ -2210,7 +2257,6 @@ server <- function(input, output, session) {
   
 }
 shinyApp(ui = ui, server = server)
-
 
 
 
