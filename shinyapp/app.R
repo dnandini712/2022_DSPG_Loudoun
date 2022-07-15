@@ -1004,13 +1004,9 @@ ui <- navbarPage(title = "DSPG",
                                    
                                    column(4,
                                           h2(strong("Project Goals")),
-                                          p("Our team seeks to design an interactive dashboard that visualizes the resources and services available to the students and families
-                                            involved in the Loudoun County Community School Initiative. This dashboard will allow stakeholders to understand the main needs of 
-                                            the community and provide insights into potential opportunities for improvement to increase the quality of life for those impacted 
-                                            by the Community School Initiative."),
-                                          p("Our dashboard will contain our findings and analysis, which will allow both our stakeholders and all those interested to understand this 
-                                            information in a comprehensive and dynamic manner"), 
-                                          #p(""),
+                                          p("Our team seeks to design an interactive dashboard that visualizes the resources and services available to the students and families involved in the Loudoun County Community School Initiative. This dashboard will allow stakeholders to understand the main needs of the community and provide insights into potential opportunities for improvement to increase the quality of life for those impacted by the Community School Initiative. "),
+                                          p("We will use publicly available data including the American Community Survey and Virginia Department of Education to provide our stakeholders with a comprehensive understanding of the factors impacting the Sterling area. We focus on sociodemographic indicators such as median income and employment, community school characteristics, and resource proximity to support our analysis. We will utilize public data sources as well as data provided by our stakeholders to map the services and resource’s locations with respect to distance and travel time. These maps will be broken down into 4 resource types: health and social services, mental health, family engagement, and youth development to analyze potential opportunities for service expansion.  "), 
+                                          p("Our dashboard will contain our findings and analysis, which will allow both our stakeholders and all those interested to understand this information in a comprehensive and dynamic manner. For those interested in further research, this repository will be useful for investigating possible underlying factors leading to these differences in accessibility. "),
                                           #p("")
                                    )
                           ),
@@ -1258,10 +1254,23 @@ ui <- navbarPage(title = "DSPG",
                                                                          ),
                                                                          
                                                                          column(5, align = "justify",
-                                                                                p("", style = "padding-top:15px;font-size: 14px;"),
-                                                                                p("To further breakdown the enrollment statistics, we used the LCPS Dashboard data to visualize the student’s absences by quarter at each school during the 2021 to 2022 school year.   While Rolling Ridge, the green line,   Sugarland, the dark blue line,   and Guilford, the yellow line,   all saw spikes in absences during quarter two,   it was Sully, the pink line,   Sterling, the light blue line,   and Forest Grove, the orange line,   that had a steady increase in absences over the 4 quarters. However it is important to note that this data came from the school year during the COVID-19 pandemic.
-To determine if this issue was chronic,   we used Virginia Department of Education data from prior to the pandemic on chronic absenteeism.   This is defined as the percentage of students who miss more than 10% of total classes throughout the year.   This data revealed to us that Sugarland and Rolling Ridge Elementary continued to have a high number of absences prior to the pandemic, suggesting that this may be an area to look for possible service gaps.
-", style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("To better understand the characteristics of the community schools regarding the classroom 
+                                                                                  environment, we pulled data from the Virginia Department of Education to visualize the number
+                                                                                  of educators, total enrollment, absences, and suspension rates. Among the six community schools, 
+                                                                                  most all have a greater number of teachers than staff except for Sterling Elementary.
+                                                                                  When looking at the total enrollment, Sterling Elementary retained a stable number of students from 
+                                                                                  2016 to 2020 right around 575 students. For Sully Elementary, they had both the lowest number of 
+                                                                                  educators as well as the lowest total enrollment of all six schools. Breaking this down further, 
+                                                                                  the student-teacher ratio of the six schools revealed that Sully had the highest student to teacher 
+                                                                                  ratio of the schools with 14 students per teacher.  ", style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("Moving to absence and suspension rates, we utilized data from the Loudoun County Public Schools Dashboard 
+                                                                                  as well as the Virginia Department of Education to visualize the differences between the schools. For the 
+                                                                                  absence rates of students by quarter in the 2020-2021 school year, Forest Grove Elementary had the lowest 
+                                                                                  absence rate across the year while Sully Elementary had the largest increase throughout the year, increasing 
+                                                                                  by over two percent. To attempt to understand if this was a chronic issue, we visualized the chronic
+                                                                                  absenteeism rate which is defined as the percentage of students who miss more than ten percent of total
+                                                                                  classes throughout the year. We found that Sugarland Elementary had the highest rate at 11.1% while 
+                                                                                  Sterling had the lowest at 5.8%.  ", style = "padding-top:15px;font-size: 14px;"),
                                                                                 
                                                                                 
                                                                          )
