@@ -391,7 +391,7 @@ hispanicschool <- leaflet(data = total) %>%
   addLegend(pal=mypalette, position = "bottomright",
             values = ~va20_2$estimate,
             opacity = 0.5, title = "Hispanic Population") %>%
-  addMarkers( ~Longitude, ~Latitude, popup = popups, label = ~as.character(School), labelOptions = FALSE) 
+  addMarkers( ~Longitude, ~Latitude, popup = popups, label = ~as.character(Name), labelOptions = FALSE) 
 #-----------enrollment-----------------
 
 enrollment <- read_excel(paste0(getwd(),"/data/Enrollment16-20.xlsx"))
@@ -1205,30 +1205,32 @@ ui <- navbarPage(title = "DSPG",
                                                                          column(7, align = "left",
                                                                                 selectInput("schooldrop1", "Select Demographic:", width = "100%", choices = c(
                                                                                   "Gender" = "cgender",
-                                                                                  "Race/Ethnicity" = "racenine",
-                                                                                  "Hispanic Population" = "chispanic"
+                                                                                  "Race/Ethnicity" = "racenine"
+                                                                                  
                                                                                   
                                                                                 ),
                                                                                 ),
                                                                                 
                                                                                 withSpinner(plotlyOutput("ocuplot1", height = "500px", width = "100%")),
-                                                                                withSpinner(leafletOutput("ocuplot3", height = "500px", width = "60%")),
+                                                                                br(""),
+                                                                                column(10, align = "left",
+                                                                                       withSpinner(leafletOutput("ocuplot3", height = "400px", width = "70%"))),
                                                                                 column(12,align = "right",
                                                                                        p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                                                                        )
                                                                          ),
                                                                          
                                                                          column(5, align = "justify",
-                                                                                p("To understand the population of the six elementary schools, we looked at the demographics and 
-                                                                                  compared them to one another. The race and ethnicity demographics in 2019-2020 revealed that overall, 
-                                                                                  Hispanic students, made up the greatest percentage of students attending the six elementary schools 
-                                                                                  in Sterling, which differs from the general make-up of the Sterling area where White residents made
-                                                                                  up the majority of residents. ", style = "padding-top:15px;font-size: 14px;"),
-                                                                                p("To break this down, we mapped the schools, and collected the total Hispanic population between the 
-                                                                                  years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population
-                                                                                  of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove 
-                                                                                  Elementary.", 
+                                                                                br(""),
+                                                                                br(""),
+                                                                                br(""),
+                                                                                
+                                                                                p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling and Sully have similar number of students and have lesser students than the other elementary schools. Forest Grove, Guilford and Sully have a similar trend like the Sterling area for the gender ratio: the female students are about 49% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling has the lowest where it has 91 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("The race and ethnicity demographics in 2019-2020 revealed that overall, Hispanic students, made up the greatest percentage of students attending the six elementary schools in Sterling, which differs from the general make-up of the Sterling area where White residents made up the majority of residents. There is a huge difference between Guilford and Forest Grove in terms of the ethnic groups of students, given that they both have similar number of total students: Guilford has significantly higher Hispanic students while Forest Grove has a lot more White and Hispanic students.", 
                                                                                   style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence,  we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary.", 
+                                                                                  style = "padding-top:15px;font-size: 14px;"),
+                                                                                
                                                                                
                                                                          )
                                                                          
@@ -1913,7 +1915,7 @@ server <- function(input, output, session) {
   
   
   output$ocuplot3 <- renderLeaflet({
-    if (Var2() == "chispanic") {
+    if (Var2() == "racenine") {
       
       hispanicschool
     }
