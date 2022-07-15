@@ -1164,8 +1164,8 @@ ui <- navbarPage(title = "DSPG",
                                                                      withSpinner(plotlyOutput("demo3", height = "500px", width ="100%")),
                                                                      column(12,align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
-                                                                          ),
-                                                                     column(5, align = "right",
+                                                                          )),
+                                                                     column(5, align = "justify",
                                                                             p("Within Sterling, the majority of residents are employed at 71.8% while only 4.7% 
                                                                               of the residents are unemployed. The labor force of Sterling has the largest number
                                                                               of the population working in the management, business, science and art sector followed
@@ -1175,7 +1175,7 @@ ui <- navbarPage(title = "DSPG",
                                                                             p("For Sterling residents who commute to work, over half have a commute that is less than 30 
                                                                               minutes and 75% of said commuters drove alone. Notably, only 2.8% of commuters utilized public 
                                                                               transportation.",style = "padding-top:15px;font-size: 14px;"),
-                                                                            )),
+                                                                            ),
                                                                      
                                                                       )
                                                               ),
@@ -1214,14 +1214,15 @@ ui <- navbarPage(title = "DSPG",
                                                                                 
                                                                                 withSpinner(plotlyOutput("ocuplot1", height = "500px", width = "100%")),
                                                                                 withSpinner(leafletOutput("ocuplot3", height = "500px", width = "60%")),
-                                                                                
+                                                                                column(12,align = "right",
+                                                                                       p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
+                                                                                       )
                                                                          ),
                                                                          
                                                                          column(5, align = "justify",
                                                                                 p("After understanding the demographics of the areas that feed into the community schools, next we began to look at the demographics of our specific populations, the 6 schools. For this, we used data from the Virginia Department of Education as well as the Loudoun County Public Schools dashboard and staff directory.", style = "padding-top:15px;font-size: 14px;"),
                                                                                 p("To further understand our population, we wanted to compare the race and ethnicity demographics we visualized from the Sterling CDP and our 6 community schools.   In this graph, we visualized data from all 6 schools together and found that overall, Hispanic students, represented by the light purple bar, make up the greatest percentage of students which differs from the general make-up of the Sterling CDP where White people made up the majority of residents. After seeing this, we wanted to look at the breakdown of the Hispanic population within the greater Sterling area.   Using data from the American Community Survey of Greater Sterling between the years 2016 to 2020, we found that the area where Rolling Ridge is located, represented by the light yellow area of the map, has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary, the area of the map shaded mustard yellow,  and Forest Grove Elementary, the dark orange, lower area of the map.   This information will help us to identify possible opportunities within the schools and neighborhoods specifically surrounding language services.", style = "padding-top:15px;font-size: 14px;"),
-                                                                                p("Once we felt we understood the demographics of those attending the schools, we switched our focus to the data within the schools themselves. Beginning with the number of teachers and staff employed at each school, we used data from the 2022 school directory, which revealed that at most of the schools, there are more teachers than staff except for Sterling Elementary, which has a larger amount of staff than teachers which may suggest possible possible opportunities in service.    Also notable was the lower total number of staff and teachers employed at Sully Elementary, seen in the last bar on the graph, which led us to visualize the total enrollment for each of the schools to better understand these differences.Using data from the Virginia Department of Education’s Fall Membership Reports for the years 2016 to 2020,   we found that Guilford, seen in the bottom left graph,   Sugarland, the top right graph,   and Rolling Ridge, the bottom right graph,  all maintained a total enrollment of between 550 and 600 students with only slight variations between years. For Forest Grove, the top left graph,   enrollment remained steady between 2016 and 2020 hovering right at 575 students.   On the other hand, Sterling Elementary, the top right graph,   had an enrollment of 450 to 500 students with a slight decline from 2016 to 2020   and Sully Elementary, has only between 400 to 475 students enrolled.   Since the implementation of the Community School Initiative, there has been an increase in enrollment at Sully and Guilford,   while we are not saying that this program is the cause of this increase, it was noticed and may be worth looking into further. Additionally, the differences in enrollment between schools may suggest possible opportunities to look into surrounding youth engagement resources.
-", style = "padding-top:15px;font-size: 14px;")
+                                                                                
                                                                                 
                                                                          )
                                                                          
@@ -1240,14 +1241,19 @@ ui <- navbarPage(title = "DSPG",
                                                                                 ),
                                                                                 
                                                                                 withSpinner(plotlyOutput("ocuplot2", height = "500px", width = "100%")),
-                                                                                
+                                                                                column(12,align = "right",
+                                                                                       p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
+                                                                                )
                                                                                 
                                                                          ),
                                                                          
                                                                          column(5, align = "justify",
+                                                                                p("Once we felt we understood the demographics of those attending the schools, we switched our focus to the data within the schools themselves. Beginning with the number of teachers and staff employed at each school, we used data from the 2022 school directory, which revealed that at most of the schools, there are more teachers than staff except for Sterling Elementary, which has a larger amount of staff than teachers which may suggest possible possible opportunities in service.    Also notable was the lower total number of staff and teachers employed at Sully Elementary, seen in the last bar on the graph, which led us to visualize the total enrollment for each of the schools to better understand these differences.Using data from the Virginia Department of Education’s Fall Membership Reports for the years 2016 to 2020,   we found that Guilford, seen in the bottom left graph,   Sugarland, the top right graph,   and Rolling Ridge, the bottom right graph,  all maintained a total enrollment of between 550 and 600 students with only slight variations between years. For Forest Grove, the top left graph,   enrollment remained steady between 2016 and 2020 hovering right at 575 students.   On the other hand, Sterling Elementary, the top right graph,   had an enrollment of 450 to 500 students with a slight decline from 2016 to 2020   and Sully Elementary, has only between 400 to 475 students enrolled.   Since the implementation of the Community School Initiative, there has been an increase in enrollment at Sully and Guilford,   while we are not saying that this program is the cause of this increase, it was noticed and may be worth looking into further. Additionally, the differences in enrollment between schools may suggest possible opportunities to look into surrounding youth engagement resources.
+", style = "padding-top:15px;font-size: 14px;"),
                                                                                 p("To further breakdown the enrollment statistics, we used the LCPS Dashboard data to visualize the student’s absences by quarter at each school during the 2021 to 2022 school year.   While Rolling Ridge, the green line,   Sugarland, the dark blue line,   and Guilford, the yellow line,   all saw spikes in absences during quarter two,   it was Sully, the pink line,   Sterling, the light blue line,   and Forest Grove, the orange line,   that had a steady increase in absences over the 4 quarters. However it is important to note that this data came from the school year during the COVID-19 pandemic.
 To determine if this issue was chronic,   we used Virginia Department of Education data from prior to the pandemic on chronic absenteeism.   This is defined as the percentage of students who miss more than 10% of total classes throughout the year.   This data revealed to us that Sugarland and Rolling Ridge Elementary continued to have a high number of absences prior to the pandemic, suggesting that this may be an area to look for possible service gaps.
 ", style = "padding-top:15px;font-size: 14px;"),
+                                                                                
                                                                                 
                                                                          )
                                                                          
@@ -1576,7 +1582,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                             tabPanel("Mental Health",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
-                                              column(12, align = "center",h4(strong("")),
+                                              column(12, align = "center",h4(strong("Mental Health")),
                                                      p(""),
                                                      br("")
                                                      
@@ -1595,7 +1601,7 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                             tabPanel("Family Engagement",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
-                                              column(12, align = "center",h4(strong("")),
+                                              column(12, align = "center",h4(strong("Family Engagement")),
                                                      p(""),
                                                      br("")
                                                      
