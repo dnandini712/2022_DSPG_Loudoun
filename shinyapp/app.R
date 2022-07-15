@@ -1077,8 +1077,11 @@ ui <- navbarPage(title = "DSPG",
                                    h1(strong("Sterling Sociodemographics"), align = "center"),
                                    p("", style = "padding-top:10px;"), 
                                    column(12, 
-                                          h4(strong("Sterling Residents' Characteristics")),
-                                          
+                                          h2(strong("Sterling Residents' Characteristics")),
+                                   column(12, align = "left",
+                                          h3(strong("Who Makes Up Sterling, Virginia?")), 
+                                          p("We used the American Community Survey (ACS) 5-year data to understand the socioeconomic demographics of the Sterling Census Designated Place (CDP) from the years 2016 to 2020. The ACS data is a survey collected by the U.S. Census Bureau which gathers sociodemographic information on American households including age, gender, race/ethnicity, income, and employment. ")
+                                          ),
                                           tabsetPanel(
                                             
                                             tabPanel("Demographic",
@@ -1195,6 +1198,9 @@ ui <- navbarPage(title = "DSPG",
                                      fluidRow(style = "margin: 6px;",
                                               column(12, 
                                                      h1(strong("Elementary Students in Community Schools Characteristics"), align = "center"),
+                                                     h2(strong("What Do Community Schools Look Like?"), align = "left"),
+                                                     p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
+                                                     
                                                      #column(4, 
                                                      #      h4(strong("Education")),
                                                      #     p("These are demographics"),
