@@ -238,22 +238,22 @@ commutermode <- plot_ly(type='pie', labels=~labelsR, values=~valuesR, hoverinfo 
                         textinfo='text') %>% layout(title ='', legend=list(title=list(text='Mode of Transportation to Work')), hoverinfo = "none")
 #------------------poverty-------------------------------
 
-poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
-                        sheet = "Data")
+poverty_as1<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
+                         sheet = "Data")
 
-subset_poverty_as <- poverty_as[3:28, 1:4]
-subset_poverty_as
+subset_poverty_as1 <- poverty_as1[3:28, 1:4]
+
 #subset_poverty_as$Estimate[1:26]
-povas_pop <- subset_poverty_as$Estimate
-povas_pop <- as.numeric(povas_pop)
-povas_cat <- subset_poverty_as$Label
+povas_pop1 <- subset_poverty_as1$Estimate
+povas_pop1 <- as.numeric(povas_pop1)
+povas_cat1 <- subset_poverty_as1$Label
 
-Total <- povas_pop
+Total1 <- povas_pop1
 
-cat <- as.character(povas_cat)
+cat1 <- as.character(povas_cat1)
 
-pov <- plot_ly(subset_poverty_as, x = ~cat, y = ~Total, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat,"<br>","Total:",Total,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = ~cat))
-#--------gender by school-------------------------------------------------
+pov <- plot_ly(subset_poverty_as1, x = cat1, y = Total1, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat1,"<br>","Total:",Total1,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = cat1))
+#-#--------gender by school-------------------------------------------------
 
 
 genders <- data.frame(Sex=rep(c("Male", "Female"), each=6),
