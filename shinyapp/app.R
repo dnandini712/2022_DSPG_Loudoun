@@ -239,21 +239,21 @@ commutermode <- plot_ly(type='pie', labels=~labelsR, values=~valuesR, hoverinfo 
                         textinfo='text') %>% layout(title ='', legend=list(title=list(text='')), hoverinfo = "none")
 #------------------poverty-------------------------------
 
-poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
+poverty_as1<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
                         sheet = "Data")
 
-subset_poverty_as <- poverty_as[3:28, 1:4]
-subset_poverty_as
+subset_poverty_as1 <- poverty_as1[3:28, 1:4]
+
 #subset_poverty_as$Estimate[1:26]
-povas_pop <- subset_poverty_as$Estimate
-povas_pop <- as.numeric(povas_pop)
-povas_cat <- subset_poverty_as$Label
+povas_pop1 <- subset_poverty_as1$Estimate
+povas_pop1 <- as.numeric(povas_pop1)
+povas_cat1 <- subset_poverty_as1$Label
 
-Total <- povas_pop
+Total1 <- povas_pop1
 
-cat <- as.character(povas_cat)
+cat1 <- as.character(povas_cat1)
 
-pov <- plot_ly(subset_poverty_as, x = ~cat, y = ~Total, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat,"<br>","Total:",Total,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = ~cat))
+pov <- plot_ly(subset_poverty_as1, x = cat1, y = Total1, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat1,"<br>","Total:",Total1,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = cat1))
 #--------gender by school-------------------------------------------------
 
 
@@ -952,7 +952,7 @@ studentquestion5percentage <- studentquestion5percentage*100
 sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer5 <- ggplotly(sixteen, tooltip = c("text"))
 
-# user -------------------------------------------------------------
+# user interface-------------------------------------------------------------
 ui <- navbarPage(title = "DSPG",
                  selected = "overview",
                  theme = shinytheme("lumen"),
@@ -1077,8 +1077,11 @@ ui <- navbarPage(title = "DSPG",
                                    h1(strong("Sterling Sociodemographics"), align = "center"),
                                    p("", style = "padding-top:10px;"), 
                                    column(12, 
-                                          h4(strong("Sterling Residents' Characteristics")),
-                                          
+                                          h2(strong("Sterling Residents' Characteristics")),
+                                          column(12, align = "left",
+                                                 h3(strong("Who Makes Up Sterling, Virginia?")), 
+                                                 p("We used the American Community Survey (ACS) 5-year data to understand the socioeconomic demographics of the Sterling Census Designated Place (CDP) from the years 2016 to 2020. The ACS data is a survey collected by the U.S. Census Bureau which gathers sociodemographic information on American households including age, gender, race/ethnicity, income, and employment. ")
+                                          ),
                                           tabsetPanel(
                                             
                                             tabPanel("Demographic",
@@ -1195,10 +1198,9 @@ ui <- navbarPage(title = "DSPG",
                                      fluidRow(style = "margin: 6px;",
                                               column(12, 
                                                      h1(strong("Elementary Students in Community Schools Characteristics"), align = "center"),
-                                                     #column(4, 
-                                                     #      h4(strong("Education")),
-                                                     #     p("These are demographics"),
-                                                     #  ) ,
+                                                     h2(strong("What Do Community Schools Look Like?"), align = "left"),
+                                                     p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
+                                                     
                                                      
                                                      tabsetPanel(
                                                        
@@ -1567,9 +1569,10 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                             tabPanel("Health and Social Services",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
-                                              column(12, align = "center",h4(strong("Health and Social Services")),
+                                              column(12, align = "center",h1(strong("Health and Social Services")),
                                                      p(""),
-                                                     br("")
+                                                     h3(strong("Overview"), align = "left"), 
+                                                     p(("To understand the services available to those located in Sterling, we used data from our stakeholders as well as publicly available data to provide a general idea of the resources available within the Sterling area. "), align = "left"),
                                                      
                                                      
                                                      
@@ -1579,11 +1582,16 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                               )),
                                      
                                      fluidPage(style = "margin: 2px;", 
-                                               column(12, 
-                                                      leafletOutput("map_health", width = "100%")
+                                               column(6, 
+                                                      leafletOutput("map_health", width = "100%", height = 600)
                                                       #fluidRow(align = "center",
                                                       #    p(tags$small(em('Last updated: August 2021'))))
-                                               )
+                                               ), 
+                                               column(6, 
+                                                      h3("Services"), 
+                                                      
+                                                      
+                                                      )
                                      )),
                             
                             
