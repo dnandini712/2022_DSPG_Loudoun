@@ -1,0 +1,56 @@
+---
+title: "surveys more"
+author: "NDP"
+date: '2022-07-12'
+output: html_document
+---
+```{r}
+library(fmsb)
+newsurveydata <- read_excel(paste0(getwd(), "/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
+subsetnewsurveydataPARENT <- newsurveydata[19:24,c(1,2:5)]
+```
+
+#Parent Survey Q1 - Academic Support 
+```{r}
+parentquestion1 <- subsetnewsurveydataPARENT[1:6,1:2]
+question8 <- parentquestion1$SCHOOLS
+parentquestion1percentage <- parentquestion1$`Question 1`
+parentquestion1percentage <- as.numeric(parentquestion1percentage)
+parentquestion1percentage <- parentquestion1percentage*100
+eight <- ggplot(parentquestion1,aes(x=question8,y=parentquestion1percentage,fill=question8)) +geom_col()+labs(title="Academic Support",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion1percentage, y = parentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(eight)
+```
+
+#Parent Survey Q2 - Communications
+```{r}
+parentquestion2 <- subsetnewsurveydataPARENT[1:6,c(1,3)]
+question9 <- parentquestion2$SCHOOLS
+parentquestion2percentage <- parentquestion2$`Question 2`
+parentquestion2percentage <- as.numeric(parentquestion2percentage)
+parentquestion2percentage <- parentquestion2percentage*100
+nine <- ggplot(parentquestion2,aes(x=question9,y=parentquestion2percentage,fill=question9)) +geom_col()+labs(title="Communications",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion2percentage, y = parentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(nine)
+```
+
+#Parent Survey Q3 - Relationships
+```{r}
+parentquestion3 <- subsetnewsurveydataPARENT[1:6,c(1,4)]
+question10 <- parentquestion3$SCHOOLS
+parentquestion3percentage <- parentquestion3$`Question 3`
+parentquestion3percentage <- as.numeric(parentquestion3percentage)
+parentquestion3percentage <- parentquestion3percentage*100
+ten <- ggplot(parentquestion3,aes(x=question10,y=parentquestion3percentage,fill=question10)) +geom_col()+labs(title="Relationships",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion3percentage, y = parentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(ten)
+```
+
+#Parent Survey Q4 - Instructions
+```{r}
+parentquestion4 <- subsetnewsurveydataPARENT[1:6,c(1,5)]
+question11 <- parentquestion4$SCHOOLS
+parentquestion4percentage <- parentquestion4$`Question 4`
+parentquestion4percentage <- as.numeric(parentquestion4percentage)
+parentquestion4percentage <- parentquestion4percentage*100
+eleven <- ggplot(parentquestion4,aes(x=question11,y=parentquestion4percentage,fill=question11)) +geom_col()+labs(title="Instructions",x="",y="Percent") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion4percentage, y = parentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+ggplotly(eleven)
+```
+

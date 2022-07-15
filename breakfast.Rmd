@@ -1,0 +1,21 @@
+---
+title: "Breakfast"
+author: "Abdullah Rizwan"
+date: '2022-07-14'
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(tidycensus)
+library(viridis)
+library(readxl)
+```
+
+```{r}
+breakfast <- read_excel("C:/Users/abdul/Downloads/DSPG/2022_DSPG_Loudoun/shinyapp/data/Breakfast.xlsx",skip=0,col_names=TRUE)
+plot_ly(breakfast, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'lines', hoverinfo = "text", text = ~paste("School", School, "<br>", "Percent: ", Percent)) %>% layout(title = "Breakfast", xaxis = list(title = ""))
+```
+
+
