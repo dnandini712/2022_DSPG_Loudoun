@@ -1165,7 +1165,7 @@ ui <- navbarPage(title = "DSPG",
                  ),
                  
                  
-                 navbarMenu("Community Schools",
+                 navbarMenu("Schools",
                             tabPanel("Demographics", 
                                      fluidRow(style = "margin: 6px;",
                                               column(12, 
