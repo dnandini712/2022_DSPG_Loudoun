@@ -496,7 +496,7 @@ popups <- lapply(
 
 healthfree <- read_excel(paste0(getwd(), "/data/resourcecost.xlsx"),sheet = "Health Free")
 youthfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth Free")
-mentfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Mental Free")
+
 famfree <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family Free")
 
 pal <- colorFactor(c("#91003f", "#005824", "#d7301f","#CC6677","#DDCC77","#88419d"), domain = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"))
@@ -619,6 +619,40 @@ leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
                    stroke = F, fillOpacity = 1)%>%
   addLayersControl(overlayGroups = ~Resources2,options = layersControlOptions(collapsed = FALSE)) %>% 
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
+
+mentfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Mental Free")
+
+popups5 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(mentfree$Name5),
+        "<br />",
+        "<strong>Description:</strong>",
+        mentfree$Description5 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        mentfree$Hours5, 
+        "<br />",
+        "<strong>Address:</strong>",
+        mentfree$Address5,
+        "<a href = ",mentfree$Website5, "> Website </a>",
+        "<br />"),
+  
+  
+  htmltools::HTML
+)
+
+leaflet(data = mentfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data = mentfree, ~Longitude5,~Latitude5,popup = ~popups5,label = ~as.character(Name5),group = ~Resource5,color = ~pal2(Resource5),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resource5,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> mental_free
 
 
 #----------------------family engagement map-------------------
@@ -1790,7 +1824,13 @@ server <- function(input, output, session) {
   })
   
   output$map_mental <- renderLeaflet({
-    map_mental
+    if(input$mental_category == "Free Services"){
+      mental_free
+    }
+    else{
+      map_mental
+    }
+   
   })
   
   output$map_family <- renderLeaflet({
