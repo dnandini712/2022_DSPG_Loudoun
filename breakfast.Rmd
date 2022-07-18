@@ -11,11 +11,21 @@ library(ggplot2)
 library(tidycensus)
 library(viridis)
 library(readxl)
+library(plotly)
 ```
 
 ```{r}
 breakfast <- read_excel("C:/Users/abdul/Downloads/DSPG/2022_DSPG_Loudoun/shinyapp/data/Breakfast.xlsx",skip=0,col_names=TRUE)
-plot_ly(breakfast, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'lines', hoverinfo = "text", text = ~paste("School", School, "<br>", "Percent: ", Percent)) %>% layout(title = "Breakfast", xaxis = list(title = ""))
+plot_ly(breakfast, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Breakfast", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 ```
 
+```{r}
+suspension <- read_excel("C:/Users/abdul/Downloads/DSPG/2022_DSPG_Loudoun/shinyapp/data/Suspensions.xlsx",skip=0,col_names=TRUE)
+plot_ly(suspension, x = ~Year, y = ~`Percent of the Student Population`, color = ~Division, type = 'scatter', hoverinfo = "text", text = ~paste("School:", Division, "<br>", "Percentage: ", `Percent of the Student Population`, "%"))
+```
+
+```{r}
+chronic <- read_excel("C:/Users/abdul/Downloads/DSPG/2022_DSPG_Loudoun/shinyapp/data/Chronic.xlsx",skip=0,col_names=TRUE)
+plot_ly(chronic, x = ~Year, y = ~`Percent above 10`, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", `Percent above 10`, "%"))
+```
 
