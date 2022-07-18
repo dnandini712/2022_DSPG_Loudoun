@@ -235,7 +235,7 @@ valuesR = c(12922, 2574, 308, 77, 609, 741)
 perc <- round(valuesR / sum(valuesR)*100, 1)
 commutermode <- plot_ly(type='pie', labels=~labelsR, values=~valuesR, hoverinfo = "none", 
                         text = ~paste0(labelsR, "\n", perc, "%"), 
-                        textinfo='text') %>% layout(title ='Mode of Transportation to Work', legend=list(title=list(text='')), hoverinfo = "none")
+                        textinfo='text') %>% layout(title ='Mode of Transportation to Work', legend=list(title=list(text='Mode of Transportation to Work')), hoverinfo = "none")
 #------------------poverty-------------------------------
 
 poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
@@ -423,7 +423,7 @@ figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = '
 figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(253, 151, 12 )'))
 cteacher <- figSTM %>% layout(title = "Teachers/Staff by Schools", yaxis = list(title = 'Total Educators'), xaxis = list(title = ''), barmode = 'stack')
 
-#--------Chronic absenteeism------------------
+##--------Chronic absenteeism------------------
 
 chronic <- data.frame(sex=rep(c("Missed less than 10%"), each=6),
                       School=c("Sugarland","Rolling Ridge","Guilford","Sterling","Sully","Forest Grove"),
@@ -447,8 +447,8 @@ speech <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Speech and
 physical <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Physical Therapy")
 #---------------map_health and isochrones-----------------------------------------
 
-YourAPIKey <- "73ad15c60d8fe57014b574b4fc428ec0"
-YourAppId <- "afe3f1af"
+YourAPIKey <- "57d25be2553eff250c5cab1446a9261a"
+YourAppId <- "8eddb716"
 
 traveltime10 <- traveltime_map(appId=YourAppId,
                                apiKey=YourAPIKey,
@@ -770,6 +770,7 @@ df3 <- data.frame(word = names(words3),freq=words3)
 cloud3<- wordcloud2(df3, size=0.5)
 
 
+
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
                 var vars = {};
@@ -951,7 +952,7 @@ studentquestion5percentage <- studentquestion5percentage*100
 sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer5 <- ggplotly(sixteen, tooltip = c("text"))
 
-# user -------------------------------------------------------------
+# user interface-------------------------------------------------------------
 ui <- navbarPage(title = "DSPG",
                  selected = "overview",
                  theme = shinytheme("lumen"),
@@ -1075,15 +1076,19 @@ ui <- navbarPage(title = "DSPG",
                           fluidRow(style = "margin: 4px;",
                                    h1(strong("Sterling Sociodemographics"), align = "center"),
                                    p("", style = "padding-top:10px;"), 
-                                   column(12, 
-                                          h4(strong("Sterling Residents' Characteristics")),
-                                          
+                                   
+                                   h2(strong("Sterling Residents' Characteristics")),
+                                   column(12, align = "left",
+                                          h3(strong("Who Makes Up Sterling, Virginia?")), 
+                                          p("We used the American Community Survey (ACS) 5-year data to understand the socioeconomic demographics of the Sterling Census Designated Place (CDP) from the years 2016 to 2020. The ACS data is a survey collected by the U.S. Census Bureau which gathers sociodemographic information on American households including age, gender, race/ethnicity, income, and employment. ")
+                                   ),
+                                   column(7, 
                                           tabsetPanel(
                                             
                                             tabPanel("Demographic",
                                                      fluidRow(style = "margin: 4px;",
                                                               p("", style = "padding-top:10px;"),
-                                                              column(7, align = "left",
+                                                              column(12, align = "left",
                                                                      selectInput("demos1drop", "Select Socioeconomic Characteristic:", width = "100%", choices = c(
                                                                        "Gender" = "gender",
                                                                        "Age" = "age",
@@ -1098,24 +1103,12 @@ ui <- navbarPage(title = "DSPG",
                                                                             
                                                                      )
                                                               ),
-                                                              
-                                                              column(5, 
-                                                                     
-                                                                     p("Within Sterling, the largest age group are adults aged 35 to 44 years old, closely followed by 
-                                                                       25 to 34 years old, and 45 to 54 years old. About 27% of the population is under the age of 20 
-                                                                       with the largest group being those under 5.", style = "padding-top:15px;font-size: 14px;"),
-                                                                     p("From 2016-2020, those identifying as White made up just over half of the Sterling residents 
-                                                                       followed Asian and Other which may include those who identify as Hispanic as the ACS does not
-                                                                       include Hispanic as a race.", 
-                                                                       style = "padding-top:15px;font-size: 14px;"),
-                                                                     
-                                                                     
-                                                              ))),
+                                                     )),
                                             
                                             tabPanel("Income",
                                                      fluidRow(style = "margin: 4px;",
                                                               p("", style = "padding-top:10px;"),
-                                                              column(7, align = "left",
+                                                              column(12, align = "left",
                                                                      selectInput("demos2drop", "Select Socioeconomic Characteristic:", width = "100%", choices = c(
                                                                        "Educational Attainment" = "edu",
                                                                        "Family Income" = "faminc",
@@ -1131,29 +1124,11 @@ ui <- navbarPage(title = "DSPG",
                                                                      
                                                               ),
                                                               
-                                                              column(5, align = "justify",
-                                                                     p("For the Sterling residents, the majority have attained a high school degree or 
-                                                                       equivalent with the largest group having attained a bachelor’s degree. ", style = "padding-top:15px;font-size: 14px;"),
-                                                                     p("For families in the past 12 months, the largest income level is the $100,000 to $149,999 bracket 
-                                                                       followed closely by both the $50,000 to $74,999 bracket and $150,000 to $199,999. It should be taken
-                                                                       into consideration however that our data is slightly skewed as the areas of the Sterling CPD includes
-                                                                       those that are highly affluent, outweigh those located in the areas with the schools designated as 
-                                                                       Title 1. ", style = "padding-top:15px;font-size: 14px;"),  
-                                                                     p("Expanding on that, females ages 18 to 24 years old face the highest level of poverty by sex and age 
-                                                                       overall followed by females ages 35 to 44 years old and males ages 25 to 34 years old. The ACS lacks 
-                                                                       data on males 12 to 14, 15, and 34 to 44 years as well as females ages 16 to 17 years. From the data 
-                                                                       that is available, females tend to have higher levels of poverty than males especially from years 6 to 11. 
-                                                                       While most Sterling residents have private health insurance, 23% are on public insurance such as Medicare 
-                                                                       and Medicaid, and 16.5% of residents have no health insurance at all. ", 
-                                                                       style = "padding-top:15px;font-size: 14px;"), 
-                                                                     
-                                                              )
-                                                              
                                                      )),
                                             tabPanel("Occupation/Work",
                                                      fluidRow(style = "margin: 4px;",
                                                               p("", style = "padding-top:10px;"),
-                                                              column(7, align = "left",
+                                                              column(12, align = "left",
                                                                      selectInput("demos3drop", "Select Socioeconomic Characteristic:", width = "100%", choices = c(
                                                                        "Employment" = "employment",
                                                                        "Work Occupation" = "workoccu",
@@ -1166,17 +1141,8 @@ ui <- navbarPage(title = "DSPG",
                                                                      column(12,align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
                                                                      )),
-                                                              column(5, align = "justify",
-                                                                     p("Within Sterling, the majority of residents are employed at 71.8% while only 4.7% 
-                                                                              of the residents are unemployed. The labor force of Sterling has the largest number
-                                                                              of the population working in the management, business, science and art sector followed
-                                                                              by the service sector and sales and office sector. Only 20% of residents in Sterling 
-                                                                              work in the natural resources, construction, and maintenance field as well as the 
-                                                                              production, transportation, and material moving field. ",  style = "padding-top:15px;font-size: 14px;"),
-                                                                     p("For Sterling residents who commute to work, over half have a commute that is less than 30 
-                                                                              minutes and 75% of said commuters drove alone. Notably, only 2.8% of commuters utilized public 
-                                                                              transportation.",style = "padding-top:15px;font-size: 14px;"),
-                                                              ),
+                                                              
+                                                              
                                                               
                                                      )
                                             ),
@@ -1184,6 +1150,43 @@ ui <- navbarPage(title = "DSPG",
                                             
                                             
                                           )),
+                                   
+                                   column(5, 
+                                          br(""),
+                                          br(""),
+                                          br(""),
+                                          p("Females are about 49.5% of the total population in Sterling. This is marginally in contrast with the Virginia and Loudoun County averages whose populations comprise of more women than men. The national female percentage also stands at 50.7%. Within Sterling, the largest age group are adults (aged 35 to 44 years), closely followed by 25 to 34 years olds, and 45 to 54 years olds. The median age is 34.7. About 27% of the population is under the age of 20 with the largest group being those under 5. From 2016-2020, those identifying as White made up just over half of the Sterling residents followed Asian and Other which may include those who identify as Hispanics as the ACS does not include Hispanic as a race.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                          
+                                          p("For the Sterling residents, the majority have attained a high school degree or 
+                                                                       equivalent with the largest group having attained a bachelor’s degree. ", style = "padding-top:15px;font-size: 14px;"),
+                                          p("For families in the past 12 months, the largest income level is the $100,000 to $149,999 bracket 
+                                                                       followed closely by both the $50,000 to $74,999 bracket and $150,000 to $199,999. It should be taken
+                                                                       into consideration however that our data is slightly skewed as the areas of the Sterling CPD includes
+                                                                       those that are highly affluent, outweigh those located in the areas with the schools designated as 
+                                                                       Title 1. ", style = "padding-top:15px;font-size: 14px;"),  
+                                          p("Expanding on that, females ages 18 to 24 years old face the highest level of poverty by sex and age 
+                                                                       overall followed by females ages 35 to 44 years old and males ages 25 to 34 years old. The ACS lacks 
+                                                                       data on males 12 to 14, 15, and 34 to 44 years as well as females ages 16 to 17 years. From the data 
+                                                                       that is available, females tend to have higher levels of poverty than males especially from years 6 to 11. 
+                                                                       While most Sterling residents have private health insurance, 23% are on public insurance such as Medicare 
+                                                                       and Medicaid, and 16.5% of residents have no health insurance at all. ", 
+                                            style = "padding-top:15px;font-size: 14px;"), 
+                                          p("Within Sterling, the majority of residents are employed at 71.8% while only 4.7% 
+                                                                              of the residents are unemployed. The labor force of Sterling has the largest number
+                                                                              of the population working in the management, business, science and art sector followed
+                                                                              by the service sector and sales and office sector. Only 20% of residents in Sterling 
+                                                                              work in the natural resources, construction, and maintenance field as well as the 
+                                                                              production, transportation, and material moving field. ",  style = "padding-top:15px;font-size: 14px;"),
+                                          p("For Sterling residents who commute to work, over half have a commute that is less than 30 
+                                                                              minutes and 75% of said commuters drove alone. Notably, only 2.8% of commuters utilized public 
+                                                                              transportation.",style = "padding-top:15px;font-size: 14px;"),
+                                          
+                                          
+                                   )
+                                   
+                                   
+                                   
+                                   
                                    
                           )
                  ),
@@ -1194,10 +1197,9 @@ ui <- navbarPage(title = "DSPG",
                                      fluidRow(style = "margin: 6px;",
                                               column(12, 
                                                      h1(strong("Elementary Students in Community Schools Characteristics"), align = "center"),
-                                                     #column(4, 
-                                                     #      h4(strong("Education")),
-                                                     #     p("These are demographics"),
-                                                     #  ) ,
+                                                     h2(strong("What Do Community Schools Look Like?"), align = "left"),
+                                                     p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
+                                                     
                                                      
                                                      tabsetPanel(
                                                        
@@ -1221,25 +1223,16 @@ ui <- navbarPage(title = "DSPG",
                                                                          ),
                                                                          
                                                                          column(5, align = "justify",
-                                                                                p("After understanding the demographics of the areas that feed into the community schools, 
-                                                                                  next we began to look at the demographics of our specific populations, the 6 schools. For 
-                                                                                  this, we used data from the Virginia Department of Education as well as the Loudoun County 
-                                                                                  Public Schools dashboard and staff directory.", style = "padding-top:15px;font-size: 14px;"),
-                                                                                p("To further understand our population, we wanted to compare the race and ethnicity 
-                                                                                  demographics we visualized from the Sterling CDP and our 6 community schools.  
-                                                                                  In this graph, we visualized data from all 6 schools together and found that overall,
-                                                                                  Hispanic students, represented by the light purple bar, make up the greatest percentage of 
-                                                                                  students which differs from the general make-up of the Sterling CDP where White people made 
-                                                                                  up the majority of residents. After seeing this, we wanted to look at the breakdown of the 
-                                                                                  Hispanic population within the greater Sterling area.   Using data from the American Community
-                                                                                  Survey of Greater Sterling between the years 2016 to 2020, we found that the area where Rolling
-                                                                                  Ridge is located, represented by the light yellow area of the map, has the largest population
-                                                                                  of Hispanic identifying people. This is followed closely by Sterling Elementary, the area of 
-                                                                                  the map shaded mustard yellow,  and Forest Grove Elementary, the dark orange, lower area of 
-                                                                                  the map.   This information will help us to identify possible opportunities within the schools
-                                                                                  and neighborhoods specifically surrounding language services.", 
+                                                                                p("To understand the population of the six elementary schools, we looked at the demographics and 
+                                                                                  compared them to one another. The race and ethnicity demographics in 2019-2020 revealed that overall, 
+                                                                                  Hispanic students, made up the greatest percentage of students attending the six elementary schools 
+                                                                                  in Sterling, which differs from the general make-up of the Sterling area where White residents made
+                                                                                  up the majority of residents. ", style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("To break this down, we mapped the schools, and collected the total Hispanic population between the 
+                                                                                  years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population
+                                                                                  of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove 
+                                                                                  Elementary.", 
                                                                                   style = "padding-top:15px;font-size: 14px;"),
-                                                                                
                                                                                 
                                                                          )
                                                                          
@@ -1265,8 +1258,7 @@ ui <- navbarPage(title = "DSPG",
                                                                          ),
                                                                          
                                                                          column(5, align = "justify",
-                                                                                p("Once we felt we understood the demographics of those attending the schools, we switched our focus to the data within the schools themselves. Beginning with the number of teachers and staff employed at each school, we used data from the 2022 school directory, which revealed that at most of the schools, there are more teachers than staff except for Sterling Elementary, which has a larger amount of staff than teachers which may suggest possible possible opportunities in service.    Also notable was the lower total number of staff and teachers employed at Sully Elementary, seen in the last bar on the graph, which led us to visualize the total enrollment for each of the schools to better understand these differences.Using data from the Virginia Department of Education’s Fall Membership Reports for the years 2016 to 2020,   we found that Guilford, seen in the bottom left graph,   Sugarland, the top right graph,   and Rolling Ridge, the bottom right graph,  all maintained a total enrollment of between 550 and 600 students with only slight variations between years. For Forest Grove, the top left graph,   enrollment remained steady between 2016 and 2020 hovering right at 575 students.   On the other hand, Sterling Elementary, the top right graph,   had an enrollment of 450 to 500 students with a slight decline from 2016 to 2020   and Sully Elementary, has only between 400 to 475 students enrolled.   Since the implementation of the Community School Initiative, there has been an increase in enrollment at Sully and Guilford,   while we are not saying that this program is the cause of this increase, it was noticed and may be worth looking into further. Additionally, the differences in enrollment between schools may suggest possible opportunities to look into surrounding youth engagement resources.
-", style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("", style = "padding-top:15px;font-size: 14px;"),
                                                                                 p("To further breakdown the enrollment statistics, we used the LCPS Dashboard data to visualize the student’s absences by quarter at each school during the 2021 to 2022 school year.   While Rolling Ridge, the green line,   Sugarland, the dark blue line,   and Guilford, the yellow line,   all saw spikes in absences during quarter two,   it was Sully, the pink line,   Sterling, the light blue line,   and Forest Grove, the orange line,   that had a steady increase in absences over the 4 quarters. However it is important to note that this data came from the school year during the COVID-19 pandemic.
 To determine if this issue was chronic,   we used Virginia Department of Education data from prior to the pandemic on chronic absenteeism.   This is defined as the percentage of students who miss more than 10% of total classes throughout the year.   This data revealed to us that Sugarland and Rolling Ridge Elementary continued to have a high number of absences prior to the pandemic, suggesting that this may be an area to look for possible service gaps.
 ", style = "padding-top:15px;font-size: 14px;"),
@@ -1575,9 +1567,10 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                             tabPanel("Health and Social Services",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
-                                              column(12, align = "center",h4(strong("Health and Social Services")),
+                                              column(12, align = "center",h1(strong("Health and Social Services")),
                                                      p(""),
-                                                     br("")
+                                                     h3(strong("Overview"), align = "left"), 
+                                                     p(("To understand the services available to those located in Sterling, we used data from our stakeholders as well as publicly available data to provide a general idea of the resources available within the Sterling area. "), align = "left"),
                                                      
                                                      
                                                      
@@ -1587,10 +1580,15 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                               )),
                                      
                                      fluidPage(style = "margin: 2px;", 
-                                               column(12, 
-                                                      leafletOutput("map_health", width = "100%")
+                                               column(6, 
+                                                      leafletOutput("map_health", width = "100%", height = 600)
                                                       #fluidRow(align = "center",
                                                       #    p(tags$small(em('Last updated: August 2021'))))
+                                               ), 
+                                               column(6, 
+                                                      h3("Services"), 
+                                                      
+                                                      
                                                )
                                      )),
                             
@@ -2257,6 +2255,7 @@ server <- function(input, output, session) {
   
 }
 shinyApp(ui = ui, server = server)
+
 
 
 
