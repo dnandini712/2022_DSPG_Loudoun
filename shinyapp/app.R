@@ -235,25 +235,25 @@ valuesR = c(12922, 2574, 308, 77, 609, 741)
 perc <- round(valuesR / sum(valuesR)*100, 1)
 commutermode <- plot_ly(type='pie', labels=~labelsR, values=~valuesR, hoverinfo = "none", 
                         text = ~paste0(labelsR, "\n", perc, "%"), 
-                        textinfo='text') %>% layout(title ='Mode of Transportation to Work', legend=list(title=list(text='Mode of Transportation to Work')), hoverinfo = "none")
+                        textinfo='text') %>% layout(title ='Mode of Transportation to Work', legend=list(title=list(text='')), hoverinfo = "none")
 #------------------poverty-------------------------------
 
-poverty_as<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
-                        sheet = "Data")
+poverty_as1<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
+                         sheet = "Data")
 
-subset_poverty_as <- poverty_as[3:28, 1:4]
-subset_poverty_as
+subset_poverty_as1 <- poverty_as1[3:28, 1:4]
+
 #subset_poverty_as$Estimate[1:26]
-povas_pop <- subset_poverty_as$Estimate
-povas_pop <- as.numeric(povas_pop)
-povas_cat <- subset_poverty_as$Label
+povas_pop1 <- subset_poverty_as1$Estimate
+povas_pop1 <- as.numeric(povas_pop1)
+povas_cat1 <- subset_poverty_as1$Label
 
-Total <- povas_pop
+Total1 <- povas_pop1
 
-cat <- as.character(povas_cat)
+cat1 <- as.character(povas_cat1)
 
-pov <- plot_ly(subset_poverty_as, x = ~cat, y = ~Total, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat,"<br>","Total:",Total,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = ~cat))
-#--------gender by school-------------------------------------------------
+pov <- plot_ly(subset_poverty_as1, x = cat1, y = Total1, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat1,"<br>","Total:",Total1,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = cat1))
+#-#--------gender by school-------------------------------------------------
 
 
 genders <- data.frame(Sex=rep(c("Male", "Female"), each=6),
@@ -391,7 +391,7 @@ hispanicschool <- leaflet(data = total) %>%
   addLegend(pal=mypalette, position = "bottomright",
             values = ~va20_2$estimate,
             opacity = 0.5, title = "Hispanic Population") %>%
-  addMarkers( ~Longitude, ~Latitude, popup = popups, label = ~as.character(School), labelOptions = FALSE) 
+  addMarkers( ~Longitude, ~Latitude, popup = popups, label = ~as.character(Name), labelOptions = FALSE) 
 #-----------enrollment-----------------
 
 enrollment <- read_excel(paste0(getwd(),"/data/Enrollment16-20.xlsx"))
@@ -437,18 +437,11 @@ chronic<-ggplotly(chronic, tooltip = c("text"))
 #--------------free or not free resources ---------------------------------------
 
 costs <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"))
-foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"),sheet="Food")
-clothes <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"),sheet = "Clothing")
-counseling <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Counseling")
-dental <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Dental Care")
-vision <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Vision Care")
-medical <-  read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Medical Services")
-speech <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Speech and Hearing")
-physical <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Physical Therapy")
+foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
 #---------------map_health and isochrones-----------------------------------------
 
-YourAPIKey <- "57d25be2553eff250c5cab1446a9261a"
-YourAppId <- "8eddb716"
+YourAPIKey <- "32f6ed99d0636fe05d01a5ff5a99c6e7"
+YourAppId <- "190b7348"
 
 traveltime10 <- traveltime_map(appId=YourAppId,
                                apiKey=YourAPIKey,
@@ -476,36 +469,62 @@ subset_map <- map[1,c(1,4,5)]
 healthsep <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
 popups <- lapply(
   paste("<strong>Name: </strong>",
-        str_to_title(healthsep$Name),
+        str_to_title(healthsep$Name1),
         "<br />",
         "<strong>Description:</strong>",
-        healthsep$Description ,
+        healthsep$Description1 ,
         "<br />",
         "<strong>Serves:</strong>",
-        healthsep$Serves, 
+        healthsep$Serves1, 
         "<br />",
         "<strong>Hours:</strong>",
-        healthsep$Hours,
+        healthsep$Hours1,
         "<br />",
         "<strong>Language:</strong>",
         healthsep$Language,
         "<br />",
         "<strong>Address:</strong>",
-        healthsep$Address,
+        healthsep$Address1,
         "<a href = ",healthsep$Website, "> Website </a>",
         "<br />"),
   
   htmltools::HTML
 )
 
-foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"),sheet="Food")
-clothes <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"),sheet = "Clothing")
-counseling <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Counseling")
-dental <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Dental Care")
-vision <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Vision Care")
-medical <-  read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Medical Services")
-speech <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Speech and Hearing")
-physical <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Physical Therapy")
+costs <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"))
+healthfree <- read_excel(paste0(getwd(), "/data/resourcecost.xlsx"),sheet = "Health Free")
+healthpay <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Health")
+youthfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth Free")
+youthpay <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth")
+mentfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Mental Free")
+mentpay <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Mental")
+famfree <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family Free")
+fampay <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family")
+
+pal <- colorFactor(c("#2e850c", "#0a31a5", "#ec1c1c","#ffd600","purple","pink"), domain = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"))
+pal1 <- colorFactor(c("332288","#117733","#44AA99","#88CCEE","#DDCC77","#CC6677","#AA4499","#882255"),domain = c("Food Pantry","Clothing","Counseling","Dental Care","Vision Care","Medical Services","Speech and Hearing Services","Physical Therapy"))
+
+blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
+va20_2 <- get_acs(geography = "block group",
+                  variables = c(hispanic = "B03002_012"),
+                  state = "VA",
+                  year = 2020,
+                  geometry = TRUE) %>%
+  filter(NAME %in% blocks)
+leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=healthfree,~Longitude,~Latitude,popup = ~popups, label = ~as.character(Name),group = ~Resource,color = ~pal1(Resource),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addLayersControl(overlayGroups = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"),options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
+  setView(-77.4029155,39.009006, zoom = 11)
+
 
 
 blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
@@ -523,49 +542,33 @@ leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=foods,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),color="#2e850c",group = "Food",weight = 7, radius=7, 
+  addCircleMarkers(data=foods,~Longitude1,~Latitude1,popup=~popups,label=~as.character(Name1),color= ~pal1(Resource1),group = ~Resource1,weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
-  addCircleMarkers(data=clothes,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),color=         "#0a31a5",group="Clothing",weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)  %>%
-  addCircleMarkers(data=counseling,~Longitude,~Latitude,popup =~popups,label=~as.character(Name),color="#ec1c1c",group = "Counseling", weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1) %>%
-  addCircleMarkers(data=dental,~Longitude,~Latitude,popup = ~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1) %>%
-  addCircleMarkers(data=vision,~Longitude,~Latitude,popup =~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1) %>%
-  addCircleMarkers(data=medical,~Longitude,~Latitude,popup = ~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1) %>%
-  addCircleMarkers(data=speech,~Longitude,~Latitude,popup =~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1) %>%
-  addCircleMarkers(data=physical,~Longitude,~Latitude,popup = ~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1) %>%
-  addLayersControl(overlayGroups = c("Food", "Clothing", "Counseling","Medical Services"),options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_health
+  addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_health
 
-
-
-#--------------youth development map ----------------
+#--------------youth development map --------------------------
 
 youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 3.xlsx"))
 popups <- lapply(
   paste("<strong>Name: </strong>",
-        str_to_title(youth$Name),
+        str_to_title(youth$Name3),
         "<br />",
         "<strong>Description:</strong>",
-        youth$Description ,
+        youth$Description3 ,
         "<br />",
         "<strong>Hours:</strong>",
-        youth$Hours, 
+        youth$Hours3, 
         "<br />",
         "<strong>Address:</strong>",
-        youth$Address,
-        "<a href = ",youth$Website, "> Website </a>",
+        youth$Address3,
+        "<a href = ",youth$Website3, "> Website </a>",
         "<br />"),
   
   
   htmltools::HTML
 )
 
-pal <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
+pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
 
 leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(data = va20_2,
@@ -575,7 +578,7 @@ leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=youth,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),color= ~pal(Type),weight = 7, radius=7, 
+  addCircleMarkers(data=youth,~Longitude3,~Latitude3,popup=~popups,label=~as.character(Name3),color= ~pal3(Type),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1,group = ~Type)%>%
   addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
@@ -587,24 +590,24 @@ ment <- read_excel(paste0(getwd(),"/data/mentalhealthres.xlsx"),sheet = "Mental"
 
 popups <- lapply(
   paste("<strong>Name: </strong>",
-        str_to_title(ment$Name),
+        str_to_title(ment$Name2),
         "<br />",
         "<strong>Description:</strong>",
-        ment$Description ,
+        ment$Description2 ,
         "<br />",
         "<strong>Hours:</strong>",
-        ment$Hours, 
+        ment$Hours2, 
         "<br />",
         "<strong>Address:</strong>",
-        ment$Address,
-        "<a href = ",ment$Website, "> Website </a>",
+        ment$Address2,
+        "<a href = ",ment$Website2, "> Website </a>",
         "<br />"),
   
   
   htmltools::HTML
 )
 
-pal <- colorFactor(c("red", "blue", "green"), domain = c("Family Therapy", "Family Counseling", "Bereavement"))
+pal2 <- colorFactor(c("red", "blue", "green"), domain = c("Family Therapy", "Family Counseling", "Bereavement"))
 
 leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(data = va20_2,
@@ -614,9 +617,9 @@ leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=ment,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal(Resources),weight = 7, radius=7, 
+  addCircleMarkers(data=ment,~Longitude2,~Latitude2,popup=~popups,label=~as.character(Name2),group=~Resources2,color=~pal2(Resources2),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addLayersControl(overlayGroups = ~Resources2,options = layersControlOptions(collapsed = FALSE)) %>% 
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
 
 #----------------------family engagement map-------------------
@@ -979,38 +982,28 @@ ui <- navbarPage(title = "DSPG",
                                    column(4,
                                           h2(strong("The Setting")),align = "justify",
                                           
-                                          p("Loudoun County",a(href = "https://www.loudoun.gov/Loudoun County"), target = "_blank", "is located in the Northern Neck of Virginia 
-                                          within the D.C. metropolitan area. With a population of 413,538 and a median income of $147,111 in 2020, Loudoun County is 
-                                          fast growing and has remained the richest county with a population over 65,000 in the United States. The bulk of the 
-                                          population resides in the Eastern half of Loudoun County with many high-tech companies located in and around the region 
-                                          while Western Loudoun retains many of its rural roots. Loudoun County Public Schools claims the top employer with 
-                                          over 10,000 employees followed by Verizon and the Loudoun County Government."),
-                                          p("Sterling",a(href = "https://en.wikipedia.org/wiki/Sterling,_Virginia Sterling"), target = "_blank", "Virginia, located in the 
-                                              Eastern most section of Loudoun County, had a population of 30,872 in 2020. Sterling is situated next to Washington Dulles 
-                                              International Airport and is home to many federal agencies and tech companies allowing for rapid growth."),
-                                          #p("During the 2018 – 2019 school year, the Community school model provided the families with clothes, shoes, and other basic supplies 538 times; enabled 135 families to receive weekend meals throughout the school year; supported 6 academic programs for 323 students; and provided 9 after-school enrichment programs for 373 students. Funds have provided these Community Schools with additional resources, such as full-time parent liaisons, a full-time social worker, and programs that keep families engaged in their child’s education. The Community Schools initiative focuses on bolstering these schools in six areas: academies, health and social services, youth and community engagement, building stronger families, and healthier communities."),
-                                          
+                                          p("Founded in 1757, Loudon County is a county located in the Northern part of the state of Virginia. The county was named after John Campbell, a Scottish nobleman who served as the commander-in-chief for all British armed forces in North America and the fourth earl of Loudon. From 1756 to 1759, he was the titular governor of Virginia. The county’s official motto is “I Byde My time”. This was borrowed from the Earl of Loudon’s family coat of arms."),
+                                          p("With an estimated population of 420,959 as of the 2020 Decennial Census, Loudon County is Virginia’s third most populated county. It is also the country’s richest county with a population ocer 65,000 people with a median average household income of $147,111 and has held this title for over ten years. Loudon is a part of the Washington Metropolitan Statistical Area and the 10th Congressional District of Virginia. Located in the eastern time zone, Loudon County, Virginia is a total of 522 square miles with 516 square miles being land and 6 square miles being water."),
+                                          p("Loudon County was traditionally a rural county until the Washington Dulles International Airport was built in 1962. This resulted in a high-tech economic boom and rapid growth in the county. The building of the Washington Dulles International Airport also contributed to the increase of the population in the 1980’s and the heavy suburbanization throughout the 1990’s. Due to the full-fledged service economy in Loudoun County, it has become home to several world headquarters of high-tech companies. These companies include Verizon Business, Orbital Sciences Corporation, and Telos Corporation. With more than 10,000 employees, Loudon County Public Schools is the number one employer in Loudon County. Next is Verizon and the Loudon County Government, both with employees ranging from 2,500 to 5,000."),
+                                          p("Sterling, Virginia is a census-designated place (CDP) in Loudoun County, Virginia. However, the “Sterling, Virginia” mailing address applies to a much wider region including other localities such as Arcola, Cascades, Dulles, Countryside, and Sugarland Run. Sugarland Run in a portion of Sterling with zip code 20164. As of the 2020 Decennial Census, Sterling has an estimated population of 30,271 and a median household income of $97,647. Located in Sterling, Virginia are the six title 1 schools that will be discussed throughout this project. The six title 1 schools in Sterling are Sterling Elementary, Sugarland Elementary, Sully Elementary, Guilford Elementary, Rolling Ridge Elementary, and Forest Grove Elementary."),
                                    ),
                                    column(4,
                                           h2(strong("Project Background")), align = "justify",
-                                          
-                                          p("The Supervisor of Outreach Services for the Department of Education in the Loudoun County Public School
-                                            System as well as the Virginia Cooperative Extension seek to understand areas of opportunity to further
-                                            assist low-income families within Sterling."),
-                                          p("We will use publicly available data including the American Community Survey and Virginia Department of Education to 
-                                            provide our stakeholders with a comprehensive understanding of the factors impacting the Sterling area. We focus on 
-                                            sociodemographic indicators, community school characteristics, and resource proximity to support our analysis."),
+                                          h4(strong("Loudoun County Public Schools")),
+                                          p("Loudoun County Public Schools (LCPS) is the third largest school division in Virginia. LCPS was established in 1870. LCPS has over 80,000 students in their 97 facilities. There are 18 high schools, 17 middle schools, 60 elementary schools, and two educational centers. The superintendent of the Loudoun County Public Schools is Dr. Scott A. Ziegler. The purpose of LCPS is “for all students to make meaningful contributions to the world"), 
+                                          h4(strong("Sterling")), 
+                                          p("Sterling, Virginia is a census-designated place (CDP) in Loudoun County, Virginia. However, the “Sterling, Virginia” mailing address applies to a much wider region including other localities such as Arcola, Cascades, Dulles, Countryside, and Sugarland Run. Sugarland Run in a portion of Sterling with zip code 20164. As of the 2020 Decennial Census, Sterling has an estimated population of 30,271 and a median household income of $97,647. Located in Sterling, Virginia are the six title 1 schools that will be discussed throughout this [project]. "),
+                                          h4(strong("Our Target Schools")), 
+                                          p("Loudoun County Public Schools started a Community School Initiative in 2015 with Sterling Elementary being the first one to be part of the program. Soon after in 2018, 5 other Elementary Schools joined the program Sugarland Elementary, Sully Elementary, Guilford Elementary, Forest Grove Elementary, and Rolling Ridge Elementary. "),
+                                          h4(strong("What is the question?")), 
+                                          p("Potential partners of Loudoun County Public Schools are eager to provide services to the Community Schools but due to a lack of data, are unclear on what resources would be most beneficial for this region. Scrapping data and visualizing it would help our stakeholders to find potential improvement opportunities that can help improve the lives of the students in our targeted Elementary Schools."),
                                    ),  
                                    
                                    column(4,
-                                          h2(strong("Project Goals")),
-                                          p("Our team seeks to design an interactive dashboard that visualizes the resources and services available to the students and families
-                                            involved in the Loudoun County Community School Initiative. This dashboard will allow stakeholders to understand the main needs of 
-                                            the community and provide insights into potential opportunities for improvement to increase the quality of life for those impacted 
-                                            by the Community School Initiative."),
-                                          p("Our dashboard will contain our findings and analysis, which will allow both our stakeholders and all those interested to understand this 
-                                            information in a comprehensive and dynamic manner"), 
-                                          #p(""),
+                                          h2(strong("Project Goals")), align = "justify",
+                                          p("Our team seeks to design an interactive dashboard that visualizes the resources and services available to the students and families involved in the Loudoun County Community School Initiative. This dashboard will allow stakeholders to understand the main needs of the community and provide insights into potential opportunities for improvement to increase the quality of life for those impacted by the Community School Initiative. "),
+                                          p("We will use publicly available data including the American Community Survey and Virginia Department of Education to provide our stakeholders with a comprehensive understanding of the factors impacting the Sterling area. We focus on sociodemographic indicators such as median income and employment, community school characteristics, and resource proximity to support our analysis. We will utilize public data sources as well as data provided by our stakeholders to map the services and resource’s locations with respect to distance and travel time. These maps will be broken down into 4 resource types: health and social services, mental health, family engagement, and youth development to analyze potential opportunities for service expansion.  "), 
+                                          p("Our dashboard will contain our findings and analysis, which will allow both our stakeholders and all those interested to understand this information in a comprehensive and dynamic manner. For those interested in further research, this repository will be useful for investigating possible underlying factors leading to these differences in accessibility. "),
                                           #p("")
                                    )
                           ),
@@ -1059,7 +1052,7 @@ ui <- navbarPage(title = "DSPG",
                           fluidRow(style = "margin: 12px;",
                                    column(8, h3(strong("When did schools join the Community Schools Initiative?"))),
                                    column(12, align ="center", 
-                                          img(src='sterlingmascot.png', width = "60%", height = 250)
+                                          img(src='sterlingmascot.png', width = "50%", height = 250)
                                           
                                           
                                    ), 
@@ -1120,7 +1113,7 @@ ui <- navbarPage(title = "DSPG",
                                                                      withSpinner(plotlyOutput("demo2", height = "500px", width ="100%")),
                                                                      column(12,align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
-                                                                            p("*Note: Data is nill for missing bars", style = "font-size:12px;"))
+                                                                            p("*Note: Data is zero for missing bars", style = "font-size:12px;"))
                                                                      
                                                               ),
                                                               
@@ -1151,35 +1144,15 @@ ui <- navbarPage(title = "DSPG",
                                             
                                           )),
                                    
-                                   column(5, 
+                                   column(5, align = "justify",
                                           br(""),
                                           br(""),
                                           br(""),
                                           p("Females are about 49.5% of the total population in Sterling. This is marginally in contrast with the Virginia and Loudoun County averages whose populations comprise of more women than men. The national female percentage also stands at 50.7%. Within Sterling, the largest age group are adults (aged 35 to 44 years), closely followed by 25 to 34 years olds, and 45 to 54 years olds. The median age is 34.7. About 27% of the population is under the age of 20 with the largest group being those under 5. From 2016-2020, those identifying as White made up just over half of the Sterling residents followed Asian and Other which may include those who identify as Hispanics as the ACS does not include Hispanic as a race.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
                                           
-                                          p("For the Sterling residents, the majority have attained a high school degree or 
-                                                                       equivalent with the largest group having attained a bachelor’s degree. ", style = "padding-top:15px;font-size: 14px;"),
-                                          p("For families in the past 12 months, the largest income level is the $100,000 to $149,999 bracket 
-                                                                       followed closely by both the $50,000 to $74,999 bracket and $150,000 to $199,999. It should be taken
-                                                                       into consideration however that our data is slightly skewed as the areas of the Sterling CPD includes
-                                                                       those that are highly affluent, outweigh those located in the areas with the schools designated as 
-                                                                       Title 1. ", style = "padding-top:15px;font-size: 14px;"),  
-                                          p("Expanding on that, females ages 18 to 24 years old face the highest level of poverty by sex and age 
-                                                                       overall followed by females ages 35 to 44 years old and males ages 25 to 34 years old. The ACS lacks 
-                                                                       data on males 12 to 14, 15, and 34 to 44 years as well as females ages 16 to 17 years. From the data 
-                                                                       that is available, females tend to have higher levels of poverty than males especially from years 6 to 11. 
-                                                                       While most Sterling residents have private health insurance, 23% are on public insurance such as Medicare 
-                                                                       and Medicaid, and 16.5% of residents have no health insurance at all. ", 
-                                            style = "padding-top:15px;font-size: 14px;"), 
-                                          p("Within Sterling, the majority of residents are employed at 71.8% while only 4.7% 
-                                                                              of the residents are unemployed. The labor force of Sterling has the largest number
-                                                                              of the population working in the management, business, science and art sector followed
-                                                                              by the service sector and sales and office sector. Only 20% of residents in Sterling 
-                                                                              work in the natural resources, construction, and maintenance field as well as the 
-                                                                              production, transportation, and material moving field. ",  style = "padding-top:15px;font-size: 14px;"),
-                                          p("For Sterling residents who commute to work, over half have a commute that is less than 30 
-                                                                              minutes and 75% of said commuters drove alone. Notably, only 2.8% of commuters utilized public 
-                                                                              transportation.",style = "padding-top:15px;font-size: 14px;"),
+                                          p("For the Sterling residents, who are above the age of 25 majority of them have attained a high school diploma with the largest group having attained a bachelor’s degree with a total number of 4,706 people from the Sterling population who are 25 years and above. This implies that a large part of the community is well educated and have attained a college degree. For families in the past 12 months, the largest income level is the $100,000 to $149,999 bracket followed closely by both the $50,000 to $74,999 bracket and $150,000 to $199,999. It should be taken into consideration however that our data is slightly skewed as the areas of the Sterling CPD includes those that are highly affluent, outweigh those located in the areas with the schools designated as Title 1. Expanding on that, females ages 18 to 24 years old face the highest level of poverty by sex and age overall followed by females ages 35 to 44 years old and males ages 25 to 34 years old. Females tend to have higher levels of poverty than males especially from years 6 to 11. While most Sterling residents have private health insurance, which is insurance mostly provided by the employer’s, 23% are on public insurance such as Medicare and Medicaid, and 16.5% of residents have no health insurance at all. This might be due to the undocumented residents in the area. ", style = "padding-top:15px;font-size: 14px;"),
+                                          
+                                          p("Within Sterling, the majority of residents are employed at 71.8% while 4.7% of the residents are unemployed. It is important to note that while 4.7% may seem like a small number, keep in mind that the population of Sterling is 30,271 so 4.7% of the population is 1,423 people. The labor force of Sterling has the largest number of the population working in the management, business, science and art sector followed by the service sector and sales and office sector. Only 20% of residents in Sterling work in the natural resources, construction, and maintenance field as well as the production, transportation, and material moving field. This shows us that Sterling is more of a tech-savy area, and it makes sense because of all the headquarters and big named companies that have moved to the area over the years. For Sterling residents who commute to work, over half have a commute time that is less than 30 minutes and 75% of said commuters drive alone. Notably, only 1.8% of commuters utilized public transportation so this could be a potential area to look into to see why this service isn't being utilized as much. ",style = "padding-top:15px;font-size: 14px;"),
                                           
                                           
                                    )
@@ -1209,30 +1182,32 @@ ui <- navbarPage(title = "DSPG",
                                                                          column(7, align = "left",
                                                                                 selectInput("schooldrop1", "Select Demographic:", width = "100%", choices = c(
                                                                                   "Gender" = "cgender",
-                                                                                  "Race/Ethnicity" = "racenine",
-                                                                                  "Hispanic Population" = "chispanic"
+                                                                                  "Race/Ethnicity" = "racenine"
+                                                                                  
                                                                                   
                                                                                 ),
                                                                                 ),
                                                                                 
                                                                                 withSpinner(plotlyOutput("ocuplot1", height = "500px", width = "100%")),
-                                                                                withSpinner(leafletOutput("ocuplot3", height = "500px", width = "60%")),
+                                                                                br(""),
+                                                                                column(10, align = "left",
+                                                                                       withSpinner(leafletOutput("ocuplot3", height = "400px", width = "70%"))),
                                                                                 column(12,align = "right",
                                                                                        p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                                                                 )
                                                                          ),
                                                                          
                                                                          column(5, align = "justify",
-                                                                                p("To understand the population of the six elementary schools, we looked at the demographics and 
-                                                                                  compared them to one another. The race and ethnicity demographics in 2019-2020 revealed that overall, 
-                                                                                  Hispanic students, made up the greatest percentage of students attending the six elementary schools 
-                                                                                  in Sterling, which differs from the general make-up of the Sterling area where White residents made
-                                                                                  up the majority of residents. ", style = "padding-top:15px;font-size: 14px;"),
-                                                                                p("To break this down, we mapped the schools, and collected the total Hispanic population between the 
-                                                                                  years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population
-                                                                                  of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove 
-                                                                                  Elementary.", 
+                                                                                br(""),
+                                                                                br(""),
+                                                                                br(""),
+                                                                                
+                                                                                p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling and Sully have similar number of students and have lesser students than the other elementary schools. Forest Grove, Guilford and Sully have a similar trend like the Sterling area for the gender ratio: the female students are about 49% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling has the lowest where it has 91 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("The race and ethnicity demographics in 2019-2020 revealed that overall, Hispanic students, made up the greatest percentage of students attending the six elementary schools in Sterling, which differs from the general make-up of the Sterling area where White residents made up the majority of residents. There is a huge difference between Guilford and Forest Grove in terms of the ethnic groups of students, given that they both have similar number of total students: Guilford has significantly higher Hispanic students while Forest Grove has a lot more White and Hispanic students.", 
                                                                                   style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence,  we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary.", 
+                                                                                  style = "padding-top:15px;font-size: 14px;"),
+                                                                                
                                                                                 
                                                                          )
                                                                          
@@ -1258,10 +1233,27 @@ ui <- navbarPage(title = "DSPG",
                                                                          ),
                                                                          
                                                                          column(5, align = "justify",
-                                                                                p("", style = "padding-top:15px;font-size: 14px;"),
-                                                                                p("To further breakdown the enrollment statistics, we used the LCPS Dashboard data to visualize the student’s absences by quarter at each school during the 2021 to 2022 school year.   While Rolling Ridge, the green line,   Sugarland, the dark blue line,   and Guilford, the yellow line,   all saw spikes in absences during quarter two,   it was Sully, the pink line,   Sterling, the light blue line,   and Forest Grove, the orange line,   that had a steady increase in absences over the 4 quarters. However it is important to note that this data came from the school year during the COVID-19 pandemic.
-To determine if this issue was chronic,   we used Virginia Department of Education data from prior to the pandemic on chronic absenteeism.   This is defined as the percentage of students who miss more than 10% of total classes throughout the year.   This data revealed to us that Sugarland and Rolling Ridge Elementary continued to have a high number of absences prior to the pandemic, suggesting that this may be an area to look for possible service gaps.
-", style = "padding-top:15px;font-size: 14px;"),
+                                                                                br(""),
+                                                                                br(""),
+                                                                                br(""),
+                                                                                
+                                                                                p("To better understand the characteristics of the community schools regarding the classroom 
+                                                                                  environment, we pulled data from the Virginia Department of Education to visualize the number
+                                                                                  of educators, total enrollment, absences, and suspension rates. Among the six community schools, 
+                                                                                  most all have a greater number of teachers than staff except for Sterling Elementary.
+                                                                                  When looking at the total enrollment, Sterling Elementary retained a stable number of students from 
+                                                                                  2016 to 2020 right around 575 students. For Sully Elementary, they had both the lowest number of 
+                                                                                  educators as well as the lowest total enrollment of all six schools. Breaking this down further, 
+                                                                                  the student-teacher ratio of the six schools revealed that Sully had the highest student to teacher 
+                                                                                  ratio of the schools with 14 students per teacher.  ", style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("Moving to absence and suspension rates, we utilized data from the Loudoun County Public Schools Dashboard 
+                                                                                  as well as the Virginia Department of Education to visualize the differences between the schools. For the 
+                                                                                  absence rates of students by quarter in the 2020-2021 school year, Forest Grove Elementary had the lowest 
+                                                                                  absence rate across the year while Sully Elementary had the largest increase throughout the year, increasing 
+                                                                                  by over two percent. To attempt to understand if this was a chronic issue, we visualized the chronic
+                                                                                  absenteeism rate which is defined as the percentage of students who miss more than ten percent of total
+                                                                                  classes throughout the year. We found that Sugarland Elementary had the highest rate at 11.1% while 
+                                                                                  Sterling had the lowest at 5.8%.  ", style = "padding-top:15px;font-size: 14px;"),
                                                                                 
                                                                                 
                                                                          )
@@ -1523,37 +1515,25 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                             
                             tabPanel("School Reports",
                                      fluidPage(style = "margin: 2px;",
-                                               p(h4("Representatives' responses"), style = "padding-top:5px;"),
+                                               p(h4(strong("Representatives' Responses")), style = "padding-top:5px;"),
                                                
-                                               tabsetPanel(
-                                                 tabPanel("Challenges and Weaknesses",
-                                                          fluidRow(style = "margin: 2px;",
-                                                                   p("", style = "padding-top:10px;"),
-                                                                   column(12, align = "center",
-                                                                          wordcloud2Output("cloud1")
-                                                                   )
-                                                                   
-                                                          )),
-                                                 tabPanel("Strengths and Successes",
-                                                          p("", style = "padding-top:10px;"),
-                                                          column(12, align = "center",
-                                                                 wordcloud2Output("cloud2")
-                                                          ),
-                                                          
-                                                 ), 
-                                                 
-                                                 tabPanel("Future Goals",
-                                                          p("", style = "padding-top:10px;"),
-                                                          column(12, align = "center",
-                                                                 wordcloud2Output("cloud3")
-                                                          ),
-                                                          
-                                                 )
-                                                 
-                                                 
-                                                 
-                                                 
-                                               )))
+                                               radioButtons(
+                                                 "category",
+                                                 label = "Select:",
+                                                 choices = c("Challenges and Weaknesses", "Strengths and Successes", "Future Goals"),
+                                               ),
+                                               
+                                               column(8, align = "left",
+                                                      wordcloud2Output("wordcloud")
+                                               ),
+                                               
+                                               column(4, align = "justify",
+                                                      p("The word cloud 'Weaknesses and Challenges' is considering all the responses of all the schools to two questions 'What are your school's biggest challenges?' and 'What are your school's biggest weaknesses?'. The more number of times each word has appeared, the bigger it is on the cloud. If one hovers over a word, it will show the number of times that word came up in the School Representative's response while answering the questions. As evident from the word cloud, the biggest challenges exist in the areas of mental health and ensuring care for the undocumented and uninsured, especially in Forest Grove and Sterling. Parent involvement is a major concern in Sugarland. "),
+                                                      p("The next word cloud are responses to the questions regarding their successes and strengths. While we read through the responses, we found out that, the schools are in general doing well in the Family Engagement pillar, except Sugarland. There is a strong sense of community and teamwork. These schools have a rich human capital, in the sense that the teachers and staff are valued. If there is a negative word, for example, 'gaggle' - it means there has been a decrease in that area in one or many schools, depending on the size of the word: so in this case, one school, Sugarland saw a reduction of gaggle reports. ('Gaggle is a student surveillance application, in which student work and behavior are scrutinized for indicators of violence or a mental health crisis, and profanity and sexuality are policed.'"),
+                                                      p("The Future Goals mostly focus on creating more oppotunities and focusing on development as the schools continue working with the students and their families through the various programs as illustrated the wordcloud.")
+                                               )
+                                               
+                                     ))
                             
                             #tabPanel(h4("Weaknesses and biggest challenges")),
                             
@@ -1570,7 +1550,12 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                               column(12, align = "center",h1(strong("Health and Social Services")),
                                                      p(""),
                                                      h3(strong("Overview"), align = "left"), 
-                                                     p(("To understand the services available to those located in Sterling, we used data from our stakeholders as well as publicly available data to provide a general idea of the resources available within the Sterling area. "), align = "left"),
+                                                     p(("To understand the services available to those located in Sterling, we used data from our
+                                                        stakeholders as well as publicly available data to provide a general idea of the resources
+                                                        available within the Sterling area for the four pillars of Community Schools. On each map,
+                                                        the legend in the top right corner is interactive allowing the user to select and deselect
+                                                        desired resource groups and each colored marker provides a pop-up with information on that 
+                                                        resource.   "), align = "left"),
                                                      
                                                      
                                                      
@@ -1580,13 +1565,38 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                                               )),
                                      
                                      fluidPage(style = "margin: 2px;", 
+                                               radioButtons(
+                                                 "category",
+                                                 label = "Select:",
+                                                 choices = c("All Services", "Free Services"),
+                                               ),
                                                column(6, 
                                                       leafletOutput("map_health", width = "100%", height = 600)
                                                       #fluidRow(align = "center",
                                                       #    p(tags$small(em('Last updated: August 2021'))))
                                                ), 
                                                column(6, 
-                                                      h3("Services"), 
+                                                      h3(strong("Services")), 
+                                                      p("A key pillar essential to ensuring that a community will thrive is access to 
+                                                        quality health and social services which include nutritious food, weather-appropriate
+                                                        clothing, and medical care including dental care, vision care, comprehensive primary 
+                                                        care, and preventative care. For many, barriers to these services are often a result 
+                                                        of expense and transportation making it vital to provide access to these resources for
+                                                        all members of a community."),
+                                                      p("Due to Sterling’s unique location within Loudoun County and its proximity to Washington, 
+                                                        D.C., Sterling residents have access to many options when it comes to health and social 
+                                                        services. However, this is not true for all Sterling residents. For those in need of free 
+                                                        or reduced cost services, the number and accessibility decrease with many services falling 
+                                                        outside of a ten-minute drive."),
+                                                      p("In terms of free services, there is a wide variety of food pantries available within a 
+                                                        ten-minute drive of Sterling Elementary. However, beyond that, access to medical care and 
+                                                        clothing is not as readily available with many resources falling within the 20- and 45-minute
+                                                        boundaries. "),
+                                                      h3(strong("Travel Distance")),
+                                                      p("We included the driving distances from the center location of Sterling Elementary School as 
+                                                        it sits in the middle of the Sterling, CDP. Shown on the map are the driving distances for 10 
+                                                        minutes, 20 minutes, and 45 minutes shaded in green, blue, and red, respectively. Within each 
+                                                        boundary are markers representing different services available within those driving distances.")
                                                       
                                                       
                                                )
@@ -1594,22 +1604,57 @@ To determine if this issue was chronic,   we used Virginia Department of Educati
                             
                             
                             
-                            tabPanel("Mental Health",
+                            tabPanel("Mental Health", 
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
-                                              column(12, align = "center",h4(strong("Mental Health")),
+                                              column(12, align = "center",h1(strong("Mental Health")),
                                                      p(""),
-                                                     br("")
+                                                     h3(strong("Overview"), align = "left"), 
+                                                     p(("To understand the services available to those located in Sterling, we used data from our
+                                                        stakeholders as well as publicly available data to provide a general idea of the resources
+                                                        available within the Sterling area for the four pillars of Community Schools. On each map,
+                                                        the legend in the top right corner is interactive allowing the user to select and deselect
+                                                        desired resource groups and each colored marker provides a pop-up with information on that 
+                                                        resource.   "), align = "left"),
+                                                     
+                                                     
+                                                     
                                                      
                                                      
                                                      
                                               )),
+                                     p(""),
+                                     br(""),
+                                     
+                                     
+                                     
+                                     
                                      fluidPage(style = "margin: 2px;", 
-                                               column(12, 
-                                                      leafletOutput("map_mental", width = "100%")
+                                               column(6, 
+                                                      leafletOutput("map_mental", width = "100%", height = 600)
                                                       #fluidRow(align = "center",
                                                       #    p(tags$small(em('Last updated: August 2021'))))
+                                               ), 
+                                               
+                                               column(6, 
+                                                      h3(strong("Services")), 
+                                                      p("Mental health is equally important as physical health. For a community to flourish it is important that mental health resources be provided and be easily accessible. The mental health resources have been divided into four categories Anger Management, Bereavement, Family Counseling, and Family Therapy. The resources have been mapped within a 45 minutes driving time from Sterling. Anger Management services are not abundant in the sterling surroundings with only 3 available in a 45-minute radius. Bereavement services are the least abundant with only two available around the Sterling area. The most abundant resource is Family therapy, they offer family counseling, relationship counseling, and children counseling. Mental health resources decrease in number and accessibility after the ten minute radius. "),
+                                                      p("Due to Sterling’s unique location within Loudoun County and its proximity to Washington, 
+                                                        D.C., Sterling residents have access to many options when it comes to health and social 
+                                                        services. However, this is not true for all Sterling residents. For those in need of free 
+                                                        or reduced cost services, the number and accessibility decrease with many services falling 
+                                                        outside of a ten-minute drive."),
+                                                      
+                                                      h3(strong("Travel Distance")),
+                                                      p("We included the driving distances from the center location of Sterling Elementary School as 
+                                                        it sits in the middle of the Sterling, CDP. Shown on the map are the driving distances for 10 
+                                                        minutes, 20 minutes, and 45 minutes shaded in green, blue, and red, respectively. Within each 
+                                                        boundary are markers representing different services available within those driving distances.")
+                                                      
+                                                      
                                                )
+                                               
+                                               
                                      )
                                      
                             ),
@@ -1879,7 +1924,7 @@ server <- function(input, output, session) {
   
   
   output$ocuplot3 <- renderLeaflet({
-    if (Var2() == "chispanic") {
+    if (Var2() == "racenine") {
       
       hispanicschool
     }
@@ -2245,17 +2290,38 @@ server <- function(input, output, session) {
     }
   })
   
-  
   #---------word clouds-----------------
   
-  output$cloud1 <- renderWordcloud2(
-    cloud1
-  )
+  category <- reactive({
+    input$category
+  })
+  
+  output$wordcloud <- renderWordcloud2({
+    
+    if (category() == "Challenges and Weaknesses") {
+      
+      cloud1
+      
+    }
+    
+    else if(category() == "Strengths and Successes") {
+      
+      cloud2
+    }
+    
+    else if(category() == "Future Goals") {
+      
+      cloud3
+    }
+    
+  })
+  
+  
+  
   
   
 }
 shinyApp(ui = ui, server = server)
-
 
 
 

@@ -10,7 +10,7 @@ library(dplyr)
 library(plotly)
 library(readxl)
 newsurveydata <- read_excel(paste0(getwd(), "/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
-subsetnewsurveydataSTAFF <- newsurveydata[3:8,c(1,2:5,7:8)]
+subsetnewsurveydataSTAFF <- newsurveydata[3:8,c(1,2:8)]
 ```
 
 #Teacher & Staff Survey Q1 - Staff Collegiality

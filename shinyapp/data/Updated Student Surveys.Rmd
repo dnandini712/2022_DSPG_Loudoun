@@ -7,7 +7,7 @@ output: html_document
 ```{r}
 library(fmsb)
 newsurveydata <- read_excel(paste0(getwd(), "/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
-subsetnewsurveydataSTUDENT <- newsurveydata[11:16,c(1,2:4,6)]
+subsetnewsurveydataSTUDENT <- newsurveydata[11:16,c(1,2:6)]
 ```
 
 #Student Survey Q1 - Student Engagement
