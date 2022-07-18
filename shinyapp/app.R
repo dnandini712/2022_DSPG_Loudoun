@@ -440,8 +440,8 @@ costs <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"))
 foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
 #---------------map_health and isochrones-----------------------------------------
 
-YourAPIKey <- "73ad15c60d8fe57014b574b4fc428ec0"
-YourAppId <- "afe3f1af"
+YourAPIKey <- "32f6ed99d0636fe05d01a5ff5a99c6e7"
+YourAppId <- "190b7348"
 
 traveltime10 <- traveltime_map(appId=YourAppId,
                                apiKey=YourAPIKey,
@@ -469,22 +469,22 @@ subset_map <- map[1,c(1,4,5)]
 healthsep <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
 popups <- lapply(
   paste("<strong>Name: </strong>",
-        str_to_title(healthsep$Name),
+        str_to_title(healthsep$Name1),
         "<br />",
         "<strong>Description:</strong>",
-        healthsep$Description ,
+        healthsep$Description1 ,
         "<br />",
         "<strong>Serves:</strong>",
-        healthsep$Serves, 
+        healthsep$Serves1, 
         "<br />",
         "<strong>Hours:</strong>",
-        healthsep$Hours,
+        healthsep$Hours1,
         "<br />",
         "<strong>Language:</strong>",
         healthsep$Language,
         "<br />",
         "<strong>Address:</strong>",
-        healthsep$Address,
+        healthsep$Address1,
         "<a href = ",healthsep$Website, "> Website </a>",
         "<br />"),
   
@@ -542,7 +542,7 @@ leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=foods,~Longitude1,~Latitude1,popup=~popups,label=~as.character(Name),color= ~pal1,group = ~Resource1,weight = 7, radius=7, 
+  addCircleMarkers(data=foods,~Longitude1,~Latitude1,popup=~popups,label=~as.character(Name1),color= ~pal1,group = ~Resource1,weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
   addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_health
 
