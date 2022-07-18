@@ -174,7 +174,20 @@ race <- plot_ly(type='pie', labels=labelsR, values=valuesR,
                 textinfo='label+percent',
                 hoverinfo = 'text', 
                 text = ~paste('Total:', valuesR),
-                insidetextorientation='radial') %>% layout(title ='Race/Ethnicity Composition', legend=list(title=list(text='Select Race')))
+                insidetextorientation='radial') %>% layout(title ='2019 Race/Ethnicity Composition', legend=list(title=list(text='Select Race')))
+
+#------------Hispanic Percentage-------------
+
+labelsHispanicPIE = c('Hispanic or Latino','Not Hispanic or Latino')
+valuesHispanicPIE = c(12472, 17799)
+
+HispanicPercentagePIE <- plot_ly(type='pie', labels=labelsH, values=valuesH, 
+                                 textinfo='label+percent',
+                                 insidetextorientation='radial',
+                                 hoverinfo = 'text', 
+                                 text = ~paste('Total Population:', valuesHispanicPIE)) %>% layout(title ='2019 Hispanic Population In Sterling', legend=list(title=list(text='')))
+
+HispanicPercentagePIE
 
 #-------income--------------------------------
 medianin <- read_excel(paste0(getwd(),"/data/incomemedian.xlsx"))
@@ -1011,14 +1024,20 @@ ui <- navbarPage(title = "DSPG",
                                       br()
                                    )
                           ),
+                          
                           fluidRow(style = "margin: 6px;",
                                    column(4,
                                           h2(strong("The Setting")),align = "justify",
                                           
-                                          p("Founded in 1757, Loudon County is a county located in the Northern part of the state of Virginia. The county was named after John Campbell, a Scottish nobleman who served as the commander-in-chief for all British armed forces in North America and the fourth earl of Loudon. From 1756 to 1759, he was the titular governor of Virginia. The county’s official motto is “I Byde My time”. This was borrowed from the Earl of Loudon’s family coat of arms."),
-                                          p("With an estimated population of 420,959 as of the 2020 Decennial Census, Loudon County is Virginia’s third most populated county. It is also the country’s richest county with a population ocer 65,000 people with a median average household income of $147,111 and has held this title for over ten years. Loudon is a part of the Washington Metropolitan Statistical Area and the 10th Congressional District of Virginia. Located in the eastern time zone, Loudon County, Virginia is a total of 522 square miles with 516 square miles being land and 6 square miles being water."),
-                                          p("Loudon County was traditionally a rural county until the Washington Dulles International Airport was built in 1962. This resulted in a high-tech economic boom and rapid growth in the county. The building of the Washington Dulles International Airport also contributed to the increase of the population in the 1980’s and the heavy suburbanization throughout the 1990’s. Due to the full-fledged service economy in Loudoun County, it has become home to several world headquarters of high-tech companies. These companies include Verizon Business, Orbital Sciences Corporation, and Telos Corporation. With more than 10,000 employees, Loudon County Public Schools is the number one employer in Loudon County. Next is Verizon and the Loudon County Government, both with employees ranging from 2,500 to 5,000."),
-                                          p("Sterling, Virginia is a census-designated place (CDP) in Loudoun County, Virginia. However, the “Sterling, Virginia” mailing address applies to a much wider region including other localities such as Arcola, Cascades, Dulles, Countryside, and Sugarland Run. Sugarland Run in a portion of Sterling with zip code 20164. As of the 2020 Decennial Census, Sterling has an estimated population of 30,271 and a median household income of $97,647. Located in Sterling, Virginia are the six title 1 schools that will be discussed throughout this project. The six title 1 schools in Sterling are Sterling Elementary, Sugarland Elementary, Sully Elementary, Guilford Elementary, Rolling Ridge Elementary, and Forest Grove Elementary."),
+                                          p("Loudoun County is located in the northern part of the state of Virginia. It lies along Virginia’s state line, where Virginia meets West Virginia and Maryland. It is also part of the Washington Metropolitan Statistical Area, the sixth largest metropolitan area in the United States. Loudoun County is among the top three most populated county in Virginia with an estimated population of 420,959."),
+                                          p(a(href = 'https://www.loudoun.gov/', 'Loudoun County', target = '_blank')),
+                                          p(a(href = 'https://data.census.gov/cedsci/profile?g=0500000US51107', 'Loudoun County Population', target = '_blank')),
+                                          p("Loudoun County was traditionally a rural county heavily dependent on agriculture as a primary livelihood. However, this changed in the early 1960s with the construction of the Dulles International Airport. This resulted in an economic boom and rapid growth in the county. Additionally, the metropolitan Washington, D.C. area began growing simultaneously. These two factors led to a significant increase in Loudoun’s population in the 1970s and heavy suburbanization throughout the 1990s. Due to the full-fledged service economy, Loudoun County hosts several world headquarters of high-tech companies, including Verizon Business and Telos Corporation. Notably, the largest employer is the government sector, with Loudoun County Public Schools being the number one sector with over 10,000 individuals. These factors led to Loudoun being one of the wealthiest county in the United States, with a median average household income of $147,111 as of the 2020 American Community Survey."),
+                                          p(a(href = 'https://www.loudoun.gov/174/History', 'Loudoun County History', target = '_blank')),
+                                          p(a(href = 'https://biz.loudoun.gov/information-center/major-employers/)', 'Loudoun County Employers', target = '_blank')),
+                                          p("Despite Loudoun county’s wealth, some areas could benefit from improving their economic conditions to be on par with the county. For example, the Sterling region (our area of interest) had 6.9% in 2018 of the households that are below the federal poverty level. While this is substantially low compared to Virginia’s rate of 10%, it is quite high compared to Loudoun’s low rate of 3.2%."),
+                                          p(a(href = 'https://www.livehealthyloudoun.org/indicators/index/view?indicatorId=8483&localeId=202605', 'Loudoun County Household Indicators', target = '_blank')),
+                                          
                                    ),
                                    column(4,
                                           h2(strong("Project Background")), align = "justify",
@@ -1034,9 +1053,9 @@ ui <- navbarPage(title = "DSPG",
                                    
                                    column(4,
                                           h2(strong("Project Goals")), align = "justify",
-                                          p("Our team seeks to design an interactive dashboard that visualizes the resources and services available to the students and families involved in the Loudoun County Community School Initiative. This dashboard will allow stakeholders to understand the main needs of the community and provide insights into potential opportunities for improvement to increase the quality of life for those impacted by the Community School Initiative. "),
-                                          p("We will use publicly available data including the American Community Survey and Virginia Department of Education to provide our stakeholders with a comprehensive understanding of the factors impacting the Sterling area. We focus on sociodemographic indicators such as median income and employment, community school characteristics, and resource proximity to support our analysis. We will utilize public data sources as well as data provided by our stakeholders to map the services and resource’s locations with respect to distance and travel time. These maps will be broken down into 4 resource types: health and social services, mental health, family engagement, and youth development to analyze potential opportunities for service expansion.  "), 
-                                          p("Our dashboard will contain our findings and analysis, which will allow both our stakeholders and all those interested to understand this information in a comprehensive and dynamic manner. For those interested in further research, this repository will be useful for investigating possible underlying factors leading to these differences in accessibility. "),
+                                          p("Our team seeks to design an interactive dashboard that visualizes the resources and services available to the students and families involved in the Loudoun County Community School Initiative. This dashboard will allow stakeholders to understand the primary needs of the community and provide insights into potential opportunities for improvement to increase the quality of life for those impacted by the Community School Initiative. "),
+                                          p("We will use publicly available data, including the American Community Survey and the Virginia Department of Education, to provide our stakeholders with a comprehensive understanding of the factors impacting families in the Sterling area. We focus on sociodemographic indicators such as median income and employment and education indicators such as enrollment and grades to support our analysis. We will also map available services and resource locations relating to distance and travel time. These maps will be broken down into four key areas related to the Community School Program Health and Social Services, Mental Health, Family Engagement, and Youth Development to analyze potential opportunities for service expansion. "), 
+                                          p("Our dashboard will contain our findings and analysis, allowing our stakeholders, Supervisor of Outreach, LCPS, and other interested individuals to understand this information comprehensively and dynamically. This dashboard will also enable the LCPS to leverage target points for further community collaboration and partnerships. For those interested in further research, this repository will help investigate possible underlying factors leading to these differences in accessibility. "),
                                           #p("")
                                    )
                           ),
@@ -1045,7 +1064,7 @@ ui <- navbarPage(title = "DSPG",
                  ),
                  
                  ## Sterling Area--------------------------------------------
-                 tabPanel("Community School Initiative", value = "overview",
+                 tabPanel("Community School", value = "overview",
                           fluidRow(style = "margin: 2px;",
                                    p("", style = "padding-top:10px;"),
                                    column(12, align = "center", h1(strong("Sterling’s Elementary Community Schools"))),
@@ -1126,8 +1145,12 @@ ui <- navbarPage(title = "DSPG",
                                                                      withSpinner(plotlyOutput("demo1", height = "500px", width ="100%")),
                                                                      column(12, align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
-                                                                           
-                                                                     )
+                                                                            withSpinner(plotlyOutput("demoHispanicPIE", height = "500px", width = "100%")),
+                                                                            column(12, align = "right",
+                                                                                   p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
+                                                                                   
+                                                                                   
+                                                                            ),)
                                                               ),
                                                      )),
                                             
@@ -1312,7 +1335,7 @@ ui <- navbarPage(title = "DSPG",
                                             
                                      )
                                      ),
-                            
+                            #------------Climate Survey UI-----------------
                             tabPanel("Climate Survey Reports",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
@@ -1320,80 +1343,6 @@ ui <- navbarPage(title = "DSPG",
                                               
                                               
                                               tabsetPanel(
-                                                tabPanel("Parent Climate Survey",
-                                                         fluidRow(style = "margin: 2px;",
-                                                                  fluidRow(style = "margin: 2px;",
-                                                                           align = "center",
-                                                                           # br("", style = "padding-top:2px;"),
-                                                                           # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
-                                                                           br(""),
-                                                                           h1(strong("Parent Survey"),
-                                                                              #h2("") ,
-                                                                              h4("2019 to 2020 Academic School Year"),
-                                                                              h4(""),
-                                                                              #h4("[updat this]"),
-                                                                              br()
-                                                                           )
-                                                                  ),
-                                                                  p("", style = "padding-top:10px;"),
-                                                                  column(6, align = "center",h4(strong("")),
-                                                                         p(""),
-                                                                         selectInput("surveydrop1", "Select Survey Question", width = "60%", choices = c(
-                                                                           "Academic Support" = "parentanswer1",
-                                                                           "Communications" = "parentanswer2",
-                                                                           "Relationships" = "parentanswer3",
-                                                                           "Instructions" = "parentanswer4"
-                                                                         ),
-                                                                         ),
-                                                                         withSpinner(plotlyOutput("survo1", height = "275px", width ="100%")),
-                                                                         
-                                                                         
-                                                                         
-                                                                  ),
-                                                                  column(6, align = "center",h4(strong("")),
-                                                                         p(""),
-                                                                         selectInput("surveydrop2", "Select Survey Question", width = "60%", choices = c(
-                                                                           "Academic Support" = "parentanswer1",
-                                                                           "Communications" = "parentanswer2",
-                                                                           "Relationships" = "parentanswer3",
-                                                                           "Instructions" = "parentanswer4"
-                                                                         ),
-                                                                         ),
-                                                                         withSpinner(plotlyOutput("survo2", height = "275px", width ="100%")),
-                                                                         
-                                                                         
-                                                                         
-                                                                  ),
-                                                                  column(6, align = "center",h4(strong("")),
-                                                                         p(""),
-                                                                         selectInput("surveydrop3", "Select Survey Question", width = "60%", choices = c(
-                                                                           "Academic Support" = "parentanswer1",
-                                                                           "Communications" = "parentanswer2",
-                                                                           "Relationships" = "parentanswer3",
-                                                                           "Instructions" = "parentanswer4"
-                                                                         ),
-                                                                         ),
-                                                                         withSpinner(plotlyOutput("survo3", height = "275px", width ="100%")),
-                                                                         
-                                                                         
-                                                                         
-                                                                  ),
-                                                                  column(6, align = "center",h4(strong("")),
-                                                                         p(""),
-                                                                         selectInput("surveydrop4", "Select Survey Question", width = "60%", choices = c(
-                                                                           "Academic Support" = "parentanswer1",
-                                                                           "Communications" = "parentanswer2",
-                                                                           "Relationships" = "parentanswer3",
-                                                                           "Instructions" = "parentanswer4"
-                                                                         ),
-                                                                         ),
-                                                                         withSpinner(plotlyOutput("survo4", height = "275px", width ="100%")),
-                                                                         
-                                                                         
-                                                                         
-                                                                  ),
-                                                         )
-                                                ),
                                                 tabPanel("Student Climate Survey",
                                                          p("", style = "padding-top:10px;"),
                                                          fluidRow(style = "margin: 2px;",
@@ -1401,9 +1350,9 @@ ui <- navbarPage(title = "DSPG",
                                                                   # br("", style = "padding-top:2px;"),
                                                                   # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                   br(""),
-                                                                  h1(strong("Student Survey"),
-                                                                     #h2("") ,
-                                                                     h4("2019 to 2020 Academic School Year"),
+                                                                  h1(strong("Student Perception"),
+                                                                     column(12, align = "center"),
+                                                                     h4("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."),
                                                                      h4(""),
                                                                      #h4("[updat this]"),
                                                                      br()
@@ -1411,7 +1360,7 @@ ui <- navbarPage(title = "DSPG",
                                                          ),
                                                          column(6, align = "center",h4(strong("")),
                                                                 p(""),
-                                                                selectInput("surveydrop5", "Select Survey Question", width = "60%", choices = c(
+                                                                selectInput("surveydrop5", "Select Survey Index:", width = "60%", choices = c(
                                                                   "Student Engagement" = "studentanswer1",
                                                                   "Teacher Relationship" = "studentanswer2",
                                                                   "Social-Emotional Wellbeing" = "studentanswer3",
@@ -1425,7 +1374,7 @@ ui <- navbarPage(title = "DSPG",
                                                          ),
                                                          column(6, align = "center",h4(strong("")),
                                                                 p(""),
-                                                                selectInput("surveydrop6", "Select Survey Question", width = "60%", choices = c(
+                                                                selectInput("surveydrop6", "Select Survey Index:", width = "60%", choices = c(
                                                                   "Student Engagement" = "studentanswer1",
                                                                   "Teacher Relationship" = "studentanswer2",
                                                                   "Social-Emotional Wellbeing" = "studentanswer3",
@@ -1439,7 +1388,7 @@ ui <- navbarPage(title = "DSPG",
                                                          ),
                                                          column(6, align = "center",h4(strong("")),
                                                                 p(""),
-                                                                selectInput("surveydrop7", "Select Survey Question", width = "60%", choices = c(
+                                                                selectInput("surveydrop7", "Select Survey Index:", width = "60%", choices = c(
                                                                   "Student Engagement" = "studentanswer1",
                                                                   "Teacher Relationship" = "studentanswer2",
                                                                   "Social-Emotional Wellbeing" = "studentanswer3",
@@ -1453,7 +1402,7 @@ ui <- navbarPage(title = "DSPG",
                                                          ),
                                                          column(6, align = "center",h4(strong()),
                                                                 p(""),
-                                                                selectInput("surveydrop8", "Select Survey Question", width = "60%", choices = c(
+                                                                selectInput("surveydrop8", "Select Survey Index:", width = "60%", choices = c(
                                                                   "Student Engagement" = "studentanswer1",
                                                                   "Teacher Relationship" = "studentanswer2",
                                                                   "Social-Emotional Wellbeing" = "studentanswer3",
@@ -1467,6 +1416,81 @@ ui <- navbarPage(title = "DSPG",
                                                          ),
                                                 ), 
                                                 
+                                                tabPanel("Parent Climate Survey",
+                                                         fluidRow(style = "margin: 2px;",
+                                                                  fluidRow(style = "margin: 2px;",
+                                                                           align = "center",
+                                                                           # br("", style = "padding-top:2px;"),
+                                                                           # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
+                                                                           br(""),
+                                                                           h1(strong("Parent Perception"),
+                                                                              column(12, align = "center"),
+                                                                              h4("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."),
+                                                                              h4(""),
+                                                                              #h4("[updat this]"),
+                                                                              br()
+                                                                           )
+                                                                  ),
+                                                                  p("", style = "padding-top:10px;"),
+                                                                  column(6, align = "center",h4(strong("")),
+                                                                         p(""),
+                                                                         selectInput("surveydrop1", "Select Survey Index:", width = "60%", choices = c(
+                                                                           "Academic Support" = "parentanswer1",
+                                                                           "Communications" = "parentanswer2",
+                                                                           "Relationships" = "parentanswer3",
+                                                                           "Instructions" = "parentanswer4"
+                                                                         ),
+                                                                         ),
+                                                                         withSpinner(plotlyOutput("survo1", height = "275px", width ="100%")),
+                                                                         
+                                                                         
+                                                                         
+                                                                  ),
+                                                                  column(6, align = "center",h4(strong("")),
+                                                                         p(""),
+                                                                         selectInput("surveydrop2", "Select Survey Index:", width = "60%", choices = c(
+                                                                           "Academic Support" = "parentanswer1",
+                                                                           "Communications" = "parentanswer2",
+                                                                           "Relationships" = "parentanswer3",
+                                                                           "Instructions" = "parentanswer4"
+                                                                         ),
+                                                                         ),
+                                                                         withSpinner(plotlyOutput("survo2", height = "275px", width ="100%")),
+                                                                         
+                                                                         
+                                                                         
+                                                                  ),
+                                                                  column(6, align = "center",h4(strong("")),
+                                                                         p(""),
+                                                                         selectInput("surveydrop3", "Select Survey Index:", width = "60%", choices = c(
+                                                                           "Academic Support" = "parentanswer1",
+                                                                           "Communications" = "parentanswer2",
+                                                                           "Relationships" = "parentanswer3",
+                                                                           "Instructions" = "parentanswer4"
+                                                                         ),
+                                                                         ),
+                                                                         withSpinner(plotlyOutput("survo3", height = "275px", width ="100%")),
+                                                                         
+                                                                         
+                                                                         
+                                                                  ),
+                                                                  column(6, align = "center",h4(strong("")),
+                                                                         p(""),
+                                                                         selectInput("surveydrop4", "Select Survey Index:", width = "60%", choices = c(
+                                                                           "Academic Support" = "parentanswer1",
+                                                                           "Communications" = "parentanswer2",
+                                                                           "Relationships" = "parentanswer3",
+                                                                           "Instructions" = "parentanswer4"
+                                                                         ),
+                                                                         ),
+                                                                         withSpinner(plotlyOutput("survo4", height = "275px", width ="100%")),
+                                                                         
+                                                                         
+                                                                         
+                                                                  ),
+                                                         )
+                                                ),
+                                                
                                                 tabPanel("Teacher/Staff Climate Survey",
                                                          p("", style = "padding-top:10px;"),
                                                          fluidRow(style = "margin: 2px;",
@@ -1474,9 +1498,9 @@ ui <- navbarPage(title = "DSPG",
                                                                   # br("", style = "padding-top:2px;"),
                                                                   # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                   br(""),
-                                                                  h1(strong("Teacher/Staff Survey"),
-                                                                     #h2("") ,
-                                                                     h4("2019 to 2020 Academic School Year"),
+                                                                  h1(strong("Teacher/Staff Perception"),
+                                                                     column(12, align = "center"),
+                                                                     h4("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."),
                                                                      h4(""),
                                                                      #h4("[updat this]"),
                                                                      br()
@@ -1484,7 +1508,7 @@ ui <- navbarPage(title = "DSPG",
                                                          ),
                                                          column(6, align = "center",h4(strong("")),
                                                                 p(""),
-                                                                selectInput("surveydrop9", "Select Survey Question", width = "60%", choices = c(
+                                                                selectInput("surveydrop9", "Select Survey Index:", width = "60%", choices = c(
                                                                   "Staff Collegiality" = "teacherandstaffanswer1",
                                                                   "Academic Environment" = "teacherandstaffanswer2",
                                                                   "School Leadership" = "teacherandstaffanswer3",
@@ -1501,7 +1525,7 @@ ui <- navbarPage(title = "DSPG",
                                                          ),
                                                          column(6, align = "center",h4(strong("")),
                                                                 p(""),
-                                                                selectInput("surveydrop10", "Select Survey Question", width = "60%", choices = c(
+                                                                selectInput("surveydrop10", "Select Survey Index:", width = "60%", choices = c(
                                                                   "Staff Collegiality" = "teacherandstaffanswer1",
                                                                   "Academic Environment" = "teacherandstaffanswer2",
                                                                   "School Leadership" = "teacherandstaffanswer3",
@@ -1518,7 +1542,7 @@ ui <- navbarPage(title = "DSPG",
                                                          ),
                                                          column(6, align = "center",h4(strong("")),
                                                                 p(""),
-                                                                selectInput("surveydrop11", "Select Survey Question", width = "60%", choices = c(
+                                                                selectInput("surveydrop11", "Select Survey Index:", width = "60%", choices = c(
                                                                   "Staff Collegiality" = "teacherandstaffanswer1",
                                                                   "Academic Environment" = "teacherandstaffanswer2",
                                                                   "School Leadership" = "teacherandstaffanswer3",
@@ -1535,7 +1559,7 @@ ui <- navbarPage(title = "DSPG",
                                                          ),
                                                          column(6, align = "center",h4(strong("")),
                                                                 p(""),
-                                                                selectInput("surveydrop12", "Select Survey Question", width = "60%", choices = c(
+                                                                selectInput("surveydrop12", "Select Survey Index:", width = "60%", choices = c(
                                                                   "Staff Collegiality" = "teacherandstaffanswer1",
                                                                   "Academic Environment" = "teacherandstaffanswer2",
                                                                   "School Leadership" = "teacherandstaffanswer3",
@@ -1853,6 +1877,12 @@ server <- function(input, output, session) {
   
   Var3 <- reactive({
     input$demos1drop
+  })
+  
+  output$demoHispanicPIE <- renderPlotly({
+    if (Var3() == "race") {
+      HispanicPercentagePIE
+    }
   })
   
   output$demo1 <- renderPlotly({
