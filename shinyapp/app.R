@@ -1164,42 +1164,30 @@ ui <- navbarPage(title = "DSPG",
                  ),
                  
                  
-                 navbarMenu("Community Schools",
+                 navbarMenu("Schools",
                             tabPanel("Demographics", 
                                      fluidRow(style = "margin: 6px;",
                                               column(12, 
-                                                     h1(strong("Elementary Students in Community Schools Characteristics"), align = "center"),
-                                                     h2(strong("What Do Community Schools Look Like?"), align = "left"),
-                                                     p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
-                                                     
+                                                     h1(strong("Student Characteristics in Elementary Community Schools"), align = "center"),
                                                      
                                                      tabsetPanel(
                                                        
-                                                       tabPanel("Demographics",
+                                                       tabPanel("Gender",
                                                                 fluidRow(style = "margin: 4px;",
                                                                          
-                                                                         column(7, align = "left",
-                                                                                selectInput("schooldrop1", "Select Demographic:", width = "100%", choices = c(
-                                                                                  "Gender" = "cgender",
-                                                                                  "Race/Ethnicity" = "racenine"
-                                                                                  
-                                                                                  
-                                                                                ),
-                                                                                ),
-                                                                                
-                                                                                withSpinner(plotlyOutput("ocuplot1", height = "500px", width = "100%")),
+                                                                         column(8, align = "left",
+                                                                                withSpinner(plotlyOutput("cgender", height = "500px", width = "100%")),
                                                                                 br(""),
-                                                                                column(10, align = "left",
-                                                                                       withSpinner(leafletOutput("ocuplot3", height = "400px", width = "70%"))),
+                                                                               
                                                                                 column(12,align = "right",
                                                                                        p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                                                                        )
                                                                          ),
                                                                          
-                                                                         column(5, align = "justify",
-                                                                                br(""),
-                                                                                br(""),
-                                                                                br(""),
+                                                                         column(4, align = "justify",
+                                                                                
+                                                                                h4(strong("What Do Community Schools Look Like?"), align = "left"),
+                                                                                p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
                                                                                 
                                                                                 p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling and Sully have similar number of students and have lesser students than the other elementary schools. Forest Grove, Guilford and Sully have a similar trend like the Sterling area for the gender ratio: the female students are about 49% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling has the lowest where it has 91 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
                                                                                 p("The race and ethnicity demographics in 2019-2020 revealed that overall, Hispanic students, made up the greatest percentage of students attending the six elementary schools in Sterling, which differs from the general make-up of the Sterling area where White residents made up the majority of residents. There is a huge difference between Guilford and Forest Grove in terms of the ethnic groups of students, given that they both have similar number of total students: Guilford has significantly higher Hispanic students while Forest Grove has a lot more White and Hispanic students.", 
@@ -1212,31 +1200,64 @@ ui <- navbarPage(title = "DSPG",
                                                                          
                                                                 )
                                                        ),
-                                                       tabPanel("Education",
+                                                       tabPanel("Race/Ethnicity",
                                                                 fluidRow(style = "margin: 4px;",
-                                                                         column(7, align = "left",
-                                                                                selectInput("schooldrop2", "Select Characteristic:", width = "100%", choices = c(
-                                                                                  "Educators" = "cteacher",
-                                                                                  "Enrollment" = "cenrol", 
-                                                                                  "Absences" = "attend", 
-                                                                                  "Chronic Absenteeism" = "chronic"
-                                                                                  
-                                                                                ),
-                                                                                ),
-                                                                                
-                                                                                withSpinner(plotlyOutput("ocuplot2", height = "500px", width = "100%")),
+                                                                         
+                                                                         column(8, align = "left",
+                                                                                withSpinner(plotlyOutput("racenine", height = "500px", width = "100%")),
+                                                                                br(""),
+                                                                                column(10, align = "left",
+                                                                                       withSpinner(leafletOutput("hispanicschool", height = "400px", width = "70%"))),
                                                                                 column(12,align = "right",
                                                                                        p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                                                                 )
-                                                                                
                                                                          ),
-                                                                         
-                                                                         column(5, align = "justify",
-                                                                                br(""),
-                                                                                br(""),
-                                                                                br(""),
+                                                                         column(4, align = "justify",
                                                                                 
-                                                                                p("To better understand the characteristics of the community schools regarding the classroom 
+                                                                                h4(strong("What Do Community Schools Look Like?"), align = "left"),
+                                                                                p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
+                                                                                
+                                                                                p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling and Sully have similar number of students and have lesser students than the other elementary schools. Forest Grove, Guilford and Sully have a similar trend like the Sterling area for the gender ratio: the female students are about 49% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling has the lowest where it has 91 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("The race and ethnicity demographics in 2019-2020 revealed that overall, Hispanic students, made up the greatest percentage of students attending the six elementary schools in Sterling, which differs from the general make-up of the Sterling area where White residents made up the majority of residents. There is a huge difference between Guilford and Forest Grove in terms of the ethnic groups of students, given that they both have similar number of total students: Guilford has significantly higher Hispanic students while Forest Grove has a lot more White and Hispanic students.", 
+                                                                                  style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence,  we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary.", 
+                                                                                  style = "padding-top:15px;font-size: 14px;"),
+                                                                                
+                                                                                
+                                                                         )
+                                                                         
+                                                                )
+                                                       )
+                                                     ))
+                                              
+                                              
+                                              
+                                     )), 
+                            
+                            tabPanel("Education", 
+                                     column(7, align = "left",
+                                            selectInput("schooldrop2", "Select Characteristic:", width = "100%", choices = c(
+                                              "Educators" = "cteacher",
+                                              "Enrollment" = "cenrol", 
+                                              "Absences" = "attend", 
+                                              "Chronic Absenteeism" = "chronic"
+                                              
+                                            ),
+                                            ),
+                                            
+                                            withSpinner(plotlyOutput("ocuplot2", height = "500px", width = "100%")),
+                                            column(12,align = "right",
+                                                   p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
+                                            )
+                                            
+                                     ),
+                                     
+                                     column(5, align = "justify",
+                                            br(""),
+                                            br(""),
+                                            br(""),
+                                            
+                                            p("To better understand the characteristics of the community schools regarding the classroom 
                                                                                   environment, we pulled data from the Virginia Department of Education to visualize the number
                                                                                   of educators, total enrollment, absences, and suspension rates. Among the six community schools, 
                                                                                   most all have a greater number of teachers than staff except for Sterling Elementary.
@@ -1245,7 +1266,7 @@ ui <- navbarPage(title = "DSPG",
                                                                                   educators as well as the lowest total enrollment of all six schools. Breaking this down further, 
                                                                                   the student-teacher ratio of the six schools revealed that Sully had the highest student to teacher 
                                                                                   ratio of the schools with 14 students per teacher.  ", style = "padding-top:15px;font-size: 14px;"),
-                                                                                p("Moving to absence and suspension rates, we utilized data from the Loudoun County Public Schools Dashboard 
+                                            p("Moving to absence and suspension rates, we utilized data from the Loudoun County Public Schools Dashboard 
                                                                                   as well as the Virginia Department of Education to visualize the differences between the schools. For the 
                                                                                   absence rates of students by quarter in the 2020-2021 school year, Forest Grove Elementary had the lowest 
                                                                                   absence rate across the year while Sully Elementary had the largest increase throughout the year, increasing 
@@ -1253,19 +1274,10 @@ ui <- navbarPage(title = "DSPG",
                                                                                   absenteeism rate which is defined as the percentage of students who miss more than ten percent of total
                                                                                   classes throughout the year. We found that Sugarland Elementary had the highest rate at 11.1% while 
                                                                                   Sterling had the lowest at 5.8%.  ", style = "padding-top:15px;font-size: 14px;"),
-                                                                                
-                                                                                
-                                                                         )
-                                                                         
-                                                                )
-                                                       )
-                                                       
-                                                     )),
-                                              
-                                              
-                                              
-                                              
-                                     )), 
+                                            
+                                            
+                                     )
+                                     ),
                             
                             tabPanel("Climate Survey Reports",
                                      fluidRow(style = "margin: 6px;",
@@ -1542,7 +1554,7 @@ ui <- navbarPage(title = "DSPG",
                             
                  ),
                  
-                 navbarMenu("Availabile Resources",
+                 navbarMenu("Resources",
                             tabPanel("Health and Social Services",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
@@ -1893,14 +1905,18 @@ server <- function(input, output, session) {
     input$schooldrop1
   }) 
   
-  output$ocuplot1 <- renderPlotly({
+  output$cgender <- renderPlotly({
     
-    if(Var2() == "racenine"){
-      racenine 
-    }
-    else if(Var2() == "cgender"){
       genders 
-    }
+    
+
+  })
+  
+  
+  output$racenine <- renderPlotly({
+    
+   racenine 
+    
     
   })
   
@@ -1936,11 +1952,11 @@ server <- function(input, output, session) {
   
   
   
-  output$ocuplot3 <- renderLeaflet({
-    if (Var2() == "racenine") {
+  output$hispanicschool <- renderLeaflet({
+
       
       hispanicschool
-    }
+    
     
     
   })
