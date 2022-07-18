@@ -437,14 +437,7 @@ chronic<-ggplotly(chronic, tooltip = c("text"))
 #--------------free or not free resources ---------------------------------------
 
 costs <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"))
-foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"),sheet="Food")
-clothes <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"),sheet = "Clothing")
-counseling <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Counseling")
-dental <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Dental Care")
-vision <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Vision Care")
-medical <-  read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Medical Services")
-speech <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Speech and Hearing")
-physical <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Physical Therapy")
+foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
 #---------------map_health and isochrones-----------------------------------------
 
 YourAPIKey <- "73ad15c60d8fe57014b574b4fc428ec0"
@@ -498,14 +491,40 @@ popups <- lapply(
   htmltools::HTML
 )
 
-foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"),sheet="Food")
-clothes <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"),sheet = "Clothing")
-counseling <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Counseling")
-dental <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Dental Care")
-vision <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Vision Care")
-medical <-  read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Medical Services")
-speech <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Speech and Hearing")
-physical <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"), sheet = "Physical Therapy")
+costs <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx")
+healthfree <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet = "Health Free")
+healthpay <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx", sheet = "Health")
+youthfree <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx", sheet = "Youth Free")
+youthpay <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet="Youth")
+mentfree <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet= "Mental Free")
+mentpay <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet = "Mental")
+famfree <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet = "Family Free")
+fampay <- read_excel("~/Downloads/DSPG-R-Training/2022_DSPG_Loudoun/shinyapp/data/resourcecost.xlsx",sheet = "Family")
+
+pal <- colorFactor(c("#2e850c", "#0a31a5", "#ec1c1c","#ffd600","purple","pink"), domain = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"))
+pal1 <- colorFactor(c("332288","#117733","#44AA99","#88CCEE","#DDCC77","#CC6677","#AA4499","#882255"),domain = c("Food Pantry","Clothing","Counseling","Dental Care","Vision Care","Medical Services","Speech and Hearing Services","Physical Therapy"))
+
+blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
+va20_2 <- get_acs(geography = "block group",
+                  variables = c(hispanic = "B03002_012"),
+                  state = "VA",
+                  year = 2020,
+                  geometry = TRUE) %>%
+  filter(NAME %in% blocks)
+leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=healthfree,~Longitude,~Latitude,popup = ~popups, label = ~as.character(Name),group = ~Resource,color = ~pal(Resource),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addLayersControl(overlayGroups = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"),options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
+  setView(-77.4029155,39.009006, zoom = 11)
+
 
 
 blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
@@ -523,49 +542,33 @@ leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=foods,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),color="#2e850c",group = "Food",weight = 7, radius=7, 
+  addCircleMarkers(data=foods,~Longitude1,~Latitude1,popup=~popups,label=~as.character(Name),color= ~pal1,group = ~Resource1,weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
-  addCircleMarkers(data=clothes,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),color=         "#0a31a5",group="Clothing",weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)  %>%
-  addCircleMarkers(data=counseling,~Longitude,~Latitude,popup =~popups,label=~as.character(Name),color="#ec1c1c",group = "Counseling", weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1) %>%
-  addCircleMarkers(data=dental,~Longitude,~Latitude,popup = ~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1) %>%
-  addCircleMarkers(data=vision,~Longitude,~Latitude,popup =~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1) %>%
-  addCircleMarkers(data=medical,~Longitude,~Latitude,popup = ~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1) %>%
-  addCircleMarkers(data=speech,~Longitude,~Latitude,popup =~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1) %>%
-  addCircleMarkers(data=physical,~Longitude,~Latitude,popup = ~popups,label=~as.character(Name),color="#ffd600",group = "Medical Services", weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1) %>%
-  addLayersControl(overlayGroups = c("Food", "Clothing", "Counseling","Medical Services"),options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_health
-
-
+  addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_health
 
 #--------------youth development map ----------------
 
 youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 3.xlsx"))
 popups <- lapply(
   paste("<strong>Name: </strong>",
-        str_to_title(youth$Name),
+        str_to_title(youth$Name3),
         "<br />",
         "<strong>Description:</strong>",
-        youth$Description ,
+        youth$Description3 ,
         "<br />",
         "<strong>Hours:</strong>",
-        youth$Hours, 
+        youth$Hours3, 
         "<br />",
         "<strong>Address:</strong>",
-        youth$Address,
-        "<a href = ",youth$Website, "> Website </a>",
+        youth$Address3,
+        "<a href = ",youth$Website3, "> Website </a>",
         "<br />"),
   
   
   htmltools::HTML
 )
 
-pal <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
+pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
 
 leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(data = va20_2,
@@ -575,7 +578,7 @@ leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=youth,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),color= ~pal(Type),weight = 7, radius=7, 
+  addCircleMarkers(data=youth,~Longitude3,~Latitude3,popup=~popups,label=~as.character(Name3),color= ~pal3,weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1,group = ~Type)%>%
   addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
@@ -587,24 +590,24 @@ ment <- read_excel(paste0(getwd(),"/data/mentalhealthres.xlsx"),sheet = "Mental"
 
 popups <- lapply(
   paste("<strong>Name: </strong>",
-        str_to_title(ment$Name),
+        str_to_title(ment$Name2),
         "<br />",
         "<strong>Description:</strong>",
-        ment$Description ,
+        ment$Description2 ,
         "<br />",
         "<strong>Hours:</strong>",
-        ment$Hours, 
+        ment$Hours2, 
         "<br />",
         "<strong>Address:</strong>",
-        ment$Address,
-        "<a href = ",ment$Website, "> Website </a>",
+        ment$Address2,
+        "<a href = ",ment$Website2, "> Website </a>",
         "<br />"),
   
   
   htmltools::HTML
 )
 
-pal <- colorFactor(c("red", "blue", "green"), domain = c("Family Therapy", "Family Counseling", "Bereavement"))
+pal2 <- colorFactor(c("red", "blue", "green"), domain = c("Family Therapy", "Family Counseling", "Bereavement"))
 
 leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(data = va20_2,
@@ -614,9 +617,9 @@ leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=ment,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal(Resources),weight = 7, radius=7, 
+  addCircleMarkers(data=ment,~Longitude2,~Latitude2,popup=~popups,label=~as.character(Name2),group=~Resources2,color=~pal2,weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addLayersControl(overlayGroups = ~Resources2,options = layersControlOptions(collapsed = FALSE)) %>% 
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
 
 #----------------------family engagement map-------------------
@@ -1512,7 +1515,7 @@ ui <- navbarPage(title = "DSPG",
                             
                             tabPanel("School Reports",
                                      fluidPage(style = "margin: 2px;",
-                                               p(h4(strong("Representatives' responses")), style = "padding-top:5px;"),
+                                               p(h4(strong("Representatives' Responses")), style = "padding-top:5px;"),
                                                
                                                radioButtons(
                                                  "category",
@@ -1562,6 +1565,11 @@ ui <- navbarPage(title = "DSPG",
                                               )),
                                      
                                      fluidPage(style = "margin: 2px;", 
+                                               radioButtons(
+                                                 "category",
+                                                 label = "Select:",
+                                                 choices = c("All Services", "Free Services"),
+                                               ),
                                                column(6, 
                                                       leafletOutput("map_health", width = "100%", height = 600)
                                                       #fluidRow(align = "center",
