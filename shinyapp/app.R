@@ -1082,7 +1082,7 @@ ui <- navbarPage(title = "DSPG",
                  useShinyjs(),
                  
                  # main tab -----------------------------------------------------------
-                 tabPanel("Project Overview", value = "overview",
+                 tabPanel("Overview", value = "overview",
                           fluidRow(style = "margin: 2px;",
                                    align = "center",
                                    # br("", style = "padding-top:2px;"),
@@ -1838,10 +1838,18 @@ ui <- navbarPage(title = "DSPG",
                                                       h4(("Travel Distance")),
                                                       p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances.  "), align = "justify"),
                                                       h4(strong("Youth Development Resources")), 
+<<<<<<< HEAD
+                                                      p(("Students from low-income communities tend to have limited access to activities outside of school which can widen the achievement gap. Services or programs where students can develop social, emotional, physical, and academic skills can improve a student’s performance and behavior. These include athletic events, academic and non-academic clubs, as well as after school programs and family resources. While going through the available resources within Sterling, we chose resources that are given through the Loudoun County school system, and free or reduced cost resources that are available nearby. When you look at the map, there are nine plots (youth development opportunities) that fall within our Sterling defined area. Most of those resources are after school related. CASA is a licensed after-school program that provides students with activities and a fun environment while their parents are working. CASA is located in two schools, while serving others. The YMCA is located in the 4 other schools. They offer activities and support in homework, sports, fitness, and so much more.  "), align = "justify"),
+                                                      p(("A resource that is available within our Sterling defined area is the Sterling Library. The library is a great resource for the students and families. They provide clubs, conversation groups, book clubs, art classes, and more. The Inova Healthy Plate Club is a club that is also located within our Sterling defined area. They provide cooking classes for healthy eating throughout the week. For the athletic and sport lovers, the Sterling Soccer is another resource available within our Sterling defined area. Sterling Soccer provides opportunities to play at a variety of competitive levels, while providing a safe and healthy soccer environment for the youth. "),align = "justify"),
+                                     )),
+                            
+                 )
+=======
                                                       p((""), align = "justify"),
                                                )),
                                      
                             )
+>>>>>>> 2d09eb2680d474a7ddf9c1b786a0d323fae4fbea
                  ),
                  
                  tabPanel("Opportunities",
