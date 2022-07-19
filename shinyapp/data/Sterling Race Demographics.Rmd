@@ -71,7 +71,7 @@ library(plotly)
 labelsHispanicPIE = c('Hispanic or Latino','Not Hispanic or Latino')
 valuesHispanicPIE = c(12472, 17799)
 
-HispanicPercentagePIE <- plot_ly(type='pie', labels=labelsH, values=valuesH, 
+HispanicPercentagePIE <- plot_ly(type='pie', labels=labelsHispanicPIE, values=valuesHispanicPIE, 
                textinfo='label+percent',
                insidetextorientation='radial',
                hoverinfo = 'text', 
