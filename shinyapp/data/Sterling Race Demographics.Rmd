@@ -68,16 +68,14 @@ Here is a pie chart that displays the race population in Sterling,VA. The races 
 ```{r}
 library(plotly)
 
-labelsHispanicPIE = c('Hispanic or Latino','Not Hispanic or Latino')
-valuesHispanicPIE = c(12472, 17799)
+labelsH = c('Hispanic or Latino','Not Hispanic or Latino')
+valuesH = c(12472, 17799)
 
-HispanicPercentagePIE <- plot_ly(type='pie', labels=labelsHispanicPIE, values=valuesHispanicPIE, 
+figH <- plot_ly(type='pie', labels=labelsH, values=valuesH, 
                textinfo='label+percent',
-               insidetextorientation='radial',
-               hoverinfo = 'text', 
-               text = ~paste('Total Population:', valuesHispanicPIE)) %>% layout(title ='Hispanic Population In Sterling', legend=list(title=list(text='')))
+               insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Race/Ethnicity')))
 
-HispanicPercentagePIE
+figH
 
 ```
 Here is a pie chart that displays the Hispanic population in Sterling,VA. Since Hispanic is not considered a race by the ACS source, it is included within the race population. That is why I have a separate chart for Hispanics. In total, the Hispanic population makes up 41.2% of Sterling,VA. That is a total of 12,472 out of the 30,271 people in the area. 58.8% of the Sterling population are non Hispanics. That means 17,799 do not identify as Hispanic or Latino. 
