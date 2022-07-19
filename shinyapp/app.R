@@ -181,7 +181,7 @@ race <- plot_ly(type='pie', labels=labelsR, values=valuesR,
 labelsHispanicPIE = c('Hispanic or Latino','Not Hispanic or Latino')
 valuesHispanicPIE = c(12472, 17799)
 
-HispanicPercentagePIE <- plot_ly(type='pie', labels=labelsH, values=valuesH, 
+HispanicPercentagePIE <- plot_ly(type='pie', labels=labelsHispanicPIE, values=valuesHispanicPIE, 
                                  textinfo='label+percent',
                                  insidetextorientation='radial',
                                  hoverinfo = 'text', 
@@ -456,25 +456,28 @@ foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
 YourAPIKey <- "32f6ed99d0636fe05d01a5ff5a99c6e7"
 YourAppId <- "190b7348"
 
-traveltime10 <- traveltime_map(appId=YourAppId,
-                               apiKey=YourAPIKey,
-                               location=c(39.009006,-77.4029155),
-                               traveltime=600,
-                               type="driving",
-                               departure="2022-08-09T08:00:00+01:00")
-# ... and within 60 minutes?
-traveltime20 <- traveltime_map(appId=YourAppId,
-                               apiKey=YourAPIKey,
-                               location=c(39.009006,-77.4029155),
-                               traveltime=1200,
-                               type="driving",
-                               departure="2022-08-09T08:00:00+01:00")
-traveltime45 <- traveltime_map(appId = YourAppId,
-                               apiKey = YourAPIKey,
-                               location = c(39.009006,-77.4029155),
-                               traveltime= 2700,
-                               type = "driving",
-                               departure = "2022-08-09T08:00:00+01:00")
+traveltime10 <- read_sf("data/iso_10_sterling.shp")
+traveltime20 <- read_sf("data/iso_20_sterling.shp")
+traveltime45 <- read_sf("data/iso_45_sterling.shp")
+# traveltime10 <- traveltime_map(appId=YourAppId,
+#                                apiKey=YourAPIKey,
+#                                location=c(39.009006,-77.4029155),
+#                                traveltime=600,
+#                                type="driving",
+#                                departure="2022-08-09T08:00:00+01:00")
+# # ... and within 60 minutes?
+# traveltime20 <- traveltime_map(appId=YourAppId,
+#                                apiKey=YourAPIKey,
+#                                location=c(39.009006,-77.4029155),
+#                                traveltime=1200,
+#                                type="driving",
+#                                departure="2022-08-09T08:00:00+01:00")
+# traveltime45 <- traveltime_map(appId = YourAppId,
+#                                apiKey = YourAPIKey,
+#                                location = c(39.009006,-77.4029155),
+#                                traveltime= 2700,
+#                                type = "driving",
+#                                departure = "2022-08-09T08:00:00+01:00")
 map<- read_excel(paste0(getwd(),"/data/school_locations.xlsx"))
 
 subset_map <- map[1,c(1,4,5)]
@@ -498,24 +501,19 @@ popups <- lapply(
         "<br />",
         "<strong>Address:</strong>",
         healthsep$Address1,
-        "<a href = ",healthsep$Website, "> Website </a>",
+        "<a href = ",healthsep$Website1, "> Website </a>",
         "<br />"),
   
   htmltools::HTML
 )
 
-costs <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"))
 healthfree <- read_excel(paste0(getwd(), "/data/resourcecost.xlsx"),sheet = "Health Free")
-healthpay <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Health")
 youthfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth Free")
-youthpay <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth")
 mentfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Mental Free")
-mentpay <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Mental")
 famfree <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family Free")
-fampay <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family")
 
-pal <- colorFactor(c("#2e850c", "#0a31a5", "#ec1c1c","#ffd600","purple","pink"), domain = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"))
-pal1 <- colorFactor(c("332288","#117733","#44AA99","#88CCEE","#DDCC77","#CC6677","#AA4499","#882255"),domain = c("Food Pantry","Clothing","Counseling","Dental Care","Vision Care","Medical Services","Speech and Hearing Services","Physical Therapy"))
+pal <- colorFactor(c("#91003f", "#005824", "#d7301f","#CC6677","#DDCC77","#88419d"), domain = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"))
+pal1 <- colorFactor(c("#91003f","#005824","#d7301f","#88419d","#DDCC77","#CC6677","#AA4499","#882255"),domain = c("Food Pantry","Clothing","Counseling","Dental Care","Vision Care","Medical Services","Speech and Hearing Services","Physical Therapy"))
 
 blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
 va20_2 <- get_acs(geography = "block group",
@@ -532,11 +530,11 @@ leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=healthfree,~Longitude,~Latitude,popup = ~popups, label = ~as.character(Name),group = ~Resource,color = ~pal1(Resource),weight = 7, radius=7, 
+  addCircleMarkers(data=healthfree,~Longitude,~Latitude,popup = ~popups, label = ~as.character(Name),group = ~Resource,color = ~pal(Resource),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1) %>%
   addLayersControl(overlayGroups = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"),options = layersControlOptions(collapsed = FALSE)) %>% 
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
-  setView(-77.4029155,39.009006, zoom = 11)
+  setView(-77.4029155,39.009006, zoom = 11) -> health_free
 
 
 
@@ -557,12 +555,12 @@ leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
   addCircleMarkers(data=foods,~Longitude1,~Latitude1,popup=~popups,label=~as.character(Name1),color= ~pal1(Resource1),group = ~Resource1,weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_health
+  addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> health_all
 
 #--------------youth development map --------------------------
 
 youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 3.xlsx"))
-popups <- lapply(
+popups3 <- lapply(
   paste("<strong>Name: </strong>",
         str_to_title(youth$Name3),
         "<br />",
@@ -591,7 +589,7 @@ leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=youth,~Longitude3,~Latitude3,popup=~popups,label=~as.character(Name3),color= ~pal3(Type),weight = 7, radius=7, 
+  addCircleMarkers(data=youth,~Longitude3,~Latitude3,popup=~popups3,label=~as.character(Name3),color= ~pal3(Type),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1,group = ~Type)%>%
   addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
@@ -601,7 +599,7 @@ leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
 
 ment <- read_excel(paste0(getwd(),"/data/mentalhealthres.xlsx"),sheet = "Mental")
 
-popups <- lapply(
+popups2 <- lapply(
   paste("<strong>Name: </strong>",
         str_to_title(ment$Name2),
         "<br />",
@@ -630,10 +628,11 @@ leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=ment,~Longitude2,~Latitude2,popup=~popups,label=~as.character(Name2),group=~Resources2,color=~pal2(Resources2),weight = 7, radius=7, 
+  addCircleMarkers(data=ment,~Longitude2,~Latitude2,popup=~popups2,label=~as.character(Name2),group=~Resources2,color=~pal2(Resources2),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
   addLayersControl(overlayGroups = ~Resources2,options = layersControlOptions(collapsed = FALSE)) %>% 
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
+
 
 #----------------------family engagement map-------------------
 
@@ -991,6 +990,7 @@ ui <- navbarPage(title = "DSPG",
                                       br()
                                    )
                           ),
+                          
                           fluidRow(style = "margin: 6px;",
                                    column(4,
                                           h2(strong("The Setting")),align = "justify",
@@ -1003,7 +1003,7 @@ ui <- navbarPage(title = "DSPG",
                                           p(a(href = 'https://biz.loudoun.gov/information-center/major-employers/)', 'Loudoun County Employers', target = '_blank')),
                                           p("Despite Loudoun county’s wealth, some areas could benefit from improving their economic conditions to be on par with the county. For example, the Sterling region (our area of interest) had 6.9% in 2018 of the households that are below the federal poverty level. While this is substantially low compared to Virginia’s rate of 10%, it is quite high compared to Loudoun’s low rate of 3.2%."),
                                           p(a(href = 'https://www.livehealthyloudoun.org/indicators/index/view?indicatorId=8483&localeId=202605', 'Loudoun County Household Indicators', target = '_blank')),
-
+                                          
                                    ),
                                    column(4,
                                           h2(strong("Project Background")), align = "justify",
@@ -1111,12 +1111,12 @@ ui <- navbarPage(title = "DSPG",
                                                                      withSpinner(plotlyOutput("demo1", height = "500px", width ="100%")),
                                                                      column(12, align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
-                                                                     withSpinner(plotlyOutput("demoHispanicPIE", height = "500px", width = "100%")),
-                                                                     column(12, align = "right",
-                                                                            p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
-                                                                            
-                                                                            
-                                                                     ),)
+                                                                            withSpinner(plotlyOutput("demoHispanicPIE", height = "500px", width = "100%")),
+                                                                            column(12, align = "right",
+                                                                                   p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
+                                                                                   
+                                                                                   
+                                                                            ),)
                                                               ),
                                                      )),
                                             
@@ -1187,42 +1187,30 @@ ui <- navbarPage(title = "DSPG",
                  ),
                  
                  
-                 navbarMenu("Community Schools",
+                 navbarMenu("Schools",
                             tabPanel("Demographics", 
                                      fluidRow(style = "margin: 6px;",
                                               column(12, 
-                                                     h1(strong("Elementary Students in Community Schools Characteristics"), align = "center"),
-                                                     h2(strong("What Do Community Schools Look Like?"), align = "left"),
-                                                     p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
-                                                     
+                                                     h1(strong("Student Characteristics in Elementary Community Schools"), align = "center"),
                                                      
                                                      tabsetPanel(
                                                        
-                                                       tabPanel("Demographics",
+                                                       tabPanel("Gender",
                                                                 fluidRow(style = "margin: 4px;",
                                                                          
-                                                                         column(7, align = "left",
-                                                                                selectInput("schooldrop1", "Select Demographic:", width = "100%", choices = c(
-                                                                                  "Gender" = "cgender",
-                                                                                  "Race/Ethnicity" = "racenine"
-                                                                                  
-                                                                                  
-                                                                                ),
-                                                                                ),
-                                                                                
-                                                                                withSpinner(plotlyOutput("ocuplot1", height = "500px", width = "100%")),
+                                                                         column(8, align = "left",
+                                                                                withSpinner(plotlyOutput("cgender", height = "500px", width = "100%")),
                                                                                 br(""),
-                                                                                column(10, align = "left",
-                                                                                       withSpinner(leafletOutput("ocuplot3", height = "400px", width = "70%"))),
+                                                                                
                                                                                 column(12,align = "right",
                                                                                        p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                                                                 )
                                                                          ),
                                                                          
-                                                                         column(5, align = "justify",
-                                                                                br(""),
-                                                                                br(""),
-                                                                                br(""),
+                                                                         column(4, align = "justify",
+                                                                                
+                                                                                h4(strong("What Do Community Schools Look Like?"), align = "left"),
+                                                                                p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
                                                                                 
                                                                                 p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling and Sully have similar number of students and have lesser students than the other elementary schools. Forest Grove, Guilford and Sully have a similar trend like the Sterling area for the gender ratio: the female students are about 49% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling has the lowest where it has 91 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
                                                                                 p("The race and ethnicity demographics in 2019-2020 revealed that overall, Hispanic students, made up the greatest percentage of students attending the six elementary schools in Sterling, which differs from the general make-up of the Sterling area where White residents made up the majority of residents. There is a huge difference between Guilford and Forest Grove in terms of the ethnic groups of students, given that they both have similar number of total students: Guilford has significantly higher Hispanic students while Forest Grove has a lot more White and Hispanic students.", 
@@ -1235,31 +1223,64 @@ ui <- navbarPage(title = "DSPG",
                                                                          
                                                                 )
                                                        ),
-                                                       tabPanel("Education",
+                                                       tabPanel("Race/Ethnicity",
                                                                 fluidRow(style = "margin: 4px;",
-                                                                         column(7, align = "left",
-                                                                                selectInput("schooldrop2", "Select Characteristic:", width = "100%", choices = c(
-                                                                                  "Educators" = "cteacher",
-                                                                                  "Enrollment" = "cenrol", 
-                                                                                  "Absences" = "attend", 
-                                                                                  "Chronic Absenteeism" = "chronic"
-                                                                                  
-                                                                                ),
-                                                                                ),
-                                                                                
-                                                                                withSpinner(plotlyOutput("ocuplot2", height = "500px", width = "100%")),
+                                                                         
+                                                                         column(8, align = "left",
+                                                                                withSpinner(plotlyOutput("racenine", height = "500px", width = "100%")),
+                                                                                br(""),
+                                                                                column(10, align = "left",
+                                                                                       withSpinner(leafletOutput("hispanicschool", height = "400px", width = "70%"))),
                                                                                 column(12,align = "right",
                                                                                        p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                                                                 )
-                                                                                
                                                                          ),
-                                                                         
-                                                                         column(5, align = "justify",
-                                                                                br(""),
-                                                                                br(""),
-                                                                                br(""),
+                                                                         column(4, align = "justify",
                                                                                 
-                                                                                p("To better understand the characteristics of the community schools regarding the classroom 
+                                                                                h4(strong("What Do Community Schools Look Like?"), align = "left"),
+                                                                                p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
+                                                                                
+                                                                                p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling and Sully have similar number of students and have lesser students than the other elementary schools. Forest Grove, Guilford and Sully have a similar trend like the Sterling area for the gender ratio: the female students are about 49% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling has the lowest where it has 91 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("The race and ethnicity demographics in 2019-2020 revealed that overall, Hispanic students, made up the greatest percentage of students attending the six elementary schools in Sterling, which differs from the general make-up of the Sterling area where White residents made up the majority of residents. There is a huge difference between Guilford and Forest Grove in terms of the ethnic groups of students, given that they both have similar number of total students: Guilford has significantly higher Hispanic students while Forest Grove has a lot more White and Hispanic students.", 
+                                                                                  style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence,  we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary.", 
+                                                                                  style = "padding-top:15px;font-size: 14px;"),
+                                                                                
+                                                                                
+                                                                         )
+                                                                         
+                                                                )
+                                                       )
+                                                     ))
+                                              
+                                              
+                                              
+                                     )), 
+                            
+                            tabPanel("Education", 
+                                     column(7, align = "left",
+                                            selectInput("schooldrop2", "Select Characteristic:", width = "100%", choices = c(
+                                              "Educators" = "cteacher",
+                                              "Enrollment" = "cenrol", 
+                                              "Absences" = "attend", 
+                                              "Chronic Absenteeism" = "chronic"
+                                              
+                                            ),
+                                            ),
+                                            
+                                            withSpinner(plotlyOutput("ocuplot2", height = "500px", width = "100%")),
+                                            column(12,align = "right",
+                                                   p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
+                                            )
+                                            
+                                     ),
+                                     
+                                     column(5, align = "justify",
+                                            br(""),
+                                            br(""),
+                                            br(""),
+                                            
+                                            p("To better understand the characteristics of the community schools regarding the classroom 
                                                                                   environment, we pulled data from the Virginia Department of Education to visualize the number
                                                                                   of educators, total enrollment, absences, and suspension rates. Among the six community schools, 
                                                                                   most all have a greater number of teachers than staff except for Sterling Elementary.
@@ -1268,7 +1289,7 @@ ui <- navbarPage(title = "DSPG",
                                                                                   educators as well as the lowest total enrollment of all six schools. Breaking this down further, 
                                                                                   the student-teacher ratio of the six schools revealed that Sully had the highest student to teacher 
                                                                                   ratio of the schools with 14 students per teacher.  ", style = "padding-top:15px;font-size: 14px;"),
-                                                                                p("Moving to absence and suspension rates, we utilized data from the Loudoun County Public Schools Dashboard 
+                                            p("Moving to absence and suspension rates, we utilized data from the Loudoun County Public Schools Dashboard 
                                                                                   as well as the Virginia Department of Education to visualize the differences between the schools. For the 
                                                                                   absence rates of students by quarter in the 2020-2021 school year, Forest Grove Elementary had the lowest 
                                                                                   absence rate across the year while Sully Elementary had the largest increase throughout the year, increasing 
@@ -1276,19 +1297,10 @@ ui <- navbarPage(title = "DSPG",
                                                                                   absenteeism rate which is defined as the percentage of students who miss more than ten percent of total
                                                                                   classes throughout the year. We found that Sugarland Elementary had the highest rate at 11.1% while 
                                                                                   Sterling had the lowest at 5.8%.  ", style = "padding-top:15px;font-size: 14px;"),
-                                                                                
-                                                                                
-                                                                         )
-                                                                         
-                                                                )
-                                                       )
-                                                       
-                                                     )),
-                                              
-                                              
-                                              
-                                              
-                                     )), 
+                                            
+                                            
+                                     )
+                            ),
                             #------------Climate Survey UI-----------------
                             tabPanel("Climate Survey Reports",
                                      fluidRow(style = "margin: 6px;",
@@ -1566,7 +1578,7 @@ ui <- navbarPage(title = "DSPG",
                             
                  ),
                  
-                 navbarMenu("Availabile Resources",
+                 navbarMenu("Resources",
                             tabPanel("Health and Social Services",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
@@ -1589,7 +1601,7 @@ ui <- navbarPage(title = "DSPG",
                                      
                                      fluidPage(style = "margin: 2px;", 
                                                radioButtons(
-                                                 "category",
+                                                 inputId = "health_category",
                                                  label = "Select:",
                                                  choices = c("All Services", "Free Services"),
                                                ),
@@ -1653,6 +1665,11 @@ ui <- navbarPage(title = "DSPG",
                                      
                                      
                                      fluidPage(style = "margin: 2px;", 
+                                               radioButtons(
+                                                 inputId = "mental_category",
+                                                 label = "Select:",
+                                                 choices = c("All Services", "Free Services"),
+                                               ),
                                                column(6, 
                                                       leafletOutput("map_mental", width = "100%", height = 600)
                                                       #fluidRow(align = "center",
@@ -1780,11 +1797,20 @@ server <- function(input, output, session) {
   })
   
   output$map_health <- renderLeaflet({
-    map_health
+    if(input$health_category == "Free Services"){
+      # call some leaflet plot already made for the free services
+      health_free
+    }
+    else{
+      health_all
+    }
+    
+    
   })
   
   output$map_youth <- renderLeaflet({
     map_youth
+    
   })
   
   output$map_mental <- renderLeaflet({
@@ -1909,14 +1935,18 @@ server <- function(input, output, session) {
     input$schooldrop1
   }) 
   
-  output$ocuplot1 <- renderPlotly({
+  output$cgender <- renderPlotly({
     
-    if(Var2() == "racenine"){
-      racenine 
-    }
-    else if(Var2() == "cgender"){
-      genders 
-    }
+    genders 
+    
+    
+  })
+  
+  
+  output$racenine <- renderPlotly({
+    
+    racenine 
+    
     
   })
   
@@ -1952,11 +1982,11 @@ server <- function(input, output, session) {
   
   
   
-  output$ocuplot3 <- renderLeaflet({
-    if (Var2() == "racenine") {
-      
-      hispanicschool
-    }
+  output$hispanicschool <- renderLeaflet({
+    
+    
+    hispanicschool
+    
     
     
   })
@@ -2351,6 +2381,7 @@ server <- function(input, output, session) {
   
 }
 shinyApp(ui = ui, server = server)
+
 
 
 
