@@ -1122,11 +1122,8 @@ ui <- navbarPage(title = "DSPG",
                                    h1(strong("Sterling Sociodemographics"), align = "center"),
                                    p("", style = "padding-top:10px;"), 
                                   
-                                          h2(strong("Sterling Residents' Characteristics")),
-                                          column(12, align = "left",
-                                                 h3(strong("Who Makes Up Sterling, Virginia?")), 
-                                                 p("We used the American Community Survey (ACS) 5-year data to understand the socioeconomic demographics of the Sterling Census Designated Place (CDP) from the years 2016 to 2020. The ACS data is a survey collected by the U.S. Census Bureau which gathers sociodemographic information on American households including age, gender, race/ethnicity, income, and employment. ")
-                                          ),
+                                         
+                                         
                                    column(7, 
                                           tabsetPanel(
                                             
@@ -1204,6 +1201,9 @@ ui <- navbarPage(title = "DSPG",
                                          br(""),
                                          br(""),
                                          br(""),
+                                         h4(strong("Who Makes Up Sterling, Virginia?")), 
+                                         p("We used the American Community Survey (ACS) 5-year data to understand the socioeconomic demographics of the Sterling Census Designated Place (CDP) from the years 2016 to 2020. The ACS data is a survey collected by the U.S. Census Bureau which gathers sociodemographic information on American households including age, gender, race/ethnicity, income, and employment. "),
+                                  
                                           p("Females are about 49.5% of the total population in Sterling. This is marginally in contrast with the Virginia and Loudoun County averages whose populations comprise of more women than men. The national female percentage also stands at 50.7%. Within Sterling, the largest age group are adults (aged 35 to 44 years), closely followed by 25 to 34 years olds, and 45 to 54 years olds. The median age is 34.7. About 27% of the population is under the age of 20 with the largest group being those under 5. From 2016-2020, those identifying as White made up just over half of the Sterling residents followed Asian and Other which may include those who identify as Hispanics as the ACS does not include Hispanic as a race.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
                                           
                                          p("For the Sterling residents, who are above the age of 25 majority of them have attained a high school diploma with the largest group having attained a bachelor’s degree with a total number of 4,706 people from the Sterling population who are 25 years and above. This implies that a large part of the community is well educated and have attained a college degree. For families in the past 12 months, the largest income level is the $100,000 to $149,999 bracket followed closely by both the $50,000 to $74,999 bracket and $150,000 to $199,999. It should be taken into consideration however that our data is slightly skewed as the areas of the Sterling CPD includes those that are highly affluent, outweigh those located in the areas with the schools designated as Title 1. Expanding on that, females ages 18 to 24 years old face the highest level of poverty by sex and age overall followed by females ages 35 to 44 years old and males ages 25 to 34 years old. Females tend to have higher levels of poverty than males especially from years 6 to 11. While most Sterling residents have private health insurance, which is insurance mostly provided by the employer’s, 23% are on public insurance such as Medicare and Medicaid, and 16.5% of residents have no health insurance at all. This might be due to the undocumented residents in the area. ", style = "padding-top:15px;font-size: 14px;"),
