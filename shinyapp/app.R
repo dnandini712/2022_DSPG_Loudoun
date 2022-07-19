@@ -367,12 +367,13 @@ healthin <- ggplotly(health, tooltip = c("text"))
 
 races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
 
-race_subset <- races[(1:153),c(1,5,6,7)]
-nineteensub <- race_subset[(73:96),(1:4)]
+race_subset <- races[(1:153),c(1,5,6,7,11)]
+nineteensub <- race_subset[(1:24),c(1:5)]
 Race <- nineteensub$Race
 Total <- nineteensub$`Full Time Count (All Grades)`
+Percentage <- nineteensub$Percentage
 School <- nineteensub$`School Name`
-racenine <- ggplot(nineteensub,aes(x=School,y=Total,fill=Race))+ geom_col(position = "dodge")+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Total",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
+racenine <- ggplot(nineteensub,aes(x=School,y=Percentage,fill=Race))+ geom_col(position = "dodge")+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Percentage",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
                                                                                                                                                                                                                                          plot.caption = element_text(hjust = 1)) + guides(fill=guide_legend(title="Race/Ethnicity"))
 racenine <- ggplotly(racenine)
 
