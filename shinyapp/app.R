@@ -367,12 +367,13 @@ healthin <- ggplotly(health, tooltip = c("text"))
 
 races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
 
-race_subset <- races[(1:153),c(1,5,6,7)]
-nineteensub <- race_subset[(73:96),(1:4)]
+race_subset <- races[(1:153),c(1,5,6,7,11)]
+nineteensub <- race_subset[(1:24),c(1:5)]
 Race <- nineteensub$Race
 Total <- nineteensub$`Full Time Count (All Grades)`
+Percentage <- nineteensub$Percentage
 School <- nineteensub$`School Name`
-racenine <- ggplot(nineteensub,aes(x=School,y=Total,fill=Race))+ geom_col(position = "dodge")+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Total",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
+racenine <- ggplot(nineteensub,aes(x=School,y=Percentage,fill=Race))+ geom_col(position = "dodge")+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Percentage",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
                                                                                                                                                                                                                                          plot.caption = element_text(hjust = 1)) + guides(fill=guide_legend(title="Race/Ethnicity"))
 racenine <- ggplotly(racenine)
 
@@ -1311,6 +1312,22 @@ ui <- navbarPage(title = "DSPG",
                                                                                        p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                                                                 ),
                                                                          
+<<<<<<< HEAD
+=======
+                                                                         column(4, align = "justify",
+                                                                                
+                                                                                h4(strong("What Do Community Schools Look Like?"), align = "left"),
+                                                                                p("Community schools provide additional resources and accommodation for students and families using community partnerships. These schools not only focus on learning objectives but provide supplementary services, such as free meals, health care services, tutoring, and counseling services, to those in need. There are six Title 1 Community Schools - all in the Sterling area - Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
+                                                                                
+                                                                                p("We examine the demographic characteristics of students at the six elementary schools to better understand the population. Most schools have a similar number of students (around 500) except Sterling and Sully elementary, with about 100 fewer students. Interestingly, the gender ratio for Forest Grove, Guilford, and Sully are similar to the Sterling area gender ratio – approximately 49% of the student population are females. Sterling ratio is lower, with 91 females for every 100 male students.", style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("The race/ethnicity composition revealed that the majority of students attending the six elementary schools identified as Hispanic, differing from Sterling’s general population, where White residents were the majority. There are also significant differences between Guilford and Forest Grove, which have similar total students. Most students in Guilford are Hispanic students, whereas Forest Grove has a more diverse population between Hispanic, White, and Asian groups.", 
+                                                                                  style = "padding-top:15px;font-size: 14px;"),
+                                                                                p("The differences across ethnic groups might be due to the Hispanic population density in the areas where these schools are located. Hence, we mapped the schools and collected the average total Hispanic population between the years 2016 to 2020. We present this information by census blocks, and hovering over each block will show the total Hispanic population. Areas surrounding the schools have a large number of residents identifying as Hispanic. This is significant for neighborhoods near Rolling Ridge, Sully, Sterling, and Guilford.", 
+                                                                                  style = "padding-top:15px;font-size: 14px;"),
+                                                                                
+                                                                                
+                                                                         )
+>>>>>>> 35fce37aeebbc6453067a37ce84bd32fee4e74a1
                                                                          
                                                                          
                                                                          
