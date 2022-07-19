@@ -1629,36 +1629,14 @@ ui <- navbarPage(title = "DSPG",
                                                       #    p(tags$small(em('Last updated: August 2021'))))
                                                ), 
                                                column(6, 
-                                                      h3(strong("Overview"), align = "left"), 
-                                                      p(("To understand the services available to those located in Sterling, we used data from our
-                                                        stakeholders as well as publicly available data to provide a general idea of the resources
-                                                        available within the Sterling area for the four pillars of Community Schools. On each map,
-                                                        the legend in the top right corner is interactive allowing the user to select and deselect
-                                                        desired resource groups and each colored marker provides a pop-up with information on that 
-                                                        resource.   "), align = "left"),
-                                                      h3(strong("Services")), 
-                                                      p("A key pillar essential to ensuring that a community will thrive is access to 
-                                                        quality health and social services which include nutritious food, weather-appropriate
-                                                        clothing, and medical care including dental care, vision care, comprehensive primary 
-                                                        care, and preventative care. For many, barriers to these services are often a result 
-                                                        of expense and transportation making it vital to provide access to these resources for
-                                                        all members of a community."),
-                                                      p("Due to Sterling’s unique location within Loudoun County and its proximity to Washington, 
-                                                        D.C., Sterling residents have access to many options when it comes to health and social 
-                                                        services. However, this is not true for all Sterling residents. For those in need of free 
-                                                        or reduced cost services, the number and accessibility decrease with many services falling 
-                                                        outside of a ten-minute drive."),
-                                                      p("In terms of free services, there is a wide variety of food pantries available within a 
-                                                        ten-minute drive of Sterling Elementary. However, beyond that, access to medical care and 
-                                                        clothing is not as readily available with many resources falling within the 20- and 45-minute
-                                                        boundaries. "),
-                                                      h3(strong("Travel Distance")),
-                                                      p("We included the driving distances from the center location of Sterling Elementary School as 
-                                                        it sits in the middle of the Sterling, CDP. Shown on the map are the driving distances for 10 
-                                                        minutes, 20 minutes, and 45 minutes shaded in green, blue, and red, respectively. Within each 
-                                                        boundary are markers representing different services available within those driving distances.")
-                                                      
-                                                      
+                                                      h3(strong("Overview"), align = "justify"), 
+                                                      p(("We present interactive maps to better understand the services available to students and families in the six community schools. The legend on the top right corner is interactive, allowing the user to filter by desired resource groups. Each colored marker provides a pop-up with the Name of the services, detailed Description, Language, Address, and Website link.   "), align = "justify"),
+                                                      h4("Travel Distance"),
+                                                      p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances."),align = "justify"),
+                                                      h3(strong("Health and Social Services Availability")), 
+                                                      p(("A key pillar essential to ensuring students thrive in school is access to quality health and social services. It is difficult for students to focus on academic needs if their non-academic needs are not met. Thus, providing nutritious food, weather-appropriate clothing, and medical care such as dental, vision, and preventative care can improve a student's performance. For many, barriers to these services are often a result of expense, transportation, and time availability, making it vital to provide access to these resources for all members of a community. "),align = "justify"),
+                                                      p(("Due to Sterling's unique location within Loudoun County and its proximity to Washington, D.C., Sterling residents have access to numerous health and social services. However, the map shows this is not true for all Sterling residents. The number and accessibility of services decrease for residents that require free or reduced-cost services, with many options falling outside of a ten-minute drive. For instance, a wide variety of free food pantries are available within a ten-minute drive of Sterling Elementary. However, beyond that, access to medical care and clothing is not as readily open, with many resources falling within the 20- and 45-minute boundaries. "),align = "justify"),
+                                     
                                                       )
                                      )),
                             
@@ -1697,27 +1675,12 @@ ui <- navbarPage(title = "DSPG",
                                                
                                                column(6, 
                                                       h3(strong("Overview"), align = "left"), 
-                                                      p(("To understand the services available to those located in Sterling, we used data from our
-                                                        stakeholders as well as publicly available data to provide a general idea of the resources
-                                                        available within the Sterling area for the four pillars of Community Schools. On each map,
-                                                        the legend in the top right corner is interactive allowing the user to select and deselect
-                                                        desired resource groups and each colored marker provides a pop-up with information on that 
-                                                        resource.   "), align = "left"),
-                                                      h3(strong("Services")), 
-                                                      p("Mental health is equally important as physical health. For a community to flourish it is important that mental health resources be provided and be easily accessible. The mental health resources have been divided into four categories Anger Management, Bereavement, Family Counseling, and Family Therapy. The resources have been mapped within a 45 minutes driving time from Sterling. Anger Management services are not abundant in the sterling surroundings with only 3 available in a 45-minute radius. Bereavement services are the least abundant with only two available around the Sterling area. The most abundant resource is Family therapy, they offer family counseling, relationship counseling, and children counseling. Mental health resources decrease in number and accessibility after the ten minute radius. "),
-                                                      p("Due to Sterling’s unique location within Loudoun County and its proximity to Washington, 
-                                                        D.C., Sterling residents have access to many options when it comes to health and social 
-                                                        services. However, this is not true for all Sterling residents. For those in need of free 
-                                                        or reduced cost services, the number and accessibility decrease with many services falling 
-                                                        outside of a ten-minute drive."),
-                                                      
-                                                      h3(strong("Travel Distance")),
-                                                      p("We included the driving distances from the center location of Sterling Elementary School as 
-                                                        it sits in the middle of the Sterling, CDP. Shown on the map are the driving distances for 10 
-                                                        minutes, 20 minutes, and 45 minutes shaded in green, blue, and red, respectively. Within each 
-                                                        boundary are markers representing different services available within those driving distances.")
-                                                      
-                                                      
+                                                      p(("We present interactive maps to better understand the services available to students and families in the six community schools. The legend on the top right corner is interactive, allowing the user to filter by desired resource groups. Each colored marker provides a pop-up with the Name of the services, detailed Description, Language, Address, and Website link.  "), align = "justify"),
+                                                      h4(("Travel Distance")),
+                                                      p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances.  "), align = "justify"),
+                                                      h3(strong("Mental Health Availability")), 
+                                                      p(("Mental health is equally important as physical health. For a community to flourish it is important that mental health resources be provided and be easily accessible. The mental health resources have been divided into four categories Anger Management, Bereavement, Family Counseling, and Family Therapy. The resources have been mapped within a 45 minutes driving time from Sterling. Anger Management services are not abundant in the sterling surroundings with only 3 available in a 45-minute radius. Bereavement services are the least abundant with only two available around the Sterling area. The most abundant resource is Family therapy, they offer family counseling, relationship counseling, and children counseling. Mental health resources decrease in number and accessibility after the ten minute radius. "), align = "justify"),
+                                        
                                                )
                                                
                                                
@@ -1736,15 +1699,26 @@ ui <- navbarPage(title = "DSPG",
                                               )),
                                      
                                      fluidPage(style = "margin: 2px;", 
-                                               column(12, 
-                                                      leafletOutput("map_family", width = "100%")
-                                                      #fluidRow(align = "center",
-                                                      #    p(tags$small(em('Last updated: August 2021'))))
+                                               column(6, 
+                                                      leafletOutput("map_family", width = "100%",height =600)
+                                                      ),
+                                                      column(6, 
+                                                             h3(strong("Overview"), align = "left"), 
+                                                             p(("We present interactive maps to better understand the services available to students and families in the six community schools. The legend on the top right corner is interactive, allowing the user to filter by desired resource groups. Each colored marker provides a pop-up with the Name of the services, detailed Description, Language, Address, and Website link.  "), align = "justify"),
+                                                             h4(("Travel Distance")),
+                                                             p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances.  "), align = "justify"),
+                                                             h3(strong("Family Engagement Resources")), 
+                                                             p((""), align = "justify"),
+                                                             
+                                                      )
+                                                      
+                                                      
                                                )
-                                     )
-                                     
-                                     
-                            ),
+                                               
+                                     ),
+                                                    
+                                               
+                          
                             tabPanel("Youth Development Opportunities",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
@@ -1761,13 +1735,19 @@ ui <- navbarPage(title = "DSPG",
                                      
                                      
                                      fluidPage(style = "margin: 2px;", 
-                                               column(12, 
-                                                      leafletOutput("map_youth", width = "100%")
-                                                      #fluidRow(align = "center",
-                                                      #    p(tags$small(em('Last updated: August 2021'))))
-                                               )
+                                               column(6, 
+                                                      leafletOutput("map_youth", width = "100%", height = 600)
+                                               ),
+                                               column(6, 
+                                                      h3(strong("Overview"), align = "left"), 
+                                                      p(("We present interactive maps to better understand the services available to students and families in the six community schools. The legend on the top right corner is interactive, allowing the user to filter by desired resource groups. Each colored marker provides a pop-up with the Name of the services, detailed Description, Language, Address, and Website link.  "), align = "justify"),
+                                                      h4(("Travel Distance")),
+                                                      p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances.  "), align = "justify"),
+                                                      h3(strong("Family Engagement Resources")), 
+                                                      p((""), align = "justify"),
                                      )),
                             
+                 )
                  ),
                  
                  tabPanel("Opportunities",
