@@ -279,7 +279,7 @@ genders <- data.frame(Sex=rep(c("Male", "Female"), each=6),
 
 genders<- ggplot(data=genders, aes(x=School, y=Total, fill=Sex,  width=0.9)) +
   geom_bar(stat="identity", position="stack", hoverinfo = "text", aes(text = paste("Percentage :",Percentage,"%\n", "Total :", Total))) +
-  scale_fill_manual(values = c('#F56D4F', "#20AFCC")) + labs(y="Total Students", x="", fill="")+ggtitle("Gender by Schools") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  scale_fill_manual(values = c('#F56D4F', "#20AFCC")) + labs(y="Total Students", x="", fill="")+ggtitle("Gender by Schools for 2020-21") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
 genders <-ggplotly(genders, tooltip = c("text"))
 #race by school ----------------------------
