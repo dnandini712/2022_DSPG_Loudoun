@@ -1102,14 +1102,9 @@ ui <- navbarPage(title = "DSPG",
                                    column(4,
                                           h2(strong("The Setting")),align = "justify",
                                           
-                                          p("Loudoun County is located in the northern part of the state of Virginia. It lies along Virginia’s state line, where Virginia meets West Virginia and Maryland. It is also part of the Washington Metropolitan Statistical Area, the sixth largest metropolitan area in the United States. Loudoun County is among the top three most populated county in Virginia with an estimated population of 420,959."),
-                                          p(a(href = 'https://www.loudoun.gov/', 'Loudoun County', target = '_blank')),
-                                          p(a(href = 'https://data.census.gov/cedsci/profile?g=0500000US51107', 'Loudoun County Population', target = '_blank')),
-                                          p("Loudoun County was traditionally a rural county heavily dependent on agriculture as a primary livelihood. However, this changed in the early 1960s with the construction of the Dulles International Airport. This resulted in an economic boom and rapid growth in the county. Additionally, the metropolitan Washington, D.C. area began growing simultaneously. These two factors led to a significant increase in Loudoun’s population in the 1970s and heavy suburbanization throughout the 1990s. Due to the full-fledged service economy, Loudoun County hosts several world headquarters of high-tech companies, including Verizon Business and Telos Corporation. Notably, the largest employer is the government sector, with Loudoun County Public Schools being the number one sector with over 10,000 individuals. These factors led to Loudoun being one of the wealthiest county in the United States, with a median average household income of $147,111 as of the 2020 American Community Survey."),
-                                          p(a(href = 'https://www.loudoun.gov/174/History', 'Loudoun County History', target = '_blank')),
-                                          p(a(href = 'https://biz.loudoun.gov/information-center/major-employers/)', 'Loudoun County Employers', target = '_blank')),
-                                          p("Despite Loudoun county’s wealth, some areas could benefit from improving their economic conditions to be on par with the county. For example, the Sterling region (our area of interest) had 6.9% in 2018 of the households that are below the federal poverty level. While this is substantially low compared to Virginia’s rate of 10%, it is quite high compared to Loudoun’s low rate of 3.2%."),
-                                          p(a(href = 'https://www.livehealthyloudoun.org/indicators/index/view?indicatorId=8483&localeId=202605', 'Loudoun County Household Indicators', target = '_blank')),
+                                          p(a(href = "https://www.loudoun.gov/", strong("Loudoun County"), target = "_blank"), "is located in the northern part of the state of Virginia. It lies along Virginia’s state line, where Virginia meets West Virginia and Maryland. It is also part of the Washington Metropolitan Statistical Area, the sixth largest metropolitan area in the United States. Loudoun County is among the top three most populated county in Virginia with an estimated", a(href = "https://data.census.gov/cedsci/profile?g=0500000US51107", strong("population"), target = "_blank"), "of 420,959."),
+                                          p(a(href = "https://www.loudoun.gov/174/History", strong("Loudoun County"), target = "_blank"), "was traditionally a rural county heavily dependent on agriculture as a primary livelihood. However, this changed in the early 1960s with the construction of the Dulles International Airport. This resulted in an economic boom and rapid growth in the county. Additionally, the metropolitan Washington, D.C. area began growing simultaneously. These two factors led to a significant increase in Loudoun’s population in the 1970s and heavy suburbanization throughout the 1990s. Due to the full-fledged service economy, Loudoun County hosts several world headquarters of high-tech companies, including Verizon Business and Telos Corporation. Notably, the largest", a(href = "https://biz.loudoun.gov/information-center/major-employers/", strong("employer"), target = "_blank"), "is the government sector, with Loudoun County Public Schools being the number one sector with over 10,000 individuals. These factors led to Loudoun being one of the wealthiest county in the United States, with a median average household income of $147,111 as of the 2020 American Community Survey."),
+                                          p("Despite Loudoun county’s wealth, some areas could benefit from improving their economic conditions to be on par with the county. For example, the", a(href = "https://www.livehealthyloudoun.org/indicators/index/view?indicatorId=8483&localeId=202605", strong("Sterling"), target = "_blank"), "region (our area of interest) had 6.9% in 2018 of the households that are below the federal poverty level. While this is substantially low compared to Virginia’s rate of 10%, it is quite high compared to Loudoun’s low rate of 3.2%."),
                                           
                                    ),
                                    column(4,
@@ -1122,7 +1117,14 @@ ui <- navbarPage(title = "DSPG",
                                           p("Loudoun County Public Schools started a Community School Initiative in 2015 with Sterling Elementary being the first one to be part of the program. Soon after in 2018, 5 other Elementary Schools joined the program Sugarland Elementary, Sully Elementary, Guilford Elementary, Forest Grove Elementary, and Rolling Ridge Elementary. "),
                                           h4(strong("What is the question?")), 
                                           p("Potential partners of Loudoun County Public Schools are eager to provide services to the Community Schools but due to a lack of data, are unclear on what resources would be most beneficial for this region. Scrapping data and visualizing it would help our stakeholders to find potential improvement opportunities that can help improve the lives of the students in our targeted Elementary Schools."),
-                                          ),  
+                                          fluidRow(style = "margin: 12px;",
+                                                   column(12, align ="center", 
+                                                          img(src='lcps_com_school_initiative.png', width = 200, height = 200)
+                                                          
+                                                          
+                                                   ),
+                                          ),
+                                   ),  
                                    
                                    column(4,
                                           h2(strong("Project Goals")), align = "justify",
@@ -1194,9 +1196,9 @@ ui <- navbarPage(title = "DSPG",
                           fluidRow(style = "margin: 4px;",
                                    h1(strong("Sterling Sociodemographics"), align = "center"),
                                    p("", style = "padding-top:10px;"), 
-                                  
-                                         
-                                         
+                                   
+                                   
+                                   
                                    column(7, 
                                           tabsetPanel(
                                             
@@ -1216,7 +1218,7 @@ ui <- navbarPage(title = "DSPG",
                                                                      column(12, align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
                                                                             withSpinner(plotlyOutput("demoHispanicPIE", height = "500px", width = "100%")),
-                                                                            )
+                                                                     )
                                                               ),
                                                      )),
                                             
@@ -1234,8 +1236,8 @@ ui <- navbarPage(title = "DSPG",
                                                                      br(""),
                                                                      withSpinner(plotlyOutput("demo2", height = "500px", width ="100%")),
                                                                      column(12,align = "right",
-                                                                     p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
-                                                                     p("*Note: Data is zero for missing bars", style = "font-size:12px;"))
+                                                                            p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
+                                                                            p("*Note: Data is zero for missing bars", style = "font-size:12px;"))
                                                                      
                                                               ),
                                                               
@@ -1255,33 +1257,33 @@ ui <- navbarPage(title = "DSPG",
                                                                      withSpinner(plotlyOutput("demo3", height = "500px", width ="100%")),
                                                                      column(12,align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
-                                                                          )),
-                                                                     
-                                                                            
-                                                                     
-                                                                      )
-                                                              ),
+                                                                     )),
+                                                              
+                                                              
+                                                              
+                                                     )
+                                            ),
                                             
                                             
                                             
                                           )),
                                    
-                                  column(5, align = "justify",
-                                         br(""),
-                                         br(""),
-                                         br(""),
-                                         h4(strong("Who Makes Up Sterling, Virginia?")), 
-                                         p("We used the American Community Survey (ACS) 5-year data to understand the socioeconomic demographics of the Sterling Census Designated Place (CDP) from the years 2016 to 2020. The ACS data is a survey collected by the U.S. Census Bureau which gathers sociodemographic information on American households including age, gender, race/ethnicity, income, and employment. "),
-                                  
+                                   column(5, align = "justify",
+                                          br(""),
+                                          br(""),
+                                          br(""),
+                                          h4(strong("Who Makes Up Sterling, Virginia?")), 
+                                          p("We used the American Community Survey (ACS) 5-year data to understand the socioeconomic demographics of the Sterling Census Designated Place (CDP) from the years 2016 to 2020. The ACS data is a survey collected by the U.S. Census Bureau which gathers sociodemographic information on American households including age, gender, race/ethnicity, income, and employment. "),
+                                          
                                           p("Females are about 49.5% of the total population in Sterling. This is marginally in contrast with the Virginia and Loudoun County averages whose populations comprise of more women than men. The national female percentage also stands at 50.7%. Within Sterling, the largest age group are adults (aged 35 to 44 years), closely followed by 25 to 34 years olds, and 45 to 54 years olds. The median age is 34.7. About 27% of the population is under the age of 20 with the largest group being those under 5. From 2016-2020, those identifying as White made up just over half of the Sterling residents followed Asian and Other which may include those who identify as Hispanics as the ACS does not include Hispanic as a race.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
                                           
-                                         p("For the Sterling residents, who are above the age of 25 majority of them have attained a high school diploma with the largest group having attained a bachelor’s degree with a total number of 4,706 people from the Sterling population who are 25 years and above. This implies that a large part of the community is well educated and have attained a college degree. For families in the past 12 months, the largest income level is the $100,000 to $149,999 bracket followed closely by both the $50,000 to $74,999 bracket and $150,000 to $199,999. It should be taken into consideration however that our data is slightly skewed as the areas of the Sterling CPD includes those that are highly affluent, outweigh those located in the areas with the schools designated as Title 1. Expanding on that, females ages 18 to 24 years old face the highest level of poverty by sex and age overall followed by females ages 35 to 44 years old and males ages 25 to 34 years old. Females tend to have higher levels of poverty than males especially from years 6 to 11. While most Sterling residents have private health insurance, which is insurance mostly provided by the employer’s, 23% are on public insurance such as Medicare and Medicaid, and 16.5% of residents have no health insurance at all. This might be due to the undocumented residents in the area. ", style = "padding-top:15px;font-size: 14px;"),
-                                        
-                                         p("Within Sterling, the majority of residents are employed at 71.8% while 4.7% of the residents are unemployed. It is important to note that while 4.7% may seem like a small number, keep in mind that the population of Sterling is 30,271 so 4.7% of the population is 1,423 people. The labor force of Sterling has the largest number of the population working in the management, business, science and art sector followed by the service sector and sales and office sector. Only 20% of residents in Sterling work in the natural resources, construction, and maintenance field as well as the production, transportation, and material moving field. This shows us that Sterling is more of a tech-savy area, and it makes sense because of all the headquarters and big named companies that have moved to the area over the years. For Sterling residents who commute to work, over half have a commute time that is less than 30 minutes and 75% of said commuters drive alone. Notably, only 1.8% of commuters utilized public transportation so this could be a potential area to look into to see why this service isn't being utilized as much. ",style = "padding-top:15px;font-size: 14px;"),
-                                         
-                                    
-                                  )
-                                    
+                                          p("For the Sterling residents, who are above the age of 25 majority of them have attained a high school diploma with the largest group having attained a bachelor’s degree with a total number of 4,706 people from the Sterling population who are 25 years and above. This implies that a large part of the community is well educated and have attained a college degree. For families in the past 12 months, the largest income level is the $100,000 to $149,999 bracket followed closely by both the $50,000 to $74,999 bracket and $150,000 to $199,999. It should be taken into consideration however that our data is slightly skewed as the areas of the Sterling CPD includes those that are highly affluent, outweigh those located in the areas with the schools designated as Title 1. Expanding on that, females ages 18 to 24 years old face the highest level of poverty by sex and age overall followed by females ages 35 to 44 years old and males ages 25 to 34 years old. Females tend to have higher levels of poverty than males especially from years 6 to 11. While most Sterling residents have private health insurance, which is insurance mostly provided by the employer’s, 23% are on public insurance such as Medicare and Medicaid, and 16.5% of residents have no health insurance at all. This might be due to the undocumented residents in the area. ", style = "padding-top:15px;font-size: 14px;"),
+                                          
+                                          p("Within Sterling, the majority of residents are employed at 71.8% while 4.7% of the residents are unemployed. It is important to note that while 4.7% may seem like a small number, keep in mind that the population of Sterling is 30,271 so 4.7% of the population is 1,423 people. The labor force of Sterling has the largest number of the population working in the management, business, science and art sector followed by the service sector and sales and office sector. Only 20% of residents in Sterling work in the natural resources, construction, and maintenance field as well as the production, transportation, and material moving field. This shows us that Sterling is more of a tech-savy area, and it makes sense because of all the headquarters and big named companies that have moved to the area over the years. For Sterling residents who commute to work, over half have a commute time that is less than 30 minutes and 75% of said commuters drive alone. Notably, only 1.8% of commuters utilized public transportation so this could be a potential area to look into to see why this service isn't being utilized as much. ",style = "padding-top:15px;font-size: 14px;"),
+                                          
+                                          
+                                   )
+                                   
                                    
                                    
                                    
@@ -1304,10 +1306,10 @@ ui <- navbarPage(title = "DSPG",
                                                                          column(8, align = "left",
                                                                                 withSpinner(plotlyOutput("cgender", height = "500px", width = "100%")),
                                                                                 br(""),
-                                                                               
+                                                                                
                                                                                 column(12,align = "right",
                                                                                        p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
-                                                                                       )
+                                                                                )
                                                                          ),
                                                                          
                                                                          column(4, align = "justify",
@@ -1321,7 +1323,7 @@ ui <- navbarPage(title = "DSPG",
                                                                                 p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence,  we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary.", 
                                                                                   style = "padding-top:15px;font-size: 14px;"),
                                                                                 
-                                                                               
+                                                                                
                                                                          )
                                                                          
                                                                 )
@@ -1403,7 +1405,8 @@ ui <- navbarPage(title = "DSPG",
                                             
                                             
                                      )
-                                     ),
+                            ),
+                            
                             #------------Climate Survey UI-----------------
                             tabPanel("Climate Survey Reports",
                                      fluidRow(style = "margin: 6px;",
@@ -1420,8 +1423,8 @@ ui <- navbarPage(title = "DSPG",
                                                                   # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                   br(""),
                                                                   h1(strong("Student Perception"),
-                                                                     column(12, align = "center"),
-                                                                     h4("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."),
+                                                                     column(12, align = "justify"),
+                                                                     h5(("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), align = "justify"),
                                                                      h4(""),
                                                                      #h4("[updat this]"),
                                                                      br()
@@ -1493,8 +1496,8 @@ ui <- navbarPage(title = "DSPG",
                                                                            # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                            br(""),
                                                                            h1(strong("Parent Perception"),
-                                                                              column(12, align = "center"),
-                                                                              h4("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."),
+                                                                              column(12, align = "justify"),
+                                                                              h5(("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), align = "justify"),
                                                                               h4(""),
                                                                               #h4("[updat this]"),
                                                                               br()
@@ -1568,8 +1571,8 @@ ui <- navbarPage(title = "DSPG",
                                                                   # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                   br(""),
                                                                   h1(strong("Teacher/Staff Perception"),
-                                                                     column(12, align = "center"),
-                                                                     h4("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."),
+                                                                     column(12, align = "justify"),
+                                                                     h5(("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), align = "justify"),
                                                                      h4(""),
                                                                      #h4("[updat this]"),
                                                                      br()
@@ -1657,14 +1660,14 @@ ui <- navbarPage(title = "DSPG",
                                                       p(h1(strong("Elementary Community School Representatives ")), style = "padding-top:5px;"),
                                                ),
                                                fluidRow(
-                                               column(5,),
-                                               column(7, align = "justify",
-                                                      radioButtons(
-                                                 "category",
-                                                 
-                                                 label = "Select:",
-                                                 choices = c("Challenges and Weaknesses", "Strengths and Successes", "Future Goals"),
-                                               ))),
+                                                 column(5,),
+                                                 column(7, align = "justify",
+                                                        radioButtons(
+                                                          "category",
+                                                          
+                                                          label = "Select:",
+                                                          choices = c("Challenges and Weaknesses", "Strengths and Successes", "Future Goals"),
+                                                        ))),
                                                
                                                column(5, align = "left",
                                                       wordcloud2Output("wordcloud")
@@ -1679,7 +1682,7 @@ ui <- navbarPage(title = "DSPG",
                                                       h4(strong("Future Goals")),
                                                       p("Future Goals primarily focus on creating more opportunities to engage and offer to students and parents. Representatives would like to focus on program development as the schools continue working with the students and their families. Another major goal for all schools is the partnership creation and development with community members to help expand programs. This is evident by numerous terms such as agencies, stakeholder, partners, partnerships, involvement, community, meaningful services addition, and assistance.")
                                                )
-                                               ))
+                                     ))
                             
                             #tabPanel(h4("Weaknesses and biggest challenges")),
                             
@@ -1695,7 +1698,7 @@ ui <- navbarPage(title = "DSPG",
                                               p("", style = "padding-top:10px;"),
                                               column(12, align = "center",h1(strong("Health and Social Services")),
                                                      p(""),
-                                      
+                                                     
                                               )),
                                      
                                      fluidPage(style = "margin: 2px;", 
@@ -1717,31 +1720,31 @@ ui <- navbarPage(title = "DSPG",
                                                       h4(strong("Health and Social Services Availability")), 
                                                       p(("A key pillar essential to ensuring students thrive in school is access to quality health and social services. It is difficult for students to focus on academic needs if their non-academic needs are not met. Thus, providing nutritious food, weather-appropriate clothing, and medical care such as dental, vision, and preventative care can improve a student's performance. For many, barriers to these services are often a result of expense, transportation, and time availability, making it vital to provide access to these resources for all members of a community. "),align = "justify"),
                                                       p(("Due to Sterling's unique location within Loudoun County and its proximity to Washington, D.C., Sterling residents have access to numerous health and social services. However, the map shows this is not true for all Sterling residents. The number and accessibility of services decrease for residents that require free or reduced-cost services, with many options falling outside of a ten-minute drive. For instance, a wide variety of free food pantries are available within a ten-minute drive of Sterling Elementary. However, beyond that, access to medical care and clothing is not as readily open, with many resources falling within the 20- and 45-minute boundaries. "),align = "justify"),
-                                     
-                                                      )
+                                                      
+                                               )
                                      )),
                             
                             
                             
                             tabPanel("Mental Health", 
-                                                     fluidRow(style = "margin: 6px;",
-                                                              p("", style = "padding-top:10px;"),
-                                                              column(12, align = "center",h1(strong("Mental Health Services")),
-                                                                     p(""),
-                                                                    
-                                                                     
-                                                                     
-                                                                     
-                                                                     
-                                                                     
-                                                                     
-                                                              )),
+                                     fluidRow(style = "margin: 6px;",
+                                              p("", style = "padding-top:10px;"),
+                                              column(12, align = "center",h1(strong("Mental Health Services")),
                                                      p(""),
-                                                     br(""),
                                                      
                                                      
                                                      
-                                              
+                                                     
+                                                     
+                                                     
+                                                     
+                                              )),
+                                     p(""),
+                                     br(""),
+                                     
+                                     
+                                     
+                                     
                                      fluidPage(style = "margin: 2px;", 
                                                radioButtons(
                                                  inputId = "mental_category",
@@ -1761,7 +1764,7 @@ ui <- navbarPage(title = "DSPG",
                                                       p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances.  "), align = "justify"),
                                                       h4(strong("Mental Health Availability")), 
                                                       p(("Mental health is equally important as physical health. For a community to flourish it is important that mental health resources be provided and be easily accessible. The mental health resources have been divided into four categories Anger Management, Bereavement, Family Counseling, and Family Therapy. The resources have been mapped within a 45 minutes driving time from Sterling. Anger Management services are not abundant in the sterling surroundings with only 3 available in a 45-minute radius. Bereavement services are the least abundant with only two available around the Sterling area. The most abundant resource is Family therapy, they offer family counseling, relationship counseling, and children counseling. Mental health resources decrease in number and accessibility after the ten minute radius. "), align = "justify"),
-                                        
+                                                      
                                                )
                                                
                                                
@@ -1787,24 +1790,24 @@ ui <- navbarPage(title = "DSPG",
                                                ),
                                                column(6, 
                                                       leafletOutput("map_family", width = "100%",height =600)
-                                                      ),
-                                                      column(6, 
-                                                             h4(strong("Overview"), align = "left"), 
-                                                             p(("We present interactive maps to better understand the services available to students and families in the six community schools. The legend on the top right corner is interactive, allowing the user to filter by desired resource groups. Each colored marker provides a pop-up with the Name of the services, detailed Description, Language, Address, and Website link.  "), align = "justify"),
-                                                             h4(("Travel Distance")),
-                                                             p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances.  "), align = "justify"),
-                                                             h4(strong("Family Engagement Resources")), 
-                                                             p((""), align = "justify"),
-                                                             
-                                                      )
-                                                      
+                                               ),
+                                               column(6, 
+                                                      h4(strong("Overview"), align = "left"), 
+                                                      p(("We present interactive maps to better understand the services available to students and families in the six community schools. The legend on the top right corner is interactive, allowing the user to filter by desired resource groups. Each colored marker provides a pop-up with the Name of the services, detailed Description, Language, Address, and Website link.  "), align = "justify"),
+                                                      h4(("Travel Distance")),
+                                                      p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances.  "), align = "justify"),
+                                                      h4(strong("Family Engagement Resources")), 
+                                                      p((""), align = "justify"),
                                                       
                                                )
                                                
-                                     ),
-                                                    
                                                
-                          
+                                     )
+                                     
+                            ),
+                            
+                            
+                            
                             tabPanel("Youth Development",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
@@ -1835,11 +1838,18 @@ ui <- navbarPage(title = "DSPG",
                                                       h4(("Travel Distance")),
                                                       p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances.  "), align = "justify"),
                                                       h4(strong("Youth Development Resources")), 
+<<<<<<< HEAD
                                                       p(("Students from low-income communities tend to have limited access to activities outside of school which can widen the achievement gap. Services or programs where students can develop social, emotional, physical, and academic skills can improve a student’s performance and behavior. These include athletic events, academic and non-academic clubs, as well as after school programs and family resources. While going through the available resources within Sterling, we chose resources that are given through the Loudoun County school system, and free or reduced cost resources that are available nearby. When you look at the map, there are nine plots (youth development opportunities) that fall within our Sterling defined area. Most of those resources are after school related. CASA is a licensed after-school program that provides students with activities and a fun environment while their parents are working. CASA is located in two schools, while serving others. The YMCA is located in the 4 other schools. They offer activities and support in homework, sports, fitness, and so much more.  "), align = "justify"),
                                                       p(("A resource that is available within our Sterling defined area is the Sterling Library. The library is a great resource for the students and families. They provide clubs, conversation groups, book clubs, art classes, and more. The Inova Healthy Plate Club is a club that is also located within our Sterling defined area. They provide cooking classes for healthy eating throughout the week. For the athletic and sport lovers, the Sterling Soccer is another resource available within our Sterling defined area. Sterling Soccer provides opportunities to play at a variety of competitive levels, while providing a safe and healthy soccer environment for the youth. "),align = "justify"),
                                      )),
                             
                  )
+=======
+                                                      p((""), align = "justify"),
+                                               )),
+                                     
+                            )
+>>>>>>> 2d09eb2680d474a7ddf9c1b786a0d323fae4fbea
                  ),
                  
                  tabPanel("Opportunities",
@@ -1913,7 +1923,7 @@ server <- function(input, output, session) {
     else{
       map_youth
     }
-   
+    
     
   })
   
@@ -1924,7 +1934,7 @@ server <- function(input, output, session) {
     else{
       map_mental
     }
-   
+    
   })
   
   output$map_family <- renderLeaflet({
@@ -2052,15 +2062,15 @@ server <- function(input, output, session) {
   
   output$cgender <- renderPlotly({
     
-      genders 
+    genders 
     
-
+    
   })
   
   
   output$racenine <- renderPlotly({
     
-   racenine 
+    racenine 
     
     
   })
@@ -2098,9 +2108,9 @@ server <- function(input, output, session) {
   
   
   output$hispanicschool <- renderLeaflet({
-
-      
-      hispanicschool
+    
+    
+    hispanicschool
     
     
     
@@ -2490,13 +2500,11 @@ server <- function(input, output, session) {
     
   })
   
-
+  
   
   
   
 }
 shinyApp(ui = ui, server = server)
-
-
 
 
