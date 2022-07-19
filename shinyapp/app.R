@@ -508,9 +508,8 @@ popups <- lapply(
 )
 
 healthfree <- read_excel(paste0(getwd(), "/data/resourcecost.xlsx"),sheet = "Health Free")
-youthfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth Free")
 
-famfree <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family Free")
+
 
 pal <- colorFactor(c("#91003f", "#005824", "#d7301f","#CC6677","#DDCC77","#88419d"), domain = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"))
 pal1 <- colorFactor(c("#91003f","#005824","#d7301f","#88419d","#DDCC77","#CC6677","#AA4499","#882255"),domain = c("Food Pantry","Clothing","Counseling","Dental Care","Vision Care","Medical Services","Speech and Hearing Services","Physical Therapy"))
@@ -593,6 +592,41 @@ leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
                    stroke = F, fillOpacity = 1,group = ~Type)%>%
   addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
+
+
+youthfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth Free")
+
+popups4 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(youthfree$Name4),
+        "<br />",
+        "<strong>Description:</strong>",
+        youthfree$Description4 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        youthfree$Hours4, 
+        "<br />",
+        "<strong>Address:</strong>",
+        youthfree$Address4,
+        "<a href = ",youthfree$Website4, "> Website </a>",
+        "<br />"),
+  htmltools::HTML
+)
+
+pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
+
+leaflet(data = youthfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=youthfree,~Longitude4,~Latitude4,popup=~popups4,label=~as.character(Name4),color= ~pal3(Type),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1,group = ~Type)%>%
+  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> youth_free
 
 
 #---------mental health resources map------------------------
@@ -694,7 +728,7 @@ popups <- lapply(
   htmltools::HTML
 )
 
-pal <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Housing", "Holiday Help", "Education", "Essentials supply", "Employment help", "Other"))
+pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Housing", "Holiday Help", "Education", "Essentials supply", "Employment help", "Other"))
 
 leaflet(data = familyengage) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(data = va20_2,
@@ -704,10 +738,49 @@ leaflet(data = familyengage) %>% addProviderTiles(providers$CartoDB.Positron) %>
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=familyengage,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal(Resources),weight = 7, radius=7, 
+  addCircleMarkers(data=familyengage,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal8(Resources),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
   addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_family
+
+famfree <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family Free")
+
+popups9 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(famfree$Name8),
+        "<br />",
+        "<strong>Description:</strong>",
+        famfree$Description8 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        famfree$Hours8, 
+        "<br />",
+        "<strong>Address:</strong>",
+        famfree$Address8,
+        "<br />",
+        "<a href = ",famfree$Website8, "> Website </a>",
+        "<br />",
+        "<strong>Serves:</strong>",
+        famfree$Serves8),
+  
+  
+  htmltools::HTML
+)
+
+pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Housing", "Holiday Help", "Education", "Essentials supply", "Employment help", "Other"))
+
+leaflet(data = famfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=famfree,~Longitude8,~Latitude8,popup=~popups9,label=~as.character(Name8),group=~Resource8,color=~pal8(Resource8),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resource8,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> fam_free
 
 
 
@@ -753,7 +826,7 @@ clean1 <- Clean_String(text1)
 
 docs1 <- Corpus(VectorSource(clean1))
 
-docs1 <- tm_map(docs1, removeWords, c("to", "challenge", "concern", "level", "aged", "created", "elementary", "basic", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "continue"))
+docs1 <- tm_map(docs1, removeWords, c("to", "challenge", "concern", "level", "aged", "created", "elementary", "basic", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "continue", "provide"))
 
 
 dtm1 <- TermDocumentMatrix(docs1) 
@@ -784,7 +857,7 @@ clean2 <- Clean_String(text2)
 
 docs2 <- Corpus(VectorSource(clean2))
 
-docs2 <- tm_map(docs2, removeWords, c("day", "now", "help", "pep", "people", "arose", "to", "risen", "offer", "offered", "warm", "spots", "their", "every", "they", "tell", "that", "who", "are", "all", "many", "gaggle", "here", "always", "among", "mtss", "umht", "how", "feel", "adept", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "hot"))
+docs2 <- tm_map(docs2, removeWords, c("day", "now", "help", "pep", "people", "arose", "to", "risen", "offer", "offered", "warm", "spots", "their", "every", "they", "tell", "that", "who", "are", "all", "many", "here", "always", "among", "mtss", "umht", "how", "feel", "adept", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "hot","wanted", "tiered", "using", "staying", "excellent", "worked", "actively", "throughout"))
 
 
 dtm2 <- TermDocumentMatrix(docs2) 
@@ -808,7 +881,7 @@ clean3 <- Clean_String(text3)
 
 docs3 <- Corpus(VectorSource(clean3))
 
-docs3 <- tm_map(docs3, removeWords, c("will", "covid", "areas", "listed", "input", "to", "per", "pre", "utilize", "most", "also", "more", "many", "ways", "local", "pep", "times", "ridge", "year", "needy", "people", "after", "person", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "umht", "hot", "to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "their", "from", "always"))
+docs3 <- tm_map(docs3, removeWords, c("better","rolling","return", "above", "will", "covid", "areas", "listed", "input", "to", "per", "pre", "utilize", "most", "also", "more", "many", "ways", "local", "pep", "times", "ridge", "year", "needy", "people", "after", "person", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "umht", "hot", "to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "their", "from", "always"))
 
 
 dtm3 <- TermDocumentMatrix(docs3) 
@@ -1051,7 +1124,7 @@ ui <- navbarPage(title = "DSPG",
                                                           
                                                    ),
                                           ),
-                                   ), 
+                                   ),  
                                    
                                    column(4,
                                           h2(strong("Project Goals")), align = "justify",
@@ -1066,7 +1139,7 @@ ui <- navbarPage(title = "DSPG",
                  ),
                  
                  ## Sterling Area--------------------------------------------
-                 tabPanel("Community School", value = "overview",
+                 tabPanel("Community Schools", value = "overview",
                           fluidRow(style = "margin: 2px;",
                                    p("", style = "padding-top:10px;"),
                                    column(12, align = "center", h1(strong("Sterling’s Elementary Community Schools"))),
@@ -1106,7 +1179,7 @@ ui <- navbarPage(title = "DSPG",
                           fluidRow(style = "margin: 12px;",
                                    column(8, h3(strong("When did schools join the Community Schools Initiative?"))),
                                    column(12, align ="center", 
-                                          img(src='sterlingmascot.png', width = 700, height = 200)
+                                          img(src='sterlingmascot.png', width = "50%", height = "20%")
                                           
                                           
                                    ), 
@@ -1333,6 +1406,7 @@ ui <- navbarPage(title = "DSPG",
                                             
                                      )
                             ),
+                            
                             #------------Climate Survey UI-----------------
                             tabPanel("Climate Survey Reports",
                                      fluidRow(style = "margin: 6px;",
@@ -1580,26 +1654,34 @@ ui <- navbarPage(title = "DSPG",
                                      
                             ),
                             
-                            tabPanel("School Reports",
+                            tabPanel("School Representative",
                                      fluidPage(style = "margin: 2px;",
-                                               p(h4(strong("Representatives' Responses")), style = "padding-top:5px;"),
-                                               
-                                               radioButtons(
-                                                 "category",
-                                                 label = "Select:",
-                                                 choices = c("Challenges and Weaknesses", "Strengths and Successes", "Future Goals"),
+                                               column(12, align = "center",
+                                                      p(h1(strong("Elementary Community School Representatives ")), style = "padding-top:5px;"),
                                                ),
+                                               fluidRow(
+                                                 column(5,),
+                                                 column(7, align = "justify",
+                                                        radioButtons(
+                                                          "category",
+                                                          
+                                                          label = "Select:",
+                                                          choices = c("Challenges and Weaknesses", "Strengths and Successes", "Future Goals"),
+                                                        ))),
                                                
-                                               column(8, align = "left",
+                                               column(5, align = "left",
                                                       wordcloud2Output("wordcloud")
                                                ),
                                                
-                                               column(4, align = "justify",
-                                                      p("The word cloud 'Weaknesses and Challenges' is considering all the responses of all the schools to two questions 'What are your school's biggest challenges?' and 'What are your school's biggest weaknesses?'. The more number of times each word has appeared, the bigger it is on the cloud. If one hovers over a word, it will show the number of times that word came up in the School Representative's response while answering the questions. As evident from the word cloud, the biggest challenges exist in the areas of mental health and ensuring care for the undocumented and uninsured, especially in Forest Grove and Sterling. Parent involvement is a major concern in Sugarland. "),
-                                                      p("The next word cloud are responses to the questions regarding their successes and strengths. While we read through the responses, we found out that, the schools are in general doing well in the Family Engagement pillar, except Sugarland. There is a strong sense of community and teamwork. These schools have a rich human capital, in the sense that the teachers and staff are valued. If there is a negative word, for example, 'gaggle' - it means there has been a decrease in that area in one or many schools, depending on the size of the word: so in this case, one school, Sugarland saw a reduction of gaggle reports. ('Gaggle is a student surveillance application, in which student work and behavior are scrutinized for indicators of violence or a mental health crisis, and profanity and sexuality are policed.'"),
-                                                      p("The Future Goals mostly focus on creating more oppotunities and focusing on development as the schools continue working with the students and their families through the various programs as illustrated the wordcloud.")
+                                               column(7, align = "justify",
+                                                      p("Loudoun County Public Schools surveyed each school representative in 2020-2021 to obtain information on the state of the Elementary Community Schools. Questions ranged from strengths, weaknesses, and utilization of different programs. We present word clouds to highlight representatives’ major responses.  The bigger the word appears, the more often it is mentioned in the representative’s response. Hovering over the word will show the number of times the school representatives used the term in their response. "),
+                                                      h4(strong("Challenges and Weaknesses Faced")),
+                                                      p("Challenges and Weaknesses consist of responses to two questions: 'What are your school's biggest challenges?' and 'What are your school's biggest weaknesses?'. The word cloud suggests that the biggest challenges for Elementary Community Schools in Sterling are mental health and ensuring care for the undocumented and uninsured, especially for Forest Grove and Sterling. Parent involvement is also a significant concern for representatives in Sugarland."),
+                                                      h4(strong("Strengths and Successes")), 
+                                                      p("Responses suggest that schools generally do well in the Family Engagement pillar, except for Sugarland. There is also a strong sense of community and teamwork. Teachers and staff at these schools also feel valued. If there is a negative word, for example, 'gaggle' - it means there has been a decrease in that area in one or many schools, depending on the size of the word: so in this case, one school, Sugarland saw a reduction of gaggle reports. ('Gaggle is a student surveillance application, in which student work and behavior are scrutinized for indicators of violence or a mental health crisis, and profanity and sexuality are policed.')"),
+                                                      h4(strong("Future Goals")),
+                                                      p("Future Goals primarily focus on creating more opportunities to engage and offer to students and parents. Representatives would like to focus on program development as the schools continue working with the students and their families. Another major goal for all schools is the partnership creation and development with community members to help expand programs. This is evident by numerous terms such as agencies, stakeholder, partners, partnerships, involvement, community, meaningful services addition, and assistance.")
                                                )
-                                               
                                      ))
                             
                             #tabPanel(h4("Weaknesses and biggest challenges")),
@@ -1631,35 +1713,13 @@ ui <- navbarPage(title = "DSPG",
                                                       #    p(tags$small(em('Last updated: August 2021'))))
                                                ), 
                                                column(6, 
-                                                      h3(strong("Overview"), align = "left"), 
-                                                      p(("To understand the services available to those located in Sterling, we used data from our
-                                                        stakeholders as well as publicly available data to provide a general idea of the resources
-                                                        available within the Sterling area for the four pillars of Community Schools. On each map,
-                                                        the legend in the top right corner is interactive allowing the user to select and deselect
-                                                        desired resource groups and each colored marker provides a pop-up with information on that 
-                                                        resource.   "), align = "left"),
-                                                      h3(strong("Services")), 
-                                                      p("A key pillar essential to ensuring that a community will thrive is access to 
-                                                        quality health and social services which include nutritious food, weather-appropriate
-                                                        clothing, and medical care including dental care, vision care, comprehensive primary 
-                                                        care, and preventative care. For many, barriers to these services are often a result 
-                                                        of expense and transportation making it vital to provide access to these resources for
-                                                        all members of a community."),
-                                                      p("Due to Sterling’s unique location within Loudoun County and its proximity to Washington, 
-                                                        D.C., Sterling residents have access to many options when it comes to health and social 
-                                                        services. However, this is not true for all Sterling residents. For those in need of free 
-                                                        or reduced cost services, the number and accessibility decrease with many services falling 
-                                                        outside of a ten-minute drive."),
-                                                      p("In terms of free services, there is a wide variety of food pantries available within a 
-                                                        ten-minute drive of Sterling Elementary. However, beyond that, access to medical care and 
-                                                        clothing is not as readily available with many resources falling within the 20- and 45-minute
-                                                        boundaries. "),
-                                                      h3(strong("Travel Distance")),
-                                                      p("We included the driving distances from the center location of Sterling Elementary School as 
-                                                        it sits in the middle of the Sterling, CDP. Shown on the map are the driving distances for 10 
-                                                        minutes, 20 minutes, and 45 minutes shaded in green, blue, and red, respectively. Within each 
-                                                        boundary are markers representing different services available within those driving distances.")
-                                                      
+                                                      h4(strong("Overview"), align = "justify"), 
+                                                      p(("We present interactive maps to better understand the services available to students and families in the six community schools. The legend on the top right corner is interactive, allowing the user to filter by desired resource groups. Each colored marker provides a pop-up with the Name of the services, detailed Description, Language, Address, and Website link.   "), align = "justify"),
+                                                      h4("Travel Distance"),
+                                                      p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances."),align = "justify"),
+                                                      h4(strong("Health and Social Services Availability")), 
+                                                      p(("A key pillar essential to ensuring students thrive in school is access to quality health and social services. It is difficult for students to focus on academic needs if their non-academic needs are not met. Thus, providing nutritious food, weather-appropriate clothing, and medical care such as dental, vision, and preventative care can improve a student's performance. For many, barriers to these services are often a result of expense, transportation, and time availability, making it vital to provide access to these resources for all members of a community. "),align = "justify"),
+                                                      p(("Due to Sterling's unique location within Loudoun County and its proximity to Washington, D.C., Sterling residents have access to numerous health and social services. However, the map shows this is not true for all Sterling residents. The number and accessibility of services decrease for residents that require free or reduced-cost services, with many options falling outside of a ten-minute drive. For instance, a wide variety of free food pantries are available within a ten-minute drive of Sterling Elementary. However, beyond that, access to medical care and clothing is not as readily open, with many resources falling within the 20- and 45-minute boundaries. "),align = "justify"),
                                                       
                                                )
                                      )),
@@ -1669,7 +1729,7 @@ ui <- navbarPage(title = "DSPG",
                             tabPanel("Mental Health", 
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
-                                              column(12, align = "center",h1(strong("Mental Health")),
+                                              column(12, align = "center",h1(strong("Mental Health Services")),
                                                      p(""),
                                                      
                                                      
@@ -1698,27 +1758,12 @@ ui <- navbarPage(title = "DSPG",
                                                ), 
                                                
                                                column(6, 
-                                                      h3(strong("Overview"), align = "left"), 
-                                                      p(("To understand the services available to those located in Sterling, we used data from our
-                                                        stakeholders as well as publicly available data to provide a general idea of the resources
-                                                        available within the Sterling area for the four pillars of Community Schools. On each map,
-                                                        the legend in the top right corner is interactive allowing the user to select and deselect
-                                                        desired resource groups and each colored marker provides a pop-up with information on that 
-                                                        resource.   "), align = "left"),
-                                                      h3(strong("Services")), 
-                                                      p("Mental health is equally important as physical health. For a community to flourish it is important that mental health resources be provided and be easily accessible. The mental health resources have been divided into four categories Anger Management, Bereavement, Family Counseling, and Family Therapy. The resources have been mapped within a 45 minutes driving time from Sterling. Anger Management services are not abundant in the sterling surroundings with only 3 available in a 45-minute radius. Bereavement services are the least abundant with only two available around the Sterling area. The most abundant resource is Family therapy, they offer family counseling, relationship counseling, and children counseling. Mental health resources decrease in number and accessibility after the ten minute radius. "),
-                                                      p("Due to Sterling’s unique location within Loudoun County and its proximity to Washington, 
-                                                        D.C., Sterling residents have access to many options when it comes to health and social 
-                                                        services. However, this is not true for all Sterling residents. For those in need of free 
-                                                        or reduced cost services, the number and accessibility decrease with many services falling 
-                                                        outside of a ten-minute drive."),
-                                                      
-                                                      h3(strong("Travel Distance")),
-                                                      p("We included the driving distances from the center location of Sterling Elementary School as 
-                                                        it sits in the middle of the Sterling, CDP. Shown on the map are the driving distances for 10 
-                                                        minutes, 20 minutes, and 45 minutes shaded in green, blue, and red, respectively. Within each 
-                                                        boundary are markers representing different services available within those driving distances.")
-                                                      
+                                                      h4(strong("Overview"), align = "left"), 
+                                                      p(("We present interactive maps to better understand the services available to students and families in the six community schools. The legend on the top right corner is interactive, allowing the user to filter by desired resource groups. Each colored marker provides a pop-up with the Name of the services, detailed Description, Language, Address, and Website link.  "), align = "justify"),
+                                                      h4(("Travel Distance")),
+                                                      p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances.  "), align = "justify"),
+                                                      h4(strong("Mental Health Availability")), 
+                                                      p(("Mental health is equally important as physical health. For a community to flourish it is important that mental health resources be provided and be easily accessible. The mental health resources have been divided into four categories Anger Management, Bereavement, Family Counseling, and Family Therapy. The resources have been mapped within a 45 minutes driving time from Sterling. Anger Management services are not abundant in the sterling surroundings with only 3 available in a 45-minute radius. Bereavement services are the least abundant with only two available around the Sterling area. The most abundant resource is Family therapy, they offer family counseling, relationship counseling, and children counseling. Mental health resources decrease in number and accessibility after the ten minute radius. "), align = "justify"),
                                                       
                                                )
                                                
@@ -1729,7 +1774,7 @@ ui <- navbarPage(title = "DSPG",
                             tabPanel("Family Engagement",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
-                                              column(12, align = "center",h4(strong("Family Engagement")),
+                                              column(12, align = "center",h1(strong("Family Engagement Resources")),
                                                      p(""),
                                                      br("")
                                                      
@@ -1738,21 +1783,37 @@ ui <- navbarPage(title = "DSPG",
                                               )),
                                      
                                      fluidPage(style = "margin: 2px;", 
-                                               column(12, 
-                                                      leafletOutput("map_family", width = "100%")
-                                                      #fluidRow(align = "center",
-                                                      #    p(tags$small(em('Last updated: August 2021'))))
+                                               radioButtons(
+                                                 inputId = "family_category",
+                                                 label = "Select:",
+                                                 choices = c("All Services", "Free Services"),
+                                               ),
+                                               column(6, 
+                                                      leafletOutput("map_family", width = "100%",height =600)
+                                               ),
+                                               column(6, 
+                                                      h4(strong("Overview"), align = "left"), 
+                                                      p(("We present interactive maps to better understand the services available to students and families in the six community schools. The legend on the top right corner is interactive, allowing the user to filter by desired resource groups. Each colored marker provides a pop-up with the Name of the services, detailed Description, Language, Address, and Website link.  "), align = "justify"),
+                                                      h4(("Travel Distance")),
+                                                      p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances.  "), align = "justify"),
+                                                      h4(strong("Family Engagement Resources")), 
+                                                      p((""), align = "justify"),
+                                                      
                                                )
+                                               
+                                               
                                      )
                                      
-                                     
                             ),
-                            tabPanel("Youth Development Opportunities",
+                            
+                            
+                            
+                            tabPanel("Youth Development",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
-                                              column(12, align = "center",h4(strong("Youth Development Opportunities")),
+                                              column(12, align = "center",h1(strong("Youth Development Opportunities")),
                                                      p(""),
-                                                     br("")
+                                                     
                                                      
                                                      
                                                      
@@ -1763,13 +1824,24 @@ ui <- navbarPage(title = "DSPG",
                                      
                                      
                                      fluidPage(style = "margin: 2px;", 
-                                               column(12, 
-                                                      leafletOutput("map_youth", width = "100%")
-                                                      #fluidRow(align = "center",
-                                                      #    p(tags$small(em('Last updated: August 2021'))))
-                                               )
-                                     )),
-                            
+                                               radioButtons(
+                                                 inputId = "youth_category",
+                                                 label = "Select:",
+                                                 choices = c("All Services", "Free Services"),
+                                               ),
+                                               column(6, 
+                                                      leafletOutput("map_youth", width = "100%", height = 600)
+                                               ),
+                                               column(6, 
+                                                      h4(strong("Overview"), align = "left"), 
+                                                      p(("We present interactive maps to better understand the services available to students and families in the six community schools. The legend on the top right corner is interactive, allowing the user to filter by desired resource groups. Each colored marker provides a pop-up with the Name of the services, detailed Description, Language, Address, and Website link.  "), align = "justify"),
+                                                      h4(("Travel Distance")),
+                                                      p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances.  "), align = "justify"),
+                                                      h4(strong("Youth Development Resources")), 
+                                                      p((""), align = "justify"),
+                                               )),
+                                     
+                            )
                  ),
                  
                  tabPanel("Opportunities",
@@ -1837,7 +1909,13 @@ server <- function(input, output, session) {
   })
   
   output$map_youth <- renderLeaflet({
-    map_youth
+    if(input$youth_category == "Free Services"){
+      youth_free
+    }
+    else{
+      map_youth
+    }
+    
     
   })
   
@@ -1852,7 +1930,12 @@ server <- function(input, output, session) {
   })
   
   output$map_family <- renderLeaflet({
-    map_family
+    if(input$family_category == "Free Services"){
+      fam_free
+    }
+    else{
+      map_family
+    }
   })
   
   output$cloud2 <- renderWordcloud2(
