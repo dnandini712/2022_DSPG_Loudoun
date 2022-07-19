@@ -443,7 +443,7 @@ chronic <- data.frame(sex=rep(c("Missed less than 10%"), each=6),
                       Percent=c(11.1, 10.1, 6.7, 5.8, 9.7,7.9))
 
 chronic<- ggplot(data=chronic, aes(x=School, y=Percent, fill=School,  width=0.8)) +
-  geom_bar(stat="identity",hoverinfo = "text", aes(text = paste("School :",School,"\n", "Percent :", Percent, "%")))  + labs(y="", x="", fill="")+ggtitle("Chronic Absenteeism by Schools") 
+  geom_bar(stat="identity",hoverinfo = "text", aes(text = paste("School :",School,"\n", "Percent :", Percent, "%")))  + labs(y="", x="", fill="")+ggtitle("Chronic Absenteeism by Schools for 2018-2019") 
 
 chronic<-ggplotly(chronic, tooltip = c("text"))
 
@@ -1104,7 +1104,7 @@ ui <- navbarPage(title = "DSPG",
                           fluidRow(style = "margin: 12px;",
                                    column(8, h3(strong("When did schools join the Community Schools Initiative?"))),
                                    column(12, align ="center", 
-                                          img(src='sterlingmascot.png', width = "50%", height = 250)
+                                          img(src='sterlingmascot.png', width = 700, height = 200)
                                           
                                           
                                    ), 
@@ -1143,11 +1143,7 @@ ui <- navbarPage(title = "DSPG",
                                                                      column(12, align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
                                                                             withSpinner(plotlyOutput("demoHispanicPIE", height = "500px", width = "100%")),
-                                                                            column(12, align = "right",
-                                                                                   p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
-                                                                                   
-                                                                                   
-                                                                            ),)
+                                                                            )
                                                               ),
                                                      )),
                                             
