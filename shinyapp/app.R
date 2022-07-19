@@ -753,7 +753,7 @@ clean1 <- Clean_String(text1)
 
 docs1 <- Corpus(VectorSource(clean1))
 
-docs1 <- tm_map(docs1, removeWords, c("to", "challenge", "concern", "level", "aged", "created", "elementary", "basic", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "continue"))
+docs1 <- tm_map(docs1, removeWords, c("to", "challenge", "concern", "level", "aged", "created", "elementary", "basic", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "continue", "provide"))
 
 
 dtm1 <- TermDocumentMatrix(docs1) 
@@ -784,7 +784,7 @@ clean2 <- Clean_String(text2)
 
 docs2 <- Corpus(VectorSource(clean2))
 
-docs2 <- tm_map(docs2, removeWords, c("day", "now", "help", "pep", "people", "arose", "to", "risen", "offer", "offered", "warm", "spots", "their", "every", "they", "tell", "that", "who", "are", "all", "many", "gaggle", "here", "always", "among", "mtss", "umht", "how", "feel", "adept", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "hot"))
+docs2 <- tm_map(docs2, removeWords, c("day", "now", "help", "pep", "people", "arose", "to", "risen", "offer", "offered", "warm", "spots", "their", "every", "they", "tell", "that", "who", "are", "all", "many", "here", "always", "among", "mtss", "umht", "how", "feel", "adept", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "hot","wanted", "tiered", "using", "staying", "excellent", "worked", "actively", "throughout"))
 
 
 dtm2 <- TermDocumentMatrix(docs2) 
@@ -808,7 +808,7 @@ clean3 <- Clean_String(text3)
 
 docs3 <- Corpus(VectorSource(clean3))
 
-docs3 <- tm_map(docs3, removeWords, c("will", "covid", "areas", "listed", "input", "to", "per", "pre", "utilize", "most", "also", "more", "many", "ways", "local", "pep", "times", "ridge", "year", "needy", "people", "after", "person", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "umht", "hot", "to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "their", "from", "always"))
+docs3 <- tm_map(docs3, removeWords, c("better","rolling","return", "above", "will", "covid", "areas", "listed", "input", "to", "per", "pre", "utilize", "most", "also", "more", "many", "ways", "local", "pep", "times", "ridge", "year", "needy", "people", "after", "person", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "umht", "hot", "to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "their", "from", "always"))
 
 
 dtm3 <- TermDocumentMatrix(docs3) 
@@ -1064,7 +1064,7 @@ ui <- navbarPage(title = "DSPG",
                  ),
                  
                  ## Sterling Area--------------------------------------------
-                 tabPanel("Community School", value = "overview",
+                 tabPanel("Community Schools", value = "overview",
                           fluidRow(style = "margin: 2px;",
                                    p("", style = "padding-top:10px;"),
                                    column(12, align = "center", h1(strong("Sterling’s Elementary Community Schools"))),
@@ -1104,7 +1104,7 @@ ui <- navbarPage(title = "DSPG",
                           fluidRow(style = "margin: 12px;",
                                    column(8, h3(strong("When did schools join the Community Schools Initiative?"))),
                                    column(12, align ="center", 
-                                          img(src='sterlingmascot.png', width = 700, height = 200)
+                                          img(src='sterlingmascot.png', width = "50%", height = "20%")
                                           
                                           
                                    ), 
@@ -1578,26 +1578,34 @@ ui <- navbarPage(title = "DSPG",
                                      
                             ),
                             
-                            tabPanel("School Reports",
+                            tabPanel("School Representative",
                                      fluidPage(style = "margin: 2px;",
-                                               p(h4(strong("Representatives' Responses")), style = "padding-top:5px;"),
-                                               
-                                               radioButtons(
+                                               column(12, align = "center",
+                                                      p(h1(strong("Elementary Community School Representatives ")), style = "padding-top:5px;"),
+                                               ),
+                                               fluidRow(
+                                               column(5,),
+                                               column(7, align = "justify",
+                                                      radioButtons(
                                                  "category",
+                                                 
                                                  label = "Select:",
                                                  choices = c("Challenges and Weaknesses", "Strengths and Successes", "Future Goals"),
-                                               ),
+                                               ))),
                                                
-                                               column(8, align = "left",
+                                               column(5, align = "left",
                                                       wordcloud2Output("wordcloud")
                                                ),
                                                
-                                               column(4, align = "justify",
-                                                      p("The word cloud 'Weaknesses and Challenges' is considering all the responses of all the schools to two questions 'What are your school's biggest challenges?' and 'What are your school's biggest weaknesses?'. The more number of times each word has appeared, the bigger it is on the cloud. If one hovers over a word, it will show the number of times that word came up in the School Representative's response while answering the questions. As evident from the word cloud, the biggest challenges exist in the areas of mental health and ensuring care for the undocumented and uninsured, especially in Forest Grove and Sterling. Parent involvement is a major concern in Sugarland. "),
-                                                      p("The next word cloud are responses to the questions regarding their successes and strengths. While we read through the responses, we found out that, the schools are in general doing well in the Family Engagement pillar, except Sugarland. There is a strong sense of community and teamwork. These schools have a rich human capital, in the sense that the teachers and staff are valued. If there is a negative word, for example, 'gaggle' - it means there has been a decrease in that area in one or many schools, depending on the size of the word: so in this case, one school, Sugarland saw a reduction of gaggle reports. ('Gaggle is a student surveillance application, in which student work and behavior are scrutinized for indicators of violence or a mental health crisis, and profanity and sexuality are policed.'"),
-                                                      p("The Future Goals mostly focus on creating more oppotunities and focusing on development as the schools continue working with the students and their families through the various programs as illustrated the wordcloud.")
-                                                      )
-                                               
+                                               column(7, align = "justify",
+                                                      p("Loudoun County Public Schools surveyed each school representative in 2020-2021 to obtain information on the state of the Elementary Community Schools. Questions ranged from strengths, weaknesses, and utilization of different programs. We present word clouds to highlight representatives’ major responses.  The bigger the word appears, the more often it is mentioned in the representative’s response. Hovering over the word will show the number of times the school representatives used the term in their response. "),
+                                                      h4(strong("Challenges and Weaknesses Faced")),
+                                                      p("Challenges and Weaknesses consist of responses to two questions: 'What are your school's biggest challenges?' and 'What are your school's biggest weaknesses?'. The word cloud suggests that the biggest challenges for Elementary Community Schools in Sterling are mental health and ensuring care for the undocumented and uninsured, especially for Forest Grove and Sterling. Parent involvement is also a significant concern for representatives in Sugarland."),
+                                                      h4(strong("Strengths and Successes")), 
+                                                      p("Responses suggest that schools generally do well in the Family Engagement pillar, except for Sugarland. There is also a strong sense of community and teamwork. Teachers and staff at these schools also feel valued. If there is a negative word, for example, 'gaggle' - it means there has been a decrease in that area in one or many schools, depending on the size of the word: so in this case, one school, Sugarland saw a reduction of gaggle reports. ('Gaggle is a student surveillance application, in which student work and behavior are scrutinized for indicators of violence or a mental health crisis, and profanity and sexuality are policed.')"),
+                                                      h4(strong("Future Goals")),
+                                                      p("Future Goals primarily focus on creating more opportunities to engage and offer to students and parents. Representatives would like to focus on program development as the schools continue working with the students and their families. Another major goal for all schools is the partnership creation and development with community members to help expand programs. This is evident by numerous terms such as agencies, stakeholder, partners, partnerships, involvement, community, meaningful services addition, and assistance.")
+                                               )
                                                ))
                             
                             #tabPanel(h4("Weaknesses and biggest challenges")),
