@@ -1614,19 +1614,7 @@ ui <- navbarPage(title = "DSPG",
                                               p("", style = "padding-top:10px;"),
                                               column(12, align = "center",h1(strong("Health and Social Services")),
                                                      p(""),
-                                                     h3(strong("Overview"), align = "left"), 
-                                                     p(("To understand the services available to those located in Sterling, we used data from our
-                                                        stakeholders as well as publicly available data to provide a general idea of the resources
-                                                        available within the Sterling area for the four pillars of Community Schools. On each map,
-                                                        the legend in the top right corner is interactive allowing the user to select and deselect
-                                                        desired resource groups and each colored marker provides a pop-up with information on that 
-                                                        resource.   "), align = "left"),
-                                                     
-                                                     
-                                                     
-                                                     
-                                                     
-                                                     
+                                      
                                               )),
                                      
                                      fluidPage(style = "margin: 2px;", 
@@ -1641,6 +1629,13 @@ ui <- navbarPage(title = "DSPG",
                                                       #    p(tags$small(em('Last updated: August 2021'))))
                                                ), 
                                                column(6, 
+                                                      h3(strong("Overview"), align = "left"), 
+                                                      p(("To understand the services available to those located in Sterling, we used data from our
+                                                        stakeholders as well as publicly available data to provide a general idea of the resources
+                                                        available within the Sterling area for the four pillars of Community Schools. On each map,
+                                                        the legend in the top right corner is interactive allowing the user to select and deselect
+                                                        desired resource groups and each colored marker provides a pop-up with information on that 
+                                                        resource.   "), align = "left"),
                                                       h3(strong("Services")), 
                                                       p("A key pillar essential to ensuring that a community will thrive is access to 
                                                         quality health and social services which include nutritious food, weather-appropriate
@@ -1674,13 +1669,7 @@ ui <- navbarPage(title = "DSPG",
                                                               p("", style = "padding-top:10px;"),
                                                               column(12, align = "center",h1(strong("Mental Health")),
                                                                      p(""),
-                                                                     h3(strong("Overview"), align = "left"), 
-                                                                     p(("To understand the services available to those located in Sterling, we used data from our
-                                                        stakeholders as well as publicly available data to provide a general idea of the resources
-                                                        available within the Sterling area for the four pillars of Community Schools. On each map,
-                                                        the legend in the top right corner is interactive allowing the user to select and deselect
-                                                        desired resource groups and each colored marker provides a pop-up with information on that 
-                                                        resource.   "), align = "left"),
+                                                                    
                                                                      
                                                                      
                                                                      
@@ -1707,6 +1696,13 @@ ui <- navbarPage(title = "DSPG",
                                                ), 
                                                
                                                column(6, 
+                                                      h3(strong("Overview"), align = "left"), 
+                                                      p(("To understand the services available to those located in Sterling, we used data from our
+                                                        stakeholders as well as publicly available data to provide a general idea of the resources
+                                                        available within the Sterling area for the four pillars of Community Schools. On each map,
+                                                        the legend in the top right corner is interactive allowing the user to select and deselect
+                                                        desired resource groups and each colored marker provides a pop-up with information on that 
+                                                        resource.   "), align = "left"),
                                                       h3(strong("Services")), 
                                                       p("Mental health is equally important as physical health. For a community to flourish it is important that mental health resources be provided and be easily accessible. The mental health resources have been divided into four categories Anger Management, Bereavement, Family Counseling, and Family Therapy. The resources have been mapped within a 45 minutes driving time from Sterling. Anger Management services are not abundant in the sterling surroundings with only 3 available in a 45-minute radius. Bereavement services are the least abundant with only two available around the Sterling area. The most abundant resource is Family therapy, they offer family counseling, relationship counseling, and children counseling. Mental health resources decrease in number and accessibility after the ten minute radius. "),
                                                       p("Due to Sterling’s unique location within Loudoun County and its proximity to Washington, 
