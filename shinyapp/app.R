@@ -220,6 +220,31 @@ property <- figpv %>% layout(title = "Residential Property Value", showlegend = 
                              xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                              yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 
+#-------------Prop. Value Comparison---------------------
+
+propcomparison <- plot_ly(
+  domain = list(x = c(0, 1), y = c(0, 1)),
+  value = 378700,
+  title = list(text = "Median PV Compared to Virginia Median PV"),
+  type = "indicator",
+  mode = "gauge+number+delta",
+  delta = list(reference = 282800),
+  gauge = list(
+    axis =list(range = list(NULL, 500000)),
+    steps = list(
+      list(range = c(0, 200000), color = "lightgray"),
+      list(range = c(200000, 285000), color = "gray"),
+      list(range = c(285000, 400000), color = "yellow"),
+      list(range = c(400000, 500000), color = "red")),
+    threshold = list(
+      line = list(color = "red", width = 4),
+      thickness = 0.75,
+      value = 282800))) 
+propcomparison <- propcomparison %>%
+  layout(margin = list(l=20,r=30))
+
+propcomparison
+
 #------------Housing Occupancy---------------------------
 
 lbls.HOUSING = c("Owners", "Renters")
@@ -763,7 +788,7 @@ popups9 <- lapply(
   htmltools::HTML
 )
 
-pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Housing", "Holiday Help", "Education", "Essentials supply", "Employment help", "Other"))
+pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Education", "Employment help","Essentials Supply","Housing", "Holiday Help","Other"))
 
 leaflet(data = famfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(data = va20_2,
@@ -1070,6 +1095,19 @@ studentquestion5percentage <- studentquestion5percentage*100
 sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer5 <- ggplotly(sixteen, tooltip = c("text"))
 
+# manually scraped health and social services --------------------------------
+
+healthscrape <- read_excel(paste0(getwd(),"/data/manualscrappingdata.xlsx"))
+subset_healthscrape <- healthscrape[2:5,c(2,5)]
+Total <- subset_healthscrape$...5
+Year <- subset_healthscrape$...2
+plot_ly(data = subset_healthscrape, x = ~Year, y = ~Total, type = "scatter",mode="line",hoverinfo = "text",text = ~paste("Year:",Year,"Total:",Total)) %>% layout(yaxis = list(tickvals = list(100,200,300,400,500,600,700,800,900)),title = "Families Who Receieved Weekend Meals") -> weekendmeals
+
+subset_healthscrape2 <- healthscrape[c(2,4),c(2,4)]
+Year2 <- subset_healthscrape2$...2
+Total2 <- subset_healthscrape2$...4
+plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Families Who Receieved Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
+
 # user interface-------------------------------------------------------------
 ui <- navbarPage(title = "DSPG",
                  selected = "overview",
@@ -1217,6 +1255,7 @@ ui <- navbarPage(title = "DSPG",
                                                               ),
                                                      )),
                                             
+                                            
                                             tabPanel("Income",
                                                      fluidRow(style = "margin: 4px;",
                                                               p("", style = "padding-top:10px;"),
@@ -1225,11 +1264,16 @@ ui <- navbarPage(title = "DSPG",
                                                                        "Educational Attainment" = "edu",
                                                                        "Family Income" = "faminc",
                                                                        "Poverty Status" = "pov", 
-                                                                       "Health Coverage" = "health"
+                                                                       "Health Coverage" = "health",
+                                                                       "Property Value" = "property"
                                                                      ),
                                                                      ),     
                                                                      br(""),
                                                                      withSpinner(plotlyOutput("demo2", height = "500px", width ="100%")),
+                                                                     column(12, align = "right",
+                                                                            p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
+                                                                            withSpinner(plotlyOutput("PropComp", height = "500px", width = "100%")),
+                                                                     ),
                                                                      column(12,align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
                                                                             p("*Note: Data is zero for missing bars", style = "font-size:12px;"))
@@ -1275,6 +1319,8 @@ ui <- navbarPage(title = "DSPG",
                                           p("While the majority of Sterling’s population is employed (approximately 71%), there is a notable gap in the residents' health insurance. About 17% have no health insurance, which is higher than Loudoun county's 5.5%. This may point to possible opportunities provided by Community Schools as these families will be less routine screening and will delay treatment until the condition is more advanced and more costly and challenging to treat.", style = "padding-top:15px;font-size: 14px;"),
                                           
                                           p("The labor force of Sterling primarily works in management, business, science, and art, followed by the service sector. Over half of those who commute to work have a commute time less than 30 minutes, and 75% of said commuters drive alone. Notably, only 1.8% of commuters utilized public transportation.",style = "padding-top:15px;font-size: 14px;"),
+                                          
+                                          p("When you take a look at the median property value visualizations, it is clear that a large percentage of homes fall into the property value range of $300,000 to $499,999. The average property value of Sterling is $378,700 which is almost $96,000 higher than the state of Virginia's $282,800 median property value.",style = "padding-top:15px;font-size: 14px;"),
                                           
                                           
                                    )
@@ -1734,10 +1780,11 @@ ui <- navbarPage(title = "DSPG",
                                                       #    p(tags$small(em('Last updated: August 2021'))))
                                                ), 
                                                column(6, 
-                                                      h4(strong("Overview"), align = "justify"), 
+                                                      h3(strong("Overview"), align = "justify"), 
                                                       p(("We present interactive maps to better understand the services available to students and families in the six community schools. The legend on the top right corner is interactive, allowing the user to filter by desired resource groups. Each colored marker provides a pop-up with the Name of the services, detailed Description, Language, Address, and Website link.   "), align = "justify"),
                                                       h4("Travel Distance"),
                                                       p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances."),align = "justify"),
+                                                      br(""),
                                                       h4(strong("Health and Social Services Availability")), 
                                                       p(("A key pillar essential to ensuring students thrive in school is access to quality health and social services. It is difficult for students to focus on academic needs if their non-academic needs are not met. Thus, providing nutritious food, weather-appropriate clothing, and medical care such as dental, vision, and preventative care can improve a student's performance. For many, barriers to these services are often a result of expense, transportation, and time availability, making it vital to provide access to these resources for all members of a community. "),align = "justify"),
                                                       p(("Due to Sterling's unique location within Loudoun County and its proximity to Washington, D.C., Sterling residents have access to numerous health and social services. However, the map shows this is not true for all Sterling residents. The number and accessibility of services decrease for residents that require free or reduced-cost services, with many options falling outside of a ten-minute drive. For instance, a wide variety of free food pantries are available within a ten-minute drive of Sterling Elementary. However, beyond that, access to medical care and clothing is not as readily open, with many resources falling within the 20- and 45-minute boundaries. "),align = "justify"),
@@ -1779,10 +1826,11 @@ ui <- navbarPage(title = "DSPG",
                                                ), 
                                                
                                                column(6, 
-                                                      h4(strong("Overview"), align = "left"), 
+                                                      h3(strong("Overview"), align = "left"), 
                                                       p(("We present interactive maps to better understand the services available to students and families in the six community schools. The legend on the top right corner is interactive, allowing the user to filter by desired resource groups. Each colored marker provides a pop-up with the Name of the services, detailed Description, Language, Address, and Website link.  "), align = "justify"),
                                                       h4(("Travel Distance")),
                                                       p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances.  "), align = "justify"),
+                                                      br(""),
                                                       h4(strong("Mental Health Availability")), 
                                                       p(("MentalMental health services can improve behavior, attendance, performance, and one’s overall wellbeing. Mental health is important to perform well in school. It is equally important as physical health. If Mental health is not given attention it can lead to behavioral issues. A person cannot function well with poor mental health. Providing the correct mental health resource in a timely manner can improve a student’s performance drastically. Furthermore, mental health is not only important for a student but also for everyone living in an area. Parents also equally require mental health checkups so that they can take care of their children properly and make sure that their children are living in a healthy environment at home.  "), align = "justify"),
                                                       p("In order to understand the availability of mental health services in and around the Sterling area we used publicly available data to plot the resources on the map. We further divide Mental Health into four categories: Anger Management, Bereavement, Family Counseling, and Family Therapy. There are only two mental health services available in a 10-minute driving radius. There are only three available anger management services in a 45-minute radius of the Sterling area. However, there are numerous options of Family therapy including family counseling, relationship counseling, and children counseling. The residents of the Sterling area should take advantage of these resources provided around their area.  ", align = "justify")
@@ -1813,10 +1861,11 @@ ui <- navbarPage(title = "DSPG",
                                                       leafletOutput("map_family", width = "100%",height =600)
                                                ),
                                                column(6, 
-                                                      h4(strong("Overview"), align = "left"), 
+                                                      h3(strong("Overview"), align = "left"), 
                                                       p(("We present interactive maps to better understand the services available to students and families in the six community schools. The legend on the top right corner is interactive, allowing the user to filter by desired resource groups. Each colored marker provides a pop-up with the Name of the services, detailed Description, Language, Address, and Website link.  "), align = "justify"),
                                                       h4(("Travel Distance")),
                                                       p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances.  "), align = "justify"),
+                                                      br(""),
                                                       h4(strong("Family Engagement Resources")), 
                                                       p((""), align = "justify"),
                                                       p("Engaging family members such as parents, siblings, grandparents, and neighbors can help create a neighborhood with goals and strategies to ensure student success. These individuals can work together to help monitor students' progress and provide early intervention guidance if necessary. Informed and increase family engagement can improve attendance rates and academic achievement. Additionally, providing adults with educational opportunities can spur students' performance. ", align = "justify"),
@@ -1857,10 +1906,11 @@ ui <- navbarPage(title = "DSPG",
                                                       leafletOutput("map_youth", width = "100%", height = 600)
                                                ),
                                                column(6, 
-                                                      h4(strong("Overview"), align = "left"), 
+                                                      h3(strong("Overview"), align = "left"), 
                                                       p(("We present interactive maps to better understand the services available to students and families in the six community schools. The legend on the top right corner is interactive, allowing the user to filter by desired resource groups. Each colored marker provides a pop-up with the Name of the services, detailed Description, Language, Address, and Website link.  "), align = "justify"),
                                                       h4(("Travel Distance")),
                                                       p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances.  "), align = "justify"),
+                                                      br(""),
                                                       h4(strong("Youth Development Resources")), 
                                                       p(("Students from low-income communities tend to have limited access to activities outside of school which can widen the achievement gap. Services or programs where students can develop social, emotional, physical, and academic skills can improve a student’s performance and behavior. These include athletic events, academic and non-academic clubs, as well as after school programs and family resources. While going through the available resources within Sterling, we chose resources that are given through the Loudoun County school system, and free or reduced cost resources that are available nearby. When you look at the map, there are nine plots (youth development opportunities) that fall within our Sterling defined area.  "), align = "justify"),
                                                       p(("Most of those resources are after school related. CASA is a licensed after-school program that provides students with activities and a fun environment while their parents are working. CASA is in two schools, while serving others. The YMCA is in the 4 other schools. They offer activities and support in homework, sports, fitness, and so much more. A resource that is available within our Sterling defined area is the Sterling Library. The library is a great resource for the students and families. They provide clubs, conversation groups, book clubs, art classes, and more. The Inova Healthy Plate Club is a club that is also located within our Sterling defined area. They provide cooking classes for healthy eating throughout the week. For the athletic and sport lovers, the Sterling Soccer is another resource available within our Sterling defined area. Sterling Soccer provides opportunities to play at a variety of competitive levels, while providing a safe and healthy soccer environment for the youth. "),align = "justify"),
@@ -1868,7 +1918,7 @@ ui <- navbarPage(title = "DSPG",
                                      
                             )
                  ),
-                 
+
                  tabPanel("Opportunities",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
@@ -1879,8 +1929,14 @@ ui <- navbarPage(title = "DSPG",
                                           
                                           
                                    )),
-                          
-                 ),
+                          fluidPage(style = "margin: 2px;",
+                                    column(6,
+                                           plotlyOutput("weekendmeals", width = "100%",height = 600)
+                                           ),
+                                    column(6,
+                                           plotlyOutput("basicsupplies",width = "100%",height = 600)
+                                    )),
+         ),
                  
                  tabPanel("Analysis",
                           fluidRow(style = "margin: 6px;",
@@ -2045,6 +2101,15 @@ server <- function(input, output, session) {
     }
   })
   
+  
+  output$weekendmeals <- renderPlotly({
+    weekendmeals
+  })
+  
+  output$basicsupplies <- renderPlotly({
+    basicsupplies
+  })
+  
   output$cloud2 <- renderWordcloud2(
     cloud2
   )
@@ -2059,14 +2124,16 @@ server <- function(input, output, session) {
   })
   
   
-  Var3 <- reactive({
-    input$demos1drop
-  })
+
   
   output$demoHispanicPIE <- renderPlotly({
     if (Var3() == "race") {
       HispanicPercentagePIE
     }
+  })
+  
+  Var3 <- reactive({
+    input$demos1drop
   })
   
   output$demo1 <- renderPlotly({
@@ -2114,10 +2181,19 @@ server <- function(input, output, session) {
     else if (Var4() == "health") {
       
       healthin
-      
-      
     }
     
+    else if (Var4() == "property") {
+      
+      property
+    }
+    
+  })
+  
+  output$PropComp <- renderPlotly({
+    if (Var4() == "property") {
+      propcomparison
+    }
   })
   
   Var5 <- reactive({
