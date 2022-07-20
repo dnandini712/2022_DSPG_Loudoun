@@ -174,7 +174,10 @@ race <- plot_ly(type='pie', labels=labelsR, values=valuesR,
                 textinfo='label+percent',
                 hoverinfo = 'text', 
                 text = ~paste('Total:', valuesR),
-                insidetextorientation='radial') %>% layout(title ='Race/Ethnicity 2019 Composition', legend=list(title=list(text='Select Race')))
+              
+
+                insidetextorientation='radial') %>% layout(title ='Race/Ethnicity Composition 2019', legend=list(title=list(text='Select Race')))
+
 
 #------------Hispanic Percentage-------------
 
@@ -185,9 +188,11 @@ HispanicPercentagePIE <- plot_ly(type='pie', labels=labelsHispanicPIE, values=va
                                  textinfo='label+percent',
                                  insidetextorientation='radial',
                                  hoverinfo = 'text', 
-                                 text = ~paste('Total Population:', valuesHispanicPIE)) %>% layout(title ='Hispanic Population 2019', legend=list(title=list(text='')))
+                            
 
-HispanicPercentagePIE
+                                 text = ~paste('Total Population:', valuesHispanicPIE)) %>% layout(title ='Hispanic Population In Sterling 2019', legend=list(title=list(text='')))
+
+
 
 #-------income--------------------------------
 medianin <- read_excel(paste0(getwd(),"/data/incomemedian.xlsx"))
@@ -279,7 +284,7 @@ genders <- data.frame(Sex=rep(c("Male", "Female"), each=6),
 
 genders<- ggplot(data=genders, aes(x=School, y=Total, fill=Sex,  width=0.9)) +
   geom_bar(stat="identity", position="stack", hoverinfo = "text", aes(text = paste("Percentage :",Percentage,"%\n", "Total :", Total))) +
-  scale_fill_manual(values = c('#F56D4F', "#20AFCC")) + labs(y="Total Students", x="", fill="")+ggtitle("Gender by Schools for 2020-21") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  scale_fill_manual(values = c('#F56D4F', "#20AFCC")) + labs(y="Total Students", x="", fill="")+ggtitle("Gender by Schools for 2020-2021") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
 genders <-ggplotly(genders, tooltip = c("text"))
 #race by school ----------------------------
@@ -357,7 +362,7 @@ sterling <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,co
 subset_sterling <- sterling[c(103:105),]
 subset_sterling$...4 <- as.numeric(gsub("%", "", subset_sterling$...4) )
 subset_sterling$`EMPLOYMENT STATUS` <- reorder(subset_sterling$`EMPLOYMENT STATUS`, subset_sterling$...4)
-health <- ggplot(subset_sterling, aes(x =`EMPLOYMENT STATUS`,y = (subset_sterling$...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5, aes(text = paste0(...4, "%"))) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020", titlel = "Distribution of Health Insurance") + guides(fill = guide_legend(title = ""))+ theme(axis.text.y = element_text(angle=0), axis.ticks.y= element_blank())+ coord_flip()#
+health <- ggplot(subset_sterling, aes(x =`EMPLOYMENT STATUS`,y = (subset_sterling$...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5, aes(text = paste0(...4, "%"))) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020") + ggtitle("Distribution of Health Insurance") + guides(fill = guide_legend(title = ""))+ theme(axis.text.y = element_text(angle=0), axis.ticks.y= element_blank())+ coord_flip()#
 
 
 healthin <- ggplotly(health, tooltip = c("text"))
@@ -367,13 +372,12 @@ healthin <- ggplotly(health, tooltip = c("text"))
 
 races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
 
-race_subset <- races[(1:153),c(1,5,6,7,11)]
-nineteensub <- race_subset[(1:24),c(1:5)]
+race_subset <- races[(1:153),c(1,5,6,7)]
+nineteensub <- race_subset[(73:96),(1:4)]
 Race <- nineteensub$Race
 Total <- nineteensub$`Full Time Count (All Grades)`
-Percentage <- nineteensub$Percentage
 School <- nineteensub$`School Name`
-racenine <- ggplot(nineteensub,aes(x=School,y=Percentage,fill=Race))+ geom_col(position = "dodge")+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Percentage",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
+racenine <- ggplot(nineteensub,aes(x=School,y=Total,fill=Race))+ geom_col(position = "dodge")+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Total",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
                                                                                                                                                                                                                                          plot.caption = element_text(hjust = 1)) + guides(fill=guide_legend(title="Race/Ethnicity"))
 racenine <- ggplotly(racenine)
 
@@ -1082,7 +1086,7 @@ ui <- navbarPage(title = "DSPG",
                  tags$head(tags$style('.selectize-dropdown {z-index: 10000}')),
                  useShinyjs(),
                  
-                 # main tab -----------------------------------------------------------
+                 # Overview tab -----------------------------------------------------------
                  tabPanel("Overview", value = "overview",
                           fluidRow(style = "margin: 2px;",
                                    align = "center",
@@ -1100,7 +1104,7 @@ ui <- navbarPage(title = "DSPG",
                           ),
                           
                           fluidRow(style = "margin: 6px;",
-                                   column(4,
+                                   column(3,
                                           h2(strong("The Setting")),align = "justify",
                                           
                                           p(a(href = "https://www.loudoun.gov/", strong("Loudoun County"), target = "_blank"), "is located in the northern part of the state of Virginia. It lies along Virginia’s state line, where Virginia meets West Virginia and Maryland. It is also part of the Washington Metropolitan Statistical Area, the sixth largest metropolitan area in the United States. Loudoun County is among the top three most populated county in Virginia with an estimated", a(href = "https://data.census.gov/cedsci/profile?g=0500000US51107", strong("population"), target = "_blank"), "of 420,959."),
@@ -1108,26 +1112,28 @@ ui <- navbarPage(title = "DSPG",
                                           p("Despite Loudoun county’s wealth, some areas could benefit from improving their economic conditions to be on par with the county. For example, the", a(href = "https://www.livehealthyloudoun.org/indicators/index/view?indicatorId=8483&localeId=202605", strong("Sterling"), target = "_blank"), "region (our area of interest) had 6.9% in 2018 of the households that are below the federal poverty level. While this is substantially low compared to Virginia’s rate of 10%, it is quite high compared to Loudoun’s low rate of 3.2%."),
                                           
                                    ),
-                                   column(4,
+                                   column(6,
                                           h2(strong("Project Background")), align = "justify",
                                           h4(strong("Loudoun County Public Schools")),
                                           p("Loudoun County Public Schools (LCPS) is the third largest school division in Virginia. LCPS was established in 1870. LCPS has over 80,000 students in their 97 facilities. There are 18 high schools, 17 middle schools, 60 elementary schools, and two educational centers. The superintendent of the Loudoun County Public Schools is Dr. Scott A. Ziegler. The purpose of LCPS is “for all students to make meaningful contributions to the world"), 
                                           h4(strong("Sterling")), 
                                           p("Sterling, Virginia is a census-designated place (CDP) in Loudoun County, Virginia. However, the “Sterling, Virginia” mailing address applies to a much wider region including other localities such as Arcola, Cascades, Dulles, Countryside, and Sugarland Run. Sugarland Run in a portion of Sterling with zip code 20164. As of the 2020 Decennial Census, Sterling has an estimated population of 30,271 and a median household income of $97,647. Located in Sterling, Virginia are the six title 1 schools that will be discussed throughout this [project]. "),
-                                          h4(strong("Our Target Schools")), 
-                                          p("Loudoun County Public Schools started a Community School Initiative in 2015 with Sterling Elementary being the first one to be part of the program. Soon after in 2018, 5 other Elementary Schools joined the program Sugarland Elementary, Sully Elementary, Guilford Elementary, Forest Grove Elementary, and Rolling Ridge Elementary. "),
-                                          h4(strong("What is the question?")), 
-                                          p("Potential partners of Loudoun County Public Schools are eager to provide services to the Community Schools but due to a lack of data, are unclear on what resources would be most beneficial for this region. Scrapping data and visualizing it would help our stakeholders to find potential improvement opportunities that can help improve the lives of the students in our targeted Elementary Schools."),
+                                          
                                           fluidRow(style = "margin: 12px;",
                                                    column(12, align ="center", 
-                                                          img(src='lcps_com_school_initiative.png', width = 200, height = 200)
+                                                          img(src='lcps_com_school_initiative.png', width = 210, height = 210)
                                                           
                                                           
                                                    ),
                                           ),
+                                          h4(strong("Our Target Schools")),
+                                          p("Loudoun County Public Schools started a Community School Initiative in 2015 with Sterling Elementary being the first one to be part of the program. Soon after in 2018, 5 other Elementary Schools joined the program Sugarland Elementary, Sully Elementary, Guilford Elementary, Forest Grove Elementary, and Rolling Ridge Elementary. "),
+                                          h4(strong("What is the question?")), 
+                                          p("Potential partners of Loudoun County Public Schools are eager to provide services to the Community Schools but due to a lack of data, are unclear on what resources would be most beneficial for this region. Scrapping data and visualizing it would help our stakeholders to find potential improvement opportunities that can help improve the lives of the students in our targeted Elementary Schools."),
+                                          
                                    ),  
                                    
-                                   column(4,
+                                   column(3,
                                           h2(strong("Project Goals")), align = "justify",
                                           p("Our team seeks to design an interactive dashboard that visualizes the resources and services available to the students and families involved in the Loudoun County Community School Initiative. This dashboard will allow stakeholders to understand the primary needs of the community and provide insights into potential opportunities for improvement to increase the quality of life for those impacted by the Community School Initiative. "),
                                           p("We will use publicly available data, including the American Community Survey and the Virginia Department of Education, to provide our stakeholders with a comprehensive understanding of the factors impacting families in the Sterling area. We focus on sociodemographic indicators such as median income and employment and education indicators such as enrollment and grades to support our analysis. We will also map available services and resource locations relating to distance and travel time. These maps will be broken down into four key areas related to the Community School Program Health and Social Services, Mental Health, Family Engagement, and Youth Development to analyze potential opportunities for service expansion. "), 
@@ -1297,67 +1303,59 @@ ui <- navbarPage(title = "DSPG",
                             tabPanel("Demographics", 
                                      fluidRow(style = "margin: 6px;",
                                               column(12, 
-                                                     h1(strong("Student Characteristics in Elementary Community Schools"), align = "center"),
-                                                     
+                                                     h1(strong("Student Characteristics in Elementary Community Schools"), align = "center")),
+                                              
+                                              column(7, align = "left",
                                                      tabsetPanel(
-                                                       
                                                        tabPanel("Gender",
                                                                 fluidRow(style = "margin: 4px;",
+                                                                         withSpinner(plotlyOutput("cgender", height = "500px", width = "100%")),
+                                                                         br(""),
                                                                          
-                                                                         column(8, align = "left",
-                                                                                withSpinner(plotlyOutput("cgender", height = "500px", width = "100%")),
-                                                                                br(""),
-                                                                                
-                                                                                column(12,align = "right",
-                                                                                       p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
-                                                                                )
+                                                                         column(12,align = "right",
+                                                                                p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                                                          ),
                                                                          
-                                                                         column(4, align = "justify",
-                                                                                
-                                                                                h4(strong("What Do Community Schools Look Like?"), align = "left"),
-                                                                                p("Community schools provide additional resources and accommodation for students and families using community partnerships. These schools not only focus on learning objectives but provide supplementary services, such as free meals, health care services, tutoring, and counseling services, to those in need. There are six Title 1 Community Schools - all in the Sterling area - Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
-                                                                                
-                                                                                p("We examine the demographic characteristics of students at the six elementary schools to better understand the population. Most schools have a similar number of students (around 500) except Sterling and Sully elementary, with about 100 fewer students. Interestingly, the gender ratio for Forest Grove, Guilford, and Sully are similar to the Sterling area gender ratio – approximately 49% of the student population are females. Sterling ratio is lower, with 91 females for every 100 male students.", style = "padding-top:15px;font-size: 14px;"),
-                                                                                p("The race/ethnicity composition revealed that the majority of students attending the six elementary schools identified as Hispanic, differing from Sterling’s general population, where White residents were the majority. There are also significant differences between Guilford and Forest Grove, which have similar total students. Most students in Guilford are Hispanic students, whereas Forest Grove has a more diverse population between Hispanic, White, and Asian groups.", 
-                                                                                  style = "padding-top:15px;font-size: 14px;"),
-                                                                                p("The differences across ethnic groups might be due to the Hispanic population density in the areas where these schools are located. Hence, we mapped the schools and collected the average total Hispanic population between the years 2016 to 2020. We present this information by census blocks, and hovering over each block will show the total Hispanic population. Areas surrounding the schools have a large number of residents identifying as Hispanic. This is significant for neighborhoods near Rolling Ridge, Sully, Sterling, and Guilford.", 
-                                                                                  style = "padding-top:15px;font-size: 14px;"),
-                                                                                
-                                                                                
-                                                                         )
                                                                          
-                                                                )
-                                                       ),
+                                                                         
+                                                                         
+                                                                         
+                                                                )),
                                                        tabPanel("Race/Ethnicity",
                                                                 fluidRow(style = "margin: 4px;",
-                                                                         
-                                                                         column(8, align = "left",
-                                                                                withSpinner(plotlyOutput("racenine", height = "500px", width = "100%")),
-                                                                                br(""),
-                                                                                column(10, align = "left",
-                                                                                       withSpinner(leafletOutput("hispanicschool", height = "400px", width = "70%"))),
-                                                                                column(12,align = "right",
-                                                                                       p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
-                                                                                )
+                                                                         withSpinner(plotlyOutput("racenine", height = "500px", width = "100%")),
+                                                                         br(""),
+                                                                         fluidRow( 
+                                                                           column(1,),
+                                                                           
+                                                                           column(11, align = "left",
+                                                                                  withSpinner(leafletOutput("hispanicschool", height = "400px", width = "70%"))),
                                                                          ),
-                                                                         column(4, align = "justify",
-                                                                                
-                                                                                h4(strong("What Do Community Schools Look Like?"), align = "left"),
-                                                                                p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
-                                                                                
-                                                                                p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling and Sully have similar number of students and have lesser students than the other elementary schools. Forest Grove, Guilford and Sully have a similar trend like the Sterling area for the gender ratio: the female students are about 49% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling has the lowest where it has 91 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
-                                                                                p("The race and ethnicity demographics in 2019-2020 revealed that overall, Hispanic students, made up the greatest percentage of students attending the six elementary schools in Sterling, which differs from the general make-up of the Sterling area where White residents made up the majority of residents. There is a huge difference between Guilford and Forest Grove in terms of the ethnic groups of students, given that they both have similar number of total students: Guilford has significantly higher Hispanic students while Forest Grove has a lot more White and Hispanic students.", 
-                                                                                  style = "padding-top:15px;font-size: 14px;"),
-                                                                                p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence,  we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary.", 
-                                                                                  style = "padding-top:15px;font-size: 14px;"),
-                                                                                
-                                                                                
+                                                                         column(12,align = "right",
+                                                                                p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory, American Community 2019 5-Year Estimates", style = "font-size:12px;"),
                                                                          )
-                                                                         
-                                                                )
+                                                                ),
+                                                                
+                                                                
                                                        )
-                                                     ))
+                                                     )
+                                              ), 
+                                              br(""),
+                                              br(""),
+                                              br(""),
+                                              column(5, align = "justify",
+                                                     
+                                                     h4(strong("What Do Community Schools Look Like?"), align = "left"),
+                                                     p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
+                                                     
+                                                     p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling and Sully have similar number of students and have lesser students than the other elementary schools. Forest Grove, Guilford and Sully have a similar trend like the Sterling area for the gender ratio: the female students are about 49% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling has the lowest where it has 91 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("The race and ethnicity demographics in 2019-2020 revealed that overall, Hispanic students, made up the greatest percentage of students attending the six elementary schools in Sterling, which differs from the general make-up of the Sterling area where White residents made up the majority of residents. There is a huge difference between Guilford and Forest Grove in terms of the ethnic groups of students, given that they both have similar number of total students: Guilford has significantly higher Hispanic students while Forest Grove has a lot more White and Hispanic students.", 
+                                                       style = "padding-top:15px;font-size: 14px;"),
+                                                     p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence,  we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary.", 
+                                                       style = "padding-top:15px;font-size: 14px;"),
+                                                     
+                                                     
+                                              )
                                               
                                               
                                               
@@ -1764,8 +1762,8 @@ ui <- navbarPage(title = "DSPG",
                                                       h4(("Travel Distance")),
                                                       p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances.  "), align = "justify"),
                                                       h4(strong("Mental Health Availability")), 
-                                                      p(("Mental health is equally important as physical health. For a community to flourish it is important that mental health resources be provided and be easily accessible. The mental health resources have been divided into four categories Anger Management, Bereavement, Family Counseling, and Family Therapy. The resources have been mapped within a 45 minutes driving time from Sterling. Anger Management services are not abundant in the sterling surroundings with only 3 available in a 45-minute radius. Bereavement services are the least abundant with only two available around the Sterling area. The most abundant resource is Family therapy, they offer family counseling, relationship counseling, and children counseling. Mental health resources decrease in number and accessibility after the ten minute radius. "), align = "justify"),
-                                                      
+                                                      p(("MentalMental health services can improve behavior, attendance, performance, and one’s overall wellbeing. Mental health is important to perform well in school. It is equally important as physical health. If Mental health is not given attention it can lead to behavioral issues. A person cannot function well with poor mental health. Providing the correct mental health resource in a timely manner can improve a student’s performance drastically. Furthermore, mental health is not only important for a student but also for everyone living in an area. Parents also equally require mental health checkups so that they can take care of their children properly and make sure that their children are living in a healthy environment at home.  "), align = "justify"),
+                                                      p("In order to understand the availability of mental health services in and around the Sterling area we used publicly available data to plot the resources on the map. We further divide Mental Health into four categories: Anger Management, Bereavement, Family Counseling, and Family Therapy. There are only two mental health services available in a 10-minute driving radius. There are only three available anger management services in a 45-minute radius of the Sterling area. However, there are numerous options of Family therapy including family counseling, relationship counseling, and children counseling. The residents of the Sterling area should take advantage of these resources provided around their area.  ", align = "justify")
                                                )
                                                
                                                
@@ -1799,6 +1797,9 @@ ui <- navbarPage(title = "DSPG",
                                                       p(("We also include the driving distances to services from Sterling Elementary School (the blue-tipped marker). Sterling Elementary School is the center point on our map as it is located in the middle of Sterling, CDP. Driving distances for 10 minutes, 20 minutes, and 45 minutes are shown on the map using the green, blue, and red boundaries, respectively. Service markers within these boundaries on the map represent different services available within the respective driving distances.  "), align = "justify"),
                                                       h4(strong("Family Engagement Resources")), 
                                                       p((""), align = "justify"),
+                                                      p("Engaging family members such as parents, siblings, grandparents, and neighbors can help create a neighborhood with goals and strategies to ensure student success. These individuals can work together to help monitor students' progress and provide early intervention guidance if necessary. Informed and increase family engagement can improve attendance rates and academic achievement. Additionally, providing adults with educational opportunities can spur students' performance. ", align = "justify"),
+                                                      p("As compared to the other resources in this group, services which provide various classes to enrich skillsets and help the family members to find employment are lesser in number and are mostly above 20-minute drive time (Select Education and Employment Help). Resources which provide emergency housing facilities and help with paying rent and utilities are also mostly around the Leesburg area which is just a bit longer than a 20-minute drive. INMED Family Homelessness Prevention And Intervention Program is a major resource inside the Sterling area which rescues families on the edge of homelessness. ", align = "justify"),
+                                                      p("Another noteworthy organization which provides multiple resources to women who are victims of domestic violence is LAWS (Loudoun Abused Womens’ Shelter). There are some resources in Ashburn and Leesburg which help families during holidays which are grouped under “Holiday Help”. An important service provider is the Tin Cup Fund which works towards fulfilling the needs of the communities in various ways and have partnerships with organizations like the Cornerstones, Embry Rucker Homeless Shelter, Habitat for Humanity, Women Giving Back and Loudoun Cares, among others. NOVA Diaper Bank is another organization which share partnerships with many of these groups: it distributes diapers (primarily) and also other basic needs for childcare with several drop off locations in and around Sterling. ", align = "justify")
                                                       
                                                )
                                                
