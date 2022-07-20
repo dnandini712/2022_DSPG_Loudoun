@@ -287,16 +287,7 @@ genders<- ggplot(data=genders, aes(x=School, y=Total, fill=Sex,  width=0.9)) +
   scale_fill_manual(values = c('#F56D4F', "#20AFCC")) + labs(y="Total Students", x="", fill="")+ggtitle("Gender by Schools for 2020-2021") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
 genders <-ggplotly(genders, tooltip = c("text"))
-#race by school ----------------------------
 
-races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
-
-race_subset <- races[(1:153),c(1,5,6,7)]
-School <- race_subset$`School Name`
-raceS <- race_subset$Race
-total <- race_subset$`Full Time Count (All Grades)`
-raceehtn <- ggplot(race_subset, aes(x=raceS,y=total,fill=School))+ geom_col()+labs(x="Race/Ethnicity",y="Number of Students",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1),axis.text.x=element_text(angle=90)) + scale_fill_brewer(palette = "Set1") + scale_fill_discrete(name = "")
-raceehtn<-ggplotly(raceehtn)
 
 #attendance --------------
 
@@ -372,12 +363,12 @@ healthin <- ggplotly(health, tooltip = c("text"))
 
 races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
 
-race_subset <- races[(1:153),c(1,5,6,7)]
-nineteensub <- race_subset[(73:96),(1:4)]
+race_subset <- races[(1:153),c(1,5,6,11)]
+nineteensub <- race_subset[(1:24),(1:4)]
 Race <- nineteensub$Race
-Total <- nineteensub$`Full Time Count (All Grades)`
+Percentage <- nineteensub$Percentage
 School <- nineteensub$`School Name`
-racenine <- ggplot(nineteensub,aes(x=School,y=Total,fill=Race))+ geom_col(position = "dodge")+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Total",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
+racenine <- ggplot(nineteensub,aes(x=School,y=Percentage,fill=Race))+ geom_col(position = "dodge")+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Percentage",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
                                                                                                                                                                                                                                          plot.caption = element_text(hjust = 1)) + guides(fill=guide_legend(title="Race/Ethnicity"))
 racenine <- ggplotly(racenine)
 
