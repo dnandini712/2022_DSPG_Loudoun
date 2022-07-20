@@ -220,6 +220,31 @@ property <- figpv %>% layout(title = "Residential Property Value", showlegend = 
                              xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                              yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 
+#-------------Prop. Value Comparison---------------------
+
+propcomparison <- plot_ly(
+  domain = list(x = c(0, 1), y = c(0, 1)),
+  value = 378700,
+  title = list(text = "Median PV Compared to Virginia Median PV"),
+  type = "indicator",
+  mode = "gauge+number+delta",
+  delta = list(reference = 282800),
+  gauge = list(
+    axis =list(range = list(NULL, 500000)),
+    steps = list(
+      list(range = c(0, 200000), color = "lightgray"),
+      list(range = c(200000, 285000), color = "gray"),
+      list(range = c(285000, 400000), color = "yellow"),
+      list(range = c(400000, 500000), color = "red")),
+    threshold = list(
+      line = list(color = "red", width = 4),
+      thickness = 0.75,
+      value = 282800))) 
+propcomparison <- propcomparison %>%
+  layout(margin = list(l=20,r=30))
+
+propcomparison
+
 #------------Housing Occupancy---------------------------
 
 lbls.HOUSING = c("Owners", "Renters")
@@ -1230,6 +1255,7 @@ ui <- navbarPage(title = "DSPG",
                                                               ),
                                                      )),
                                             
+                                            
                                             tabPanel("Income",
                                                      fluidRow(style = "margin: 4px;",
                                                               p("", style = "padding-top:10px;"),
@@ -1238,11 +1264,16 @@ ui <- navbarPage(title = "DSPG",
                                                                        "Educational Attainment" = "edu",
                                                                        "Family Income" = "faminc",
                                                                        "Poverty Status" = "pov", 
-                                                                       "Health Coverage" = "health"
+                                                                       "Health Coverage" = "health",
+                                                                       "Property Value" = "property"
                                                                      ),
                                                                      ),     
                                                                      br(""),
                                                                      withSpinner(plotlyOutput("demo2", height = "500px", width ="100%")),
+                                                                     column(12, align = "right",
+                                                                            p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
+                                                                            withSpinner(plotlyOutput("PropComp", height = "500px", width = "100%")),
+                                                                     ),
                                                                      column(12,align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
                                                                             p("*Note: Data is zero for missing bars", style = "font-size:12px;"))
@@ -1288,6 +1319,8 @@ ui <- navbarPage(title = "DSPG",
                                           p("While the majority of Sterling’s population is employed (approximately 71%), there is a notable gap in the residents' health insurance. About 17% have no health insurance, which is higher than Loudoun county's 5.5%. This may point to possible opportunities provided by Community Schools as these families will be less routine screening and will delay treatment until the condition is more advanced and more costly and challenging to treat.", style = "padding-top:15px;font-size: 14px;"),
                                           
                                           p("The labor force of Sterling primarily works in management, business, science, and art, followed by the service sector. Over half of those who commute to work have a commute time less than 30 minutes, and 75% of said commuters drive alone. Notably, only 1.8% of commuters utilized public transportation.",style = "padding-top:15px;font-size: 14px;"),
+                                          
+                                          p("When you take a look at the median property value visualizations, it is clear that a large percentage of homes fall into the property value range of $300,000 to $499,999. The average property value of Sterling is $378,700 which is almost $96,000 higher than the state of Virginia's $282,800 median property value.",style = "padding-top:15px;font-size: 14px;"),
                                           
                                           
                                    )
@@ -2149,10 +2182,19 @@ server <- function(input, output, session) {
     else if (Var4() == "health") {
       
       healthin
-      
-      
     }
     
+    else if (Var4() == "property") {
+      
+      property
+    }
+    
+  })
+  
+  output$PropComp <- renderPlotly({
+    if (Var4() == "property") {
+      propcomparison
+    }
   })
   
   Var5 <- reactive({
