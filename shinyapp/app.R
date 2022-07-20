@@ -1873,6 +1873,52 @@ ui <- navbarPage(title = "DSPG",
                           
                  ),
                  
+                 tabPanel("Data ", value = "data",
+                          fluidRow(style = "margin: 6px;",
+                                   h1(strong("Data Sources"), align = "center"),
+                                   p("", style = "padding-top:10px;"), 
+                                   column(6,
+                                          img(src = 'data-acs.png', style = "display: inline; float: left;", width = "250px"),
+                                          p("We retrieve ",strong("American Community Survey (ACS)")," data to examine demographic and socioeconomic characteristics of our target population. 
+                                            ACS is an ongoing yearly survey conducted by the U.S Census Bureau that samples households to compile 1-year and 5-year datasets.
+                                            We used the most recently available 1-year/5-year estimates, to characterize Loudoun County’s transition aged youths by age, race,
+                                            gender, educational attainment, health insurance coverage, and poverty level. ", align = "justify"),
+                                          br(), 
+                                          br(),
+                                          br(),
+                                        
+                                          img(src = 'VDOEimage.png', style = "display: inline; float: left;", width = "250px"),
+                                          p(strong("Virginia Department of Education:"), "The Virginia Department of Education records the information for all Virginia schools county wise. We graphed the demographics such as like enrollment ,chronic absenteeism,  absences and number of educators for the 6 Sterling Community Schools for the years 2016 – 2020. ", align = "justify"), 
+                                          br(), 
+                                          br(), 
+                                          br(), 
+                                          br(),
+                                          br(),
+                                          img(src = 'Loudounimage.png', style = "display: inline; float: left;", width = "225px", height=200),
+                                          p("The ", strong("Loudoun County Outreach Services:"), " Holds records of those who use their provided services based on number of persons, percent of student population and year. We graphed several demographics including health coverage, family income, and listed various resources onto maps. ", align = "justify"),
+                                          p("", style = "padding-top:10px;")) ,
+                                   column(6,
+                                          img(src = 'data-LCPS.png', style = "display: inline; float: left;", width = "200px"),
+                                          p("The ", strong("Loudoun County Public Schools : "), "Loudoun County Public Schools holds the data for each individual school in its division. It reports the number of students and families who used their provided resources and different demographics such as gender, race/ethnicity, absences, social worker services, and free and reduced lunch. ", align = "justify"),
+                                          br(), 
+                                          br(), 
+                                          br(), 
+                                          br(),
+                                          br(),
+                                          br(),
+                                          br(),
+                                          br(),
+                                          br(),
+                                          img(src = 'data-traveltime.png', style = "display: inline; float: left;", width = "250px"),
+                                          p(strong("TravelTime")," Travel Time Application Programming Interface (API) aggregates data from OpenStreetMap, transport timetables and speed profiles to generate isochrones. An isochrone is a shape covering all locations that can be reached within the same timeframe given a start location, departure time, and a mode of transportation. We used the Travel Time API to produce isochrones of 10- to 45-minute drive times interval from Sterling Elementary which is the Central point for our 6 community schools.", align = "justify"),
+                                          
+                                          
+                                   )
+                                   
+                          )
+                          
+                 ),
+                 
                  tabPanel("Meet the Team",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
