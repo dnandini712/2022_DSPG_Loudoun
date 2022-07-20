@@ -174,7 +174,7 @@ race <- plot_ly(type='pie', labels=labelsR, values=valuesR,
                 textinfo='label+percent',
                 hoverinfo = 'text', 
                 text = ~paste('Total:', valuesR),
-                insidetextorientation='radial') %>% layout(title ='2019 Race/Ethnicity Composition', legend=list(title=list(text='Select Race')))
+                insidetextorientation='radial') %>% layout(title ='Race/Ethnicity 2019 Composition', legend=list(title=list(text='Select Race')))
 
 #------------Hispanic Percentage-------------
 
@@ -185,7 +185,7 @@ HispanicPercentagePIE <- plot_ly(type='pie', labels=labelsHispanicPIE, values=va
                                  textinfo='label+percent',
                                  insidetextorientation='radial',
                                  hoverinfo = 'text', 
-                                 text = ~paste('Total Population:', valuesHispanicPIE)) %>% layout(title ='2019 Hispanic Population In Sterling', legend=list(title=list(text='')))
+                                 text = ~paste('Total Population:', valuesHispanicPIE)) %>% layout(title ='Hispanic Population 2019', legend=list(title=list(text='')))
 
 HispanicPercentagePIE
 
