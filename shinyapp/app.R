@@ -1774,8 +1774,8 @@ ui <- navbarPage(title = "DSPG",
                                                       p(h1(strong("Elementary Community School Representatives ")), style = "padding-top:5px;"),
                                                ),
                                                fluidRow(
-                                                 column(5,),
-                                                 column(7, align = "justify",
+                                                
+                                                 column(12, align = "left",
                                                         radioButtons(
                                                           "category",
                                                           
