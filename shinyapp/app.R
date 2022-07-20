@@ -1953,17 +1953,54 @@ ui <- navbarPage(title = "DSPG",
                           
                  ),
                  
-                 tabPanel("Meet the Team",
-                          fluidRow(style = "margin: 6px;",
+                 tabPanel("Meet the Team", value = "team",
+                          fluidRow(style = "margin-left: 100px; margin-right: 100px;",
+                                   h1(strong("Team"), align = "center"),
+                                   br(),
+                                   h4(strong("VT Data Science for the Public Good"), align = "center"),
+                                   p("The", a(href = 'https://aaec.vt.edu/academics/undergraduate/beyond-classroom/dspg.html', 'Data Science for the Public Good (DSPG) Young Scholars program', target = "_blank"),
+                                     "is a summer immersive program offered by the", a(href = 'https://aaec.vt.edu/index.html', 'Virginia Tech Department of Agricultural and Applied Economics'), 
+                                     "In its second year, the program engages students from across the country to work together on projects that address state, federal, and local government challenges 
+                                     around critical social issues relevant in the world today. DSPG young scholars conduct research at the intersection of statistics, computation, and the social sciences to 
+                                     determine how information generated within every community can be leveraged to improve quality of life and inform public policy. For more information on program highlights, 
+                                     how to apply, and our annual symposium, please visit", 
+                                     a(href = 'https://aaec.vt.edu/content/aaec_vt_edu/en/academics/undergraduate/beyond-classroom/dspg.html#select=1.html', 'the official VT DSPG website.', target = "_blank")),
+                                   p("", style = "padding-top:10px;")
+                          ),
+                          fluidRow(style = "margin-left: 100px; margin-right: 100px;",
+                                   column(6, align = "center",
+                                          h4(strong("DSPG Team Members")),
+                                          img(src = "Nandini Das.jpg", style = "display: inline; margin-right: 5px; border: 1px solid #C0C0C0;", width = "150px"),
+                                          img(src = "Amanda Ljuba.jpg", style = "display: inline; margin-right: 5px; border: 1px solid #C0C0C0;", width = "150px"),
+                                          img(src = "Jontayvion Osborne.jpg", style = "display: inline; margin-right: 5px; border: 1px solid #C0C0C0;", width = "150px"),
+                                          img(src = "Chaudhry Abdullah Rizwan.jpg", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
+                                          img(src = "team-kyle.jpg", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
+                                          p("", style = "padding-top:10px;"), 
+                                          p(a(href = 'https://www.linkedin.com/in/yang-cheng-200118191/', 'Yang Cheng', target = '_blank'), "(Virginia Tech, Graduate in Agricultural and Applied Microeconomics);"),
+                                          p(a(href = 'https://www.linkedin.com/in/jaida-robinson-92856b194/', 'JaiDa Robinson', target = '_blank'), "(Virginia State University, Graduate in Counselor Education );"),
+                                          p(a(href = 'https://www.linkedin.com/in/julie-rebstock', 'Julie Rebstock', target = '_blank'), "(Virgina Tech, Undergraduate in Economics and Computational Modeling and Data Analytics);"),
+                                          p(a(href = 'https://www.linkedin.com/in/austin-burcham-9b32a81ab/', 'Austin Burcham', target = '_blank'), "(Virginia Tech, Undergradutate Computational Modeling and Data Analytics)."),
+                                          p(a(href = 'https://www.linkedin.com/in/kyle-jacobs7/', 'Kyle Jacobs', target = '_blank'), "(Virginia State Univeristy, Undergradutate in Agriculture)."),
+                                          p("", style = "padding-top:10px;") 
+                                   ),
+                                   column(6, align = "center",
+                                          h4(strong("VT Faculty Team Members")),
+                                          img(src = "faculty-chanita.png", style = "display: inline; margin-right: 5px; border: 1px solid #C0C0C0;", width = "150px"),
+                                          img(src = "faculty-isabel.jpg", style = "display: inline; margin-right: 5px; border: 1px solid #C0C0C0;", width = "150px"),
+                                          p("", style = "padding-top:10px;"), 
+                                          p(a(href = "https://aaec.vt.edu/people/faculty/holmes-chanita.html", 'Chanita Holmes', target = '_blank'), "(Project Lead, Virgina Tech, Research Assistant Professor);") , 
+                                          p(a(href = "https://liberalarts.vt.edu/departments-and-schools/department-of-human-development-and-family-science/faculty/isabel-bradburn.html", 'Isabel Bradburn', target = '_blank'), "(Research Faulty,Virgina Tech, Department of Human Development and Family Science)."),
+                                          p("", style = "padding-top:10px;")
+                                   )) ,
+                          fluidRow(style = "margin-left: 100px; margin-right: 100px;",
+                                   h4(strong("Project Stakeholders")),
+                                   p(a(href = 'https://loudoun.ext.vt.edu/staff/Vermaak-Stuart.html', 'Stuart Vermaak', target = '_blank'), "(Virginia Cooperative Extension, Loudoun County at Virginia Tech);"),
+                                   p(a(href = 'https://loudoun.ext.vt.edu/staff/Hilleary-James.html', 'James Hilleary', target = '_blank'), "(Virginia Cooperative Extension, Loudoun County at Virginia Tech)."),
                                    p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("")),
-                                          p(""),
-                                          br("")
-                                          
-                                          
-                                          
-                                   )),
-                          
+                                   h4(strong("Acknowledgments")) ,
+                                   p("We would like to thank Loudoun officials for providing us with data for our project. Specifically, the Department of Mental Health, Substance Abuse, and Developmental Services and the Family Service Department.  "),
+                                   p("", style = "padding-top:10px;")
+                          )
                  )
                  
 )
