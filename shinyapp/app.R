@@ -918,7 +918,7 @@ cloud3<- wordcloud2(df3, size=0.5)
 #-----------------Performance Graphs --------------------------
 
 
-assessment <- read_excel("/Users/nandinidas/Downloads/allstudentsassess.xlsx",skip=0,col_names=TRUE)
+assessment <- read_excel(paste0(getwd(),"/data/allstudentsassess.xlsx"),skip=0,col_names=TRUE)
 
 subset_math <- assessment[c(2,5,8,11,14,17,20,23,26,29,32,35), c(1:2,7:8)]
 math_all <- plot_ly(subset_math, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Math Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
@@ -931,48 +931,9 @@ science_all <- plot_ly(subset_science, x = ~Year, y = ~`Percent Pass`, color = ~
 
 
 
-# CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
-jscode <- "function getUrlVars() {
-                var vars = {};
-                var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
-                    vars[key] = value;
-                });
-                return vars;
-            }
-           function getUrlParam(parameter, defaultvalue){
-                var urlparameter = defaultvalue;
-                if(window.location.href.indexOf(parameter) > -1){
-                    urlparameter = getUrlVars()[parameter];
-                    }
-                return urlparameter;
-            }
-            var mytype = getUrlParam('type','Empty');
-            function changeLinks(parameter) {
-                links = document.getElementsByTagName(\"a\");
-                for(var i = 0; i < links.length; i++) {
-                   var link = links[i];
-                   var newurl = link.href + '?type=' + parameter;
-                   link.setAttribute('href', newurl);
-                 }
-            }
-           var x = document.getElementsByClassName('navbar-brand');
-           if (mytype != 'economic') {
-             x[0].innerHTML = '<div style=\"margin-top:-14px\"><a href=\"https://datascienceforthepublicgood.org/node/451\">' +
-                              '<img src=\"DSPG_black-01.png\", alt=\"DSPG 2020 Symposium Proceedings\", style=\"height:42px;\">' +
-                              '</a></div>';
-             //changeLinks('dspg');
-           } else {
-             x[0].innerHTML = '<div style=\"margin-top:-14px\"><a href=\"https://datascienceforthepublicgood.org/economic-mobility/community-insights/case-studies\">' +
-                              '<img src=\"AEMLogoGatesColorsBlack-11.png\", alt=\"Gates Economic Mobility Case Studies\", style=\"height:42px;\">' +
-                              '</a></div>';
-             //changeLinks('economic');
-           }
-           "
 
 
-#plotly vs plot variable----
 
-var <- c("ageplot1","ageplot2")
 
 #--------------Teacher/Staff Climate Surveys------------------------
 newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
@@ -1124,6 +1085,46 @@ subset_healthscrape2 <- healthscrape[c(2,4),c(2,4)]
 Year2 <- subset_healthscrape2$...2
 Total2 <- subset_healthscrape2$...4
 plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Families Who Receieved Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
+
+
+# CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
+jscode <- "function getUrlVars() {
+                var vars = {};
+                var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+                    vars[key] = value;
+                });
+                return vars;
+            }
+           function getUrlParam(parameter, defaultvalue){
+                var urlparameter = defaultvalue;
+                if(window.location.href.indexOf(parameter) > -1){
+                    urlparameter = getUrlVars()[parameter];
+                    }
+                return urlparameter;
+            }
+            var mytype = getUrlParam('type','Empty');
+            function changeLinks(parameter) {
+                links = document.getElementsByTagName(\"a\");
+                for(var i = 0; i < links.length; i++) {
+                   var link = links[i];
+                   var newurl = link.href + '?type=' + parameter;
+                   link.setAttribute('href', newurl);
+                 }
+            }
+           var x = document.getElementsByClassName('navbar-brand');
+           if (mytype != 'economic') {
+             x[0].innerHTML = '<div style=\"margin-top:-14px\"><a href=\"https://datascienceforthepublicgood.org/node/451\">' +
+                              '<img src=\"DSPG_black-01.png\", alt=\"DSPG 2020 Symposium Proceedings\", style=\"height:42px;\">' +
+                              '</a></div>';
+             //changeLinks('dspg');
+           } else {
+             x[0].innerHTML = '<div style=\"margin-top:-14px\"><a href=\"https://datascienceforthepublicgood.org/economic-mobility/community-insights/case-studies\">' +
+                              '<img src=\"AEMLogoGatesColorsBlack-11.png\", alt=\"Gates Economic Mobility Case Studies\", style=\"height:42px;\">' +
+                              '</a></div>';
+             //changeLinks('economic');
+           }
+           "
+
 
 # user interface-------------------------------------------------------------
 ui <- navbarPage(title = "DSPG",
