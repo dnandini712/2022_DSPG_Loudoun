@@ -914,6 +914,23 @@ cloud3<- wordcloud2(df3, size=0.5)
 
 
 
+
+#-----------------Performance Graphs --------------------------
+
+
+assessment <- read_excel("/Users/nandinidas/Downloads/allstudentsassess.xlsx",skip=0,col_names=TRUE)
+
+subset_math <- assessment[c(2,5,8,11,14,17,20,23,26,29,32,35), c(1:2,7:8)]
+math_all <- plot_ly(subset_math, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Math Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+
+subset_english <- assessment[c(1,4,7,10,13,16,19,22,25,28,31,34), c(1:2,7:8)]
+english_all <- plot_ly(subset_english, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School)) %>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+
+subset_science <- assessment[c(3,6,9,12,15,18,21,24,27,30,33,36), c(1:2,7:8)]
+science_all <- plot_ly(subset_science, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School)) %>% layout(title = "Science Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+
+
+
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
                 var vars = {};
@@ -1171,7 +1188,7 @@ ui <- navbarPage(title = "DSPG",
                           # p(tags$small(em('Last updated: August 2021'))))
                  ),
                  
-                 ## Sterling Area--------------------------------------------
+                 ## Community Schools Tab--------------------------------------------
                  tabPanel("Community Schools", value = "overview",
                           fluidRow(style = "margin: 2px;",
                                    p("", style = "padding-top:10px;"),
@@ -1224,7 +1241,7 @@ ui <- navbarPage(title = "DSPG",
                           ),
                  ), 
                  
-                 
+                 #---------------Tab Sociodemographics------------------------
                  tabPanel("Sociodemographics",
                           fluidRow(style = "margin: 4px;",
                                    h1(strong("Sterling Sociodemographics"), align = "center"),
@@ -1332,7 +1349,7 @@ ui <- navbarPage(title = "DSPG",
                           )
                  ),
                  
-                 
+                # ---------------Tab Schools------------------------
                  navbarMenu("Schools",
                             tabPanel("Demographics", 
                                      fluidRow(style = "margin: 6px;",
@@ -1409,7 +1426,29 @@ ui <- navbarPage(title = "DSPG",
                                             withSpinner(plotlyOutput("ocuplot2", height = "500px", width = "100%")),
                                             column(12,align = "right",
                                                    p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
-                                            )
+                                            ),
+                                         tabsetPanel(
+                                           tabPanel( "Performance",
+                                                     fluidRow(
+                                                       column(12,align = "right",
+                                                              withSpinner(plotlyOutput("math_all", height = "500px", width = "100%")),
+                                                              br(""),
+                                                              withSpinner(plotlyOutput("english_all", height = "500px", width = "100%")),
+                                                              br(""),
+                                                              withSpinner(plotlyOutput("science_all", height = "500px", width = "100%")),
+                                                              br(""),
+                                                                     p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
+                                                              )
+                                                              
+                                                              
+                                                     )      
+                                                              
+                                                     
+                                             
+                                             
+                                           )
+                                         )   
+                                            
                                             
                                      ),
                                      
@@ -2049,7 +2088,7 @@ ui <- navbarPage(title = "DSPG",
 )
 
 
-# server -----------------------------------------------------------
+#---------------------- server -----------------------------------------------------------
 server <- function(input, output, session) {
   # Run JavaScript Code
   runjs(jscode)
@@ -2058,6 +2097,8 @@ server <- function(input, output, session) {
   output$map1 <- renderLeaflet({
     map1
   })
+  
+  
   
   output$map_health <- renderLeaflet({
     if(input$health_category == "Free Services"){
@@ -2100,6 +2141,19 @@ server <- function(input, output, session) {
       map_family
     }
   })
+  
+  output$math_all<- renderPlotly({
+    math_all
+  })
+  
+  output$english_all<- renderPlotly({
+    english_all
+  })
+  
+  output$science_all<- renderPlotly({
+    science_all
+  })
+  
   
   
   output$weekendmeals <- renderPlotly({
