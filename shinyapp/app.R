@@ -1113,12 +1113,14 @@ ui <- navbarPage(title = "DSPG",
                                           
                                    ),
                                    column(6,
-                                          h2(strong("Project Background")), align = "center",
-                                          h4(strong("Loudoun County Public Schools")),
-                                          p("Loudoun County Public Schools (LCPS) is the third largest school division in Virginia. LCPS was established in 1870. LCPS has over 80,000 students in their 97 facilities. There are 18 high schools, 17 middle schools, 60 elementary schools, and two educational centers. The superintendent of the Loudoun County Public Schools is Dr. Scott A. Ziegler. The purpose of LCPS is “for all students to make meaningful contributions to the world", align = "justify"), 
+                                          h2(strong("Background")), align = "center",
+                                          h4(strong("")),
+                                          p("Loudoun County Public Schools", a(href = "https://www.lcps.org/loudoun", strong("(LCPS)"), target = "_blank"), "is the third largest school division in Virginia, serving over 80,000 students in 97 facilities.  With over 18 high schools, 17 middle schools, 60 elementary schools, and 2 educational centers there are considerable variations in the needs of these schools. For instance, 6 of the 60", a(href = "https://www.lcps.org/Page/834", strong("elementary schools"), target = "_blank"), "in Loudoun are Title 1 Schools. According to the U.S Department of Education", a(href = "https://www2.ed.gov/programs/titleiparta/index.html", strong("Title 1 Schools"), target = "_blank"), "are provided financial assistance through state educational agencies to school divisions and public schools with high numbers or percentages of children from low-income families to help ensure that all children meet challenging state academic content and achievement standards. Notably, all six of these Title 1 elementary schools are located in the Sterling area in Loudoun county.", align = "justify"), 
                                           h4(strong("Sterling")), 
-                                          p("Sterling, Virginia is a census-designated place (CDP) in Loudoun County, Virginia. However, the “Sterling, Virginia” mailing address applies to a much wider region including other localities such as Arcola, Cascades, Dulles, Countryside, and Sugarland Run. Sugarland Run in a portion of Sterling with zip code 20164. As of the 2020 Decennial Census, Sterling has an estimated population of 30,271 and a median household income of $97,647. Located in Sterling, Virginia are the six title 1 schools that will be discussed throughout this [project]. ", align = "justify"),
+                                          p("The six Title 1 schools in Sterling are Sterling Elementary, Sugarland Elementary, Sully Elementary, Guilford Elementary, Rolling Ridge Elementary, and Forest Grove Elementary. To provide additional resources to these schools, LCPS started a Community Initiative Program in 2015. This program is a partnership between school and community resources that focus on academics, health and social services, youth and community development, and community engagement to help improve student learning, strong families, and healthier communities.", align = "justify"),
                                           
+                                          h4(strong("What is the project question?")),
+                                          p("Potential partners of Loudoun County Public Schools are eager to provide services to the Community Schools. However, a lack of data makes it unclear what resources would be most beneficial for this region. Scrapping data and visualizing it would help our stakeholders to find potential improvement opportunities that can help improve the lives of the students in these targeted elementary schools. ", align = "justify"),
                                           fluidRow(style = "margin: 12px;",
                                                    column(12, align ="center", 
                                                           img(src='lcps_com_school_initiative.png', width = 210, height = 210)
@@ -1126,11 +1128,6 @@ ui <- navbarPage(title = "DSPG",
                                                           
                                                    ),
                                           ),
-                                          h4(strong("Our Target Schools")),
-                                          p("Loudoun County Public Schools started a Community School Initiative in 2015 with Sterling Elementary being the first one to be part of the program. Soon after in 2018, 5 other Elementary Schools joined the program Sugarland Elementary, Sully Elementary, Guilford Elementary, Forest Grove Elementary, and Rolling Ridge Elementary. ", align = "justify"),
-                                          h4(strong("What is the question?")), 
-                                          p("Potential partners of Loudoun County Public Schools are eager to provide services to the Community Schools but due to a lack of data, are unclear on what resources would be most beneficial for this region. Scrapping data and visualizing it would help our stakeholders to find potential improvement opportunities that can help improve the lives of the students in our targeted Elementary Schools.", align = "justify"),
-                                          
                                    ),  
                                    
                                    column(3,
