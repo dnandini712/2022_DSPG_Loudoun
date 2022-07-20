@@ -1070,6 +1070,19 @@ studentquestion5percentage <- studentquestion5percentage*100
 sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer5 <- ggplotly(sixteen, tooltip = c("text"))
 
+# manually scraped health and social services --------------------------------
+
+healthscrape <- read_excel(paste0(getwd(),"/data/manualscrappingdata.xlsx"))
+subset_healthscrape <- healthscrape[2:5,c(2,5)]
+Total <- subset_healthscrape$...5
+Year <- subset_healthscrape$...2
+plot_ly(data = subset_healthscrape, x = ~Year, y = ~Total, type = "scatter",mode="line",hoverinfo = "text",text = ~paste("Year:",Year,"Total:",Total)) %>% layout(yaxis = list(tickvals = list(100,200,300,400,500,600,700,800,900)),title = "Families Who Receieved Weekend Meals") -> weekendmeals
+
+subset_healthscrape2 <- healthscrape[c(2,4),c(2,4)]
+Year2 <- subset_healthscrape2$...2
+Total2 <- subset_healthscrape2$...4
+plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Families Who Receieved Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
+
 # user interface-------------------------------------------------------------
 ui <- navbarPage(title = "DSPG",
                  selected = "overview",
@@ -1872,7 +1885,7 @@ ui <- navbarPage(title = "DSPG",
                                      
                             )
                  ),
-                 
+
                  tabPanel("Opportunities",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
@@ -1883,8 +1896,14 @@ ui <- navbarPage(title = "DSPG",
                                           
                                           
                                    )),
-                          
-                 ),
+                          fluidPage(style = "margin: 2px;",
+                                    column(6,
+                                           plotlyOutput("weekendmeals", width = "100%",height = 600)
+                                           ),
+                                    column(6,
+                                           plotlyOutput("basicsupplies",width = "100%",height = 600)
+                                    )),
+         ),
                  
                  tabPanel("Analysis",
                           fluidRow(style = "margin: 6px;",
@@ -2050,6 +2069,15 @@ server <- function(input, output, session) {
     }
   })
   
+  
+  output$weekendmeals <- renderPlotly({
+    weekendmeals
+  })
+  
+  output$basicsupplies <- renderPlotly({
+    basicsupplies
+  })
+  
   output$cloud2 <- renderWordcloud2(
     cloud2
   )
@@ -2064,14 +2092,16 @@ server <- function(input, output, session) {
   })
   
   
-  Var3 <- reactive({
-    input$demos1drop
-  })
+
   
   output$demoHispanicPIE <- renderPlotly({
     if (Var3() == "race") {
       HispanicPercentagePIE
     }
+  })
+  
+  Var3 <- reactive({
+    input$demos1drop
   })
   
   output$demo1 <- renderPlotly({
