@@ -933,7 +933,7 @@ science_all <- plot_ly(subset_science, x = ~Year, y = ~`Percent Pass`, color = ~
 
 #--------------breakfast------------------------------------------------------
 
-breakfast_data <- read_excel("/Users/nandinidas/Downloads/Breakfast.xlsx",skip=0,col_names=TRUE)
+breakfast_data <- read_excel(paste0(getwd(),"/data/Breakfast.xlsx"),skip=0,col_names=TRUE)
 breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Breakfast", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
@@ -1450,7 +1450,11 @@ ui <- navbarPage(title = "DSPG",
                                                      
                                              
                                              
-                                           )
+                                           ), 
+                                           tabPanel("Suspension",
+                                                    
+                                                    
+                                                    )
                                          )   
                                             
                                             
@@ -1999,7 +2003,7 @@ ui <- navbarPage(title = "DSPG",
                                    )),
                           
                  ),
-                 #----------------Tab Data------------------------------------------
+                 #----------------Data Tab------------------------------------------
                  tabPanel("Data ", value = "data",
                           fluidRow(style = "margin: 6px;",
                                    h1(strong("Data Sources"), align = "center"),
@@ -2044,7 +2048,7 @@ ui <- navbarPage(title = "DSPG",
                           )
                           
                  ),
-      #---------------Tab Meet the Team-------------------------           
+      #---------------Meet the Team Tab-------------------------           
                  tabPanel("Meet the Team", value = "team",
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    h1(strong("Team"), align = "center"),
