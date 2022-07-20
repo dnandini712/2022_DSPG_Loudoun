@@ -931,7 +931,10 @@ science_all <- plot_ly(subset_science, x = ~Year, y = ~`Percent Pass`, color = ~
 
 
 
+#--------------breakfast------------------------------------------------------
 
+breakfast_data <- read_excel("/Users/nandinidas/Downloads/Breakfast.xlsx",skip=0,col_names=TRUE)
+breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Breakfast", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 
@@ -1958,7 +1961,7 @@ ui <- navbarPage(title = "DSPG",
                                      
                             )
                  ),
-
+#-------------------------Opportunites Tab -------------------------------
                  tabPanel("Opportunities",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
@@ -1975,7 +1978,13 @@ ui <- navbarPage(title = "DSPG",
                                            ),
                                     column(6,
                                            plotlyOutput("basicsupplies",width = "100%",height = 600)
-                                    )),
+                                    ), 
+                                    br(),
+                                    br(),
+                                    column(6, 
+                                           plotlyOutput("breakfast",width = "100%",height = 600)
+                                           )
+                                    ),
          ),
                  
                  tabPanel("Analysis",
@@ -2301,6 +2310,13 @@ server <- function(input, output, session) {
   output$racenine <- renderPlotly({
     
     racenine 
+    
+    
+  })
+  
+  output$breakfast <- renderPlotly({
+    
+    breakfast 
     
     
   })
