@@ -1894,7 +1894,7 @@ ui <- navbarPage(title = "DSPG",
                                    )),
                           
                  ),
-                 
+                 #----------------Tab Data------------------------------------------
                  tabPanel("Data ", value = "data",
                           fluidRow(style = "margin: 6px;",
                                    h1(strong("Data Sources"), align = "center"),
@@ -1904,35 +1904,34 @@ ui <- navbarPage(title = "DSPG",
                                           p("We retrieve ",strong("American Community Survey (ACS)")," data to examine demographic and socioeconomic characteristics of our target population. 
                                             ACS is an ongoing yearly survey conducted by the U.S Census Bureau that samples households to compile 1-year and 5-year datasets.
                                             We used the most recently available 1-year/5-year estimates, to characterize Loudoun County’s transition aged youths by age, race,
-                                            gender, educational attainment, health insurance coverage, and poverty level. ", align = "justify"),
+                                            gender, educational attainment, health insurance coverage, and poverty level. ", style = "padding-top:20px;", align = "justify"),
                                           br(), 
                                           br(),
                                           br(),
                                         
-                                          img(src = 'VDOEimage.png', style = "display: inline; float: left;", width = "250px"),
-                                          p(strong("Virginia Department of Education:"), "The Virginia Department of Education records the information for all Virginia schools county wise. We graphed the demographics such as like enrollment ,chronic absenteeism,  absences and number of educators for the 6 Sterling Community Schools for the years 2016 – 2020. ", align = "justify"), 
+                                          img(src = 'VDOEimage.png', style = "display: inline; float: left;", width = "200px"),
+                                          p(strong("Virginia Department of Education:"), "The Virginia Department of Education records the information for all Virginia schools county wise. We graphed the demographics such as like enrollment ,chronic absenteeism,  absences and number of educators for the 6 Sterling Community Schools for the years 2016 – 2020. ", style = "padding-top:20px;", align = "justify"), 
                                           br(), 
                                           br(), 
                                           br(), 
                                           br(),
                                           br(),
-                                          img(src = 'Loudounimage.png', style = "display: inline; float: left;", width = "225px", height=200),
-                                          p("The ", strong("Loudoun County Outreach Services:"), " Holds records of those who use their provided services based on number of persons, percent of student population and year. We graphed several demographics including health coverage, family income, and listed various resources onto maps. ", align = "justify"),
+                                          br(),
+                                          br(),
+                                          img(src = 'Loudounimage.png', style = "display: inline; float: left;", width = "200px", height=190),
+                                          p("The ", strong("Loudoun County Outreach Services:"), " Holds records of those who use their provided services based on number of persons, percent of student population and year. We graphed several demographics including health coverage, family income, and listed various resources onto maps. ", style = "padding-top:20px;", align = "justify"),
                                           p("", style = "padding-top:10px;")) ,
                                    column(6,
-                                          img(src = 'data-LCPS.png', style = "display: inline; float: left;", width = "200px"),
-                                          p("The ", strong("Loudoun County Public Schools : "), "Loudoun County Public Schools holds the data for each individual school in its division. It reports the number of students and families who used their provided resources and different demographics such as gender, race/ethnicity, absences, social worker services, and free and reduced lunch. ", align = "justify"),
+                                          img(src = 'data-LCPS.png', style = "display: inline; float: left;", width = "160px"),
+                                          p("The ", strong("Loudoun County Public Schools : "), "Loudoun County Public Schools holds the data for each individual school in its division. It reports the number of students and families who used their provided resources and different demographics such as gender, race/ethnicity, absences, social worker services, and free and reduced lunch. ", style = "padding-top:20px;", align = "justify"),
                                           br(), 
                                           br(), 
                                           br(), 
                                           br(),
                                           br(),
-                                          br(),
-                                          br(),
-                                          br(),
-                                          br(),
-                                          img(src = 'data-traveltime.png', style = "display: inline; float: left;", width = "250px"),
-                                          p(strong("TravelTime")," Travel Time Application Programming Interface (API) aggregates data from OpenStreetMap, transport timetables and speed profiles to generate isochrones. An isochrone is a shape covering all locations that can be reached within the same timeframe given a start location, departure time, and a mode of transportation. We used the Travel Time API to produce isochrones of 10- to 45-minute drive times interval from Sterling Elementary which is the Central point for our 6 community schools.", align = "justify"),
+                                          
+                                          img(src = 'data-traveltime.png', style = "display: inline; float: left;", width = "200px"),
+                                          p(strong("TravelTime")," Travel Time Application Programming Interface (API) aggregates data from OpenStreetMap, transport timetables and speed profiles to generate isochrones. An isochrone is a shape covering all locations that can be reached within the same timeframe given a start location, departure time, and a mode of transportation. We used the Travel Time API to produce isochrones of 10- to 45-minute drive times interval from Sterling Elementary which is the Central point for our 6 community schools.", style = "padding-top:20px;",  align = "justify"),
                                           
                                           
                                    )
@@ -1940,7 +1939,7 @@ ui <- navbarPage(title = "DSPG",
                           )
                           
                  ),
-                 
+      #---------------Tab Meet the Team-------------------------           
                  tabPanel("Meet the Team", value = "team",
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    h1(strong("Team"), align = "center"),
@@ -1948,7 +1947,7 @@ ui <- navbarPage(title = "DSPG",
                                    h4(strong("VT Data Science for the Public Good"), align = "center"),
                                    p("The", a(href = 'https://aaec.vt.edu/academics/undergraduate/beyond-classroom/dspg.html', 'Data Science for the Public Good (DSPG) Young Scholars program', target = "_blank"),
                                      "is a summer immersive program offered by the", a(href = 'https://aaec.vt.edu/index.html', 'Virginia Tech Department of Agricultural and Applied Economics'), 
-                                     "In its second year, the program engages students from across the country to work together on projects that address state, federal, and local government challenges 
+                                     "In its third year, the program engages students from across the country to work together on projects that address state, federal, and local government challenges 
                                      around critical social issues relevant in the world today. DSPG young scholars conduct research at the intersection of statistics, computation, and the social sciences to 
                                      determine how information generated within every community can be leveraged to improve quality of life and inform public policy. For more information on program highlights, 
                                      how to apply, and our annual symposium, please visit", 
@@ -1962,31 +1961,31 @@ ui <- navbarPage(title = "DSPG",
                                           img(src = "Amanda Ljuba.jpg", style = "display: inline; margin-right: 5px; border: 1px solid #C0C0C0;", width = "150px"),
                                           img(src = "Jontayvion Osborne.jpg", style = "display: inline; margin-right: 5px; border: 1px solid #C0C0C0;", width = "150px"),
                                           img(src = "Chaudhry Abdullah Rizwan.jpg", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
-                                          img(src = "team-kyle.jpg", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
+                                         
                                           p("", style = "padding-top:10px;"), 
-                                          p(a(href = 'https://www.linkedin.com/in/yang-cheng-200118191/', 'Yang Cheng', target = '_blank'), "(Virginia Tech, Graduate in Agricultural and Applied Microeconomics);"),
-                                          p(a(href = 'https://www.linkedin.com/in/jaida-robinson-92856b194/', 'JaiDa Robinson', target = '_blank'), "(Virginia State University, Graduate in Counselor Education );"),
-                                          p(a(href = 'https://www.linkedin.com/in/julie-rebstock', 'Julie Rebstock', target = '_blank'), "(Virgina Tech, Undergraduate in Economics and Computational Modeling and Data Analytics);"),
-                                          p(a(href = 'https://www.linkedin.com/in/austin-burcham-9b32a81ab/', 'Austin Burcham', target = '_blank'), "(Virginia Tech, Undergradutate Computational Modeling and Data Analytics)."),
-                                          p(a(href = 'https://www.linkedin.com/in/kyle-jacobs7/', 'Kyle Jacobs', target = '_blank'), "(Virginia State Univeristy, Undergradutate in Agriculture)."),
+                                          p(a(href = 'https://www.linkedin.com/in/nandini-das-390577104/', 'Nandini Das', target = '_blank'), "(Virginia Tech, Graduate in Economics Department);"),
+                                          p(a(href = 'https://www.linkedin.com/in/jaida-robinson-92856b194/', 'Amanda Ljuba', target = '_blank'), "(Virginia Tech, Virginia Tech, Undergraduate in Sociology with a concentration in Social Inequality);"),
+                                          p(a(href = 'https://www.linkedin.com/in/amanda-ljuba-9824551b9', 'Jontayvion Osborne', target = '_blank'), "Austin Peay State University, Undergraduate in Business Management and Minor in Marketing) ;"),
+                                          p(a(href = 'https://www.linkedin.com/in/chaudhry-abdullah-rizwan-a1641522b/', 'Chadhry Abdullah Rizwan', target = '_blank'), "(Virginia Tech, Undergraduate in Computational Modeling and Data Analytics and Economics, Minors in Computer Science and Mathematics)."),
+                                         
                                           p("", style = "padding-top:10px;") 
                                    ),
                                    column(6, align = "center",
-                                          h4(strong("VT Faculty Team Members")),
+                                          h4(strong("VT Faculty Team Member")),
                                           img(src = "faculty-chanita.png", style = "display: inline; margin-right: 5px; border: 1px solid #C0C0C0;", width = "150px"),
-                                          img(src = "faculty-isabel.jpg", style = "display: inline; margin-right: 5px; border: 1px solid #C0C0C0;", width = "150px"),
+                                         
                                           p("", style = "padding-top:10px;"), 
-                                          p(a(href = "https://aaec.vt.edu/people/faculty/holmes-chanita.html", 'Chanita Holmes', target = '_blank'), "(Project Lead, Virgina Tech, Research Assistant Professor);") , 
-                                          p(a(href = "https://liberalarts.vt.edu/departments-and-schools/department-of-human-development-and-family-science/faculty/isabel-bradburn.html", 'Isabel Bradburn', target = '_blank'), "(Research Faulty,Virgina Tech, Department of Human Development and Family Science)."),
+                                          p(a(href = "https://aaec.vt.edu/people/faculty/holmes-chanita.html", 'Chanita Holmes', target = '_blank'), "(Project Lead, Virgina Tech, Research Assistant Professor)") , 
+                                          
                                           p("", style = "padding-top:10px;")
                                    )) ,
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    h4(strong("Project Stakeholders")),
                                    p(a(href = 'https://loudoun.ext.vt.edu/staff/Vermaak-Stuart.html', 'Stuart Vermaak', target = '_blank'), "(Virginia Cooperative Extension, Loudoun County at Virginia Tech);"),
-                                   p(a(href = 'https://loudoun.ext.vt.edu/staff/Hilleary-James.html', 'James Hilleary', target = '_blank'), "(Virginia Cooperative Extension, Loudoun County at Virginia Tech)."),
+                                   p(a(href = 'https://www.lcps.org/outreachservices', 'Sarah Eaton', target = '_blank'), "(Supervisor, Outreach Services Loudoun)."),
                                    p("", style = "padding-top:10px;"),
                                    h4(strong("Acknowledgments")) ,
-                                   p("We would like to thank Loudoun officials for providing us with data for our project. Specifically, the Department of Mental Health, Substance Abuse, and Developmental Services and the Family Service Department.  "),
+                                   p("We would like to thank Loudoun officials for providing us with data for our project. "),
                                    p("", style = "padding-top:10px;")
                           )
                  )
