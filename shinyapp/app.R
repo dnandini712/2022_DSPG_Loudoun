@@ -1,4 +1,15 @@
-#==========DSPG 2022============LOUDOUN
+#==========DSPG 2022============LOUDOUN========================================
+
+#This dashboard is arranged in the following way:
+#1. Loading Packages which are required--------
+#2. Loading the data and making the visualizations-----------
+#3. JSCODE 
+#4. USER INTERFACE    (Search for 'Overview Tab' and it will take you to the UI for that tab)
+#5. Server
+
+#For this repo, all the visualisations are made beforehand and in the server these graphs are just called. 
+#Nothing is calculated in the server. 
+
 
 #Load Packages ---------------------------------------------------------------
 library(dplyr)
@@ -62,7 +73,7 @@ library(rmapzen)
 library(scales)
 library(ggwordcloud)
 library(wordcloud2)
-
+#---------------------------------------------------------------
 
 prettyblue <- "#232D4B"
 navBarBlue <- '#427EDC'
@@ -75,7 +86,7 @@ colors <- c("#232d4b","#2c4f6b","#0e879c","#60999a","#d1e0bf","#d9e12b","#e6ce3a
 
 # Sterling Map -----------------------------------------------------
 
-
+# This pulls data from ACS----------------------------------------
 readRenviron("~/.Renviron")
 Sys.getenv("CENSUS_API_KEY")
 
@@ -1211,7 +1222,7 @@ ui <- navbarPage(title = "DSPG",
                  ),
                  
                  ## Community Schools Tab--------------------------------------------
-                 tabPanel("Community Schools", value = "overview",
+                 tabPanel("The Initiative", value = "overview",
                           fluidRow(style = "margin: 2px;",
                                    p("", style = "padding-top:10px;"),
                                    column(12, align = "center", h1(strong("Sterling’s Elementary Community Schools"))),
@@ -1263,7 +1274,7 @@ ui <- navbarPage(title = "DSPG",
                           ),
                  ), 
                  
-                 #---------------Tab Sociodemographics------------------------
+                 #---------------Sociodemographics Tab------------------------
                  tabPanel("Sociodemographics",
                           fluidRow(style = "margin: 4px;",
                                    h1(strong("Sterling Sociodemographics"), align = "center"),
@@ -1371,7 +1382,7 @@ ui <- navbarPage(title = "DSPG",
                           )
                  ),
                  
-                # ---------------Tab Schools------------------------
+                # ---------------Schools Tab------------------------
                  navbarMenu("Schools",
                             tabPanel("Demographics", 
                                      fluidRow(style = "margin: 6px;",
@@ -1517,7 +1528,7 @@ ui <- navbarPage(title = "DSPG",
                             ),
                             
                             
-                            #------------Climate Survey UI-----------------
+                            #------------Climate Survey Subtab-----------------
                             tabPanel("Climate Survey Reports",
                                      fluidRow(style = "margin: 6px;",
                                               p("", style = "padding-top:10px;"),
@@ -1839,7 +1850,7 @@ ui <- navbarPage(title = "DSPG",
                             
                             
                  ),
-                 
+                 #----------------------------Resources Tab-----------------------------
                  navbarMenu("Resources",
                             tabPanel("Health and Social Services",
                                      fluidRow(style = "margin: 6px;",
@@ -2107,8 +2118,8 @@ ui <- navbarPage(title = "DSPG",
                                          
                                           p("", style = "padding-top:10px;"), 
                                           p(a(href = 'https://www.linkedin.com/in/nandini-das-390577104/', 'Nandini Das', target = '_blank'), "(Virginia Tech, Graduate in Economics Department);"),
-                                          p(a(href = 'https://www.linkedin.com/in/jaida-robinson-92856b194/', 'Amanda Ljuba', target = '_blank'), "(Virginia Tech, Virginia Tech, Undergraduate in Sociology with a concentration in Social Inequality);"),
-                                          p(a(href = 'https://www.linkedin.com/in/amanda-ljuba-9824551b9', 'Jontayvion Osborne', target = '_blank'), "Austin Peay State University, Undergraduate in Business Management and Minor in Marketing) ;"),
+                                          p(a(href = 'https://www.linkedin.com/in/amanda-ljuba-9824551b9', 'Amanda Ljuba', target = '_blank'), "(Virginia Tech, Virginia Tech, Undergraduate in Sociology with a concentration in Social Inequality);"),
+                                          p(a(href = 'https://www.linkedin.com/in/jontayvion-osborne-a3b7961a7', 'Jontayvion Osborne', target = '_blank'), "Austin Peay State University, Undergraduate in Business Management and Minor in Marketing) ;"),
                                           p(a(href = 'https://www.linkedin.com/in/chaudhry-abdullah-rizwan-a1641522b/', 'Chadhry Abdullah Rizwan', target = '_blank'), "(Virginia Tech, Undergraduate in Computational Modeling and Data Analytics and Economics, Minors in Computer Science and Mathematics)."),
                                          
                                           p("", style = "padding-top:10px;") 
@@ -2146,63 +2157,8 @@ server <- function(input, output, session) {
     map1
   })
   
-  
-  
-  output$map_health <- renderLeaflet({
-    if(input$health_category == "Free Services"){
-      # call some leaflet plot already made for the free services
-      health_free
-    }
-    else{
-      health_all
-    }
-    
-    
-  })
-  
-  output$map_youth <- renderLeaflet({
-    if(input$youth_category == "Free Services"){
-      youth_free
-    }
-    else{
-      map_youth
-    }
-    
-    
-  })
-  
-  output$map_mental <- renderLeaflet({
-    if(input$mental_category == "Free Services"){
-      mental_free
-    }
-    else{
-      map_mental
-    }
-    
-  })
-  
-  output$map_family <- renderLeaflet({
-    if(input$family_category == "Free Services"){
-      fam_free
-    }
-    else{
-      map_family
-    }
-  })
-  
-  output$math_all<- renderPlotly({
-    math_all
-  })
-  
-  output$english_all<- renderPlotly({
-    english_all
-  })
-  
-  output$science_all<- renderPlotly({
-    science_all
-  })
-  
-  
+
+
   
   output$weekendmeals <- renderPlotly({
     weekendmeals
@@ -2211,14 +2167,6 @@ server <- function(input, output, session) {
   output$basicsupplies <- renderPlotly({
     basicsupplies
   })
-  
-  output$cloud2 <- renderWordcloud2(
-    cloud2
-  )
-  
-  output$cloud3 <- renderWordcloud2(
-    cloud3
-  )
   
   
   Var <- reactive({
@@ -2821,6 +2769,61 @@ server <- function(input, output, session) {
     }
   })
   
+  output$math_all<- renderPlotly({
+    math_all
+  })
+  
+  output$english_all<- renderPlotly({
+    english_all
+  })
+  
+  output$science_all<- renderPlotly({
+    science_all
+  })
+  
+  
+  
+  output$map_health <- renderLeaflet({
+    if(input$health_category == "Free Services"){
+      # call some leaflet plot already made for the free services
+      health_free
+    }
+    else{
+      health_all
+    }
+    
+    
+  })
+  
+  output$map_youth <- renderLeaflet({
+    if(input$youth_category == "Free Services"){
+      youth_free
+    }
+    else{
+      map_youth
+    }
+    
+    
+  })
+  
+  output$map_mental <- renderLeaflet({
+    if(input$mental_category == "Free Services"){
+      mental_free
+    }
+    else{
+      map_mental
+    }
+    
+  })
+  
+  output$map_family <- renderLeaflet({
+    if(input$family_category == "Free Services"){
+      fam_free
+    }
+    else{
+      map_family
+    }
+  })
   
   
   
