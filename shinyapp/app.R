@@ -1082,12 +1082,12 @@ healthscrape <- read_excel(paste0(getwd(),"/data/manualscrappingdata.xlsx"))
 subset_healthscrape <- healthscrape[2:5,c(2,5)]
 Total <- subset_healthscrape$...5
 Year <- subset_healthscrape$...2
-plot_ly(data = subset_healthscrape, x = ~Year, y = ~Total, type = "scatter",mode="line",hoverinfo = "text",text = ~paste("Year:",Year,"Total:",Total)) %>% layout(yaxis = list(tickvals = list(100,200,300,400,500,600,700,800,900)),title = "Families Who Receieved Weekend Meals") -> weekendmeals
+plot_ly(data = subset_healthscrape, x = ~Year, y = ~Total, type = "scatter",mode="line",hoverinfo = "text",text = ~paste("Year:",Year,"Total:",Total)) %>% layout(yaxis = list(tickvals = list(100,200,300,400,500,600,700,800,900)),title = "Families Who Received Weekend Meals") -> weekendmeals
 
 subset_healthscrape2 <- healthscrape[c(2,4),c(2,4)]
 Year2 <- subset_healthscrape2$...2
 Total2 <- subset_healthscrape2$...4
-plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Families Who Receieved Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
+plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Families Who Received Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
 
 #----------------suspension data-------------------
 
