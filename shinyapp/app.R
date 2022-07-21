@@ -393,9 +393,9 @@ nineteensub <- race_subset[(1:24),(1:4)]
 Race <- nineteensub$Race
 Percentage <- nineteensub$Percentage
 School <- nineteensub$`School Name`
-racenine <- ggplot(nineteensub,aes(x=School,y=Percentage,fill=Race))+ geom_col(position = "dodge")+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Percentage",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
+racenine <- ggplot(nineteensub,aes(x=School,y=Percentage,fill=Race))+ geom_col(position = "dodge",aes(text = paste0("School:",School,"\n","Race:",Race,"\n", "Percent:", Percentage, "%")))+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Percentage",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
                                                                                                                                                                                                                                          plot.caption = element_text(hjust = 1)) + guides(fill=guide_legend(title="Race/Ethnicity"))
-racenine <- ggplotly(racenine)
+racenine <- ggplotly(racenine,tooltip=c("text"))
 
 #-----------hispanic population-----------------
 
