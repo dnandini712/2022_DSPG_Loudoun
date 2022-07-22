@@ -404,7 +404,7 @@ nineteensub <- race_subset[(1:24),(1:4)]
 Race <- nineteensub$Race
 Percentage <- nineteensub$Percentage
 School <- nineteensub$`School Name`
-racenine <- ggplot(nineteensub,aes(x=School,y=Percentage,fill=Race))+ geom_col(position = "dodge",aes(text = paste0("School:",School,"\n","Race:",Race,"\n", "Percent:", Percentage, "%")))+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Percentage",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
+racenine <- ggplot(nineteensub,aes(x=School,y=Percentage,fill=Race))+ geom_col(position = "dodge",aes(text = paste0("Percentage:",Percentage, "%", "\n","Race:",Race,"\n","School:",School)))+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Percentage",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
                                                                                                                                                                                                                                          plot.caption = element_text(hjust = 1)) + guides(fill=guide_legend(title="Race/Ethnicity"))
 racenine <- ggplotly(racenine,tooltip=c("text"))
 
@@ -443,7 +443,7 @@ enrollment <- read_excel(paste0(getwd(),"/data/Enrollment16-20.xlsx"))
 enr_total <- enrollment$Total
 School <- enrollment$Schools
 Year <- enrollment$Year
-enroll <- plot_ly(enrollment, x = ~Year,y = ~Total, color = ~School, type = 'scatter',mode = 'lines', hoverinfo="text", text = ~paste("Total:", Total)) %>% layout(title= "Total Enrollment by Schools", xaxis = list(title = ""), yaxis = list(title = "Total Students"), legend=list(title=list(text='Select School')))
+enroll <- plot_ly(enrollment, x = ~Year,y = ~Total, color = ~School, type = 'scatter',mode = 'lines', hoverinfo="text", text = ~paste("Total:", Total)) %>% layout(title= "Enrollment", xaxis = list(title = ""), yaxis = list(title = "Total Students"), legend=list(title=list(text='Select School')))
 
 #-------------------attendance --------------
 
@@ -466,7 +466,7 @@ figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = '
 #text = ~paste('Total:',))
 
 figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(253, 151, 12 )'))
-cteacher <- figSTM %>% layout(title = "Teachers/Staff by Schools", yaxis = list(title = 'Total Educators'), xaxis = list(title = ''), barmode = 'stack')
+cteacher <- figSTM %>% layout(title = "Total Teachers and Staff", yaxis = list(title = 'Total Educators'), xaxis = list(title = ''), barmode = 'stack')
 
 ##--------Chronic absenteeism------------------
 
@@ -1056,7 +1056,7 @@ figELS <- plot_ly(dataELS,
                   fill = 'tozeroy',
                   fillcolor = 'rgba(114,186,59,0.5)',
                   line = list(color = 'rgb(114,186,59)'),
-                  text = ~paste("Year:", subset_englishlearnerstatus$`School Year`, "<br>Percentage", subset_englishlearnerstatus$Percentage),
+                  text = ~paste("Percentage:", subset_englishlearnerstatus$Percentage,"%","<br>","Year:",  subset_englishlearnerstatus$`School Year`),
                   hoverinfo = 'text')
 
 figELS <- figELS %>% layout(
@@ -1070,7 +1070,7 @@ figELS <- figELS %>% layout(
     zeroline = F
   ),
   xaxis = list(
-    title = "Academic School Year", 
+    title = "", 
     zeroline = T, 
     zerolinewidth = 60,
     standoff = 25,
@@ -1098,11 +1098,11 @@ figIEP <- plot_ly(dataIEP,
                   fill = 'tozeroy',
                   fillcolor = 'rgba(114,186,59,0.5)',
                   line = list(color = 'rgb(114,186,59)'),
-                  text = ~paste("Year:", subset_IEPstatus$`School Year`, "<br>Percentage", subset_IEPstatus$Percentage),
+                  text = ~paste("Percentage:", subset_IEPstatus$Percentage,"%", "<br>","Year:", subset_IEPstatus$`School Year`),
                   hoverinfo = 'text')
 
 figIEP <- figIEP %>% layout(
-  title = "IEP Status",
+  title = "Individual Education Plan (IEP) Status",
   yaxis = list(
     title = "Percentage",
     range = list(8,13),
@@ -1110,7 +1110,7 @@ figIEP <- figIEP %>% layout(
     zeroline = F
   ),
   xaxis = list(
-    title = " Academic School Year", 
+    title = "", 
     zeroline = T, 
     zerolinewidth = 60,
     standoff = 25,
@@ -1138,7 +1138,7 @@ figFRL <- plot_ly(dataFRL,
                   fill = 'tozeroy',
                   fillcolor = 'rgba(114,186,59,0.5)',
                   line = list(color = 'rgb(114,186,59)'),
-                  text = ~paste("Year:", subset_freereducedlunch$`School Year`, "<br>Percentage", subset_freereducedlunch$Percentage),
+                  text = ~paste("Percentage:", subset_freereducedlunch$Percentage, "%", "<br>","Year:", subset_freereducedlunch$`School Year`),
                   hoverinfo = 'text')
 
 figFRL <- figFRL %>% layout(
@@ -1150,7 +1150,7 @@ figFRL <- figFRL %>% layout(
     zeroline = F
   ),
   xaxis = list(
-    title = " Academic School Year", 
+    title = "", 
     zeroline = T, 
     zerolinewidth = 60,
     standoff = 25,
@@ -1179,7 +1179,7 @@ figHOME <- plot_ly(dataHOME,
                    fill = 'tozeroy',
                    fillcolor = 'rgba(114,186,59,0.5)',
                    line = list(color = 'rgb(114,186,59)'),
-                   text = ~paste("Year:", subset_homeless$`School Year`, "<br>Percentage", subset_homeless$Percentage),
+                   text = ~paste("<br>Percentage:", subset_homeless$Percentage, "%","Year:", subset_homeless$`School Year`),
                    hoverinfo = 'text')
 
 figHOME <- figHOME %>% layout(
@@ -1191,7 +1191,7 @@ figHOME <- figHOME %>% layout(
     zeroline = TRUE
   ),
   xaxis = list(
-    title = " Academic School Year", 
+    title = "", 
     zeroline = T, 
     zerolinewidth = 60,
     standoff = 25,
@@ -2317,7 +2317,7 @@ ui <- navbarPage(title = "DSPG",
                  tabPanel("Opportunities",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("Possible Service Opportunities")),
+                                   column(12, align = "center",h4(strong("")),
                                           p(""),
                                           br("")
                                           
@@ -2342,13 +2342,29 @@ ui <- navbarPage(title = "DSPG",
                  tabPanel("Analysis",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("")),
+                                   column(12, align = "center",h1(strong("Possible Service Opportunities")),
                                           p(""),
                                           br("")
                                           
                                           
                                           
                                    )),
+                          fluidPage(style = "margin: 2px;",
+                                    column(3,
+                                           h3(strong("Health and Social Services")),
+                                             p("Social emotional learning can be implemented within all grades to promote communication skills and help students manage their emotions"),
+                                           p("Annual medical, dental, and vision clinics at each school offering services to those both insured and uninsured")),
+                                    column(3,
+                                           h3(strong("Mental Health")),
+                                           p("Provide training on Adverse Childhood Experiences (ACEs) and how to recognize and understand the impacts these may have on students")),
+                                    column(3,
+                                           h3(strong("Youth Development")),
+                                           p("Restorative justice practices such as peace circles will allow for decreases in future conflict"),
+                                           p("Increases in before and after school programs that promote health and education")),
+                                    column(3,
+                                           h3(strong("Family Development")),
+                                           p("Increasing multi-language resources"),
+                                           p("Providing more opportunities for parent feedback forums")))
                           
                  ),
                  #----------------Data Tab------------------------------------------
