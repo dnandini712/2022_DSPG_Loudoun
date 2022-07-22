@@ -1739,6 +1739,9 @@ ui <- navbarPage(title = "DSPG",
                                               ),
                                               
                                               withSpinner(plotlyOutput("ocuplot3", height = "500px", width = "100%")),
+                                              withSpinner(uiOutput("ocuplot4", height = "500px", width = "100%")),
+                                              withSpinner(withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%"))),
+                                              
                                               column(12,align = "right",
                                                      p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                               ),
@@ -1793,7 +1796,7 @@ ui <- navbarPage(title = "DSPG",
                                                     ),
                                                     ),
                                                     
-                                                    withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%")),
+                                                    
                                                     
                                                     )
                                          )),
@@ -2786,13 +2789,80 @@ server <- function(input, output, session) {
       
     }
     
-    else if(VarSchool3() == "suspension") {
-      
-      
-      
-    }
-    
   })
+    
+    output$ocuplot4<-renderUI({
+  
+  if(VarSchool3() == "suspension") {
+      
+      selectInput("schoolsuspend", "Select School:", width = "100%", choices = c(
+        "Forest Grove" = "forestsuspend",
+        "Guilford" = "guilfordsuspend",
+        "Rolling Ridge" = "rollingsuspend",
+        "Sterling" = "sterlingsuspend",
+        "Sugarland" = "sugarlandsuspend",
+        "Sully" = "sullysuspend"
+        
+      )
+      )}
+      
+    })
+    
+    Varsuspend <- reactive({
+      input$schoolsuspend
+    }) 
+    
+    output$schoolsuspendall <- renderPlotly({
+      
+      if(VarSchool3() == "suspension") {
+      
+      if (Varsuspend() == "forestsuspend") {
+        
+        forestsuspend
+        
+      }
+      
+      else if (Varsuspend() == "guilfordsuspend") {
+        
+        guilfordsuspend
+      }
+      
+      else if (Varsuspend() == "rollingsuspend") {
+        
+        rollingsuspend
+      }
+      
+      else if (Varsuspend() == "sterlingsuspend") {
+        sterlingsuspend
+      }
+      
+      else if (Varsuspend() == "sugarlandsuspend") {
+        sugarlandsuspend
+      }
+      
+      else if (Varsuspend() == "sullysuspend") {
+        sullysuspend
+      }
+      
+      }
+    })
+    
+    
+    
+    
+    #observeEvent(c(input$schooldrop3, input$ocuplot3, input$ocuplot4), {
+      #req(input$schooldrop3)
+     # if (VarSchool3() == "suspension") {
+        #hide("ocuplot3")
+    #  } else if (VarSchool3() == "attend" && VarSchool3() == "chronic"){
+     #   show("ocuplot3")
+    #    hide("ocuplot4")
+    #    hide("schoolsuspendall")
+    #  }
+      
+   #})
+    
+  
   
   
   
@@ -3191,40 +3261,7 @@ server <- function(input, output, session) {
   
   
   
-  Varsuspend <- reactive({
-    input$schoolsuspend
-  }) 
   
-  output$schoolsuspendall <- renderPlotly({
-    
-    if (Varsuspend() == "forestsuspend") {
-      
-      forestsuspend
-      
-    }
-    
-    else if (Varsuspend() == "guilfordsuspend") {
-      
-      guilfordsuspend
-    }
-    
-    else if (Varsuspend() == "rollingsuspend") {
-      
-      rollingsuspend
-    }
-    
-    else if (Varsuspend() == "sterlingsuspend") {
-      sterlingsuspend
-    }
-    
-    else if (Varsuspend() == "sugarlandsuspend") {
-      sugarlandsuspend
-    }
-    
-    else if (Varsuspend() == "sullysuspend") {
-      sullysuspend
-    }
-  })
   
   output$math_all<- renderPlotly({
     math_all
@@ -3301,6 +3338,9 @@ server <- function(input, output, session) {
       map_family
     }
   })
+  
+  
+  
   
   
   
