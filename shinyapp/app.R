@@ -2348,7 +2348,7 @@ ui <- navbarPage(title = "DSPG",
                  tabPanel("Opportunities",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("Possible Service Opportunities")),
+                                   column(12, align = "center",h4(strong("")),
                                           p(""),
                                           br("")
                                           
@@ -2373,13 +2373,29 @@ ui <- navbarPage(title = "DSPG",
                  tabPanel("Analysis",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("")),
+                                   column(12, align = "center",h1(strong("Possible Service Opportunities")),
                                           p(""),
                                           br("")
                                           
                                           
                                           
                                    )),
+                          fluidPage(style = "margin: 2px;",
+                                    column(3,
+                                           h3(strong("Health and Social Services")),
+                                             p("Social emotional learning can be implemented within all grades to promote communication skills and help students manage their emotions"),
+                                           p("Annual medical, dental, and vision clinics at each school offering services to those both insured and uninsured")),
+                                    column(3,
+                                           h3(strong("Mental Health")),
+                                           p("Provide training on Adverse Childhood Experiences (ACEs) and how to recognize and understand the impacts these may have on students")),
+                                    column(3,
+                                           h3(strong("Youth Development")),
+                                           p("Restorative justice practices such as peace circles will allow for decreases in future conflict"),
+                                           p("Increases in before and after school programs that promote health and education")),
+                                    column(3,
+                                           h3(strong("Family Development")),
+                                           p("Increasing multi-language resources"),
+                                           p("Providing more opportunities for parent feedback forums")))
                           
                  ),
                  #----------------Data Tab------------------------------------------
