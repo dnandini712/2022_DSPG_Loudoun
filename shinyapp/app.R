@@ -935,9 +935,6 @@ math_all <- plot_ly(subset_math, x = ~Year, y = ~`Percent Pass`, color = ~School
 subset_english <- assessment[c(1,4,7,10,13,16,19,22,25,28,31,34), c(1:2,7:8)]
 english_all <- plot_ly(subset_english, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School)) %>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
-subset_science <- assessment[c(3,6,9,12,15,18,21,24,27,30,33,36), c(1:2,7:8)]
-science_all <- plot_ly(subset_science, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School)) %>% layout(title = "Science Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
 #-------------------students with disabilities----------------------
 
 assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
@@ -951,13 +948,6 @@ assessment %>% filter(Subgroup == "Students with Disabilities" & Subject == "Eng
 
 english_dis <- plot_ly(assessmentdisenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
-
-assessment %>% filter(Subgroup == "Students with Disabilities" & Subject == "Science") -> assessmentdisscience
-
-science_dis <- plot_ly(assessmentdisscience, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Science Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-
-
 #----------------------white students---------------------------------------
 
 assessment %>% filter(Subgroup == "White" & Subject == "Mathematics") -> assessmentwhitemath
@@ -969,11 +959,6 @@ assessment %>% filter(Subgroup == "White" & Subject == "English Reading") -> ass
 
 english_white <- plot_ly(assessmentwhiteenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
-
-assessment %>% filter(Subgroup == "White" & Subject == "Science") -> assessmentwhitescience
-
-science_white <- plot_ly(assessmentwhitescience, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Science Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
 #---------black----------------------------
 
 assessment %>% filter(Subgroup == "Black" & Subject == "Mathematics") -> assessmentblackmath
@@ -984,11 +969,6 @@ math_black <- plot_ly(assessmentblackmath, x = ~Year, y = ~`Percent Pass`, color
 assessment %>% filter(Subgroup == "Black" & Subject == "English Reading") -> assessmentblackenglish
 
 english_black <- plot_ly(assessmentblackenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-
-assessment %>% filter(Subgroup == "Black" & Subject == "Science") -> assessmentblackscience
-
-science_black <- plot_ly(assessmentblackscience, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Science Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 #----------asian--------------------------
@@ -1003,11 +983,6 @@ assessment %>% filter(Subgroup == "Asian" & Subject == "English Reading") -> ass
 english_asian <- plot_ly(assessmentasianenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
-assessment %>% filter(Subgroup == "Asian" & Subject == "Science") -> assessmentasianscience
-
-science_asian <- plot_ly(assessmentasianscience, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Science Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-
 #--------hispanic-------------------------------
 
 assessment %>% filter(Subgroup == "Hispanic" & Subject == "Mathematics") -> assessmenthispanicmath
@@ -1020,11 +995,6 @@ assessment %>% filter(Subgroup == "Hispanic" & Subject == "English Reading") -> 
 english_hispanic <- plot_ly(assessmenthispanicenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
-assessment %>% filter(Subgroup == "Hispanic" & Subject == "Science") -> assessmenthispanicscience
-
-science_hispanic <- plot_ly(assessmenthispanicscience, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Science Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-
 #-----------male------------------------------
 
 assessment %>% filter(Subgroup == "Male" & Subject == "Mathematics") -> assessmentmalemath
@@ -1035,12 +1005,6 @@ math_male <- plot_ly(assessmentmalemath, x = ~Year, y = ~`Percent Pass`, color =
 assessment %>% filter(Subgroup == "Male" & Subject == "English Reading") -> assessmentmaleenglish
 
 english_male <- plot_ly(assessmentmaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-
-assessment %>% filter(Subgroup == "Male" & Subject == "Science") -> assessmentmalescience
-
-science_male <- plot_ly(assessmentmalescience, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Science Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
 
 
 
@@ -1056,12 +1020,6 @@ assessment %>% filter(Subgroup == "Female" & Subject == "English Reading") -> as
 english_female <- plot_ly(assessmentfemaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
-assessment %>% filter(Subgroup == "Female" & Subject == "Science") -> assessmentfemalescience
-
-science_female <- plot_ly(assessmentfemalescience, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Science Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-
-
 
 #-----------homeless-------------------------
 
@@ -1073,13 +1031,6 @@ math_homeless <- plot_ly(assessmenthomelessmath, x = ~Year, y = ~`Percent Pass`,
 assessment %>% filter(Subgroup == "Homeless" & Subject == "English Reading") -> assessmenthomelessenglish
 
 english_homeless <- plot_ly(assessmenthomelessenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-
-assessment %>% filter(Subgroup == "Homeless" & Subject == "Science") -> assessmenthomelessscience
-
-science_homeless <- plot_ly(assessmenthomelessscience, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Science Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-
 
 
 #--------------breakfast------------------------------------------------------
@@ -1761,12 +1712,12 @@ ui <- navbarPage(title = "DSPG",
                             
                             tabPanel("Education", 
                                      column(7, align = "left",
+                                     tabsetPanel(
+                                       tabPanel("Size",
                                             selectInput("schooldrop2", "Select Characteristic:", width = "100%", choices = c(
                                               "Educators" = "cteacher",
                                               "Enrollment" = "cenrol", 
-                                              "Absences" = "attend", 
-                                              "Chronic Absenteeism" = "chronic"
-                                              
+                                              "Teacher-Student ratio" = "tsratio"
                                             ),
                                             ),
                                             
@@ -1775,7 +1726,26 @@ ui <- navbarPage(title = "DSPG",
                                                    p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                             ),
 
-                                         tabsetPanel(
+                                     ),
+                                     
+                                     tabPanel("Behavior",
+                                              selectInput("schooldrop3", "Select Characteristic:", width = "100%", choices = c(
+                                              
+                                                "Absences" = "attend", 
+                                                "Chronic Absenteeism" = "chronic",
+                                                "Suspensions" = "suspension"
+                                                
+                                              ),
+                                              ),
+                                              
+                                              withSpinner(plotlyOutput("ocuplot3", height = "500px", width = "100%")),
+                                              column(12,align = "right",
+                                                     p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
+                                              ),
+                                              
+                                     ),
+                                     
+                                     
                                            tabPanel( "Performance",
                                                      fluidRow(
                                                        column(12,align = "left",
@@ -1798,7 +1768,7 @@ ui <- navbarPage(title = "DSPG",
                                                               br(""),
                                                               withSpinner(plotlyOutput("grades_english", height = "500px", width = "100%")),
                                                               #br(""),
-                                                              withSpinner(plotlyOutput("grades_science", height = "500px", width = "100%")),
+                                                          
                                                               #br(""),
                                                                      p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                                               p("*Note: Data is not available for the missing bars", style = "font-size:12px;"),
@@ -1826,11 +1796,7 @@ ui <- navbarPage(title = "DSPG",
                                                     withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%")),
                                                     
                                                     )
-                                         )   
-
-                                            
-                                            
-                                     ),
+                                         )),
                                      
                                      column(5, align = "justify",
                                             br(""),
@@ -2763,77 +2729,7 @@ server <- function(input, output, session) {
     
     
   })
-  
-  output$grades_science  <- renderPlotly({
-    
-    if (Varperf() == "allstudentsgrades") {
-      
-      science_all 
-      
-    }
-    
-    else if (Varperf() == "blackgrades") {
-      
-      science_black
-      
-    }
-    
-    else if (Varperf() == "asiangrades") {
-      
-      science_asian
-    }
-    
-    else if (Varperf() == "disabilitiesgrades") {
-      
-      science_dis
-      
-      
-    }
-    
-    else if (Varperf() == "hispanicgrades") {
-      
-      science_hispanic
-      
-      
-    }
-    
-    else if (Varperf() == "malegrades") {
-      
-      science_male
-      
-      
-    }
-    
-    
-    else if (Varperf() == "femalegrades") {
-      
-      science_female
-      
-      
-    }
-    
-    else if (Varperf() == "homelessgrades") {
-      
-      science_homeless
-      
-      
-    }
-    
-    else if (Varperf() == "whitegrades") {
-      
-      science_white
-      
-    }
-    
-    
-  })
-  
-  
-  
-  
-  
-  
-  
+
   #School Demos
   Var2 <- reactive({
     input$schooldrop1
@@ -2868,24 +2764,47 @@ server <- function(input, output, session) {
   })
   
   output$ocuplot2<- renderPlotly({
+
     
-    if(VarSchool() == "attend"){
-      attend 
-    }
-    
-    else if (VarSchool() == "cteacher") {
+     if (VarSchool() == "cteacher") {
       
       cteacher
       
     }
-    else if (VarSchool() == "chronic") {
+    else if (VarSchool() == "tsratio") {
+      
+ 
+    }
+    else if (VarSchool() == "cenrol") {
+      enroll
+      
+    }
+    
+  })
+  
+  VarSchool3 <- reactive({
+    
+    input$schooldrop3
+    
+  })
+  
+  output$ocuplot3<- renderPlotly({
+    
+
+     if (VarSchool3() == "chronic") {
       
       chronic
       
       
     }
-    else if (VarSchool() == "cenrol") {
-      enroll
+    else if (VarSchool3() == "attend") {
+      attend
+      
+    }
+    
+    else if(VarSchool3() == "suspension") {
+      
+      
       
     }
     
