@@ -925,7 +925,7 @@ cloud3<- wordcloud2(df3, size=0.5)
 
 
 #-----------------Performance Graphs --------------------------
-
+#----------------all students-------------------------------
 
 assessment <- read_excel(paste0(getwd(),"/data/allstudentsassess.xlsx"),skip=0,col_names=TRUE)
 
@@ -938,7 +938,26 @@ english_all <- plot_ly(subset_english, x = ~Year, y = ~`Percent Pass`, color = ~
 subset_science <- assessment[c(3,6,9,12,15,18,21,24,27,30,33,36), c(1:2,7:8)]
 science_all <- plot_ly(subset_science, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School)) %>% layout(title = "Science Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
+#-------------------students with disabilities----------------------
 
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
+assessment %>% filter(Subgroup == "Students with Disabilities" & Subject == "Mathematics") -> assessmentdismath
+
+math_dis <- plot_ly(assessmentdismath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Math Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+
+
+assessment %>% filter(Subgroup == "Students with Disabilities" & Subject == "English Reading") -> assessmentdisenglish
+
+english_dis <- plot_ly(assessmentdisenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+
+english_dis
+
+assessment %>% filter(Subgroup == "Students with Disabilities" & Subject == "Science") -> assessmentdisscience
+
+science_dis <- plot_ly(assessmentdisscience, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Science Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+
+science_dis
 
 #--------------breakfast------------------------------------------------------
 
@@ -1632,57 +1651,59 @@ ui <- navbarPage(title = "DSPG",
                                             column(12,align = "right",
                                                    p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                             ),
-                                            tabsetPanel(
-                                              tabPanel( "Performance",
-                                                        fluidRow(
-                                                          column(12,align = "left",
-                                                                 
-                                                                 selectInput("gradesdrop", "Select:", width = "100%", choices = c(
-                                                                   "All Students" = "allstudentsgrades",
-                                                                   "White" = "whitegrades",
-                                                                   "Black" = "blackgrades",
-                                                                   "Asian" = "asiangrades",
-                                                                   "Hispanic" = "hispanicgrades",
-                                                                   "Male" = "malegrades",
-                                                                   "Female" = "femalegrades",
-                                                                   "Homeless" = "homelessgrades",
-                                                                   "Disabilies" = "disabilitiesgrades"
-                                                                   
-                                                                 ),
-                                                                 ),
-                                                                 
-                                                                 withSpinner(plotlyOutput("grades_math", height = "500px", width = "100%")),
-                                                                 br(""),
-                                                                 withSpinner(plotlyOutput("grades_english", height = "500px", width = "100%")),
-                                                                 #br(""),
-                                                                 withSpinner(plotlyOutput("grades_science", height = "500px", width = "100%")),
-                                                                 #br(""),
-                                                                 #p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
-                                                          )
-                                                          
-                                                          
-                                                        )      
-                                                        
-                                                        
-                                                        
-                                                        
-                                              ), 
-                                              tabPanel("Suspension",
-                                                       selectInput("schoolsuspend", "Select School:", width = "100%", choices = c(
-                                                         "Forest Grove" = "forestsuspend",
-                                                         "Guilford" = "guilfordsuspend",
-                                                         "Rolling Ridge" = "rollingsuspend",
-                                                         "Sterling" = "sterlingsuspend",
-                                                         "Sugarland" = "sugarlandsuspend",
-                                                         "Sully" = "sullysuspend"
-                                                         
-                                                       ),
-                                                       ),
-                                                       
-                                                       withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%")),
-                                                       
-                                              )
-                                            )   
+
+                                         tabsetPanel(
+                                           tabPanel( "Performance",
+                                                     fluidRow(
+                                                       column(12,align = "left",
+                                                              
+                                                              selectInput("gradesdrop", "Select:", width = "100%", choices = c(
+                                                                "All Students" = "allstudentsgrades",
+                                                                "White" = "whitegrades",
+                                                                "Black" = "blackgrades",
+                                                                "Asian" = "asiangrades",
+                                                                "Hispanic" = "hispanicgrades",
+                                                                "Male" = "malegrades",
+                                                                "Female" = "femalegrades",
+                                                                "Homeless" = "homelessgrades",
+                                                                "Disabilies" = "disabilitiesgrades"
+                                                                
+                                                              ),
+                                                              ),
+                                                              
+                                                              withSpinner(plotlyOutput("grades_math", height = "500px", width = "100%")),
+                                                              br(""),
+                                                              withSpinner(plotlyOutput("grades_english", height = "500px", width = "100%")),
+                                                              #br(""),
+                                                              withSpinner(plotlyOutput("grades_science", height = "500px", width = "100%")),
+                                                              #br(""),
+                                                                     #p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
+                                                              )
+                                                              
+                                                              
+                                                     )      
+                                                              
+                                                     
+                                             
+                                             
+                                           ), 
+                                           tabPanel("Suspension",
+                                                    selectInput("schoolsuspend", "Select School:", width = "100%", choices = c(
+                                                      "Forest Grove" = "forestsuspend",
+                                                      "Guilford" = "guilfordsuspend",
+                                                      "Rolling Ridge" = "rollingsuspend",
+                                                      "Sterling" = "sterlingsuspend",
+                                                      "Sugarland" = "sugarlandsuspend",
+                                                      "Sully" = "sullysuspend"
+                                                      
+                                                    ),
+                                                    ),
+                                                    
+                                                    withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%")),
+                                                    
+                                                    )
+                                         )   
+
                                             
                                             
                                      ),
@@ -2468,6 +2489,100 @@ server <- function(input, output, session) {
   })
   
   
+  #---------performance graphs--------------
+
+  Varperf <- reactive({
+    input$gradesdrop
+  })
+  
+  output$grades_math  <- renderPlotly({
+    
+    if (Varperf() == "allstudentsgrades") {
+      
+      math_all 
+   
+    }
+    
+    else if (Varperf() == "malegrades") {
+      malegrades
+      
+    }
+    
+    else if (Varperf() == "femalegrades") {
+      
+      femalegrades
+    }
+    
+    else if (Varperf() == "disabilitiesgrades") {
+      
+      math_dis
+      
+      
+    }
+    
+    
+  })
+  
+  
+  output$grades_english  <- renderPlotly({
+    
+    if (Varperf() == "allstudentsgrades") {
+      
+      english_all 
+      
+    }
+    
+    else if (Varperf() == "malegrades") {
+      malegrades
+      
+    }
+    
+    else if (Varperf() == "femalegrades") {
+      femalegrades
+      
+    }
+    
+    else if (Varperf() == "disabilitiesgrades") {
+      
+      english_dis
+      
+      
+    }
+    
+    
+  })
+  
+  output$grades_science  <- renderPlotly({
+    
+    if (Varperf() == "allstudentsgrades") {
+      
+      science_all 
+      
+    }
+    
+    else if (Varperf() == "malegrades") {
+      malegrades
+      
+    }
+    
+    else if (Varperf() == "femalegrades") {
+      
+      femalegrades
+    }
+    
+    else if (Varperf() == "disabilitiesgrades") {
+      
+      science_dis
+      
+      
+    }
+    
+    
+  })
+  
+  
+  
+  
   
   #School Demos
   Var2 <- reactive({
@@ -2973,7 +3088,7 @@ server <- function(input, output, session) {
   gendad <- reactive({
     input$generalDATA
   })
-  
+
   output$generaldatafilledlinegraphs <- renderPlotly({
     if (gendad() == "figELS") {
       figELS
