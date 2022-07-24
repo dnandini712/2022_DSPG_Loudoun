@@ -10,6 +10,10 @@
 #For this repo, all the visualisations are made beforehand and in the server these graphs are just called. 
 #Nothing is calculated in the server. 
 
+#For the isochrones to run: install the following packages 
+##install.packages("remotes")
+#remotes::install_github("tlorusso/traveltimeR")
+
 
 #Load Packages ---------------------------------------------------------------
 library(dplyr)
@@ -87,6 +91,8 @@ colors <- c("#232d4b","#2c4f6b","#0e879c","#60999a","#d1e0bf","#d9e12b","#e6ce3a
 # Sterling Map -----------------------------------------------------
 
 # This pulls data from ACS----------------------------------------
+
+#you would need a ACS Key for this to run--------------------------
 readRenviron("~/.Renviron")
 Sys.getenv("CENSUS_API_KEY")
 
@@ -404,7 +410,7 @@ nineteensub <- race_subset[(1:24),(1:4)]
 Race <- nineteensub$Race
 Percentage <- nineteensub$Percentage
 School <- nineteensub$`School Name`
-racenine <- ggplot(nineteensub,aes(x=School,y=Percentage,fill=Race))+ geom_col(position = "dodge",aes(text = paste0("School:",School,"\n","Race:",Race,"\n", "Percent:", Percentage, "%")))+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Percentage",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
+racenine <- ggplot(nineteensub,aes(x=School,y=Percentage,fill=Race))+ geom_col(position = "dodge",aes(text = paste0("Percentage:",Percentage, "%", "\n","Race:",Race,"\n","School:",School)))+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Percentage",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
                                                                                                                                                                                                                                          plot.caption = element_text(hjust = 1)) + guides(fill=guide_legend(title="Race/Ethnicity"))
 racenine <- ggplotly(racenine,tooltip=c("text"))
 
@@ -443,7 +449,7 @@ enrollment <- read_excel(paste0(getwd(),"/data/Enrollment16-20.xlsx"))
 enr_total <- enrollment$Total
 School <- enrollment$Schools
 Year <- enrollment$Year
-enroll <- plot_ly(enrollment, x = ~Year,y = ~Total, color = ~School, type = 'scatter',mode = 'lines', hoverinfo="text", text = ~paste("Total:", Total)) %>% layout(title= "Total Enrollment by Schools", xaxis = list(title = ""), yaxis = list(title = "Total Students"), legend=list(title=list(text='Select School')))
+enroll <- plot_ly(enrollment, x = ~Year,y = ~Total, color = ~School, type = 'scatter',mode = 'lines', hoverinfo="text", text = ~paste("Total:", Total)) %>% layout(title= "Enrollment", xaxis = list(title = ""), yaxis = list(title = "Total Students"), legend=list(title=list(text='Select School')))
 
 #-------------------attendance --------------
 
@@ -466,7 +472,7 @@ figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = '
 #text = ~paste('Total:',))
 
 figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(253, 151, 12 )'))
-cteacher <- figSTM %>% layout(title = "Teachers/Staff by Schools", yaxis = list(title = 'Total Educators'), xaxis = list(title = ''), barmode = 'stack')
+cteacher <- figSTM %>% layout(title = "Total Teachers and Staff", yaxis = list(title = 'Total Educators'), xaxis = list(title = ''), barmode = 'stack')
 
 ##--------Chronic absenteeism------------------
 
@@ -477,13 +483,25 @@ chronic <- data.frame(sex=rep(c("Missed less than 10%"), each=6),
 chronic<- ggplot(data=chronic, aes(x=School, y=Percent, fill=School,  width=0.8)) +
   geom_bar(stat="identity",hoverinfo = "text", aes(text = paste("School :",School,"\n", "Percent :", Percent, "%")))  + labs(y="", x="", fill="")+ggtitle("Chronic Absenteeism by Schools for 2018-2019") 
 
-chronic<-ggplotly(chronic, tooltip = c("text"))
+chronic1<-ggplotly(chronic, tooltip = c("text"))
+
+
+absentieesm <- read_excel(paste0(getwd(),"/data/Chronicabseetism.xlsx"),skip=0,col_names=TRUE)
+
+absentieesm %>% filter(Subgroup == "All Students") -> absentieesm
+
+chronic <- plot_ly(absentieesm, x = ~Year, y = ~`Percent above 10`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent above 10`, "%"))%>% layout(title = "Chronic Absentieesm (Percentage of Students missing more than 10% classes.)", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+
+
 
 #--------------free or not free resources ---------------------------------------
 
 costs <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"))
 foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
 #---------------map_health and isochrones-----------------------------------------
+
+#install.packages("remotes")
+#remotes::install_github("tlorusso/traveltimeR")
 
 YourAPIKey <- "32f6ed99d0636fe05d01a5ff5a99c6e7"
 YourAppId <- "190b7348"
@@ -1056,7 +1074,7 @@ figELS <- plot_ly(dataELS,
                   fill = 'tozeroy',
                   fillcolor = 'rgba(114,186,59,0.5)',
                   line = list(color = 'rgb(114,186,59)'),
-                  text = ~paste("Year:", subset_englishlearnerstatus$`School Year`, "<br>Percentage", subset_englishlearnerstatus$Percentage),
+                  text = ~paste("Percentage:", subset_englishlearnerstatus$Percentage,"%","<br>","Year:",  subset_englishlearnerstatus$`School Year`),
                   hoverinfo = 'text')
 
 figELS <- figELS %>% layout(
@@ -1070,7 +1088,7 @@ figELS <- figELS %>% layout(
     zeroline = F
   ),
   xaxis = list(
-    title = "Academic School Year", 
+    title = "", 
     zeroline = T, 
     zerolinewidth = 60,
     standoff = 25,
@@ -1098,11 +1116,11 @@ figIEP <- plot_ly(dataIEP,
                   fill = 'tozeroy',
                   fillcolor = 'rgba(114,186,59,0.5)',
                   line = list(color = 'rgb(114,186,59)'),
-                  text = ~paste("Year:", subset_IEPstatus$`School Year`, "<br>Percentage", subset_IEPstatus$Percentage),
+                  text = ~paste("Percentage:", subset_IEPstatus$Percentage,"%", "<br>","Year:", subset_IEPstatus$`School Year`),
                   hoverinfo = 'text')
 
 figIEP <- figIEP %>% layout(
-  title = "IEP Status",
+  title = "Individual Education Plan (IEP) Status",
   yaxis = list(
     title = "Percentage",
     range = list(8,13),
@@ -1110,7 +1128,7 @@ figIEP <- figIEP %>% layout(
     zeroline = F
   ),
   xaxis = list(
-    title = " Academic School Year", 
+    title = "", 
     zeroline = T, 
     zerolinewidth = 60,
     standoff = 25,
@@ -1138,7 +1156,7 @@ figFRL <- plot_ly(dataFRL,
                   fill = 'tozeroy',
                   fillcolor = 'rgba(114,186,59,0.5)',
                   line = list(color = 'rgb(114,186,59)'),
-                  text = ~paste("Year:", subset_freereducedlunch$`School Year`, "<br>Percentage", subset_freereducedlunch$Percentage),
+                  text = ~paste("Percentage:", subset_freereducedlunch$Percentage, "%", "<br>","Year:", subset_freereducedlunch$`School Year`),
                   hoverinfo = 'text')
 
 figFRL <- figFRL %>% layout(
@@ -1150,7 +1168,7 @@ figFRL <- figFRL %>% layout(
     zeroline = F
   ),
   xaxis = list(
-    title = " Academic School Year", 
+    title = "", 
     zeroline = T, 
     zerolinewidth = 60,
     standoff = 25,
@@ -1179,7 +1197,7 @@ figHOME <- plot_ly(dataHOME,
                    fill = 'tozeroy',
                    fillcolor = 'rgba(114,186,59,0.5)',
                    line = list(color = 'rgb(114,186,59)'),
-                   text = ~paste("Year:", subset_homeless$`School Year`, "<br>Percentage", subset_homeless$Percentage),
+                   text = ~paste("<br>Percentage:", subset_homeless$Percentage, "%","Year:", subset_homeless$`School Year`),
                    hoverinfo = 'text')
 
 figHOME <- figHOME %>% layout(
@@ -1191,7 +1209,7 @@ figHOME <- figHOME %>% layout(
     zeroline = TRUE
   ),
   xaxis = list(
-    title = " Academic School Year", 
+    title = "", 
     zeroline = T, 
     zerolinewidth = 60,
     standoff = 25,
@@ -1714,6 +1732,7 @@ ui <- navbarPage(title = "DSPG",
                                      column(7, align = "left",
                                      tabsetPanel(
                                        tabPanel("Size",
+                                                br(),
                                             selectInput("schooldrop2", "Select Characteristic:", width = "100%", choices = c(
                                               "Educators" = "cteacher",
                                               "Enrollment" = "cenrol", 
@@ -1729,16 +1748,20 @@ ui <- navbarPage(title = "DSPG",
                                      ),
                                      
                                      tabPanel("Behavior",
+                                              br(),
                                               selectInput("schooldrop3", "Select Characteristic:", width = "100%", choices = c(
                                               
                                                 "Absences" = "attend", 
-                                                "Chronic Absenteeism" = "chronic",
-                                                "Suspensions" = "suspension"
+                                                "Chronic Absenteeism" = "chronic"
+                                                
                                                 
                                               ),
                                               ),
                                               
                                               withSpinner(plotlyOutput("ocuplot3", height = "500px", width = "100%")),
+                                             
+                                              
+                                              
                                               column(12,align = "right",
                                                      p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                               ),
@@ -1747,10 +1770,11 @@ ui <- navbarPage(title = "DSPG",
                                      
                                      
                                            tabPanel( "Performance",
+                                                     br(),
                                                      fluidRow(
                                                        column(12,align = "left",
                                                               
-                                                              selectInput("gradesdrop", "Select:", width = "100%", choices = c(
+                                                              selectInput("gradesdrop", "Select Subgroup:", width = "100%", choices = c(
                                                                 "All Students" = "allstudentsgrades",
                                                                 "White" = "whitegrades",
                                                                 "Black" = "blackgrades",
@@ -1759,14 +1783,20 @@ ui <- navbarPage(title = "DSPG",
                                                                 "Male" = "malegrades",
                                                                 "Female" = "femalegrades",
                                                                 "Homeless" = "homelessgrades",
-                                                                "Student with Disabilities(Differently-abled students)" = "disabilitiesgrades"
+                                                                "Student with Disabilities (Differently-abled students)" = "disabilitiesgrades"
                                                                 
                                                               ),
                                                               ),
                                                               
-                                                              withSpinner(plotlyOutput("grades_math", height = "500px", width = "100%")),
-                                                              br(""),
-                                                              withSpinner(plotlyOutput("grades_english", height = "500px", width = "100%")),
+                                                              radioButtons(
+                                                                "category_subject",
+                                                                label = "Select:",
+                                                                choices = c("Mathematics", "English Reading"),
+                                                              ),
+                                                              
+                                                              withSpinner(plotlyOutput("grades", height = "500px", width = "100%")),
+                                                              #br(""),
+                                                              #withSpinner(plotlyOutput("grades_english", height = "500px", width = "100%")),
                                                               #br(""),
                                                           
                                                               #br(""),
@@ -1782,6 +1812,7 @@ ui <- navbarPage(title = "DSPG",
                                              
                                            ), 
                                            tabPanel("Suspension",
+                                                    br(),
                                                     selectInput("schoolsuspend", "Select School:", width = "100%", choices = c(
                                                       "Forest Grove" = "forestsuspend",
                                                       "Guilford" = "guilfordsuspend",
@@ -1793,7 +1824,7 @@ ui <- navbarPage(title = "DSPG",
                                                     ),
                                                     ),
                                                     
-                                                    withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%")),
+                                                    withSpinner(withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%"))),
                                                     
                                                     )
                                          )),
@@ -2601,7 +2632,13 @@ server <- function(input, output, session) {
     input$gradesdrop
   })
   
-  output$grades_math  <- renderPlotly({
+  category_subject <- reactive({
+    input$category_subject
+  })
+  
+  output$grades  <- renderPlotly({
+    
+    if(category_subject() == "Mathematics") {
     
     if (Varperf() == "allstudentsgrades") {
       
@@ -2662,73 +2699,71 @@ server <- function(input, output, session) {
       
       
     }
-    
-    
-  })
-  
-  output$grades_english  <- renderPlotly({
-    
-    if (Varperf() == "allstudentsgrades") {
+    } else  {
+      if  (Varperf() == "allstudentsgrades") {
       
       english_all 
       
     }
-    
-    else if (Varperf() == "whitegrades") {
       
-      english_white
+      else if (Varperf() == "whitegrades") {
+        
+        english_white
+        
+      }
       
-    }
-    
-    else if (Varperf() == "blackgrades") {
+      else if (Varperf() == "blackgrades") {
+        
+        english_black
+        
+      }
       
-      english_black
+      else if (Varperf() == "asiangrades") {
+        
+        english_asian
+      }
       
-    }
-    
-    else if (Varperf() == "asiangrades") {
+      else if (Varperf() == "disabilitiesgrades") {
+        
+        english_dis
+        
+        
+      }
       
-      english_asian
-    }
-    
-    else if (Varperf() == "disabilitiesgrades") {
+      else if (Varperf() == "hispanicgrades") {
+        
+        english_hispanic
+        
+        
+      }
       
-      english_dis
-      
-      
-    }
-    
-    else if (Varperf() == "hispanicgrades") {
-      
-      english_hispanic
-      
-      
-    }
-    
-    else if (Varperf() == "malegrades") {
-      
-      english_male
-      
-      
-    }
-    
-    
-    else if (Varperf() == "femalegrades") {
-      
-      english_female
+      else if (Varperf() == "malegrades") {
+        
+        english_male
+        
+        
+      }
       
       
-    }
-    
-    else if (Varperf() == "homelessgrades") {
+      else if (Varperf() == "femalegrades") {
+        
+        english_female
+        
+        
+      }
       
-      english_homeless
-      
-      
-    }
+      else if (Varperf() == "homelessgrades") {
+        
+        english_homeless
+        
+        
+      }}
     
     
   })
+  
+  
+  
 
   #School Demos
   Var2 <- reactive({
@@ -2802,13 +2837,63 @@ server <- function(input, output, session) {
       
     }
     
-    else if(VarSchool3() == "suspension") {
-      
-      
-      
-    }
-    
   })
+    
+    
+    Varsuspend <- reactive({
+      input$schoolsuspend
+    }) 
+    
+    output$schoolsuspendall <- renderPlotly({
+      
+      
+      if (Varsuspend() == "forestsuspend") {
+        
+        forestsuspend
+        
+      }
+      
+      else if (Varsuspend() == "guilfordsuspend") {
+        
+        guilfordsuspend
+      }
+      
+      else if (Varsuspend() == "rollingsuspend") {
+        
+        rollingsuspend
+      }
+      
+      else if (Varsuspend() == "sterlingsuspend") {
+        sterlingsuspend
+      }
+      
+      else if (Varsuspend() == "sugarlandsuspend") {
+        sugarlandsuspend
+      }
+      
+      else if (Varsuspend() == "sullysuspend") {
+        sullysuspend
+      }
+      
+      
+    })
+    
+    
+    
+    
+    #observeEvent(c(input$schooldrop3, input$ocuplot3, input$ocuplot4), {
+      #req(input$schooldrop3)
+     # if (VarSchool3() == "suspension") {
+        #hide("ocuplot3")
+    #  } else if (VarSchool3() == "attend" && VarSchool3() == "chronic"){
+     #   show("ocuplot3")
+    #    hide("ocuplot4")
+    #    hide("schoolsuspendall")
+    #  }
+      
+   #})
+    
+  
   
   
   
@@ -3207,40 +3292,7 @@ server <- function(input, output, session) {
   
   
   
-  Varsuspend <- reactive({
-    input$schoolsuspend
-  }) 
   
-  output$schoolsuspendall <- renderPlotly({
-    
-    if (Varsuspend() == "forestsuspend") {
-      
-      forestsuspend
-      
-    }
-    
-    else if (Varsuspend() == "guilfordsuspend") {
-      
-      guilfordsuspend
-    }
-    
-    else if (Varsuspend() == "rollingsuspend") {
-      
-      rollingsuspend
-    }
-    
-    else if (Varsuspend() == "sterlingsuspend") {
-      sterlingsuspend
-    }
-    
-    else if (Varsuspend() == "sugarlandsuspend") {
-      sugarlandsuspend
-    }
-    
-    else if (Varsuspend() == "sullysuspend") {
-      sullysuspend
-    }
-  })
   
   output$math_all<- renderPlotly({
     math_all
@@ -3317,6 +3369,9 @@ server <- function(input, output, session) {
       map_family
     }
   })
+  
+  
+  
   
   
   

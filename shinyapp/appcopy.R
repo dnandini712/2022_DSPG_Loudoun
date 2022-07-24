@@ -1732,11 +1732,15 @@ ui <- navbarPage(title = "DSPG",
                                                        selectInput("schooldrop3", "Select Characteristic:", width = "100%", choices = c(
                                                          
                                                          "Absences" = "attend", 
-                                                         "Chronic Absenteeism" = "chronic",
-                                                         "Suspensions" = "suspension"
+                                                         "Chronic Absenteeism" = "chronic"
+                                                         
                                                          
                                                        ),
                                                        ),
+                                                       
+                                                       
+                                                       
+                                                       
                                                        
                                                        withSpinner(plotlyOutput("ocuplot3", height = "500px", width = "100%")),
                                                        column(12,align = "right",
@@ -2785,12 +2789,7 @@ server <- function(input, output, session) {
       attend
       
     }
-    
-    else if(VarSchool3() == "suspension") {
-      
-      
-      
-    }
+  
     
   })
   
