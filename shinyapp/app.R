@@ -1851,6 +1851,16 @@ ui <- navbarPage(title = "DSPG",
                                                                                   educators as well as the lowest total enrollment of all six schools. Breaking this down further, 
                                                                                   the student-teacher ratio of the six schools revealed that Sully had the highest student to teacher 
                                                                                   ratio of the schools with 14 students per teacher.  ", style = "padding-top:15px;font-size: 14px;"),
+                                            p("To understand the educational environment of the community schools, we acquired data on the yearly state standardized exams on math
+                                              and reading for the 2018 – 2019 school year and 2020 - 2021 school year. Due to the COVID-19 pandemic, changes in modality and 
+                                              hardships endured may have impacted exam scores leading us to be unable to draw any significant conclusions about changes over time. 
+                                              For both math and science, the performance statistics for each school have been shown by all students as well as broken into 
+                                              subgroups by race, gender, and other characteristics.",style = "padding-top:15px;font-size: 14px;"),
+                                            p(strong("Mathematics")),
+                                            p("On average, in the 2018 – 2019 school year 75% of all students passed while in the 2020 – 2021 school year, on average only 35% of all students passed. When broken down into subgroups, white students at all schools in 2018 passed above the average rate while for Hispanic students, no schools passed above the average and at Sully, only 62% of Hispanic students passed",style = "padding-top:15px;font-size: 14px;"),
+                                            p(strong("Reading")),
+                                            p("At all schools in the 2018 – 2019 academic year, the reading score for all students was below 70% with Sully having a 46% pass rate. For white students, the scores ranged between 74% and 97% while Hispanic student scores ranged from 41% to 59% with Sully having the lowest scores for both the 2018 – 2019 year and the 2020 – 2021 academic year.", style = "padding-top:15px;font-size: 14px;"),
+                                            p("Overall, Sully had the lowest performance statistics across all schools and subjects.",style = "padding-top:15px;font-size: 14px;"),
                                             p("Moving to absence and suspension rates, we utilized data from the Loudoun County Public Schools Dashboard 
                                                                                   as well as the Virginia Department of Education to visualize the differences between the schools. For the 
                                                                                   absence rates of students by quarter in the 2020-2021 school year, Forest Grove Elementary had the lowest 
@@ -2371,7 +2381,11 @@ ui <- navbarPage(title = "DSPG",
                                     br(),
                                     column(6, 
                                            plotlyOutput("breakfast",width = "100%",height = 600)
-                                           )
+                                           ),
+                                    column(6,
+                                           p("Over 800 families received weekend meals in 2020 and 2021, jumping from 600 in 2019 and only 135 in 2018"),
+                                           p("538 families received basic supplies in 2018, 832 families received basic supplies in 2020. This increase in both basic supplies and weekend meals indicates a growing need for more resources"),
+                                           p("About 80% of students at Guilford and Sully ate breakfast at school in 2020 – 2021, forest grove saw an increase from 23% to 65% of students who ate breakfast from 2019 to 2020. Over half of the students at Sugarland eat breakfast at school"))
                                     ),
          ),
                  
