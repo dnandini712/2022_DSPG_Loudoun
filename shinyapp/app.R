@@ -31,7 +31,6 @@ library(tigris)
 library(tidyverse)
 library(tidycensus)
 library(readxl)
-library(collapsibleTree)
 library(shinycssloaders)
 library(leaflet)
 library(leaflet.extras)
@@ -1401,6 +1400,32 @@ sugarlandsuspend<- plot_ly(subset_sugarland, x = ~Year, y = ~`Percent of the Stu
 subset_sully <- suspension[c(21,22,23,24,45,46,47,48,69,70,71,72), c(1:3,5)]
 sullysuspend<- plot_ly(subset_sully, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sully", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
+
+
+#----------------------Collapsible Tree - Key Partners and Programs--------------------
+
+Tree <- read_excel(paste0(getwd(),"/data/treedata.xlsx")) 
+
+Tree %>% collapsibleTree(hierarchy = c("Four Pillars", "Name", "Key Partners"),
+                         root="Pillar",
+                         attribute = "Pillar",
+                         width=1800,
+                         zoomable=F, 
+                         collapsed = T, nodeSize = 'leafCount',
+                         
+                         fill = c(
+                           # The root
+                           "white",
+                           # Unique Pillars
+                           rep("firebrick", length(unique(Tree$`Four Pillars`))),
+                           # Unique Names of schools
+                           rep("steelblue", length((Tree$`Name`))),
+                           rep("yellow", length((Tree$`Key Partners`)))
+                         )) -> tree1
+
+
+
+
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
                 var vars = {};
@@ -2167,6 +2192,8 @@ ui <- navbarPage(title = "DSPG",
                             ),
                             
                             tabPanel("School Representative",
+                                     tabsetPanel(
+                                       tabPanel("Responses",
                                      fluidPage(style = "margin: 2px;",
                                                column(12, align = "center",
                                                       p(h1(strong("Elementary Community School Representatives ")), style = "padding-top:5px;"),
@@ -2194,6 +2221,20 @@ ui <- navbarPage(title = "DSPG",
                                                       h4(strong("Future Goals")),
                                                       p("Future Goals primarily focus on creating more opportunities to engage and offer to students and parents. Representatives would like to focus on program development as the schools continue working with the students and their families. Another major goal for all schools is the partnership creation and development with community members to help expand programs. This is evident by numerous terms such as agencies, stakeholder, partners, partnerships, involvement, community, meaningful services addition, and assistance.")
                                                )
+                                     )),
+                                     
+                                     tabPanel("Partners",
+                                              
+                                              column(12, 
+                                                     
+                                                     collapsibleTreeOutput("tree1",height = "500px") 
+                                                     
+                                                     )
+                                              
+                                              
+                                              )
+                                    
+                                     
                                      ))
                             
                             #tabPanel(h4("Weaknesses and biggest challenges")),
@@ -3402,6 +3443,12 @@ server <- function(input, output, session) {
     else{
       map_family
     }
+  })
+  
+  output$tree1 <- renderCollapsibleTree({
+    
+    tree1
+    
   })
   
   
