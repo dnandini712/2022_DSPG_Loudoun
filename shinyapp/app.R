@@ -2465,7 +2465,7 @@ ui <- navbarPage(title = "DSPG",
                                          
                                           p("", style = "padding-top:10px;"), 
                                           p(a(href = 'https://www.linkedin.com/in/nandini-das-390577104/', 'Nandini Das', target = '_blank'), "(Virginia Tech, Graduate in Economics Department);"),
-                                          p(a(href = 'https://www.linkedin.com/in/amanda-ljuba-9824551b9', 'Amanda Ljuba', target = '_blank'), "(Virginia Tech, Virginia Tech, Undergraduate in Sociology with a concentration in Social Inequality);"),
+                                          p(a(href = 'https://www.linkedin.com/in/amanda-ljuba-9824551b9', 'Amanda Ljuba', target = '_blank'), "(Virginia Tech, Undergraduate in Sociology with a concentration in Social Inequality);"),
                                           p(a(href = 'https://www.linkedin.com/in/jontayvion-osborne-a3b7961a7', 'Jontayvion Osborne', target = '_blank'), "Austin Peay State University, Undergraduate in Business Management and Minor in Marketing) ;"),
                                           p(a(href = 'https://www.linkedin.com/in/chaudhry-abdullah-rizwan-a1641522b/', 'Chadhry Abdullah Rizwan', target = '_blank'), "(Virginia Tech, Undergraduate in Computational Modeling and Data Analytics and Economics, Minors in Computer Science and Mathematics)."),
                                          
