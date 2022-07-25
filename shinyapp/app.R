@@ -553,6 +553,30 @@ popups <- lapply(
   htmltools::HTML
 )
 
+popup <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(costs$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        costs$Description ,
+        "<br />",
+        "<strong>Serves:</strong>",
+        costs$Serves, 
+        "<br />",
+        "<strong>Hours:</strong>",
+        costs$Hours,
+        "<br />",
+        "<strong>Language:</strong>",
+        costs$Language,
+        "<br />",
+        "<strong>Address:</strong>",
+        costs$Address,
+        "<a href = ",costs$Website, "> Website </a>",
+        "<br />"),
+  
+  htmltools::HTML
+)
+
 healthfree <- read_excel(paste0(getwd(), "/data/resourcecost.xlsx"),sheet = "Health Free")
 
 
@@ -569,7 +593,7 @@ leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=healthfree,~Longitude,~Latitude,popup = ~popups, label = ~as.character(Name),group = ~Resource,color = ~pal(Resource),weight = 7, radius=7, 
+  addCircleMarkers(data=costs,~Longitude,~Latitude,popup = ~popup, label = ~as.character(Name),group = ~Resource,color = ~pal(Resource),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1) %>%
   addLayersControl(overlayGroups = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"),options = layersControlOptions(collapsed = FALSE)) %>% 
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
