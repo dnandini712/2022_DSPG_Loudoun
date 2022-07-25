@@ -179,7 +179,7 @@ age_cat1 <- (subset_sterling1$Label)
 Age1 <- age_cat1
 Percent1 <- age_percent1
 
-agesterling<- plot_ly(subset_sterling1,x=~Age1, y=~Percent1,type = "bar", color = ~Age1, hoverinfo = "text",text = ~paste("Age:",Age1,"<br>","Percent:",Percent1,"%" )) %>% layout(title = "Age Distribution",xaxis = list(title=""), yaxis = list(title = "Percentage"))
+agesterling<- plot_ly(subset_sterling1,x=~Age1, y=~Percent1,type = "bar", color = ~Age1, hoverinfo = "text",text = ~paste("Percent:",Percent1,"%","<br>","Age:",Age1 )) %>% layout(title = "Age Distribution",xaxis = list(title=""), yaxis = list(title = "Percentage"))
 
 
 #-----------Race/Ethnicity--------------------
@@ -224,7 +224,7 @@ mi_cat.fac <- factor(mi_cat, levels = c(mi_cat))
 subset_medianin$new_pop<-gsub("%$","",subset_medianin$...4)
 pop_nop <- subset_medianin$new_pop
 pop_num <- as.numeric(pop_nop)
-income <- plot_ly(subset_medianin,x=~mi_cat.fac,y=~pop_num,color = ~mi_cat.fac,type = "bar", hoverinfo = "text",text = ~paste("Income Level:",mi_cat.fac,"<br>","Percent:",pop_num,"%")) %>% layout(title = "Median Income Distribution",xaxis = list(title="") ,yaxis= list(title = "Percentage"))
+income <- plot_ly(subset_medianin,x=~mi_cat.fac,y=~pop_num,color = ~mi_cat.fac,type = "bar", hoverinfo = "text",text = ~paste("Percent:",pop_num,"%","<br>","Income Level:",mi_cat.fac)) %>% layout(title = "Median Income Distribution",xaxis = list(title="") ,yaxis= list(title = "Percentage"))
 #---------Property Value---------------------------------
 
 dfpv <- read_excel(paste0(getwd(), "/data/Property_Value.xlsx"), col_names = TRUE)
@@ -312,7 +312,7 @@ Total1 <- povas_pop1
 
 cat1 <- as.character(povas_cat1)
 
-pov <- plot_ly(subset_poverty_as1, x = cat1, y = Total1, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat1,"<br>","Total:",Total1,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = cat1))
+pov <- plot_ly(subset_poverty_as1, x = cat1, y = Total1, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Total:",Total1,"<br>","Age:",cat1,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = cat1))
 #-#--------gender by school-------------------------------------------------
 
 
@@ -459,7 +459,7 @@ Quarter <- attendance$`School Quarter`
 School <- attendance$`School Name`
 ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(title = "Student Absences by 2020-2021 Quarter",caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",
                                                                                                                                                                                                                                       plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
-attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("School:",School,"<br>","Percent:",Percent)) %>% layout(title = "Student Absences by 2020-2021 Quarter", legend=list(title=list(text='Select School')), yaxis = list(title = "Percentage"), xaxis = list(title = ""))
+attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("Percent:",Percent, "%","<br>","School:",School)) %>% layout(title = "Student Absences by 2020-2021 Quarter", legend=list(title=list(text='Select School')), yaxis = list(title = "Percentage"), xaxis = list(title = ""))
 #---------------Number of Teachers/Staff--------------------------
 
 Schools <- c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
@@ -582,7 +582,7 @@ leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addCircleMarkers(data=healthfree,~Longitude,~Latitude,popup = ~popups, label = ~as.character(Name),group = ~Resource,color = ~pal(Resource),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1) %>%
   addLayersControl(overlayGroups = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"),options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
   setView(-77.4029155,39.009006, zoom = 11) -> health_free
 
 
@@ -603,7 +603,7 @@ leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
   addCircleMarkers(data=foods,~Longitude1,~Latitude1,popup=~popups,label=~as.character(Name1),color= ~pal1(Resource1),group = ~Resource1,weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> health_all
+  addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> health_all
 #--------------youth development map --------------------------
 
 youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 3.xlsx"))
@@ -639,7 +639,7 @@ leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addCircleMarkers(data=youth,~Longitude3,~Latitude3,popup=~popups3,label=~as.character(Name3),color= ~pal3(Type),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1,group = ~Type)%>%
   addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
 
 
 youthfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth Free")
@@ -674,7 +674,7 @@ leaflet(data = youthfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addCircleMarkers(data=youthfree,~Longitude4,~Latitude4,popup=~popups4,label=~as.character(Name4),color= ~pal3(Type),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1,group = ~Type)%>%
   addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> youth_free
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> youth_free
 
 
 #---------mental health resources map------------------------
@@ -713,7 +713,7 @@ leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addCircleMarkers(data=ment,~Longitude2,~Latitude2,popup=~popups2,label=~as.character(Name2),group=~Resources2,color=~pal2(Resources2),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
   addLayersControl(overlayGroups = ~Resources2,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
 
 mentfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Mental Free")
 
@@ -747,7 +747,7 @@ leaflet(data = mentfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addCircleMarkers(data = mentfree, ~Longitude5,~Latitude5,popup = ~popups5,label = ~as.character(Name5),group = ~Resource5,color = ~pal2(Resource5),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
   addLayersControl(overlayGroups = ~Resource5,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> mental_free
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> mental_free
 
 
 #----------------------family engagement map-------------------
@@ -789,7 +789,7 @@ leaflet(data = familyengage) %>% addProviderTiles(providers$CartoDB.Positron) %>
   addCircleMarkers(data=familyengage,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal8(Resources),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
   addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_family
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_family
 
 famfree <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family Free")
 
@@ -828,7 +828,7 @@ leaflet(data = famfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addCircleMarkers(data=famfree,~Longitude8,~Latitude8,popup=~popups9,label=~as.character(Name8),group=~Resource8,color=~pal8(Resource8),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
   addLayersControl(overlayGroups = ~Resource8,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> fam_free
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> fam_free
 
 
 
