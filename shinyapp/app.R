@@ -4,7 +4,7 @@
 #1. Loading Packages which are required--------
 #2. Loading the data and making the visualizations-----------
 #3. JSCODE 
-#4. USER INTERFACE    (Search for 'Overview Tab' and it will take you to the UI for that tab)
+#4. USER INTERFACE    (Search for 'XXX Tab' and it will take you to the UI for that tab)
 #5. Server
 
 #For this repo, all the visualisations are made beforehand and in the server these graphs are just called. 
@@ -77,6 +77,7 @@ library(rmapzen)
 library(scales)
 library(ggwordcloud)
 library(wordcloud2)
+library(collapsibleTree)
 #---------------------------------------------------------------
 
 prettyblue <- "#232D4B"
@@ -1353,7 +1354,7 @@ plot_ly(data = subset_healthscrape, x = ~Year, y = ~Total, type = "scatter",mode
 subset_healthscrape2 <- healthscrape[c(2,4),c(2,4)]
 Year2 <- subset_healthscrape2$...2
 Total2 <- subset_healthscrape2$...4
-plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Families Who Received Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
+plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
 
 #----------------suspension data-------------------
 
@@ -1660,18 +1661,7 @@ ui <- navbarPage(title = "DSPG",
                                                                          
                                                                          
                                                                 )),
-                                                       tabPanel("General Data",
-                                                                column(11, align = "left",
-                                                                       selectInput("generalDATA", "Select Data:", width = "100%", choices = c(
-                                                                         "English Learner Status" = "figELS",
-                                                                         "IEP Status" = "figIEP",
-                                                                         "Free and Reduced Lunch" = "figFRL",
-                                                                         "Homeless" = "figHOME"
-                                                                       ),
-                                                                       ),
-                                                                       withSpinner(plotlyOutput("generaldatafilledlinegraphs", height = "500px", width = "100%")),
-                                                                )
-                                                       ),
+                                                      
                                                        tabPanel("Race/Ethnicity",
                                                                 fluidRow(style = "margin: 4px;",
                                                                          withSpinner(plotlyOutput("racenine", height = "500px", width = "100%")),
@@ -1688,7 +1678,22 @@ ui <- navbarPage(title = "DSPG",
                                                                 ),
                                                                 
                                                                 
-                                                       )
+                                                       ),
+                                                       tabPanel("Some facts",
+                                                                column(11, align = "left",
+                                                                       selectInput("generalDATA", "Select Data:", width = "100%", choices = c(
+                                                                         "English Learner Status" = "figELS",
+                                                                         "IEP Status" = "figIEP",
+                                                                         "Free and Reduced Lunch" = "figFRL",
+                                                                         "Homeless" = "figHOME",
+                                                                         "Weekend meals" = "weekendmeals",
+                                                                         "Basic Supplies" = "families",
+                                                                         "Breakfast" = "breakfast"
+                                                                       ),
+                                                                       ),
+                                                                       withSpinner(plotlyOutput("generaldatafilledlinegraphs", height = "500px", width = "100%")),
+                                                                )
+                                                       ),
                                                      )
                                               ), 
                                               br(""),
@@ -1859,13 +1864,15 @@ ui <- navbarPage(title = "DSPG",
                                                                   # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                   br(""),
                                                                   h2(strong("Student Perception"),
-                                                                     br(),
+                                                                     column(12, align = "justify",
+                                                                            br(),
+                                                                            h5(("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                            p(strong("Takeaways"), style = "padding-top:15px;font-size: 13px;", align = "justify")
+                                                                     ),
                                                                      column(6, align = "justify",
+                                                                      p("Student engagement included questions like “I feel like I belong at this school” and “I help my class make decisions at school”. When you look at all of the graphs, there isn’t a school that has a percentage over 85, with three schools sitting with percentages in the 70’s. This is definitely a potential area for improvement in the community school initiative.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
                                                                      
-                                                                     h5(strong("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), align = "justify"),
-                                                                     p("Student engagement included questions like “I feel like I belong at this school” and “I help my class make decisions at school”. When you look at all of the graphs, there isn’t a school that has a percentage over 85, with three schools sitting with percentages in the 70’s. This is definitely a potential area for improvement in the community school initiative.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                     
-                                                                     
+                                                                    
                                                                      p("Teacher relationships are important because all students should feel comfortable with their teachers, and have at least one that they can depend on when times get tough. One question asked in this category is “Teachers and other adults at this school treat me with respect”. When you look at the graph, Sterlings low 72 percent stands out significantly from all the other community schools, who have percentages over 90. This is defiantly a potential area for improvement in Sterling Elementary.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
                                                                      #h4(""),
                                                                      #h4("[updat this]"),
@@ -1947,10 +1954,21 @@ ui <- navbarPage(title = "DSPG",
                                                                            # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                            br(""),
                                                                            h2(strong("Parent Perception"),
-                                                                              column(12, align = "justify"),
+                                                                              column(12, align = "justify",
                                                                               br(),
-                                                                              h5(("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), align = "justify"),
-                                                                              h4(""),
+                                                                              h5(("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                              p(strong("Takeaways"), style = "padding-top:15px;font-size: 13px;", align = "justify")
+                                                                              ),
+                                                                              
+                                                                              column(6, align = "justify",
+                                                                                     p("The relationships graph displays how the parents feel about their student's environment within their child's school such as their emotional support and respect. Some example questions asked were “This school respects diversity and welcomes all cultures” and “My child’s teachers care about my child”. Noticeably, all six schools have percentages of 90 or above.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                                     p("The instructions graph, as mentioned in the Loudoun County Public Schools Annual Parent Survey introduction, shows us “measures of the LCPS initiatives to foster deeper learning”. Some example questions asked were “I have noticed my child taking what he/she learns in one lesson and using that learning in new situations”, “My child creates new ideas or strategies that provide solutions to challenging problems”, and “My child asks questions and thinks in creative ways”. All of the schools have percentages over 90 although four of the schools have low 90 percent's. This definitely shows us that the students appear to be very creative outside of school so perhaps some youth development programs could help them expand some of their creative ideas and skills even more. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                              ),
+                                                                              column(6, align = "justify",
+                                                                                     p("Academic support shows us how the parents of the students that attend the six elementary schools feel about their children's learning environment. Some questions asked in this category were “Teachers at this school care about how well my child does in school” and “I am satisfied that my child is receiving a quality education at this school”. When you look at the graph, all but two schools have percentages over 90, and the two that don’t sit at 89 percent.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                                     p("Communications shows us how the parents feel about the communication between them and their child's school. Again, all but two graphs have percentages over 90, with two, Forest Grove and Sugarland, sitting in the mid 80’s.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                                     ),
+                                                                              #h4(""),
                                                                               #h4("[updat this]"),
                                                                               br()
                                                                            )
@@ -2012,15 +2030,8 @@ ui <- navbarPage(title = "DSPG",
                                                                          
                                                                          
                                                                   ),
-                                                                  br(""),
-                                                                  br(""),
-                                                                  br(""),
-                                                                  column(12, h4(strong("Summary")), align = "center",
-                                                                         p("Academic support shows us how the parents of the students that attend the six elementary schools feel about their children's learning environment. Some questions asked in this category were “Teachers at this school care about how well my child does in school” and “I am satisfied that my child is receiving a quality education at this school”. When you look at the graph, all but two schools have percentages over 90, and the two that don’t sit at 89 percent.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                         p("Communications shows us how the parents feel about the communication between them and their child's school. Again, all but two graphs have percentages over 90, with two, Forest Grove and Sugarland, sitting in the mid 80’s.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                         p("The relationships graph displays how the parents feel about their student's environment within their child's school such as their emotional support and respect. Some example questions asked were “This school respects diversity and welcomes all cultures” and “My child’s teachers care about my child”. Noticeably, all six schools have percentages of 90 or above.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                         p("The instructions graph, as mentioned in the Loudoun County Public Schools Annual Parent Survey introduction, shows us “measures of the LCPS initiatives to foster deeper learning”. Some example questions asked were “I have noticed my child taking what he/she learns in one lesson and using that learning in new situations”, “My child creates new ideas or strategies that provide solutions to challenging problems”, and “My child asks questions and thinks in creative ways”. All of the schools have percentages over 90 although four of the schools have low 90 percent's. This definitely shows us that the students appear to be very creative outside of school so perhaps some youth development programs could help them expand some of their creative ideas and skills even more. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                  )
+                                                                
+                                                              
                                                          )
                                                 ),
                                                 
@@ -2032,13 +2043,24 @@ ui <- navbarPage(title = "DSPG",
                                                                   # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                   br(""),
                                                                   h2(strong("Teacher/Staff Perception"),
-                                                                     column(12, align = "justify"),
-                                                                     br(),
-                                                                     h5(("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), align = "justify"),
-                                                                     h4(""),
-                                                                     #h4("[updat this]"),
-                                                                     br()
-                                                                  )
+                                                                     column(12, align = "justify",
+                                                                            br(),
+                                                                            h5(("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                            p(strong("Takeaways"), style = "padding-top:15px;font-size: 13px;", align = "justify")
+                                                                     ),
+                                                                     column(6, align = "justify",
+                                                                            p("Staff collegiality shows us how the teachers and staff feel about one another’s capabilities. An example question given in this category was “Teachers and other adults at this school have taught me things that have helped me do my job better”. When you look at the graph, you can see that Forest Grove stands out from the other schools with a total percentage barely reaching over 80. The other schools all maintain a high percentage over 90 so this could likely suggest that the environment at Forest Grove may not be as confident and uplifting to one another as the other schools' teachers and staff are to each other. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                            p("The academic environment bar shows us how teachers and staff feel about their academic environment within their school. A question that was given in this graph was “Teachers and other adults at this school provide students the support they need to succeed”. When you look at the graph, Forest Grove’s low number stands out once again in comparison to the other schools, followed by Sterling’s. This makes us wonder what are some things these schools could implement to create a better academic environment for their students.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                            p("School leadership informs us how confident the school teachers feel about their administrator's leadership. An example question that was given to the staff was “I feel comfortable raising issues and concerns that are important to me with school administrators”. This visualization takes the first major drop, as all but one school has a percentage less than 90 who feel confident within their school leadership. Noticeably, Forest Grove has the lowest percentage once again. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                           ),
+                                                                     
+                                                                     column(6, align = "justify",
+                                                                            p("The managing student behavior graph is critical because children are going to be kids at the end of the day, so it's important to be able to teach them right from wrong, while giving them the love and support needed. An example question that was given within this category was “There are supports to help a student who consistently misbehaves develop positive behavior”. When taking a look at the graph, it's noticeable that no schools have a percentage of 90 or higher. This is definitely an area for improvement. Rolling Ridge is also the school with the lowest percent, 75, so this is a school that could benefit from reviewing and possibly revising their policies on student behavior.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                            p("The workplace environment graph tells us how the teachers and staff feel while working within their environment. An example question asked is “My school provides me with sufficient access to appropriate supplies and material”. The bar graphs here are very diverse, as the percentages range from 79 percent to 100. This is definitely an area for improvement for all of the elementary schools except Sterling and Sully because the teachers should be provided with everything, they need to make sure that they can provide quality education for the students. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                            p("The instructional environment graph was interesting to look at because once again, every school sits at a percentage above 90 except for Forest grove. This category included questions like “The physical environment of my classroom supports my teaching and my students’ learning”, and “I have the support I need to incorporate technology into my instruction” so it definitely poses a question of what does Forest Grove lack that the other schools have?", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                            
+                                                                     ),
+                                                                  ),
                                                          ),
                                                          column(6, align = "center",h4(strong("")),
                                                                 p(""),
@@ -2111,15 +2133,7 @@ ui <- navbarPage(title = "DSPG",
                                                          br(""),
                                                          br(""),
                                                          br(""),
-                                                         column(12, h4(strong("Summary")), align = "center",
-                                                                p("Staff collegiality shows us how the teachers and staff feel about one another’s capabilities. An example question given in this category was “Teachers and other adults at this school have taught me things that have helped me do my job better”. When you look at the graph, you can see that Forest Grove stands out from the other schools with a total percentage barely reaching over 80. The other schools all maintain a high percentage over 90 so this could likely suggest that the environment at Forest Grove may not be as confident and uplifting to one another as the other schools' teachers and staff are to each other. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                p("The academic environment bar shows us how teachers and staff feel about their academic environment within their school. A question that was given in this graph was “Teachers and other adults at this school provide students the support they need to succeed”. When you look at the graph, Forest Grove’s low number stands out once again in comparison to the other schools, followed by Sterling’s. This makes us wonder what are some things these schools could implement to create a better academic environment for their students.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                p("School leadership informs us how confident the school teachers feel about their administrator's leadership. An example question that was given to the staff was “I feel comfortable raising issues and concerns that are important to me with school administrators”. This visualization takes the first major drop, as all but one school has a percentage less than 90 who feel confident within their school leadership. Noticeably, Forest Grove has the lowest percentage once again. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                p("The managing student behavior graph is critical because children are going to be kids at the end of the day, so it's important to be able to teach them right from wrong, while giving them the love and support needed. An example question that was given within this category was “There are supports to help a student who consistently misbehaves develop positive behavior”. When taking a look at the graph, it's noticeable that no schools have a percentage of 90 or higher. This is definitely an area for improvement. Rolling Ridge is also the school with the lowest percent, 75, so this is a school that could benefit from reviewing and possibly revising their policies on student behavior.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                p("The workplace environment graph tells us how the teachers and staff feel while working within their environment. An example question asked is “My school provides me with sufficient access to appropriate supplies and material”. The bar graphs here are very diverse, as the percentages range from 79 percent to 100. This is definitely an area for improvement for all of the elementary schools except Sterling and Sully because the teachers should be provided with everything, they need to make sure that they can provide quality education for the students. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                p("The instructional environment graph was interesting to look at because once again, every school sits at a percentage above 90 except for Forest grove. This category included questions like “The physical environment of my classroom supports my teaching and my students’ learning”, and “I have the support I need to incorporate technology into my instruction” so it definitely poses a question of what does Forest Grove lack that the other schools have?", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                
-                                                         ))),
+                                                        )),
                                               # column(12, 
                                               # h4("References: "),
                                               # p("[1] U.S Department of Education, Office of Elementary and Secondary Education. Full-Service Community Schools Program (FSCS). Retrieved from:", a(href =  "https://oese.ed.gov/offices/office-of-discretionary-grants-support-services/school-choice-improvement-programs/full-service-community-schools-program-fscs/", "https://oese.ed.gov/offices/office-of-discretionary-grants-support-services/school-choice-improvement-programs/full-service-community-schools-program-fscs/"), style = "font-size:12px;"),
@@ -2325,31 +2339,31 @@ ui <- navbarPage(title = "DSPG",
                                      
                             )
                  ),
-#-------------------------Opportunites Tab -------------------------------
-                 tabPanel("Opportunities",
-                          fluidRow(style = "margin: 6px;",
-                                   p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("")),
-                                          p(""),
-                                          br("")
+#-------------------------Opportunities Tab -------------------------------
+              #   tabPanel("Opportunities",
+                       #   fluidRow(style = "margin: 6px;",
+                         #          p("", style = "padding-top:10px;"),
+                              #     column(12, align = "center",h4(strong("")),
+                               #           p(""),
+                                #          br("")
                                           
                                           
                                           
-                                   )),
-                          fluidPage(style = "margin: 2px;",
-                                    column(6,
-                                           plotlyOutput("weekendmeals", width = "100%",height = 600)
-                                           ),
-                                    column(6,
-                                           plotlyOutput("basicsupplies",width = "100%",height = 600)
-                                    ), 
-                                    br(),
-                                    br(),
-                                    column(6, 
-                                           plotlyOutput("breakfast",width = "100%",height = 600)
-                                           )
-                                    ),
-         ),
+                               #    )),
+                         # fluidPage(style = "margin: 2px;",
+                                  #  column(6,
+                                     #      plotlyOutput("weekendmeals", width = "100%",height = 600)
+                                     #      ),
+                                   # column(6,
+                                 #         plotlyOutput("basicsupplies",width = "100%",height = 600)
+                                  #  ), 
+                                  #  br(),
+                                 #   br(),
+                                 #   column(6, 
+                                 #          plotlyOutput("breakfast",width = "100%",height = 600)
+                                 #          )
+                                #    ),
+         #),
                  
                  tabPanel("Analysis",
                           fluidRow(style = "margin: 6px;",
@@ -2449,9 +2463,9 @@ ui <- navbarPage(title = "DSPG",
                                          
                                           p("", style = "padding-top:10px;"), 
                                           p(a(href = 'https://www.linkedin.com/in/nandini-das-390577104/', 'Nandini Das', target = '_blank'), "(Virginia Tech, Graduate in Economics Department);"),
-                                          p(a(href = 'https://www.linkedin.com/in/amanda-ljuba-9824551b9', 'Amanda Ljuba', target = '_blank'), "(Virginia Tech, Undergraduate in Sociology with a concentration in Social Inequality);"),
+                                          p(a(href = 'https://www.linkedin.com/in/amanda-ljuba-9824551b9', 'Amanda Ljuba', target = '_blank'), "(Virginia Tech, Virginia Tech, Undergraduate in Sociology with a concentration in Social Inequality);"),
                                           p(a(href = 'https://www.linkedin.com/in/jontayvion-osborne-a3b7961a7', 'Jontayvion Osborne', target = '_blank'), "Austin Peay State University, Undergraduate in Business Management and Minor in Marketing) ;"),
-                                          p(a(href = 'https://www.linkedin.com/in/chaudhry-abdullah-rizwan-a1641522b/', 'Chadhry Abdullah Rizwan', target = '_blank'), "(Virginia Tech, Undergraduate in Computational Modeling and Data Analytics and Economics, Minors in Computer Science and Mathematics)."),
+                                          p(a(href = 'https://www.linkedin.com/in/chaudhry-abdullah-rizwan-a1641522b/', 'Chaudhry Abdullah Rizwan', target = '_blank'), "(Virginia Tech, Undergraduate in Computational Modeling and Data Analytics and Economics, Minors in Computer Science and Mathematics)."),
                                          
                                           p("", style = "padding-top:10px;") 
                                    ),
@@ -3309,6 +3323,18 @@ server <- function(input, output, session) {
     
     else if (gendad() == "figHOME") {
       figHOME
+    }
+    
+    else if (gendad() == "weekendmeals") {
+      weekendmeals
+    }
+    
+    else if (gendad() == "families") {
+      basicsupplies
+    }
+    
+    else if (gendad() == "breakfast") {
+      breakfast
     }
   })
   
