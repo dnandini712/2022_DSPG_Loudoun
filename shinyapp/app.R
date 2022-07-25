@@ -116,11 +116,7 @@ blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia",
           "Block Group 1, Census Tract 6116.01, Loudoun County, Virginia",
           "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia", 
           "Block Group 3, Census Tract 6112.02, Loudoun County, Virginia")
-va20_2 <- get_acs(geography = "block group",
-                  variables = c(hispanic = "B03002_012"),
-                  state = "VA",
-                  year = 2020,
-                  geometry = TRUE) %>%
+va20_2 <- readRDS(paste0(getwd(),"/data/va20_2.RDS" )) %>%
   filter(NAME %in% blocks)
 
 blocks_CDP<-c("Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia","Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
@@ -564,13 +560,7 @@ healthfree <- read_excel(paste0(getwd(), "/data/resourcecost.xlsx"),sheet = "Hea
 pal <- colorFactor(c("#91003f", "#005824", "#d7301f","#CC6677","#DDCC77","#88419d"), domain = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"))
 pal1 <- colorFactor(c("#91003f","#005824","#d7301f","#88419d","#DDCC77","#CC6677","#AA4499","#882255"),domain = c("Food Pantry","Clothing","Counseling","Dental Care","Vision Care","Medical Services","Speech and Hearing Services","Physical Therapy"))
 
-blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
-va20_2 <- get_acs(geography = "block group",
-                  variables = c(hispanic = "B03002_012"),
-                  state = "VA",
-                  year = 2020,
-                  geometry = TRUE) %>%
-  filter(NAME %in% blocks)
+
 leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(data = va20_2,
               color="#5f308f",
@@ -586,13 +576,7 @@ leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   setView(-77.4029155,39.009006, zoom = 11) -> health_free
 
 
-blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
-va20_2 <- get_acs(geography = "block group",
-                  variables = c(hispanic = "B03002_012"),
-                  state = "VA",
-                  year = 2020,
-                  geometry = TRUE) %>%
-  filter(NAME %in% blocks)
+
 leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(data = va20_2,
               color="#5f308f",
