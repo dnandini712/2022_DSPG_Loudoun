@@ -1201,7 +1201,7 @@ figHOME <- plot_ly(dataHOME,
                    hoverinfo = 'text')
 
 figHOME <- figHOME %>% layout(
-  title = "Homeless Percentage",
+  title = "Students Facing Homelessness",
   yaxis = list(
     title = "Percentage",
     range = list(6,17),
