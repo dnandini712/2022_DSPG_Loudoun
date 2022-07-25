@@ -179,7 +179,7 @@ age_cat1 <- (subset_sterling1$Label)
 Age1 <- age_cat1
 Percent1 <- age_percent1
 
-agesterling<- plot_ly(subset_sterling1,x=~Age1, y=~Percent1,type = "bar", color = ~Age1, hoverinfo = "text",text = ~paste("Age:",Age1,"<br>","Percent:",Percent1,"%" )) %>% layout(title = "Age Distribution",xaxis = list(title=""), yaxis = list(title = "Percentage"))
+agesterling<- plot_ly(subset_sterling1,x=~Age1, y=~Percent1,type = "bar", color = ~Age1, hoverinfo = "text",text = ~paste("Percent:",Percent1,"%","<br>","Age:",Age1 )) %>% layout(title = "Age Distribution",xaxis = list(title=""), yaxis = list(title = "Percentage"))
 
 
 #-----------Race/Ethnicity--------------------
@@ -224,7 +224,7 @@ mi_cat.fac <- factor(mi_cat, levels = c(mi_cat))
 subset_medianin$new_pop<-gsub("%$","",subset_medianin$...4)
 pop_nop <- subset_medianin$new_pop
 pop_num <- as.numeric(pop_nop)
-income <- plot_ly(subset_medianin,x=~mi_cat.fac,y=~pop_num,color = ~mi_cat.fac,type = "bar", hoverinfo = "text",text = ~paste("Income Level:",mi_cat.fac,"<br>","Percent:",pop_num,"%")) %>% layout(title = "Median Income Distribution",xaxis = list(title="") ,yaxis= list(title = "Percentage"))
+income <- plot_ly(subset_medianin,x=~mi_cat.fac,y=~pop_num,color = ~mi_cat.fac,type = "bar", hoverinfo = "text",text = ~paste("Percent:",pop_num,"%","<br>","Income Level:",mi_cat.fac)) %>% layout(title = "Median Income Distribution",xaxis = list(title="") ,yaxis= list(title = "Percentage"))
 #---------Property Value---------------------------------
 
 dfpv <- read_excel(paste0(getwd(), "/data/Property_Value.xlsx"), col_names = TRUE)
@@ -312,7 +312,7 @@ Total1 <- povas_pop1
 
 cat1 <- as.character(povas_cat1)
 
-pov <- plot_ly(subset_poverty_as1, x = cat1, y = Total1, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat1,"<br>","Total:",Total1,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = cat1))
+pov <- plot_ly(subset_poverty_as1, x = cat1, y = Total1, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Total:",Total1,"<br>","Age:",cat1,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = cat1))
 #-#--------gender by school-------------------------------------------------
 
 
