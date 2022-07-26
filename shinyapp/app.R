@@ -1404,24 +1404,23 @@ sullysuspend<- plot_ly(subset_sully, x = ~Year, y = ~`Percent of the Student Pop
 
 #----------------------Collapsible Tree - Key Partners and Programs--------------------
 
-Tree <- read_excel(paste0(getwd(),"/data/treedata.xlsx")) 
-
 Tree %>% collapsibleTree(hierarchy = c("Four Pillars", "Name", "Key Partners"),
                          root="Pillar",
                          attribute = "Pillar",
                          width=1800,
-                         zoomable=F, 
+                         zoomable=T, 
                          collapsed = T, nodeSize = 'leafCount',
                          
                          fill = c(
                            # The root
-                           "white",
+                           rep("white", 1),
                            # Unique Pillars
                            rep("firebrick", length(unique(Tree$`Four Pillars`))),
                            # Unique Names of schools
-                           rep("steelblue", length((Tree$`Name`))),
-                           rep("yellow", length((Tree$`Key Partners`)))
-                         )) -> tree1
+                           rep("steelblue", 24),
+                           rep("orange", 71)
+                           
+                         ))-> tree1
 
 
 
@@ -1627,7 +1626,13 @@ ui <- navbarPage(title = "DSPG",
                                                                      ),     
                                                                      br(""),
                                                                      withSpinner(plotlyOutput("demo2", height = "500px", width ="100%")),
-                                                                     withSpinner(plotlyOutput("PropComp", height = "500px", width = "70%")),
+                                                                    fluidRow(column(2,),
+                                                                             (column(10,
+                                                                                     
+                                                                                     withSpinner(plotlyOutput("PropComp", height = "60%", width = "90%"))
+                                                                                     ))
+                                                                    ),
+                                                                            
                                                                      column(12, align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
                                                                      ),
@@ -2206,7 +2211,7 @@ ui <- navbarPage(title = "DSPG",
                                      
                             ),
                             
-                            tabPanel("School Representative",
+                            tabPanel("Representatives' Reports",
                                      tabsetPanel(
                                        tabPanel("Responses",
                                      fluidPage(style = "margin: 2px;",
@@ -2239,11 +2244,23 @@ ui <- navbarPage(title = "DSPG",
                                      )),
                                      
                                      tabPanel("Partners",
+                                              column(12, align = "center",
+                                                     p(h1(strong("Elementary Community School Representatives ")), style = "padding-top:5px;"),
+                                              ),
                                               
-                                              column(12, 
+                                              column(9, 
                                                      
-                                                     collapsibleTreeOutput("tree1",height = "500px") 
+                                                     collapsibleTreeOutput("tree1",height = "600px", width = "100%") 
                                                      
+                                                     ),
+                                              
+                                              column(3, align = "justify",
+                                                     br(),
+                                                     br(),
+                                                     br(),
+                                                     br(),
+                                                     br(),
+                                                     p("The school representatives were also asked about the key partners which help support the activities for each of the pillars. This interactive tree shows these key partners and programs in each of these schools for the year 2020-2021. One can zoom in and out or scroll around the tree for visual ease. The tree has been categorised pillar-wise to help in conducting a school wise comparative analysis, to note the different partners and thus can help to find further partnership possibilities. The size of the node is determined by the number of entries it contains, hence bigger circles of the schools point to more partnerships. As an example, Sterling Elementary has the highest number of partners for Youth Development activities, hence the blue circle is the largest. This tree is however not exhaustive since there were a few missing information (for eg., Forest Grove has no information on their key partners for the Youth Development Pillar).")
                                                      )
                                               
                                               
@@ -2637,6 +2654,8 @@ server <- function(input, output, session) {
     else if (Var4() == "property") {
       
       property
+      
+      
     }
     
   })
