@@ -90,12 +90,6 @@ colors <- c("#232d4b","#2c4f6b","#0e879c","#60999a","#d1e0bf","#d9e12b","#e6ce3a
 
 # Sterling Map -----------------------------------------------------
 
-# This pulls data from ACS----------------------------------------
-
-#you would need a ACS Key for this to run--------------------------
-readRenviron("~/.Renviron")
-Sys.getenv("CENSUS_API_KEY")
-
 blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia",
           "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia",
           "Block Group 3, Census Tract 6112.05, Loudoun County, Virginia",
@@ -314,15 +308,15 @@ pov <- plot_ly(subset_poverty_as1, x = cat1, y = Total1, color = ~Sex, type = "b
 
 genders <- data.frame(Sex=rep(c("Male", "Female"), each=6),
                       School=c("Sugarland","Rolling Ridge","Guilford","Sterling","Sully","Forest Grove"),
-                      Total=c(268, 273, 278, 237,221, 282, 255, 259, 272, 200, 217, 278),
-                      Percentage = c(51.2, 51.3, 50.5, 54.2, 50.5, 50.4, 48.8, 48.7, 49.5, 45.8, 49.5, 49.6)
+                      Total=c(251, 266, 254, 208,233, 253, 221, 245, 276, 178, 215, 251),
+                      Percentage = c(53.2, 52.1, 47.9, 53.9, 52, 50.2, 46.8, 47.9, 52.1, 46.1, 48, 49.8)
 )
 
 
 
-genders<- ggplot(data=genders, aes(x=School, y=Total, fill=Sex,  width=0.9)) +
+genders<- ggplot(data=genders, aes(x=School, y=Total, fill = forcats::fct_rev(Sex),  width=0.9)) +
   geom_bar(stat="identity", position="stack", hoverinfo = "text", aes(text = paste("Percentage :",Percentage,"%\n", "Total :", Total))) +
-  scale_fill_manual(values = c('#F56D4F', "#20AFCC")) + labs(y="Total Students", x="", fill="")+ggtitle("Gender by Schools for 2020-2021") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  scale_fill_manual(values = c('#20AFCC','#F56D4F')) + labs(y="Total Students", x="", fill="")+ggtitle("Gender by Schools for 2021-2022") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
 genders <-ggplotly(genders, tooltip = c("text"))
 
@@ -1765,7 +1759,7 @@ ui <- navbarPage(title = "DSPG",
                                                      h4(strong("What Do Community Schools Look Like?"), align = "left"),
                                                      p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
                                                      
-                                                     p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling and Sully have similar number of students and have lesser students than the other elementary schools. Forest Grove, Guilford and Sully have a similar trend like the Sterling area for the gender ratio: the female students are about 49% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling has the lowest where it has 91 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling Elementary has the lowest number of students. Guilford is the only school which has more females than male while Forest Grove like the Sterling area for the gender ratio has an almost equal split. Rolling Ridge and Sully have a similar trend: the female students are about 48% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling Elementary has the most uneven distribution where there is 86 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
                                                      p("The race and ethnicity demographics in 2019-2020 revealed that overall, Hispanic students, made up the greatest percentage of students attending the six elementary schools in Sterling, which differs from the general make-up of the Sterling area where White residents made up the majority of residents. There is a huge difference between Guilford and Forest Grove in terms of the ethnic groups of students, given that they both have similar number of total students: Guilford has significantly higher Hispanic students while Forest Grove has a lot more White and Hispanic students.", 
                                                        style = "padding-top:15px;font-size: 14px;"),
                                                      p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence,  we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary.", 
@@ -1788,6 +1782,7 @@ ui <- navbarPage(title = "DSPG",
                                      )), 
                             
                             tabPanel("Education", 
+                                     h2("Education"),
                                      column(6, align = "left",
                                      tabsetPanel(
                                        tabPanel("Size",
