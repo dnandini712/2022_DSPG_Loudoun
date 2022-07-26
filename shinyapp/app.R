@@ -313,9 +313,8 @@ genders <- data.frame(Sex=rep(c("Male", "Female"), each=6),
 )
 
 
-
-genders<- ggplot(data=genders, aes(x=School, y=Total, fill = forcats::fct_rev(Sex),  width=0.9)) +
-  geom_bar(stat="identity", position="stack", hoverinfo = "text", aes(text = paste("Percentage :",Percentage,"%\n", "Total :", Total))) +
+genders<- ggplot(data=genders, aes(x=School, y=Total, fill = forcats::fct_rev(Sex), group=Sex, width=0.9)) +
+  geom_bar(stat="identity", position=position_stack(reverse = TRUE), hoverinfo = "text", aes(text = paste("Percentage :",Percentage,"%\n", "Total :", Total))) +
   scale_fill_manual(values = c('#20AFCC','#F56D4F')) + labs(y="Total Students", x="", fill="")+ggtitle("Gender by Schools for 2021-2022") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
 genders <-ggplotly(genders, tooltip = c("text"))
@@ -1425,7 +1424,7 @@ Tree %>% collapsibleTree(hierarchy = c("Four Pillars", "Name", "Key Partners"),
 
 #--------------- teacherstudent ratio---------------------------
 
-teacherstudentratio <- img(src = "StudentTeacherRatioPic.png", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;")
+#teacherstudentratio <- img(src = "StudentTeacherRatioPic.png", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;")
 
 
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
@@ -1778,7 +1777,7 @@ ui <- navbarPage(title = "DSPG",
                                             ),
                                             
                                             withSpinner(plotlyOutput("ocuplot2", height = "500px", width = "100%")),
-                                            teacherstudentratio,
+
                                             column(12,align = "right",
                                                    p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                             ),
@@ -2979,18 +2978,18 @@ server <- function(input, output, session) {
     
     
     
-    observeEvent(c(input$schooldrop2, input$ocuplot2, teacherstudentratio), {
-      req(input$schooldrop2)
-     if (VarSchool() == "tsratio") {
-        hide("ocuplot2")
-     } else {
-        show("ocuplot2")
-       hide(teacherstudentratio)
-      
-      }
-
-   })
-    
+   #  observeEvent(c(input$schooldrop2, input$ocuplot2, teacherstudentratio), {
+   #    req(input$schooldrop2)
+   #   if (VarSchool() == "tsratio") {
+   #      hide("ocuplot2")
+   #   } else {
+   #      show("ocuplot2")
+   #     hide(teacherstudentratio)
+   #    
+   #    }
+   # 
+   # })
+   #  
   
   
   
