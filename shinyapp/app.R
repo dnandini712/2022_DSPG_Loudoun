@@ -1779,7 +1779,7 @@ ui <- navbarPage(title = "DSPG",
                                      )), 
                             
                             tabPanel("Education", 
-                                     column(7, align = "left",
+                                     column(6, align = "left",
                                      tabsetPanel(
                                        tabPanel("Size",
                                                 br(),
@@ -1817,7 +1817,22 @@ ui <- navbarPage(title = "DSPG",
                                               ),
                                               
                                      ),
-                                     
+                                     tabPanel("Suspension",
+                                              br(),
+                                              selectInput("schoolsuspend", "Select School:", width = "100%", choices = c(
+                                                "Forest Grove" = "forestsuspend",
+                                                "Guilford" = "guilfordsuspend",
+                                                "Rolling Ridge" = "rollingsuspend",
+                                                "Sterling" = "sterlingsuspend",
+                                                "Sugarland" = "sugarlandsuspend",
+                                                "Sully" = "sullysuspend"
+                                                
+                                              ),
+                                              ),
+                                              
+                                              withSpinner(withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%"))),
+                                              
+                                     ),
                                      
                                            tabPanel( "Performance",
                                                      br(),
@@ -1860,26 +1875,11 @@ ui <- navbarPage(title = "DSPG",
                                                      
                                              
                                              
-                                           ), 
-                                           tabPanel("Suspension",
-                                                    br(),
-                                                    selectInput("schoolsuspend", "Select School:", width = "100%", choices = c(
-                                                      "Forest Grove" = "forestsuspend",
-                                                      "Guilford" = "guilfordsuspend",
-                                                      "Rolling Ridge" = "rollingsuspend",
-                                                      "Sterling" = "sterlingsuspend",
-                                                      "Sugarland" = "sugarlandsuspend",
-                                                      "Sully" = "sullysuspend"
-                                                      
-                                                    ),
-                                                    ),
-                                                    
-                                                    withSpinner(withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%"))),
-                                                    
-                                                    )
+                                           ),
+                                           
                                          )),
                                      
-                                     column(5, align = "justify",
+                                     column(6, align = "justify",
                                             br(""),
                                             br(""),
                                             br(""),
@@ -1893,6 +1893,15 @@ ui <- navbarPage(title = "DSPG",
                                                                                   educators as well as the lowest total enrollment of all six schools. Breaking this down further, 
                                                                                   the student-teacher ratio of the six schools revealed that Sully had the highest student to teacher 
                                                                                   ratio of the schools with 14 students per teacher.  ", style = "padding-top:15px;font-size: 14px;"),
+                                            
+                                            p("Moving to absence and suspension rates, we utilized data from the Loudoun County Public Schools Dashboard 
+                                                                                  as well as the Virginia Department of Education to visualize the differences between the schools. For the 
+                                                                                  absence rates of students by quarter in the 2020-2021 school year, Forest Grove Elementary had the lowest 
+                                                                                  absence rate across the year while Sully Elementary had the largest increase throughout the year, increasing 
+                                                                                  by over two percent. To attempt to understand if this was a chronic issue, we visualized the chronic
+                                                                                  absenteeism rate which is defined as the percentage of students who miss more than ten percent of total
+                                                                                  classes throughout the year. We found that Sugarland Elementary had the highest rate at 11.1% while 
+                                                                                  Sterling had the lowest at 5.8%.  ", style = "padding-top:15px;font-size: 14px;"),
                                             p("To understand the educational environment of the community schools, we acquired data on the yearly state standardized exams on math
                                               and reading for the 2018 – 2019 school year and 2020 - 2021 school year. Due to the COVID-19 pandemic, changes in modality and 
                                               hardships endured may have impacted exam scores leading us to be unable to draw any significant conclusions about changes over time. 
@@ -1903,14 +1912,6 @@ ui <- navbarPage(title = "DSPG",
                                             p(strong("Reading")),
                                             p("At all schools in the 2018 – 2019 academic year, the reading score for all students was below 70% with Sully having a 46% pass rate. For white students, the scores ranged between 74% and 97% while Hispanic student scores ranged from 41% to 59% with Sully having the lowest scores for both the 2018 – 2019 year and the 2020 – 2021 academic year.", style = "padding-top:15px;font-size: 14px;"),
                                             p("Overall, Sully had the lowest performance statistics across all schools and subjects.",style = "padding-top:15px;font-size: 14px;"),
-                                            p("Moving to absence and suspension rates, we utilized data from the Loudoun County Public Schools Dashboard 
-                                                                                  as well as the Virginia Department of Education to visualize the differences between the schools. For the 
-                                                                                  absence rates of students by quarter in the 2020-2021 school year, Forest Grove Elementary had the lowest 
-                                                                                  absence rate across the year while Sully Elementary had the largest increase throughout the year, increasing 
-                                                                                  by over two percent. To attempt to understand if this was a chronic issue, we visualized the chronic
-                                                                                  absenteeism rate which is defined as the percentage of students who miss more than ten percent of total
-                                                                                  classes throughout the year. We found that Sugarland Elementary had the highest rate at 11.1% while 
-                                                                                  Sterling had the lowest at 5.8%.  ", style = "padding-top:15px;font-size: 14px;"),
                                             
                                             
                                      )
