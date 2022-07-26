@@ -1754,7 +1754,7 @@ ui <- navbarPage(title = "DSPG",
                                               br(""),
                                               br(""),
                                               br(""),
-                                              column(5.5, align = "justify",
+                                              column(5, align = "justify",
                                                      
                                                      h4(strong("What Do Community Schools Look Like?"), align = "left"),
                                                      p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
