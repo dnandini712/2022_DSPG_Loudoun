@@ -1421,7 +1421,9 @@ Tree %>% collapsibleTree(hierarchy = c("Four Pillars", "Name", "Key Partners"),
                            
                          ))-> tree1
 
+#--------------- teacherstudent ratio---------------------------
 
+teacherstudentratio <- img(src = "StudentTeacherRatioPic.png", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;")
 
 
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
@@ -1793,6 +1795,7 @@ ui <- navbarPage(title = "DSPG",
                                             ),
                                             
                                             withSpinner(plotlyOutput("ocuplot2", height = "500px", width = "100%")),
+                                            teacherstudentratio,
                                             column(12,align = "right",
                                                    p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                             ),
@@ -2886,10 +2889,7 @@ server <- function(input, output, session) {
       cteacher
       
     }
-    else if (VarSchool() == "tsratio") {
-      
- 
-    }
+
     else if (VarSchool() == "cenrol") {
       enroll
       
@@ -2961,17 +2961,17 @@ server <- function(input, output, session) {
     
     
     
-    #observeEvent(c(input$schooldrop3, input$ocuplot3, input$ocuplot4), {
-      #req(input$schooldrop3)
-     # if (VarSchool3() == "suspension") {
-        #hide("ocuplot3")
-    #  } else if (VarSchool3() == "attend" && VarSchool3() == "chronic"){
-     #   show("ocuplot3")
-    #    hide("ocuplot4")
-    #    hide("schoolsuspendall")
-    #  }
+    observeEvent(c(input$schooldrop2, input$ocuplot2, teacherstudentratio), {
+      req(input$schooldrop2)
+     if (VarSchool() == "tsratio") {
+        hide("ocuplot2")
+     } else {
+        show("ocuplot2")
+       hide(teacherstudentratio)
       
-   #})
+      }
+
+   })
     
   
   
