@@ -833,6 +833,8 @@ leaflet(data = famfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> fam_free
 
 
+#resource table ----------------------------
+list <- read_excel(paste0(getwd(),"/data/allresources.xlsx")) 
 
 #-------------word clouds--------------------
 #------------cloud_1-------------------------
@@ -1630,7 +1632,7 @@ ui <- navbarPage(title = "DSPG",
                                                                     fluidRow(column(2,),
                                                                              (column(10,
                                                                                      
-                                                                                     withSpinner(plotlyOutput("PropComp", height = "60%", width = "90%"))
+                                                                                     withSpinner(plotlyOutput("PropComp", height = "70%", width = "80%"))
                                                                                      ))
                                                                     ),
                                                                             
@@ -1734,27 +1736,12 @@ ui <- navbarPage(title = "DSPG",
                                                                 
                                                                 
                                                        ),
-                                                       tabPanel("Some facts",
-                                                                column(11, align = "left",
-                                                                       selectInput("generalDATA", "Select Data:", width = "100%", choices = c(
-                                                                         "English Learner Status" = "figELS",
-                                                                         "IEP Status" = "figIEP",
-                                                                         "Free and Reduced Lunch" = "figFRL",
-                                                                         "Homeless" = "figHOME",
-                                                                         "Weekend meals" = "weekendmeals",
-                                                                         "Basic Supplies" = "families",
-                                                                         "Breakfast" = "breakfast"
-                                                                       ),
-                                                                       ),
-                                                                       withSpinner(plotlyOutput("generaldatafilledlinegraphs", height = "500px", width = "100%")),
-                                                                )
-                                                       ),
                                                      )
                                               ), 
                                               br(""),
                                               br(""),
                                               br(""),
-                                              column(5.5, align = "justify",
+                                              column(5, align = "justify",
                                                      
                                                      h4(strong("What Do Community Schools Look Like?"), align = "left"),
                                                      p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
@@ -1764,14 +1751,7 @@ ui <- navbarPage(title = "DSPG",
                                                        style = "padding-top:15px;font-size: 14px;"),
                                                      p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence,  we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary.", 
                                                        style = "padding-top:15px;font-size: 14px;"),
-                                                     
-                                                             p("Over 800 families received weekend meals in 2020 and 2021, jumping from 600 in 2019 and only 135 in 2018"),
-                                                             p("538 families received basic supplies in 2018, 832 families received basic supplies in 2020. This increase in both basic supplies and weekend meals indicates a growing need for more resources"),
-                                                             p("For students attending Loudoun County Public Schools learning English as a second language, they are placed in the English Learners (EL) program. At the community schools, a slight increase in students participating in the EL program was seen from the years 2018 to 2021 going from 67% to just about 70%."),
-                                                             p("It is important for all students who needs special education to have a developed and credited Individual Education Plan (IEP). In the community schools, we see a positive increase in IEP status from the school year 2018-2019 to 2019-2020 rising from 10% to 11%. Noticeably, it falls again, this time to 9% in the 2021-2022 academic school year."),
-                                                             p("For most students, especially within community schools, their parents are not always able to afford school lunch prices. Throughout the academic school years of 2018 to 2022 in our community schools, we see the percentage of students receiving free and reduced lunch fluctuate, but primarily stay between the percentages of 72% and 74%."),
-                                                             p("For students attending the community schools, we see 13% are homeless in the 2018-2019 academic school year. After rising to a whopping 16% the following school year, we see a noticeably two-year decline in students facing homelessness. This is a great trend that we hope we can continue as a result of this project."),
-                                                             p("About 80% of students at Guilford and Sully ate breakfast at school in 2020 – 2021, forest grove saw an increase from 23% to 65% of students who ate breakfast from 2019 to 2020. Over half of the students at Sugarland eat breakfast at school")),
+                                                     ),
                                                             
 
                                                      
@@ -1782,7 +1762,10 @@ ui <- navbarPage(title = "DSPG",
                                      )), 
                             
                             tabPanel("Education", 
-                                     h2("Education"),
+                                     fluidRow(style = "margin: 6px;",
+                                              column(12, 
+                                                     h1(strong("Education"), align = "center")),
+                                              
                                      column(6, align = "left",
                                      tabsetPanel(
                                        tabPanel("Size",
@@ -1920,7 +1903,7 @@ ui <- navbarPage(title = "DSPG",
                                             
                                             
                                      )
-                            ),
+                            )),
                                      
                             
                             
@@ -1944,22 +1927,7 @@ ui <- navbarPage(title = "DSPG",
                                                                      column(12, align = "justify",
                                                                             br(),
                                                                             h5(("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                            p(strong("Takeaways"), style = "padding-top:15px;font-size: 13px;", align = "justify")
                                                                      ),
-                                                                     column(6, align = "justify",
-                                                                      p("Student engagement included questions like “I feel like I belong at this school” and “I help my class make decisions at school”. When you look at all of the graphs, there isn’t a school that has a percentage over 85, with three schools sitting with percentages in the 70’s. This is definitely a potential area for improvement in the community school initiative.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                     
-                                                                    
-                                                                     p("Teacher relationships are important because all students should feel comfortable with their teachers, and have at least one that they can depend on when times get tough. One question asked in this category is “Teachers and other adults at this school treat me with respect”. When you look at the graph, Sterlings low 72 percent stands out significantly from all the other community schools, who have percentages over 90. This is defiantly a potential area for improvement in Sterling Elementary.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                     #h4(""),
-                                                                     #h4("[updat this]"),
-                                                                     
-                                                                  ), 
-                                                                  column(6, align= "justify",
-                                                                         p("Social-emotional wellbeing shows us in tune the students are with their feelings and being able to differentiate between right and wrong. Some example questions asked are “I work out disagreements with other students by talking with them” and “I can control myself when I am upset”. When you look at the graph, once again we do not have a school that has a percentage over 90 and just like the student engagement graph, Guilford, Rolling Ridge, and Sterling are all at percentages below 80. This shows us a potential area for improvement in mental health services.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                         p("Bullying appears to be a problem. By looking at the graph, you can see that every school has low percentages in comparison to the other graphs, which is concerning, to say the least. Example questions asked in this category are “I have stopped other people from bullying when I have seen it at school” and “I have been bullied by students at school this year. (Disagree)”. As mentioned in the Loudoun County Public Schools Annual Student Survey, “Items that were based on percent disagree as the positive response are indicated. For example, the desired response to Bullying is a problem at this school is Disagree”. Bullying as a whole is a potential area for improvement in all six community schools in Sterling.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                         
-                                                                  )
                                                                          
                                                                   )
                                                          ),
@@ -2019,6 +1987,23 @@ ui <- navbarPage(title = "DSPG",
                                                                 
                                                                 
                                                          ),
+                                                         column(12, align = "justify",
+                                                                br(),
+                                                                h4(("Takeaways"), style = "padding-top:15px;font-size: 13px;", align = "center"),
+                                                         column(6, align = "justify",
+                                                                p("Student engagement included questions like “I feel like I belong at this school” and “I help my class make decisions at school”. When you look at all of the graphs, there isn’t a school that has a percentage over 85, with three schools sitting with percentages in the 70’s. This is definitely a potential area for improvement in the community school initiative.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                
+                                                                
+                                                                p("Teacher relationships are important because all students should feel comfortable with their teachers, and have at least one that they can depend on when times get tough. One question asked in this category is “Teachers and other adults at this school treat me with respect”. When you look at the graph, Sterlings low 72 percent stands out significantly from all the other community schools, who have percentages over 90. This is defiantly a potential area for improvement in Sterling Elementary.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                #h4(""),
+                                                                #h4("[updat this]"),
+                                                                
+                                                         ), 
+                                                         column(6, align= "justify",
+                                                                p("Social-emotional wellbeing shows us in tune the students are with their feelings and being able to differentiate between right and wrong. Some example questions asked are “I work out disagreements with other students by talking with them” and “I can control myself when I am upset”. When you look at the graph, once again we do not have a school that has a percentage over 90 and just like the student engagement graph, Guilford, Rolling Ridge, and Sterling are all at percentages below 80. This shows us a potential area for improvement in mental health services.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                p("Bullying appears to be a problem. By looking at the graph, you can see that every school has low percentages in comparison to the other graphs, which is concerning, to say the least. Example questions asked in this category are “I have stopped other people from bullying when I have seen it at school” and “I have been bullied by students at school this year. (Disagree)”. As mentioned in the Loudoun County Public Schools Annual Student Survey, “Items that were based on percent disagree as the positive response are indicated. For example, the desired response to Bullying is a problem at this school is Disagree”. Bullying as a whole is a potential area for improvement in all six community schools in Sterling.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                
+                                                         ))
                                                         
                                                          
                                                 ), 
@@ -2034,17 +2019,7 @@ ui <- navbarPage(title = "DSPG",
                                                                               column(12, align = "justify",
                                                                               br(),
                                                                               h5(("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                              p(strong("Takeaways"), style = "padding-top:15px;font-size: 13px;", align = "justify")
                                                                               ),
-                                                                              
-                                                                              column(6, align = "justify",
-                                                                                     p("The relationships graph displays how the parents feel about their student's environment within their child's school such as their emotional support and respect. Some example questions asked were “This school respects diversity and welcomes all cultures” and “My child’s teachers care about my child”. Noticeably, all six schools have percentages of 90 or above.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                                     p("The instructions graph, as mentioned in the Loudoun County Public Schools Annual Parent Survey introduction, shows us “measures of the LCPS initiatives to foster deeper learning”. Some example questions asked were “I have noticed my child taking what he/she learns in one lesson and using that learning in new situations”, “My child creates new ideas or strategies that provide solutions to challenging problems”, and “My child asks questions and thinks in creative ways”. All of the schools have percentages over 90 although four of the schools have low 90 percent's. This definitely shows us that the students appear to be very creative outside of school so perhaps some youth development programs could help them expand some of their creative ideas and skills even more. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                              ),
-                                                                              column(6, align = "justify",
-                                                                                     p("Academic support shows us how the parents of the students that attend the six elementary schools feel about their children's learning environment. Some questions asked in this category were “Teachers at this school care about how well my child does in school” and “I am satisfied that my child is receiving a quality education at this school”. When you look at the graph, all but two schools have percentages over 90, and the two that don’t sit at 89 percent.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                                     p("Communications shows us how the parents feel about the communication between them and their child's school. Again, all but two graphs have percentages over 90, with two, Forest Grove and Sugarland, sitting in the mid 80’s.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                                     ),
                                                                               #h4(""),
                                                                               #h4("[updat this]"),
                                                                               br()
@@ -2107,6 +2082,18 @@ ui <- navbarPage(title = "DSPG",
                                                                          
                                                                          
                                                                   ),
+                                                                  column(12, align = "justify",
+                                                                         br(),
+                                                                         h4(("Takeaways"), style = "padding-top:15px;font-size: 13px;", align = "center"),
+                                                                         column(6, align = "justify",
+                                                                                p("The relationships graph displays how the parents feel about their student's environment within their child's school such as their emotional support and respect. Some example questions asked were “This school respects diversity and welcomes all cultures” and “My child’s teachers care about my child”. Noticeably, all six schools have percentages of 90 or above.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                                p("The instructions graph, as mentioned in the Loudoun County Public Schools Annual Parent Survey introduction, shows us “measures of the LCPS initiatives to foster deeper learning”. Some example questions asked were “I have noticed my child taking what he/she learns in one lesson and using that learning in new situations”, “My child creates new ideas or strategies that provide solutions to challenging problems”, and “My child asks questions and thinks in creative ways”. All of the schools have percentages over 90 although four of the schools have low 90 percent's. This definitely shows us that the students appear to be very creative outside of school so perhaps some youth development programs could help them expand some of their creative ideas and skills even more. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                         ),
+                                                                         column(6, align = "justify",
+                                                                                p("Academic support shows us how the parents of the students that attend the six elementary schools feel about their children's learning environment. Some questions asked in this category were “Teachers at this school care about how well my child does in school” and “I am satisfied that my child is receiving a quality education at this school”. When you look at the graph, all but two schools have percentages over 90, and the two that don’t sit at 89 percent.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                                p("Communications shows us how the parents feel about the communication between them and their child's school. Again, all but two graphs have percentages over 90, with two, Forest Grove and Sugarland, sitting in the mid 80’s.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                         )),
+                                                                  
                                                                 
                                                               
                                                          )
@@ -2123,19 +2110,6 @@ ui <- navbarPage(title = "DSPG",
                                                                      column(12, align = "justify",
                                                                             br(),
                                                                             h5(("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                            p(strong("Takeaways"), style = "padding-top:15px;font-size: 13px;", align = "justify")
-                                                                     ),
-                                                                     column(6, align = "justify",
-                                                                            p("Staff collegiality shows us how the teachers and staff feel about one another’s capabilities. An example question given in this category was “Teachers and other adults at this school have taught me things that have helped me do my job better”. When you look at the graph, you can see that Forest Grove stands out from the other schools with a total percentage barely reaching over 80. The other schools all maintain a high percentage over 90 so this could likely suggest that the environment at Forest Grove may not be as confident and uplifting to one another as the other schools' teachers and staff are to each other. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                            p("The academic environment bar shows us how teachers and staff feel about their academic environment within their school. A question that was given in this graph was “Teachers and other adults at this school provide students the support they need to succeed”. When you look at the graph, Forest Grove’s low number stands out once again in comparison to the other schools, followed by Sterling’s. This makes us wonder what are some things these schools could implement to create a better academic environment for their students.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                            p("School leadership informs us how confident the school teachers feel about their administrator's leadership. An example question that was given to the staff was “I feel comfortable raising issues and concerns that are important to me with school administrators”. This visualization takes the first major drop, as all but one school has a percentage less than 90 who feel confident within their school leadership. Noticeably, Forest Grove has the lowest percentage once again. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                           ),
-                                                                     
-                                                                     column(6, align = "justify",
-                                                                            p("The managing student behavior graph is critical because children are going to be kids at the end of the day, so it's important to be able to teach them right from wrong, while giving them the love and support needed. An example question that was given within this category was “There are supports to help a student who consistently misbehaves develop positive behavior”. When taking a look at the graph, it's noticeable that no schools have a percentage of 90 or higher. This is definitely an area for improvement. Rolling Ridge is also the school with the lowest percent, 75, so this is a school that could benefit from reviewing and possibly revising their policies on student behavior.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                            p("The workplace environment graph tells us how the teachers and staff feel while working within their environment. An example question asked is “My school provides me with sufficient access to appropriate supplies and material”. The bar graphs here are very diverse, as the percentages range from 79 percent to 100. This is definitely an area for improvement for all of the elementary schools except Sterling and Sully because the teachers should be provided with everything, they need to make sure that they can provide quality education for the students. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                            p("The instructional environment graph was interesting to look at because once again, every school sits at a percentage above 90 except for Forest grove. This category included questions like “The physical environment of my classroom supports my teaching and my students’ learning”, and “I have the support I need to incorporate technology into my instruction” so it definitely poses a question of what does Forest Grove lack that the other schools have?", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                            
                                                                      ),
                                                                   ),
                                                          ),
@@ -2207,10 +2181,24 @@ ui <- navbarPage(title = "DSPG",
                                                                 
                                                                 
                                                          ),
+                                                         column(12, align = "justify",
+                                                                br(),
+                                                                h4(("Takeaways"), style = "padding-top:15px;font-size: 13px;", align = "center"),
+                                                         column(6, align = "justify",
+                                                                p("Staff collegiality shows us how the teachers and staff feel about one another’s capabilities. An example question given in this category was “Teachers and other adults at this school have taught me things that have helped me do my job better”. When you look at the graph, you can see that Forest Grove stands out from the other schools with a total percentage barely reaching over 80. The other schools all maintain a high percentage over 90 so this could likely suggest that the environment at Forest Grove may not be as confident and uplifting to one another as the other schools' teachers and staff are to each other. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                p("The academic environment bar shows us how teachers and staff feel about their academic environment within their school. A question that was given in this graph was “Teachers and other adults at this school provide students the support they need to succeed”. When you look at the graph, Forest Grove’s low number stands out once again in comparison to the other schools, followed by Sterling’s. This makes us wonder what are some things these schools could implement to create a better academic environment for their students.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                p("School leadership informs us how confident the school teachers feel about their administrator's leadership. An example question that was given to the staff was “I feel comfortable raising issues and concerns that are important to me with school administrators”. This visualization takes the first major drop, as all but one school has a percentage less than 90 who feel confident within their school leadership. Noticeably, Forest Grove has the lowest percentage once again. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                         ),
+                                                         column(6, align = "justify",
+                                                                p("The managing student behavior graph is critical because children are going to be kids at the end of the day, so it's important to be able to teach them right from wrong, while giving them the love and support needed. An example question that was given within this category was “There are supports to help a student who consistently misbehaves develop positive behavior”. When taking a look at the graph, it's noticeable that no schools have a percentage of 90 or higher. This is definitely an area for improvement. Rolling Ridge is also the school with the lowest percent, 75, so this is a school that could benefit from reviewing and possibly revising their policies on student behavior.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                p("The workplace environment graph tells us how the teachers and staff feel while working within their environment. An example question asked is “My school provides me with sufficient access to appropriate supplies and material”. The bar graphs here are very diverse, as the percentages range from 79 percent to 100. This is definitely an area for improvement for all of the elementary schools except Sterling and Sully because the teachers should be provided with everything, they need to make sure that they can provide quality education for the students. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                p("The instructional environment graph was interesting to look at because once again, every school sits at a percentage above 90 except for Forest grove. This category included questions like “The physical environment of my classroom supports my teaching and my students’ learning”, and “I have the support I need to incorporate technology into my instruction” so it definitely poses a question of what does Forest Grove lack that the other schools have?", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                
+                                                         ),
                                                          br(""),
                                                          br(""),
                                                          br(""),
-                                                        )),
+                                                        ))),
                                               # column(12, 
                                               # h4("References: "),
                                               # p("[1] U.S Department of Education, Office of Elementary and Secondary Education. Full-Service Community Schools Program (FSCS). Retrieved from:", a(href =  "https://oese.ed.gov/offices/office-of-discretionary-grants-support-services/school-choice-improvement-programs/full-service-community-schools-program-fscs/", "https://oese.ed.gov/offices/office-of-discretionary-grants-support-services/school-choice-improvement-programs/full-service-community-schools-program-fscs/"), style = "font-size:12px;"),
@@ -2220,12 +2208,35 @@ ui <- navbarPage(title = "DSPG",
                             ),
                             
                             tabPanel("Representatives' Reports",
+                                     column(12, align = "center",
+                                            p(h1(strong("Elementary Community School Representatives ")), style = "padding-top:5px;"),
+                                     ),
                                      tabsetPanel(
+                                       tabPanel("Some facts",
+                                                column(6, align = "left",
+                                                       selectInput("generalDATA", "Select Data:", width = "100%", choices = c(
+                                                         "English Learner Status" = "figELS",
+                                                         "IEP Status" = "figIEP",
+                                                         "Free and Reduced Lunch" = "figFRL",
+                                                         "Homeless" = "figHOME",
+                                                         "Weekend meals" = "weekendmeals",
+                                                         "Basic Supplies" = "families",
+                                                         "Breakfast" = "breakfast"
+                                                       ),
+                                                       ),
+                                                       withSpinner(plotlyOutput("generaldatafilledlinegraphs", height = "500px", width = "100%")),
+                                                ),
+                                                column(6, align = "justify",
+                                                p("For students attending Loudoun County Public Schools learning English as a second language, they are placed in the English Learners (EL) program. At the community schools, a slight increase in students participating in the EL program was seen from the years 2018 to 2021 going from 67% to just about 70%."),
+                                                p("It is important for all students who needs special education to have a developed and credited Individual Education Plan (IEP). In the community schools, we see a positive increase in IEP status from the school year 2018-2019 to 2019-2020 rising from 10% to 11%. Noticeably, it falls again, this time to 9% in the 2021-2022 academic school year."),
+                                                p("For most students, especially within community schools, their parents are not always able to afford school lunch prices. Throughout the academic school years of 2018 to 2022 in our community schools, we see the percentage of students receiving free and reduced lunch fluctuate, but primarily stay between the percentages of 72% and 74%."),
+                                                p("For students attending the community schools, we see 13% are homeless in the 2018-2019 academic school year. After rising to a whopping 16% the following school year, we see a noticeably two-year decline in students facing homelessness. This is a great trend that we hope we can continue as a result of this project."),
+                                                p("Over 800 families received weekend meals in 2020 and 2021, jumping from 600 in 2019 and only 135 in 2018"),
+                                                p("538 families received basic supplies in 2018, 832 families received basic supplies in 2020. This increase in both basic supplies and weekend meals indicates a growing need for more resources"),
+                                                p("About 80% of students at Guilford and Sully ate breakfast at school in 2020 – 2021, forest grove saw an increase from 23% to 65% of students who ate breakfast from 2019 to 2020. Over half of the students at Sugarland eat breakfast at school"),
+                                       )),
                                        tabPanel("Responses",
                                      fluidPage(style = "margin: 2px;",
-                                               column(12, align = "center",
-                                                      p(h1(strong("Elementary Community School Representatives ")), style = "padding-top:5px;"),
-                                               ),
                                                fluidRow(
                                                 
                                                  column(12, align = "left",
@@ -2250,12 +2261,8 @@ ui <- navbarPage(title = "DSPG",
                                                       p("Future Goals primarily focus on creating more opportunities to engage and offer to students and parents. Representatives would like to focus on program development as the schools continue working with the students and their families. Another major goal for all schools is the partnership creation and development with community members to help expand programs. This is evident by numerous terms such as agencies, stakeholder, partners, partnerships, involvement, community, meaningful services addition, and assistance.")
                                                )
                                      )),
-                                     
+                                    
                                      tabPanel("Partners",
-                                              column(12, align = "center",
-                                                     p(h1(strong("Elementary Community School Representatives ")), style = "padding-top:5px;"),
-                                              ),
-                                              
                                               column(9, 
                                                      
                                                      collapsibleTreeOutput("tree1",height = "600px", width = "100%") 
@@ -2442,8 +2449,17 @@ ui <- navbarPage(title = "DSPG",
                                                       p(("Most of those resources are after school related. CASA is a licensed after-school program that provides students with activities and a fun environment while their parents are working. CASA is in two schools, while serving others. The YMCA is in the 4 other schools. They offer activities and support in homework, sports, fitness, and so much more. A resource that is available within our Sterling defined area is the Sterling Library. The library is a great resource for the students and families. They provide clubs, conversation groups, book clubs, art classes, and more. The Inova Healthy Plate Club is a club that is also located within our Sterling defined area. They provide cooking classes for healthy eating throughout the week. For the athletic and sport lovers, the Sterling Soccer is another resource available within our Sterling defined area. Sterling Soccer provides opportunities to play at a variety of competitive levels, while providing a safe and healthy soccer environment for the youth. "),align = "justify"),
                                                )),
                                      
-                            )
-                 ),
+                            ),
+                            tabPanel("All Resources", 
+                                     fluidRow(style = "margin: 6px;",
+                                              p("", style = "padding-top:10px;"),
+                                              column(12, align = "center",h1(strong("All Services")),
+                                                     DT::dataTableOutput("resourcetable"),
+                                                     p(""),
+           
+                                              )),
+
+                 )),
 
                  
                  tabPanel("Analysis",
@@ -2458,20 +2474,22 @@ ui <- navbarPage(title = "DSPG",
                                    )),
                           fluidPage(style = "margin: 2px;",
                                     column(6,
+                                           h2(strong("Major Takeaways")),
                                            p("Due to the high cost of living in Loudoun County and the fact that about one third of Sterling families make less than $74,999 in a year, it is crucial to increase the availability of affordable resources especially medical and mental health services and clothing resources. Moreso, almost 40% of Sterling residents have either public health insurance or are uninsured highlighting the need for affordable, inclusive medical care especially as the school liaisons viewed health needs for those uninsured as a major challenge."),
                                            p("While each school provides opportunities for after-school programs, many come at a high cost limiting the number of families able to utilize these resources. An increase in after-school programs, especially athletic clubs would provide opportunities for youth to build communication skills while remaining healthy. An increase in affordable before and after school programs would also be beneficial to both the students and parents, providing opportunities for youth to expand their learning and interests. "),
                                            p("Sully Elementary continues to have the lowest performance statistics on math and reading standardized exams, the highest student to teacher ratio while having the lowest enrollment, and one of the largest proportions of Hispanic students to other races. Due to all this, it may be beneficial to focus resources such as language services, social workers, and teachers to ensure that the students receive the specific help they need. "),
                                            p("The number of families receiving basic supplies and services continues to grow over time especially in the wake of the pandemic making it vital that these resources expand to fit this growing need. Our research shows a lack of family engagement and mental health resources within a 10-minute drive of Sterling Elementary. ")),
                                     column(6,
-                                           h3(strong("Health and Social Services")),
+                                           h2(strong("Opportunities Within Pillars")),
+                                           h4(strong("Health and Social Services")),
                                              p("Social emotional learning can be implemented within all grades to promote communication skills and help students manage their emotions"),
                                            p("Annual medical, dental, and vision clinics at each school offering services to those both insured and uninsured"),
-                                           h3(strong("Mental Health")),
+                                           h4(strong("Mental Health")),
                                            p("Provide training on Adverse Childhood Experiences (ACEs) and how to recognize and understand the impacts these may have on students"),
-                                           h3(strong("Youth Development")),
+                                           h4(strong("Youth Development")),
                                            p("Restorative justice practices such as peace circles will allow for decreases in future conflict"),
                                            p("Increases in before and after school programs that promote health and education"),
-                                           h3(strong("Family Development")),
+                                           h4(strong("Family Development")),
                                            p("Increasing multi-language resources"),
                                            p("Providing more opportunities for parent feedback forums")))
                           
@@ -2546,7 +2564,7 @@ ui <- navbarPage(title = "DSPG",
                                          
                                           p("", style = "padding-top:10px;"), 
                                           p(a(href = 'https://www.linkedin.com/in/nandini-das-390577104/', 'Nandini Das', target = '_blank'), "(Virginia Tech, Graduate in Economics Department);"),
-                                          p(a(href = 'https://www.linkedin.com/in/amanda-ljuba-9824551b9', 'Amanda Ljuba', target = '_blank'), "(Virginia Tech, Virginia Tech, Undergraduate in Sociology with a concentration in Social Inequality);"),
+                                          p(a(href = 'https://www.linkedin.com/in/amanda-ljuba-9824551b9', 'Amanda Ljuba', target = '_blank'), "(Virginia Tech, Undergraduate in Sociology with a concentration in Social Inequality);"),
                                           p(a(href = 'https://www.linkedin.com/in/jontayvion-osborne-a3b7961a7', 'Jontayvion Osborne', target = '_blank'), "Austin Peay State University, Undergraduate in Business Management and Minor in Marketing) ;"),
                                           p(a(href = 'https://www.linkedin.com/in/chaudhry-abdullah-rizwan-a1641522b/', 'Chaudhry Abdullah Rizwan', target = '_blank'), "(Virginia Tech, Undergraduate in Computational Modeling and Data Analytics and Economics, Minors in Computer Science and Mathematics)."),
                                          
@@ -2563,8 +2581,8 @@ ui <- navbarPage(title = "DSPG",
                                    )) ,
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    h4(strong("Project Stakeholders")),
-                                   p(a(href = 'https://loudoun.ext.vt.edu/staff/Vermaak-Stuart.html', 'Stuart Vermaak', target = '_blank'), "(Virginia Cooperative Extension, Loudoun County at Virginia Tech);"),
-                                   p(a(href = 'https://www.lcps.org/outreachservices', 'Sarah Eaton', target = '_blank'), "(Supervisor, Outreach Services Loudoun)."),
+                                   p(a(href = 'https://www.lcps.org/outreachservices', 'Sarah Eaton', target = '_blank'), "(Supervisor, Outreach Services Loudoun);"),
+                                   p(a(href = 'https://loudoun.ext.vt.edu/staff/Vermaak-Stuart.html', 'Stuart Vermaak', target = '_blank'), "(Virginia Cooperative Extension, Loudoun County at Virginia Tech)."),
                                    p("", style = "padding-top:10px;"),
                                    h4(strong("Acknowledgments")) ,
                                    p("We would like to thank Loudoun officials for providing us with data for our project. "),
@@ -3461,6 +3479,11 @@ server <- function(input, output, session) {
       map_family
     }
   })
+  
+  output$resourcetable = DT::renderDataTable({
+    datatable(list, filter = 'top')
+  })
+  
   
   output$tree1 <- renderCollapsibleTree({
     
