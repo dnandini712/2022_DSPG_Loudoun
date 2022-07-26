@@ -399,7 +399,7 @@ nineteensub <- race_subset[(1:24),(1:4)]
 Race <- nineteensub$Race
 Percentage <- nineteensub$Percentage
 School <- nineteensub$`School Name`
-racenine <- ggplot(nineteensub,aes(x=School,y=Percentage,fill=Race))+ geom_col(position = "dodge",aes(text = paste0("Percentage:",Percentage, "%", "\n","Race:",Race,"\n","School:",School)))+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Percentage",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
+racenine <- ggplot(nineteensub,aes(x=School,y=Percentage,fill=Race, group=Race))+ geom_col(position = "dodge",aes(text = paste0("Percentage:",Percentage, "%", "\n","Race:",Race,"\n","School:",School)))+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Percentage",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
                                                                                                                                                                                                                                          plot.caption = element_text(hjust = 1)) + guides(fill=guide_legend(title="Race/Ethnicity"))
 racenine <- ggplotly(racenine,tooltip=c("text"))
 
@@ -479,7 +479,7 @@ absentieesm <- read_excel(paste0(getwd(),"/data/Chronicabseetism.xlsx"),skip=0,c
 
 absentieesm %>% filter(Subgroup == "All Students") -> absentieesm
 
-chronic <- plot_ly(absentieesm, x = ~Year, y = ~`Percent above 10`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent above 10`, "%"))%>% layout(title = "Chronic Absentieesm (Percentage of Students missing more than 10% classes.)", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+chronic <- plot_ly(absentieesm, x = ~Year, y = ~`Percent above 10`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent above 10`, "%"))%>% layout(title = "Chronic Absentieesm (Percentage of Students missing more than 10% classes)", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 
@@ -1673,16 +1673,20 @@ ui <- navbarPage(title = "DSPG",
                                           br(""),
                                           br(""),
                                           h4(strong("Who Makes Up Sterling, Virginia?")), 
+                                          
+                                          p("We used the American Community Survey (ACS) 5-year data to understand the socioeconomic demographics of the Sterling Census Designated Place (CDP) from the years 2016 to 2020. The ACS data is a survey collected by the U.S. Census Bureau which gathers sociodemographic information on American households including age, gender, race/ethnicity, income, and employment. "),
+                                          br(),
                                           p("Sterling’s population consists of slightly more males (50.5%) than females, with a median age of 34.7 years. Young and middle-aged adults (ages 25 to 44) account for the largest age group in Sterling.   On average, the majority of the population identified as White between 2016-2020, followed by Asian as the second most common race. The area appears diverse, with almost half of the residents (41%) identifying as Hispanic or Latino. This is considerably larger than Loudoun County, which has only about 14% Hispanic population."),
                                           
                                           p("Many in the Sterling community are well-educated and have a college degree. Most residents ages 25 and older have attained a high school diploma, with the largest group having earned a bachelor’s degree. This education level may contribute to the high-income level in the region. The largest median income group for families in Sterling earn $100,000 to $149,999, followed closely by both $50,000 to $74,999 bracket and $150,000 to $199,999. It should be taken into consideration however that our data is slightly skewed as the areas of the Sterling CPD includes those that are highly affluent, outweigh those located in the areas with the schools designated as Title 1. This is evident by the differences in poverty levels by groups – females tend to have a higher poverty level regardless of age. Specifically, females ages 18 to 24 face the highest poverty level, followed by females ages 35 to 44.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
                                           
                                           p("While the majority of Sterling’s population is employed (approximately 71%), there is a notable gap in the residents' health insurance. About 17% have no health insurance, which is higher than Loudoun county's 5.5%. This may point to possible opportunities provided by Community Schools as these families will be less routine screening and will delay treatment until the condition is more advanced and more costly and challenging to treat.", style = "padding-top:15px;font-size: 14px;"),
                                           
-                                          p("The labor force of Sterling primarily works in management, business, science, and art, followed by the service sector. Over half of those who commute to work have a commute time less than 30 minutes, and 75% of said commuters drive alone. Notably, only 1.8% of commuters utilized public transportation.",style = "padding-top:15px;font-size: 14px;"),
-                                          
                                           p("When you take a look at the median property value visualizations, it is clear that a large percentage of homes fall into the property value range of $300,000 to $499,999. The average property value of Sterling is $378,700 which is almost $96,000 higher than the state of Virginia's $282,800 median property value.",style = "padding-top:15px;font-size: 14px;"),
+                                        
+                                          p("The labor force of Sterling primarily works in management, business, science, and art, followed by the service sector. Over half of those who commute to work have a commute time less than 30 minutes, and 75% of said commuters drive alone. Notably, only 1.8% of commuters utilized public transportation.",style = "padding-top:15px;font-size: 14px;")
                                           
+                                        
                                           
                                    )
                                    
@@ -1748,7 +1752,7 @@ ui <- navbarPage(title = "DSPG",
                                                      p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling Elementary has the lowest number of students. Guilford is the only school which has more females than male while Forest Grove like the Sterling area for the gender ratio has an almost equal split. Rolling Ridge and Sully have a similar trend: the female students are about 48% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling Elementary has the most uneven distribution where there is 86 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
                                                      p("The race and ethnicity demographics in 2019-2020 revealed that overall, Hispanic students, made up the greatest percentage of students attending the six elementary schools in Sterling, which differs from the general make-up of the Sterling area where White residents made up the majority of residents. There is a huge difference between Guilford and Forest Grove in terms of the ethnic groups of students, given that they both have similar number of total students: Guilford has significantly higher Hispanic students while Forest Grove has a lot more White and Hispanic students.", 
                                                        style = "padding-top:15px;font-size: 14px;"),
-                                                     p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence,  we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary.", 
+                                                     p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence,  we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary. This shows us there is not a significant correlation of the hispanic student percentage and the hispanic population density.", 
                                                        style = "padding-top:15px;font-size: 14px;"),
                                                      ),
                                                             
@@ -1888,14 +1892,16 @@ ui <- navbarPage(title = "DSPG",
                                                                                   by over two percent. To attempt to understand if this was a chronic issue, we visualized the chronic
                                                                                   absenteeism rate which is defined as the percentage of students who miss more than ten percent of total
                                                                                   classes throughout the year. We found that Sugarland Elementary had the highest rate at 11.1% while 
-                                                                                  Sterling had the lowest at 5.8%.  ", style = "padding-top:15px;font-size: 14px;"),
+                                                                                  Sterling had the lowest at 5.8% in 2018-2019 academic year. After the pandemic hit, these percentages shot up massively for all schools except Sterling and Forest Grove. Forest Grove's chronic absenteeism astonishingly fell. Rolling Ridge unfortunately has 17.7% students missing 1 out of 10 classes.", style = "padding-top:15px;font-size: 14px;"),
                                             p("To understand the educational environment of the community schools, we acquired data on the yearly state standardized exams on math
                                               and reading for the 2018 – 2019 school year and 2020 - 2021 school year. Due to the COVID-19 pandemic, changes in modality and 
                                               hardships endured may have impacted exam scores leading us to be unable to draw any significant conclusions about changes over time. 
                                               For both math and science, the performance statistics for each school have been shown by all students as well as broken into 
                                               subgroups by race, gender, and other characteristics.",style = "padding-top:15px;font-size: 14px;"),
+                                            br(),
                                             p(strong("Mathematics")),
                                             p("On average, in the 2018 – 2019 school year 75% of all students passed while in the 2020 – 2021 school year, on average only 35% of all students passed. When broken down into subgroups, white students at all schools in 2018 passed above the average rate while for Hispanic students, no schools passed above the average and at Sully, only 62% of Hispanic students passed",style = "padding-top:15px;font-size: 14px;"),
+                                            br(),
                                             p(strong("Reading")),
                                             p("At all schools in the 2018 – 2019 academic year, the reading score for all students was below 70% with Sully having a 46% pass rate. For white students, the scores ranged between 74% and 97% while Hispanic student scores ranged from 41% to 59% with Sully having the lowest scores for both the 2018 – 2019 year and the 2020 – 2021 academic year.", style = "padding-top:15px;font-size: 14px;"),
                                             p("Overall, Sully had the lowest performance statistics across all schools and subjects.",style = "padding-top:15px;font-size: 14px;"),
