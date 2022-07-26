@@ -2218,7 +2218,7 @@ ui <- navbarPage(title = "DSPG",
                                             p(h1(strong("Elementary Community School Representatives ")), style = "padding-top:5px;"),
                                      ),
                                      tabsetPanel(
-                                       tabPanel("Some facts",
+                                       tabPanel("Some Facts",
                                                 column(6, align = "left",
                                                        selectInput("generalDATA", "Select Data:", width = "100%", choices = c(
                                                          "English Learner Status" = "figELS",
