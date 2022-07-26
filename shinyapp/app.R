@@ -4,7 +4,7 @@
 #1. Loading Packages which are required--------
 #2. Loading the data and making the visualizations-----------
 #3. JSCODE 
-#4. USER INTERFACE    (Search for 'Overview Tab' and it will take you to the UI for that tab)
+#4. USER INTERFACE    (Search for 'XXX Tab' and it will take you to the UI for that tab)
 #5. Server
 
 #For this repo, all the visualisations are made beforehand and in the server these graphs are just called. 
@@ -31,7 +31,6 @@ library(tigris)
 library(tidyverse)
 library(tidycensus)
 library(readxl)
-library(collapsibleTree)
 library(shinycssloaders)
 library(leaflet)
 library(leaflet.extras)
@@ -77,6 +76,7 @@ library(rmapzen)
 library(scales)
 library(ggwordcloud)
 library(wordcloud2)
+library(collapsibleTree)
 #---------------------------------------------------------------
 
 prettyblue <- "#232D4B"
@@ -116,11 +116,7 @@ blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia",
           "Block Group 1, Census Tract 6116.01, Loudoun County, Virginia",
           "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia", 
           "Block Group 3, Census Tract 6112.02, Loudoun County, Virginia")
-va20_2 <- get_acs(geography = "block group",
-                  variables = c(hispanic = "B03002_012"),
-                  state = "VA",
-                  year = 2020,
-                  geometry = TRUE) %>%
+va20_2 <- readRDS(paste0(getwd(),"/data/va20_2.RDS" )) %>%
   filter(NAME %in% blocks)
 
 blocks_CDP<-c("Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia","Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
@@ -179,7 +175,7 @@ age_cat1 <- (subset_sterling1$Label)
 Age1 <- age_cat1
 Percent1 <- age_percent1
 
-agesterling<- plot_ly(subset_sterling1,x=~Age1, y=~Percent1,type = "bar", color = ~Age1, hoverinfo = "text",text = ~paste("Age:",Age1,"<br>","Percent:",Percent1,"%" )) %>% layout(title = "Age Distribution",xaxis = list(title=""), yaxis = list(title = "Percentage"))
+agesterling<- plot_ly(subset_sterling1,x=~Age1, y=~Percent1,type = "bar", color = ~Age1, hoverinfo = "text",text = ~paste("Percent:",Percent1,"%","<br>","Age:",Age1 )) %>% layout(title = "Age Distribution",xaxis = list(title=""), yaxis = list(title = "Percentage"))
 
 
 #-----------Race/Ethnicity--------------------
@@ -224,7 +220,7 @@ mi_cat.fac <- factor(mi_cat, levels = c(mi_cat))
 subset_medianin$new_pop<-gsub("%$","",subset_medianin$...4)
 pop_nop <- subset_medianin$new_pop
 pop_num <- as.numeric(pop_nop)
-income <- plot_ly(subset_medianin,x=~mi_cat.fac,y=~pop_num,color = ~mi_cat.fac,type = "bar", hoverinfo = "text",text = ~paste("Income Level:",mi_cat.fac,"<br>","Percent:",pop_num,"%")) %>% layout(title = "Median Income Distribution",xaxis = list(title="") ,yaxis= list(title = "Percentage"))
+income <- plot_ly(subset_medianin,x=~mi_cat.fac,y=~pop_num,color = ~mi_cat.fac,type = "bar", hoverinfo = "text",text = ~paste("Percent:",pop_num,"%","<br>","Income Level:",mi_cat.fac)) %>% layout(title = "Median Income Distribution",xaxis = list(title="") ,yaxis= list(title = "Percentage"))
 #---------Property Value---------------------------------
 
 dfpv <- read_excel(paste0(getwd(), "/data/Property_Value.xlsx"), col_names = TRUE)
@@ -312,7 +308,7 @@ Total1 <- povas_pop1
 
 cat1 <- as.character(povas_cat1)
 
-pov <- plot_ly(subset_poverty_as1, x = cat1, y = Total1, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Age:",cat1,"<br>","Total:",Total1,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = cat1))
+pov <- plot_ly(subset_poverty_as1, x = cat1, y = Total1, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Total:",Total1,"<br>","Age:",cat1,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = cat1))
 #-#--------gender by school-------------------------------------------------
 
 
@@ -459,7 +455,7 @@ Quarter <- attendance$`School Quarter`
 School <- attendance$`School Name`
 ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(title = "Student Absences by 2020-2021 Quarter",caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",
                                                                                                                                                                                                                                       plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
-attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("School:",School,"<br>","Percent:",Percent)) %>% layout(title = "Student Absences by 2020-2021 Quarter", legend=list(title=list(text='Select School')), yaxis = list(title = "Percentage"), xaxis = list(title = ""))
+attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("Percent:",Percent, "%","<br>","School:",School)) %>% layout(title = "Student Absences by 2020-2021 Quarter", legend=list(title=list(text='Select School')), yaxis = list(title = "Percentage"), xaxis = list(title = ""))
 #---------------Number of Teachers/Staff--------------------------
 
 Schools <- c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
@@ -557,6 +553,30 @@ popups <- lapply(
   htmltools::HTML
 )
 
+popup <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(costs$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        costs$Description ,
+        "<br />",
+        "<strong>Serves:</strong>",
+        costs$Serves, 
+        "<br />",
+        "<strong>Hours:</strong>",
+        costs$Hours,
+        "<br />",
+        "<strong>Language:</strong>",
+        costs$Language,
+        "<br />",
+        "<strong>Address:</strong>",
+        costs$Address,
+        "<a href = ",costs$Website, "> Website </a>",
+        "<br />"),
+  
+  htmltools::HTML
+)
+
 healthfree <- read_excel(paste0(getwd(), "/data/resourcecost.xlsx"),sheet = "Health Free")
 
 
@@ -564,13 +584,7 @@ healthfree <- read_excel(paste0(getwd(), "/data/resourcecost.xlsx"),sheet = "Hea
 pal <- colorFactor(c("#91003f", "#005824", "#d7301f","#CC6677","#DDCC77","#88419d"), domain = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"))
 pal1 <- colorFactor(c("#91003f","#005824","#d7301f","#88419d","#DDCC77","#CC6677","#AA4499","#882255"),domain = c("Food Pantry","Clothing","Counseling","Dental Care","Vision Care","Medical Services","Speech and Hearing Services","Physical Therapy"))
 
-blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
-va20_2 <- get_acs(geography = "block group",
-                  variables = c(hispanic = "B03002_012"),
-                  state = "VA",
-                  year = 2020,
-                  geometry = TRUE) %>%
-  filter(NAME %in% blocks)
+
 leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(data = va20_2,
               color="#5f308f",
@@ -579,20 +593,14 @@ leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
               fillOpacity = 0.5)  %>% 
   addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=healthfree,~Longitude,~Latitude,popup = ~popups, label = ~as.character(Name),group = ~Resource,color = ~pal(Resource),weight = 7, radius=7, 
+  addCircleMarkers(data=costs,~Longitude,~Latitude,popup = ~popup, label = ~as.character(Name),group = ~Resource,color = ~pal(Resource),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1) %>%
   addLayersControl(overlayGroups = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"),options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
   setView(-77.4029155,39.009006, zoom = 11) -> health_free
 
 
-blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia", "Block Group 2, Census Tract 6112.04, Loudoun County, Virginia", "Block Group 2, Census Tract 6115.02, Loudoun County, Virginia","Block Group 3, Census Tract 6115.02, Loudoun County, Virginia", "Block Group 1, Census Tract 6113, Loudoun County, Virginia","Block Group 2, Census Tract 6113, Loudoun County, Virginia","Block Group 3, Census Tract 6113, Loudoun County, Virginia", "Block Group 1, Census Tract 6114, Loudoun County, Virginia","Block Group 2, Census Tract 6114, Loudoun County, Virginia","Block Group 3, Census Tract 6114, Loudoun County, Virginia","Block Group 1, Census Tract 6117.01, Loudoun County, Virginia","Block Group 2, Census Tract 6117.01, Loudoun County, Virginia", "Block Group 1, Census Tract 6116.02, Loudoun County, Virginia","Block Group 2, Census Tract 6116.02, Loudoun County, Virginia","Block Group 1, Census Tract 6116.01, Loudoun County, Virginia", "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia")
-va20_2 <- get_acs(geography = "block group",
-                  variables = c(hispanic = "B03002_012"),
-                  state = "VA",
-                  year = 2020,
-                  geometry = TRUE) %>%
-  filter(NAME %in% blocks)
+
 leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(data = va20_2,
               color="#5f308f",
@@ -603,7 +611,7 @@ leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   setView(-77.4029155,39.009006, zoom = 11)%>%
   addCircleMarkers(data=foods,~Longitude1,~Latitude1,popup=~popups,label=~as.character(Name1),color= ~pal1(Resource1),group = ~Resource1,weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> health_all
+  addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> health_all
 #--------------youth development map --------------------------
 
 youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 3.xlsx"))
@@ -639,7 +647,7 @@ leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addCircleMarkers(data=youth,~Longitude3,~Latitude3,popup=~popups3,label=~as.character(Name3),color= ~pal3(Type),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1,group = ~Type)%>%
   addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
 
 
 youthfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth Free")
@@ -674,7 +682,7 @@ leaflet(data = youthfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addCircleMarkers(data=youthfree,~Longitude4,~Latitude4,popup=~popups4,label=~as.character(Name4),color= ~pal3(Type),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1,group = ~Type)%>%
   addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> youth_free
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> youth_free
 
 
 #---------mental health resources map------------------------
@@ -713,7 +721,7 @@ leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addCircleMarkers(data=ment,~Longitude2,~Latitude2,popup=~popups2,label=~as.character(Name2),group=~Resources2,color=~pal2(Resources2),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
   addLayersControl(overlayGroups = ~Resources2,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
 
 mentfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Mental Free")
 
@@ -747,7 +755,7 @@ leaflet(data = mentfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addCircleMarkers(data = mentfree, ~Longitude5,~Latitude5,popup = ~popups5,label = ~as.character(Name5),group = ~Resource5,color = ~pal2(Resource5),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
   addLayersControl(overlayGroups = ~Resource5,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> mental_free
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> mental_free
 
 
 #----------------------family engagement map-------------------
@@ -789,7 +797,7 @@ leaflet(data = familyengage) %>% addProviderTiles(providers$CartoDB.Positron) %>
   addCircleMarkers(data=familyengage,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal8(Resources),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
   addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_family
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_family
 
 famfree <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family Free")
 
@@ -828,7 +836,7 @@ leaflet(data = famfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addCircleMarkers(data=famfree,~Longitude8,~Latitude8,popup=~popups9,label=~as.character(Name8),group=~Resource8,color=~pal8(Resource8),weight = 7, radius=7, 
                    stroke = F, fillOpacity = 1)%>%
   addLayersControl(overlayGroups = ~Resource8,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character(School)) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> fam_free
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> fam_free
 
 
 
@@ -1074,7 +1082,7 @@ figELS <- plot_ly(dataELS,
                   fill = 'tozeroy',
                   fillcolor = 'rgba(114,186,59,0.5)',
                   line = list(color = 'rgb(114,186,59)'),
-                  text = ~paste("Percentage:", subset_englishlearnerstatus$Percentage,"%","<br>","Year:",  subset_englishlearnerstatus$`School Year`),
+                  text = ~paste("Year:", subset_englishlearnerstatus$`School Year`, "<br>", "Percentage:", subset_englishlearnerstatus$Percentage,"%"),
                   hoverinfo = 'text')
 
 figELS <- figELS %>% layout(
@@ -1090,6 +1098,7 @@ figELS <- figELS %>% layout(
   xaxis = list(
     title = "", 
     zeroline = T, 
+    tickangle = 40,
     zerolinewidth = 60,
     standoff = 25,
     showgrid = T
@@ -1116,7 +1125,7 @@ figIEP <- plot_ly(dataIEP,
                   fill = 'tozeroy',
                   fillcolor = 'rgba(114,186,59,0.5)',
                   line = list(color = 'rgb(114,186,59)'),
-                  text = ~paste("Percentage:", subset_IEPstatus$Percentage,"%", "<br>","Year:", subset_IEPstatus$`School Year`),
+                  text = ~paste("Year:", subset_IEPstatus$`School Year`, "<br>", "Percentage:", subset_IEPstatus$Percentage,"%"),
                   hoverinfo = 'text')
 
 figIEP <- figIEP %>% layout(
@@ -1130,6 +1139,7 @@ figIEP <- figIEP %>% layout(
   xaxis = list(
     title = "", 
     zeroline = T, 
+    tickangle = 40, 
     zerolinewidth = 60,
     standoff = 25,
     showgrid = T
@@ -1156,7 +1166,7 @@ figFRL <- plot_ly(dataFRL,
                   fill = 'tozeroy',
                   fillcolor = 'rgba(114,186,59,0.5)',
                   line = list(color = 'rgb(114,186,59)'),
-                  text = ~paste("Percentage:", subset_freereducedlunch$Percentage, "%", "<br>","Year:", subset_freereducedlunch$`School Year`),
+                  text = ~paste("Year:", subset_freereducedlunch$`School Year`, "<br>",  "Percentage:", subset_freereducedlunch$Percentage, "%"),
                   hoverinfo = 'text')
 
 figFRL <- figFRL %>% layout(
@@ -1170,6 +1180,7 @@ figFRL <- figFRL %>% layout(
   xaxis = list(
     title = "", 
     zeroline = T, 
+    tickangle = 40,
     zerolinewidth = 60,
     standoff = 25,
     showgrid = T
@@ -1197,11 +1208,10 @@ figHOME <- plot_ly(dataHOME,
                    fill = 'tozeroy',
                    fillcolor = 'rgba(114,186,59,0.5)',
                    line = list(color = 'rgb(114,186,59)'),
-                   text = ~paste("<br>Percentage:", subset_homeless$Percentage, "%","Year:", subset_homeless$`School Year`),
-                   hoverinfo = 'text')
+                   text = ~paste("Year:", subset_homeless$`School Year`, "<br>", "Percentage:", subset_homeless$Percentage, "%"))
 
 figHOME <- figHOME %>% layout(
-  title = "Homeless Percentage",
+  title = "Students Facing Homelessness",
   yaxis = list(
     title = "Percentage",
     range = list(6,17),
@@ -1211,6 +1221,7 @@ figHOME <- figHOME %>% layout(
   xaxis = list(
     title = "", 
     zeroline = T, 
+    tickangle = 40,
     zerolinewidth = 60,
     standoff = 25,
     showgrid = T
@@ -1369,7 +1380,7 @@ plot_ly(data = subset_healthscrape, x = ~Year, y = ~Total, type = "scatter",mode
 subset_healthscrape2 <- healthscrape[c(2,4),c(2,4)]
 Year2 <- subset_healthscrape2$...2
 Total2 <- subset_healthscrape2$...4
-plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Families Who Received Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
+plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
 
 #----------------suspension data-------------------
 
@@ -1391,6 +1402,33 @@ sugarlandsuspend<- plot_ly(subset_sugarland, x = ~Year, y = ~`Percent of the Stu
 
 subset_sully <- suspension[c(21,22,23,24,45,46,47,48,69,70,71,72), c(1:3,5)]
 sullysuspend<- plot_ly(subset_sully, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sully", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+
+
+
+#----------------------Collapsible Tree - Key Partners and Programs--------------------
+
+Tree <- read_excel(paste0(getwd(),"/data/treedata.xlsx")) 
+
+Tree %>% collapsibleTree(hierarchy = c("Four Pillars", "Name", "Key Partners"),
+                         root="Pillar",
+                         attribute = "Pillar",
+                         width=1800,
+                         zoomable=T, 
+                         collapsed = T, nodeSize = 'leafCount',
+                         
+                         fill = c(
+                           # The root
+                           rep("white", 1),
+                           # Unique Pillars
+                           rep("firebrick", length(unique(Tree$`Four Pillars`))),
+                           # Unique Names of schools
+                           rep("steelblue", 24),
+                           rep("orange", 71)
+                           
+                         ))-> tree1
+
+
+
 
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
@@ -1593,7 +1631,13 @@ ui <- navbarPage(title = "DSPG",
                                                                      ),     
                                                                      br(""),
                                                                      withSpinner(plotlyOutput("demo2", height = "500px", width ="100%")),
-                                                                     withSpinner(plotlyOutput("PropComp", height = "500px", width = "70%")),
+                                                                    fluidRow(column(2,),
+                                                                             (column(10,
+                                                                                     
+                                                                                     withSpinner(plotlyOutput("PropComp", height = "60%", width = "90%"))
+                                                                                     ))
+                                                                    ),
+                                                                            
                                                                      column(12, align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
                                                                      ),
@@ -1676,18 +1720,7 @@ ui <- navbarPage(title = "DSPG",
                                                                          
                                                                          
                                                                 )),
-                                                       tabPanel("General Data",
-                                                                column(11, align = "left",
-                                                                       selectInput("generalDATA", "Select Data:", width = "100%", choices = c(
-                                                                         "English Learner Status" = "figELS",
-                                                                         "IEP Status" = "figIEP",
-                                                                         "Free and Reduced Lunch" = "figFRL",
-                                                                         "Homeless" = "figHOME"
-                                                                       ),
-                                                                       ),
-                                                                       withSpinner(plotlyOutput("generaldatafilledlinegraphs", height = "500px", width = "100%")),
-                                                                )
-                                                       ),
+                                                      
                                                        tabPanel("Race/Ethnicity",
                                                                 fluidRow(style = "margin: 4px;",
                                                                          withSpinner(plotlyOutput("racenine", height = "500px", width = "100%")),
@@ -1704,13 +1737,28 @@ ui <- navbarPage(title = "DSPG",
                                                                 ),
                                                                 
                                                                 
-                                                       )
+                                                       ),
+                                                       tabPanel("Some facts",
+                                                                column(11, align = "left",
+                                                                       selectInput("generalDATA", "Select Data:", width = "100%", choices = c(
+                                                                         "English Learner Status" = "figELS",
+                                                                         "IEP Status" = "figIEP",
+                                                                         "Free and Reduced Lunch" = "figFRL",
+                                                                         "Homeless" = "figHOME",
+                                                                         "Weekend meals" = "weekendmeals",
+                                                                         "Basic Supplies" = "families",
+                                                                         "Breakfast" = "breakfast"
+                                                                       ),
+                                                                       ),
+                                                                       withSpinner(plotlyOutput("generaldatafilledlinegraphs", height = "500px", width = "100%")),
+                                                                )
+                                                       ),
                                                      )
                                               ), 
                                               br(""),
                                               br(""),
                                               br(""),
-                                              column(5, align = "justify",
+                                              column(5.5, align = "justify",
                                                      
                                                      h4(strong("What Do Community Schools Look Like?"), align = "left"),
                                                      p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
@@ -1721,15 +1769,24 @@ ui <- navbarPage(title = "DSPG",
                                                      p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence,  we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary.", 
                                                        style = "padding-top:15px;font-size: 14px;"),
                                                      
+                                                             p("Over 800 families received weekend meals in 2020 and 2021, jumping from 600 in 2019 and only 135 in 2018"),
+                                                             p("538 families received basic supplies in 2018, 832 families received basic supplies in 2020. This increase in both basic supplies and weekend meals indicates a growing need for more resources"),
+                                                             p("For students attending Loudoun County Public Schools learning English as a second language, they are placed in the English Learners (EL) program. At the community schools, a slight increase in students participating in the EL program was seen from the years 2018 to 2021 going from 67% to just about 70%."),
+                                                             p("It is important for all students who needs special education to have a developed and credited Individual Education Plan (IEP). In the community schools, we see a positive increase in IEP status from the school year 2018-2019 to 2019-2020 rising from 10% to 11%. Noticeably, it falls again, this time to 9% in the 2021-2022 academic school year."),
+                                                             p("For most students, especially within community schools, their parents are not always able to afford school lunch prices. Throughout the academic school years of 2018 to 2022 in our community schools, we see the percentage of students receiving free and reduced lunch fluctuate, but primarily stay between the percentages of 72% and 74%."),
+                                                             p("For students attending the community schools, we see 13% are homeless in the 2018-2019 academic school year. After rising to a whopping 16% the following school year, we see a noticeably two-year decline in students facing homelessness. This is a great trend that we hope we can continue as a result of this project."),
+                                                             p("About 80% of students at Guilford and Sully ate breakfast at school in 2020 – 2021, forest grove saw an increase from 23% to 65% of students who ate breakfast from 2019 to 2020. Over half of the students at Sugarland eat breakfast at school")),
+                                                            
+
                                                      
-                                              )
+                                              
                                               
                                               
                                               
                                      )), 
                             
                             tabPanel("Education", 
-                                     column(7, align = "left",
+                                     column(6, align = "left",
                                      tabsetPanel(
                                        tabPanel("Size",
                                                 br(),
@@ -1767,7 +1824,22 @@ ui <- navbarPage(title = "DSPG",
                                               ),
                                               
                                      ),
-                                     
+                                     tabPanel("Suspension",
+                                              br(),
+                                              selectInput("schoolsuspend", "Select School:", width = "100%", choices = c(
+                                                "Forest Grove" = "forestsuspend",
+                                                "Guilford" = "guilfordsuspend",
+                                                "Rolling Ridge" = "rollingsuspend",
+                                                "Sterling" = "sterlingsuspend",
+                                                "Sugarland" = "sugarlandsuspend",
+                                                "Sully" = "sullysuspend"
+                                                
+                                              ),
+                                              ),
+                                              
+                                              withSpinner(withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%"))),
+                                              
+                                     ),
                                      
                                            tabPanel( "Performance",
                                                      br(),
@@ -1810,26 +1882,11 @@ ui <- navbarPage(title = "DSPG",
                                                      
                                              
                                              
-                                           ), 
-                                           tabPanel("Suspension",
-                                                    br(),
-                                                    selectInput("schoolsuspend", "Select School:", width = "100%", choices = c(
-                                                      "Forest Grove" = "forestsuspend",
-                                                      "Guilford" = "guilfordsuspend",
-                                                      "Rolling Ridge" = "rollingsuspend",
-                                                      "Sterling" = "sterlingsuspend",
-                                                      "Sugarland" = "sugarlandsuspend",
-                                                      "Sully" = "sullysuspend"
-                                                      
-                                                    ),
-                                                    ),
-                                                    
-                                                    withSpinner(withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%"))),
-                                                    
-                                                    )
+                                           ),
+                                           
                                          )),
                                      
-                                     column(5, align = "justify",
+                                     column(6, align = "justify",
                                             br(""),
                                             br(""),
                                             br(""),
@@ -1843,6 +1900,7 @@ ui <- navbarPage(title = "DSPG",
                                                                                   educators as well as the lowest total enrollment of all six schools. Breaking this down further, 
                                                                                   the student-teacher ratio of the six schools revealed that Sully had the highest student to teacher 
                                                                                   ratio of the schools with 14 students per teacher.  ", style = "padding-top:15px;font-size: 14px;"),
+                                            
                                             p("Moving to absence and suspension rates, we utilized data from the Loudoun County Public Schools Dashboard 
                                                                                   as well as the Virginia Department of Education to visualize the differences between the schools. For the 
                                                                                   absence rates of students by quarter in the 2020-2021 school year, Forest Grove Elementary had the lowest 
@@ -1851,6 +1909,16 @@ ui <- navbarPage(title = "DSPG",
                                                                                   absenteeism rate which is defined as the percentage of students who miss more than ten percent of total
                                                                                   classes throughout the year. We found that Sugarland Elementary had the highest rate at 11.1% while 
                                                                                   Sterling had the lowest at 5.8%.  ", style = "padding-top:15px;font-size: 14px;"),
+                                            p("To understand the educational environment of the community schools, we acquired data on the yearly state standardized exams on math
+                                              and reading for the 2018 – 2019 school year and 2020 - 2021 school year. Due to the COVID-19 pandemic, changes in modality and 
+                                              hardships endured may have impacted exam scores leading us to be unable to draw any significant conclusions about changes over time. 
+                                              For both math and science, the performance statistics for each school have been shown by all students as well as broken into 
+                                              subgroups by race, gender, and other characteristics.",style = "padding-top:15px;font-size: 14px;"),
+                                            p(strong("Mathematics")),
+                                            p("On average, in the 2018 – 2019 school year 75% of all students passed while in the 2020 – 2021 school year, on average only 35% of all students passed. When broken down into subgroups, white students at all schools in 2018 passed above the average rate while for Hispanic students, no schools passed above the average and at Sully, only 62% of Hispanic students passed",style = "padding-top:15px;font-size: 14px;"),
+                                            p(strong("Reading")),
+                                            p("At all schools in the 2018 – 2019 academic year, the reading score for all students was below 70% with Sully having a 46% pass rate. For white students, the scores ranged between 74% and 97% while Hispanic student scores ranged from 41% to 59% with Sully having the lowest scores for both the 2018 – 2019 year and the 2020 – 2021 academic year.", style = "padding-top:15px;font-size: 14px;"),
+                                            p("Overall, Sully had the lowest performance statistics across all schools and subjects.",style = "padding-top:15px;font-size: 14px;"),
                                             
                                             
                                      )
@@ -1875,13 +1943,15 @@ ui <- navbarPage(title = "DSPG",
                                                                   # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                   br(""),
                                                                   h2(strong("Student Perception"),
-                                                                     br(),
+                                                                     column(12, align = "justify",
+                                                                            br(),
+                                                                            h5(("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                            p(strong("Takeaways"), style = "padding-top:15px;font-size: 13px;", align = "justify")
+                                                                     ),
                                                                      column(6, align = "justify",
+                                                                      p("Student engagement included questions like “I feel like I belong at this school” and “I help my class make decisions at school”. When you look at all of the graphs, there isn’t a school that has a percentage over 85, with three schools sitting with percentages in the 70’s. This is definitely a potential area for improvement in the community school initiative.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
                                                                      
-                                                                     h5(strong("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), align = "justify"),
-                                                                     p("Student engagement included questions like “I feel like I belong at this school” and “I help my class make decisions at school”. When you look at all of the graphs, there isn’t a school that has a percentage over 85, with three schools sitting with percentages in the 70’s. This is definitely a potential area for improvement in the community school initiative.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                     
-                                                                     
+                                                                    
                                                                      p("Teacher relationships are important because all students should feel comfortable with their teachers, and have at least one that they can depend on when times get tough. One question asked in this category is “Teachers and other adults at this school treat me with respect”. When you look at the graph, Sterlings low 72 percent stands out significantly from all the other community schools, who have percentages over 90. This is defiantly a potential area for improvement in Sterling Elementary.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
                                                                      #h4(""),
                                                                      #h4("[updat this]"),
@@ -1963,10 +2033,21 @@ ui <- navbarPage(title = "DSPG",
                                                                            # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                            br(""),
                                                                            h2(strong("Parent Perception"),
-                                                                              column(12, align = "justify"),
+                                                                              column(12, align = "justify",
                                                                               br(),
-                                                                              h5(("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), align = "justify"),
-                                                                              h4(""),
+                                                                              h5(("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                              p(strong("Takeaways"), style = "padding-top:15px;font-size: 13px;", align = "justify")
+                                                                              ),
+                                                                              
+                                                                              column(6, align = "justify",
+                                                                                     p("The relationships graph displays how the parents feel about their student's environment within their child's school such as their emotional support and respect. Some example questions asked were “This school respects diversity and welcomes all cultures” and “My child’s teachers care about my child”. Noticeably, all six schools have percentages of 90 or above.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                                     p("The instructions graph, as mentioned in the Loudoun County Public Schools Annual Parent Survey introduction, shows us “measures of the LCPS initiatives to foster deeper learning”. Some example questions asked were “I have noticed my child taking what he/she learns in one lesson and using that learning in new situations”, “My child creates new ideas or strategies that provide solutions to challenging problems”, and “My child asks questions and thinks in creative ways”. All of the schools have percentages over 90 although four of the schools have low 90 percent's. This definitely shows us that the students appear to be very creative outside of school so perhaps some youth development programs could help them expand some of their creative ideas and skills even more. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                              ),
+                                                                              column(6, align = "justify",
+                                                                                     p("Academic support shows us how the parents of the students that attend the six elementary schools feel about their children's learning environment. Some questions asked in this category were “Teachers at this school care about how well my child does in school” and “I am satisfied that my child is receiving a quality education at this school”. When you look at the graph, all but two schools have percentages over 90, and the two that don’t sit at 89 percent.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                                     p("Communications shows us how the parents feel about the communication between them and their child's school. Again, all but two graphs have percentages over 90, with two, Forest Grove and Sugarland, sitting in the mid 80’s.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                                     ),
+                                                                              #h4(""),
                                                                               #h4("[updat this]"),
                                                                               br()
                                                                            )
@@ -2028,15 +2109,8 @@ ui <- navbarPage(title = "DSPG",
                                                                          
                                                                          
                                                                   ),
-                                                                  br(""),
-                                                                  br(""),
-                                                                  br(""),
-                                                                  column(12, h4(strong("Summary")), align = "center",
-                                                                         p("Academic support shows us how the parents of the students that attend the six elementary schools feel about their children's learning environment. Some questions asked in this category were “Teachers at this school care about how well my child does in school” and “I am satisfied that my child is receiving a quality education at this school”. When you look at the graph, all but two schools have percentages over 90, and the two that don’t sit at 89 percent.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                         p("Communications shows us how the parents feel about the communication between them and their child's school. Again, all but two graphs have percentages over 90, with two, Forest Grove and Sugarland, sitting in the mid 80’s.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                         p("The relationships graph displays how the parents feel about their student's environment within their child's school such as their emotional support and respect. Some example questions asked were “This school respects diversity and welcomes all cultures” and “My child’s teachers care about my child”. Noticeably, all six schools have percentages of 90 or above.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                         p("The instructions graph, as mentioned in the Loudoun County Public Schools Annual Parent Survey introduction, shows us “measures of the LCPS initiatives to foster deeper learning”. Some example questions asked were “I have noticed my child taking what he/she learns in one lesson and using that learning in new situations”, “My child creates new ideas or strategies that provide solutions to challenging problems”, and “My child asks questions and thinks in creative ways”. All of the schools have percentages over 90 although four of the schools have low 90 percent's. This definitely shows us that the students appear to be very creative outside of school so perhaps some youth development programs could help them expand some of their creative ideas and skills even more. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                  )
+                                                                
+                                                              
                                                          )
                                                 ),
                                                 
@@ -2048,13 +2122,24 @@ ui <- navbarPage(title = "DSPG",
                                                                   # img(src = "uva-dspg-logo.jpg", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;"),
                                                                   br(""),
                                                                   h2(strong("Teacher/Staff Perception"),
-                                                                     column(12, align = "justify"),
-                                                                     br(),
-                                                                     h5(("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), align = "justify"),
-                                                                     h4(""),
-                                                                     #h4("[updat this]"),
-                                                                     br()
-                                                                  )
+                                                                     column(12, align = "justify",
+                                                                            br(),
+                                                                            h5(("Loudoun County Public Schools surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. The graphs present key indices from the school climate surveys. Each index is comprised of a series of questions that are then averaged for an overall score. Higher scores indicate more favorable school climate. Graphs are visualized so one can select multiple indices for comparison."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                            p(strong("Takeaways"), style = "padding-top:15px;font-size: 13px;", align = "justify")
+                                                                     ),
+                                                                     column(6, align = "justify",
+                                                                            p("Staff collegiality shows us how the teachers and staff feel about one another’s capabilities. An example question given in this category was “Teachers and other adults at this school have taught me things that have helped me do my job better”. When you look at the graph, you can see that Forest Grove stands out from the other schools with a total percentage barely reaching over 80. The other schools all maintain a high percentage over 90 so this could likely suggest that the environment at Forest Grove may not be as confident and uplifting to one another as the other schools' teachers and staff are to each other. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                            p("The academic environment bar shows us how teachers and staff feel about their academic environment within their school. A question that was given in this graph was “Teachers and other adults at this school provide students the support they need to succeed”. When you look at the graph, Forest Grove’s low number stands out once again in comparison to the other schools, followed by Sterling’s. This makes us wonder what are some things these schools could implement to create a better academic environment for their students.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                            p("School leadership informs us how confident the school teachers feel about their administrator's leadership. An example question that was given to the staff was “I feel comfortable raising issues and concerns that are important to me with school administrators”. This visualization takes the first major drop, as all but one school has a percentage less than 90 who feel confident within their school leadership. Noticeably, Forest Grove has the lowest percentage once again. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                           ),
+                                                                     
+                                                                     column(6, align = "justify",
+                                                                            p("The managing student behavior graph is critical because children are going to be kids at the end of the day, so it's important to be able to teach them right from wrong, while giving them the love and support needed. An example question that was given within this category was “There are supports to help a student who consistently misbehaves develop positive behavior”. When taking a look at the graph, it's noticeable that no schools have a percentage of 90 or higher. This is definitely an area for improvement. Rolling Ridge is also the school with the lowest percent, 75, so this is a school that could benefit from reviewing and possibly revising their policies on student behavior.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                            p("The workplace environment graph tells us how the teachers and staff feel while working within their environment. An example question asked is “My school provides me with sufficient access to appropriate supplies and material”. The bar graphs here are very diverse, as the percentages range from 79 percent to 100. This is definitely an area for improvement for all of the elementary schools except Sterling and Sully because the teachers should be provided with everything, they need to make sure that they can provide quality education for the students. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                            p("The instructional environment graph was interesting to look at because once again, every school sits at a percentage above 90 except for Forest grove. This category included questions like “The physical environment of my classroom supports my teaching and my students’ learning”, and “I have the support I need to incorporate technology into my instruction” so it definitely poses a question of what does Forest Grove lack that the other schools have?", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                            
+                                                                     ),
+                                                                  ),
                                                          ),
                                                          column(6, align = "center",h4(strong("")),
                                                                 p(""),
@@ -2127,15 +2212,7 @@ ui <- navbarPage(title = "DSPG",
                                                          br(""),
                                                          br(""),
                                                          br(""),
-                                                         column(12, h4(strong("Summary")), align = "center",
-                                                                p("Staff collegiality shows us how the teachers and staff feel about one another’s capabilities. An example question given in this category was “Teachers and other adults at this school have taught me things that have helped me do my job better”. When you look at the graph, you can see that Forest Grove stands out from the other schools with a total percentage barely reaching over 80. The other schools all maintain a high percentage over 90 so this could likely suggest that the environment at Forest Grove may not be as confident and uplifting to one another as the other schools' teachers and staff are to each other. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                p("The academic environment bar shows us how teachers and staff feel about their academic environment within their school. A question that was given in this graph was “Teachers and other adults at this school provide students the support they need to succeed”. When you look at the graph, Forest Grove’s low number stands out once again in comparison to the other schools, followed by Sterling’s. This makes us wonder what are some things these schools could implement to create a better academic environment for their students.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                p("School leadership informs us how confident the school teachers feel about their administrator's leadership. An example question that was given to the staff was “I feel comfortable raising issues and concerns that are important to me with school administrators”. This visualization takes the first major drop, as all but one school has a percentage less than 90 who feel confident within their school leadership. Noticeably, Forest Grove has the lowest percentage once again. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                p("The managing student behavior graph is critical because children are going to be kids at the end of the day, so it's important to be able to teach them right from wrong, while giving them the love and support needed. An example question that was given within this category was “There are supports to help a student who consistently misbehaves develop positive behavior”. When taking a look at the graph, it's noticeable that no schools have a percentage of 90 or higher. This is definitely an area for improvement. Rolling Ridge is also the school with the lowest percent, 75, so this is a school that could benefit from reviewing and possibly revising their policies on student behavior.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                p("The workplace environment graph tells us how the teachers and staff feel while working within their environment. An example question asked is “My school provides me with sufficient access to appropriate supplies and material”. The bar graphs here are very diverse, as the percentages range from 79 percent to 100. This is definitely an area for improvement for all of the elementary schools except Sterling and Sully because the teachers should be provided with everything, they need to make sure that they can provide quality education for the students. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                p("The instructional environment graph was interesting to look at because once again, every school sits at a percentage above 90 except for Forest grove. This category included questions like “The physical environment of my classroom supports my teaching and my students’ learning”, and “I have the support I need to incorporate technology into my instruction” so it definitely poses a question of what does Forest Grove lack that the other schools have?", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                
-                                                         ))),
+                                                        )),
                                               # column(12, 
                                               # h4("References: "),
                                               # p("[1] U.S Department of Education, Office of Elementary and Secondary Education. Full-Service Community Schools Program (FSCS). Retrieved from:", a(href =  "https://oese.ed.gov/offices/office-of-discretionary-grants-support-services/school-choice-improvement-programs/full-service-community-schools-program-fscs/", "https://oese.ed.gov/offices/office-of-discretionary-grants-support-services/school-choice-improvement-programs/full-service-community-schools-program-fscs/"), style = "font-size:12px;"),
@@ -2144,7 +2221,9 @@ ui <- navbarPage(title = "DSPG",
                                      
                             ),
                             
-                            tabPanel("School Representative",
+                            tabPanel("Representatives' Reports",
+                                     tabsetPanel(
+                                       tabPanel("Responses",
                                      fluidPage(style = "margin: 2px;",
                                                column(12, align = "center",
                                                       p(h1(strong("Elementary Community School Representatives ")), style = "padding-top:5px;"),
@@ -2172,6 +2251,32 @@ ui <- navbarPage(title = "DSPG",
                                                       h4(strong("Future Goals")),
                                                       p("Future Goals primarily focus on creating more opportunities to engage and offer to students and parents. Representatives would like to focus on program development as the schools continue working with the students and their families. Another major goal for all schools is the partnership creation and development with community members to help expand programs. This is evident by numerous terms such as agencies, stakeholder, partners, partnerships, involvement, community, meaningful services addition, and assistance.")
                                                )
+                                     )),
+                                     
+                                     tabPanel("Partners",
+                                              column(12, align = "center",
+                                                     p(h1(strong("Elementary Community School Representatives ")), style = "padding-top:5px;"),
+                                              ),
+                                              
+                                              column(9, 
+                                                     
+                                                     collapsibleTreeOutput("tree1",height = "600px", width = "100%") 
+                                                     
+                                                     ),
+                                              
+                                              column(3, align = "justify",
+                                                     br(),
+                                                     br(),
+                                                     br(),
+                                                     br(),
+                                                     br(),
+                                                     p("The school representatives were also asked about the key partners which help support the activities for each of the pillars. This interactive tree shows these key partners and programs in each of these schools for the year 2020-2021. One can zoom in and out or scroll around the tree for visual ease. The tree has been categorised pillar-wise to help in conducting a school wise comparative analysis, to note the different partners and thus can help to find further partnership possibilities. The size of the node is determined by the number of entries it contains, hence bigger circles of the schools point to more partnerships. As an example, Sterling Elementary has the highest number of partners for Youth Development activities, hence the blue circle is the largest. This tree is however not exhaustive since there were a few missing information (for eg., Forest Grove has no information on their key partners for the Youth Development Pillar).")
+                                                     )
+                                              
+                                              
+                                              )
+                                    
+                                     
                                      ))
                             
                             #tabPanel(h4("Weaknesses and biggest challenges")),
@@ -2341,31 +2446,7 @@ ui <- navbarPage(title = "DSPG",
                                      
                             )
                  ),
-#-------------------------Opportunites Tab -------------------------------
-                 tabPanel("Opportunities",
-                          fluidRow(style = "margin: 6px;",
-                                   p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h4(strong("")),
-                                          p(""),
-                                          br("")
-                                          
-                                          
-                                          
-                                   )),
-                          fluidPage(style = "margin: 2px;",
-                                    column(6,
-                                           plotlyOutput("weekendmeals", width = "100%",height = 600)
-                                           ),
-                                    column(6,
-                                           plotlyOutput("basicsupplies",width = "100%",height = 600)
-                                    ), 
-                                    br(),
-                                    br(),
-                                    column(6, 
-                                           plotlyOutput("breakfast",width = "100%",height = 600)
-                                           )
-                                    ),
-         ),
+
                  
                  tabPanel("Analysis",
                           fluidRow(style = "margin: 6px;",
@@ -2467,7 +2548,7 @@ ui <- navbarPage(title = "DSPG",
                                           p(a(href = 'https://www.linkedin.com/in/nandini-das-390577104/', 'Nandini Das', target = '_blank'), "(Virginia Tech, Graduate in Economics Department);"),
                                           p(a(href = 'https://www.linkedin.com/in/amanda-ljuba-9824551b9', 'Amanda Ljuba', target = '_blank'), "(Virginia Tech, Virginia Tech, Undergraduate in Sociology with a concentration in Social Inequality);"),
                                           p(a(href = 'https://www.linkedin.com/in/jontayvion-osborne-a3b7961a7', 'Jontayvion Osborne', target = '_blank'), "Austin Peay State University, Undergraduate in Business Management and Minor in Marketing) ;"),
-                                          p(a(href = 'https://www.linkedin.com/in/chaudhry-abdullah-rizwan-a1641522b/', 'Chadhry Abdullah Rizwan', target = '_blank'), "(Virginia Tech, Undergraduate in Computational Modeling and Data Analytics and Economics, Minors in Computer Science and Mathematics)."),
+                                          p(a(href = 'https://www.linkedin.com/in/chaudhry-abdullah-rizwan-a1641522b/', 'Chaudhry Abdullah Rizwan', target = '_blank'), "(Virginia Tech, Undergraduate in Computational Modeling and Data Analytics and Economics, Minors in Computer Science and Mathematics)."),
                                          
                                           p("", style = "padding-top:10px;") 
                                    ),
@@ -2583,6 +2664,8 @@ server <- function(input, output, session) {
     else if (Var4() == "property") {
       
       property
+      
+      
     }
     
   })
@@ -3326,6 +3409,18 @@ server <- function(input, output, session) {
     else if (gendad() == "figHOME") {
       figHOME
     }
+    
+    else if (gendad() == "weekendmeals") {
+      weekendmeals
+    }
+    
+    else if (gendad() == "families") {
+      basicsupplies
+    }
+    
+    else if (gendad() == "breakfast") {
+      breakfast
+    }
   })
   
   output$map_health <- renderLeaflet({
@@ -3368,6 +3463,12 @@ server <- function(input, output, session) {
     else{
       map_family
     }
+  })
+  
+  output$tree1 <- renderCollapsibleTree({
+    
+    tree1
+    
   })
   
   

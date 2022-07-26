@@ -1,0 +1,11 @@
+name: shinyapp
+title:
+username:
+account: dspg22loudoun
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6690137
+bundleId: 6131054
+url: https://dspg22loudoun.shinyapps.io/shinyapp/
+when: 1658764897.34549
+lastSyncTime: 1658764897.34589
