@@ -1082,7 +1082,7 @@ figELS <- plot_ly(dataELS,
                   fill = 'tozeroy',
                   fillcolor = 'rgba(114,186,59,0.5)',
                   line = list(color = 'rgb(114,186,59)'),
-                  text = ~paste("Percentage:", subset_englishlearnerstatus$Percentage,"%","<br>","Year:",  subset_englishlearnerstatus$`School Year`),
+                  text = ~paste("Year:", subset_englishlearnerstatus$`School Year`, "<br>", "Percentage:", subset_englishlearnerstatus$Percentage,"%"),
                   hoverinfo = 'text')
 
 figELS <- figELS %>% layout(
@@ -1098,6 +1098,7 @@ figELS <- figELS %>% layout(
   xaxis = list(
     title = "", 
     zeroline = T, 
+    tickangle = 40,
     zerolinewidth = 60,
     standoff = 25,
     showgrid = T
@@ -1124,7 +1125,7 @@ figIEP <- plot_ly(dataIEP,
                   fill = 'tozeroy',
                   fillcolor = 'rgba(114,186,59,0.5)',
                   line = list(color = 'rgb(114,186,59)'),
-                  text = ~paste("Percentage:", subset_IEPstatus$Percentage,"%", "<br>","Year:", subset_IEPstatus$`School Year`),
+                  text = ~paste("Year:", subset_IEPstatus$`School Year`, "<br>", "Percentage:", subset_IEPstatus$Percentage,"%"),
                   hoverinfo = 'text')
 
 figIEP <- figIEP %>% layout(
@@ -1138,6 +1139,7 @@ figIEP <- figIEP %>% layout(
   xaxis = list(
     title = "", 
     zeroline = T, 
+    tickangle = 40, 
     zerolinewidth = 60,
     standoff = 25,
     showgrid = T
@@ -1164,7 +1166,7 @@ figFRL <- plot_ly(dataFRL,
                   fill = 'tozeroy',
                   fillcolor = 'rgba(114,186,59,0.5)',
                   line = list(color = 'rgb(114,186,59)'),
-                  text = ~paste("Percentage:", subset_freereducedlunch$Percentage, "%", "<br>","Year:", subset_freereducedlunch$`School Year`),
+                  text = ~paste("Year:", subset_freereducedlunch$`School Year`, "<br>",  "Percentage:", subset_freereducedlunch$Percentage, "%"),
                   hoverinfo = 'text')
 
 figFRL <- figFRL %>% layout(
@@ -1178,6 +1180,7 @@ figFRL <- figFRL %>% layout(
   xaxis = list(
     title = "", 
     zeroline = T, 
+    tickangle = 40,
     zerolinewidth = 60,
     standoff = 25,
     showgrid = T
@@ -1205,8 +1208,7 @@ figHOME <- plot_ly(dataHOME,
                    fill = 'tozeroy',
                    fillcolor = 'rgba(114,186,59,0.5)',
                    line = list(color = 'rgb(114,186,59)'),
-                   text = ~paste("<br>Percentage:", subset_homeless$Percentage, "%","Year:", subset_homeless$`School Year`),
-                   hoverinfo = 'text')
+                   text = ~paste("Year:", subset_homeless$`School Year`, "<br>", "Percentage:", subset_homeless$Percentage, "%"))
 
 figHOME <- figHOME %>% layout(
   title = "Students Facing Homelessness",
@@ -1219,6 +1221,7 @@ figHOME <- figHOME %>% layout(
   xaxis = list(
     title = "", 
     zeroline = T, 
+    tickangle = 40,
     zerolinewidth = 60,
     standoff = 25,
     showgrid = T
