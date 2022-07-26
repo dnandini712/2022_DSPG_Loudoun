@@ -833,6 +833,8 @@ leaflet(data = famfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> fam_free
 
 
+#resource table ----------------------------
+list <- read_excel(paste0(getwd(),"/data/allresources.xlsx")) 
 
 #-------------word clouds--------------------
 #------------cloud_1-------------------------
@@ -1752,7 +1754,7 @@ ui <- navbarPage(title = "DSPG",
                                               br(""),
                                               br(""),
                                               br(""),
-                                              column(5.5, align = "justify",
+                                              column(5, align = "justify",
                                                      
                                                      h4(strong("What Do Community Schools Look Like?"), align = "left"),
                                                      p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
@@ -2443,8 +2445,17 @@ ui <- navbarPage(title = "DSPG",
                                                       p(("Most of those resources are after school related. CASA is a licensed after-school program that provides students with activities and a fun environment while their parents are working. CASA is in two schools, while serving others. The YMCA is in the 4 other schools. They offer activities and support in homework, sports, fitness, and so much more. A resource that is available within our Sterling defined area is the Sterling Library. The library is a great resource for the students and families. They provide clubs, conversation groups, book clubs, art classes, and more. The Inova Healthy Plate Club is a club that is also located within our Sterling defined area. They provide cooking classes for healthy eating throughout the week. For the athletic and sport lovers, the Sterling Soccer is another resource available within our Sterling defined area. Sterling Soccer provides opportunities to play at a variety of competitive levels, while providing a safe and healthy soccer environment for the youth. "),align = "justify"),
                                                )),
                                      
-                            )
-                 ),
+                            ),
+                            tabPanel("All Resources", 
+                                     fluidRow(style = "margin: 6px;",
+                                              p("", style = "padding-top:10px;"),
+                                              column(12, align = "center",h1(strong("All Services")),
+                                                     DT::dataTableOutput("resourcetable"),
+                                                     p(""),
+           
+                                              )),
+
+                 )),
 
                  
                  tabPanel("Analysis",
@@ -2547,7 +2558,7 @@ ui <- navbarPage(title = "DSPG",
                                          
                                           p("", style = "padding-top:10px;"), 
                                           p(a(href = 'https://www.linkedin.com/in/nandini-das-390577104/', 'Nandini Das', target = '_blank'), "(Virginia Tech, Graduate in Economics Department);"),
-                                          p(a(href = 'https://www.linkedin.com/in/amanda-ljuba-9824551b9', 'Amanda Ljuba', target = '_blank'), "(Virginia Tech, Virginia Tech, Undergraduate in Sociology with a concentration in Social Inequality);"),
+                                          p(a(href = 'https://www.linkedin.com/in/amanda-ljuba-9824551b9', 'Amanda Ljuba', target = '_blank'), "(Virginia Tech, Undergraduate in Sociology with a concentration in Social Inequality);"),
                                           p(a(href = 'https://www.linkedin.com/in/jontayvion-osborne-a3b7961a7', 'Jontayvion Osborne', target = '_blank'), "Austin Peay State University, Undergraduate in Business Management and Minor in Marketing) ;"),
                                           p(a(href = 'https://www.linkedin.com/in/chaudhry-abdullah-rizwan-a1641522b/', 'Chaudhry Abdullah Rizwan', target = '_blank'), "(Virginia Tech, Undergraduate in Computational Modeling and Data Analytics and Economics, Minors in Computer Science and Mathematics)."),
                                          
@@ -2564,8 +2575,8 @@ ui <- navbarPage(title = "DSPG",
                                    )) ,
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    h4(strong("Project Stakeholders")),
-                                   p(a(href = 'https://loudoun.ext.vt.edu/staff/Vermaak-Stuart.html', 'Stuart Vermaak', target = '_blank'), "(Virginia Cooperative Extension, Loudoun County at Virginia Tech);"),
-                                   p(a(href = 'https://www.lcps.org/outreachservices', 'Sarah Eaton', target = '_blank'), "(Supervisor, Outreach Services Loudoun)."),
+                                   p(a(href = 'https://www.lcps.org/outreachservices', 'Sarah Eaton', target = '_blank'), "(Supervisor, Outreach Services Loudoun);"),
+                                   p(a(href = 'https://loudoun.ext.vt.edu/staff/Vermaak-Stuart.html', 'Stuart Vermaak', target = '_blank'), "(Virginia Cooperative Extension, Loudoun County at Virginia Tech)."),
                                    p("", style = "padding-top:10px;"),
                                    h4(strong("Acknowledgments")) ,
                                    p("We would like to thank Loudoun officials for providing us with data for our project. "),
@@ -3465,6 +3476,11 @@ server <- function(input, output, session) {
       map_family
     }
   })
+  
+  output$resourcetable = DT::renderDataTable({
+    datatable(list, filter = 'top')
+  })
+  
   
   output$tree1 <- renderCollapsibleTree({
     
