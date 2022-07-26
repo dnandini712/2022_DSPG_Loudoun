@@ -90,12 +90,6 @@ colors <- c("#232d4b","#2c4f6b","#0e879c","#60999a","#d1e0bf","#d9e12b","#e6ce3a
 
 # Sterling Map -----------------------------------------------------
 
-# This pulls data from ACS----------------------------------------
-
-#you would need a ACS Key for this to run--------------------------
-readRenviron("~/.Renviron")
-Sys.getenv("CENSUS_API_KEY")
-
 blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia",
           "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia",
           "Block Group 3, Census Tract 6112.05, Loudoun County, Virginia",
@@ -314,15 +308,15 @@ pov <- plot_ly(subset_poverty_as1, x = cat1, y = Total1, color = ~Sex, type = "b
 
 genders <- data.frame(Sex=rep(c("Male", "Female"), each=6),
                       School=c("Sugarland","Rolling Ridge","Guilford","Sterling","Sully","Forest Grove"),
-                      Total=c(268, 273, 278, 237,221, 282, 255, 259, 272, 200, 217, 278),
-                      Percentage = c(51.2, 51.3, 50.5, 54.2, 50.5, 50.4, 48.8, 48.7, 49.5, 45.8, 49.5, 49.6)
+                      Total=c(251, 266, 254, 208,233, 253, 221, 245, 276, 178, 215, 251),
+                      Percentage = c(53.2, 52.1, 47.9, 53.9, 52, 50.2, 46.8, 47.9, 52.1, 46.1, 48, 49.8)
 )
 
 
 
-genders<- ggplot(data=genders, aes(x=School, y=Total, fill=Sex,  width=0.9)) +
+genders<- ggplot(data=genders, aes(x=School, y=Total, fill = forcats::fct_rev(Sex),  width=0.9)) +
   geom_bar(stat="identity", position="stack", hoverinfo = "text", aes(text = paste("Percentage :",Percentage,"%\n", "Total :", Total))) +
-  scale_fill_manual(values = c('#F56D4F', "#20AFCC")) + labs(y="Total Students", x="", fill="")+ggtitle("Gender by Schools for 2020-2021") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  scale_fill_manual(values = c('#20AFCC','#F56D4F')) + labs(y="Total Students", x="", fill="")+ggtitle("Gender by Schools for 2021-2022") + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
 genders <-ggplotly(genders, tooltip = c("text"))
 
@@ -1763,7 +1757,7 @@ ui <- navbarPage(title = "DSPG",
                                                      h4(strong("What Do Community Schools Look Like?"), align = "left"),
                                                      p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
                                                      
-                                                     p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling and Sully have similar number of students and have lesser students than the other elementary schools. Forest Grove, Guilford and Sully have a similar trend like the Sterling area for the gender ratio: the female students are about 49% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling has the lowest where it has 91 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling Elementary has the lowest number of students. Guilford is the only school which has more females than male while Forest Grove like the Sterling area for the gender ratio has an almost equal split. Rolling Ridge and Sully have a similar trend: the female students are about 48% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling Elementary has the most uneven distribution where there is 86 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
                                                      p("The race and ethnicity demographics in 2019-2020 revealed that overall, Hispanic students, made up the greatest percentage of students attending the six elementary schools in Sterling, which differs from the general make-up of the Sterling area where White residents made up the majority of residents. There is a huge difference between Guilford and Forest Grove in terms of the ethnic groups of students, given that they both have similar number of total students: Guilford has significantly higher Hispanic students while Forest Grove has a lot more White and Hispanic students.", 
                                                        style = "padding-top:15px;font-size: 14px;"),
                                                      p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence,  we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary.", 
@@ -1786,6 +1780,7 @@ ui <- navbarPage(title = "DSPG",
                                      )), 
                             
                             tabPanel("Education", 
+                                     h2("Education"),
                                      column(6, align = "left",
                                      tabsetPanel(
                                        tabPanel("Size",
@@ -2459,18 +2454,20 @@ ui <- navbarPage(title = "DSPG",
                                           
                                    )),
                           fluidPage(style = "margin: 2px;",
-                                    column(3,
+                                    column(6,
+                                           p("Due to the high cost of living in Loudoun County and the fact that about one third of Sterling families make less than $74,999 in a year, it is crucial to increase the availability of affordable resources especially medical and mental health services and clothing resources. Moreso, almost 40% of Sterling residents have either public health insurance or are uninsured highlighting the need for affordable, inclusive medical care especially as the school liaisons viewed health needs for those uninsured as a major challenge."),
+                                           p("While each school provides opportunities for after-school programs, many come at a high cost limiting the number of families able to utilize these resources. An increase in after-school programs, especially athletic clubs would provide opportunities for youth to build communication skills while remaining healthy. An increase in affordable before and after school programs would also be beneficial to both the students and parents, providing opportunities for youth to expand their learning and interests. "),
+                                           p("Sully Elementary continues to have the lowest performance statistics on math and reading standardized exams, the highest student to teacher ratio while having the lowest enrollment, and one of the largest proportions of Hispanic students to other races. Due to all this, it may be beneficial to focus resources such as language services, social workers, and teachers to ensure that the students receive the specific help they need. "),
+                                           p("The number of families receiving basic supplies and services continues to grow over time especially in the wake of the pandemic making it vital that these resources expand to fit this growing need. Our research shows a lack of family engagement and mental health resources within a 10-minute drive of Sterling Elementary. ")),
+                                    column(6,
                                            h3(strong("Health and Social Services")),
                                              p("Social emotional learning can be implemented within all grades to promote communication skills and help students manage their emotions"),
-                                           p("Annual medical, dental, and vision clinics at each school offering services to those both insured and uninsured")),
-                                    column(3,
+                                           p("Annual medical, dental, and vision clinics at each school offering services to those both insured and uninsured"),
                                            h3(strong("Mental Health")),
-                                           p("Provide training on Adverse Childhood Experiences (ACEs) and how to recognize and understand the impacts these may have on students")),
-                                    column(3,
+                                           p("Provide training on Adverse Childhood Experiences (ACEs) and how to recognize and understand the impacts these may have on students"),
                                            h3(strong("Youth Development")),
                                            p("Restorative justice practices such as peace circles will allow for decreases in future conflict"),
-                                           p("Increases in before and after school programs that promote health and education")),
-                                    column(3,
+                                           p("Increases in before and after school programs that promote health and education"),
                                            h3(strong("Family Development")),
                                            p("Increasing multi-language resources"),
                                            p("Providing more opportunities for parent feedback forums")))
