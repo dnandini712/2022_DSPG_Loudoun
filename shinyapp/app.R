@@ -1404,6 +1404,8 @@ sullysuspend<- plot_ly(subset_sully, x = ~Year, y = ~`Percent of the Student Pop
 
 #----------------------Collapsible Tree - Key Partners and Programs--------------------
 
+Tree <- read_excel(paste0(getwd(),"/data/treedata.xlsx")) 
+
 Tree %>% collapsibleTree(hierarchy = c("Four Pillars", "Name", "Key Partners"),
                          root="Pillar",
                          attribute = "Pillar",
