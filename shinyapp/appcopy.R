@@ -969,12 +969,344 @@ english_all <- plot_ly(subset_english, x = ~Year, y = ~`Percent Pass`, color = ~
   #zeroline = F
 ))
 
-#-------------------students with disabilities----------------------
+#-------------------students by race----------------------
+#------------------Mathematics-------------------------------
+
+
 assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Forest Grove" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceForestGrove
 
-plot_ly(assessmentraceForestGrove, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+forestgroverace <- plot_ly(assessmentraceForestGrove, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#----------------Sugarland------------------------------------------------
+
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
+assessment %>% filter(School == "Sugarland" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSugarland
+
+sugarlandrace <- plot_ly(assessmentraceSugarland, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#-------------------Guilford------------------------------------
+
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
+assessment %>% filter(School == "Guilford" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceGuilford
+
+guilfordrace <- plot_ly(assessmentraceGuilford, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#-------------------------------Rolling Ridge------------------
+
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
+assessment %>% filter(School == "Rolling Ridge" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceRollingRidge
+
+rrrace <- plot_ly(assessmentraceRollingRidge, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#-----------------------------Sterling--------------------
+
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
+assessment %>% filter(School == "Sterling" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSterling
+
+sterlingrace <- plot_ly(assessmentraceSterling, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#----------------------Sully--------------------------
+
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
+assessment %>% filter(School == "Sully" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSully
+
+sullyrace <- plot_ly(assessmentraceSully, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#------------------English------------------
+
+#-----------------Forest Grove-------------------------------------------
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
+assessment %>% filter(School == "Forest Grove" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceForestGroveeng
+
+forestgroveraceeng <- plot_ly(assessmentraceForestGroveeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#----------------Sugarland------------------------------------------------
+
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
+assessment %>% filter(School == "Sugarland" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSugarlandeng
+
+sugarlandraceeng <- plot_ly(assessmentraceSugarlandeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#-------------------Guilford------------------------------------
+
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
+assessment %>% filter(School == "Guilford" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceGuilfordeng
+
+guilfordraceeng <- plot_ly(assessmentraceGuilfordeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#-------------------------------Rolling Ridge------------------
+
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
+assessment %>% filter(School == "Rolling Ridge" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceRollingRidgeeng
+
+rrraceeng <- plot_ly(assessmentraceRollingRidgeeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#-----------------------------Sterling--------------------
+
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
+assessment %>% filter(School == "Sterling" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSterlingeng
+
+sterlingraceeng <- plot_ly(assessmentraceSterlingeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#----------------------Sully--------------------------
+
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
+assessment %>% filter(School == "Sully" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSullyeng
+
+sullyraceeng <- plot_ly(assessmentraceSullyeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#--------performance / assessment by School and Gender-----------------
+
+#-------------Mathematics-------------------------------
+  
+assessment %>% filter(School == "Forest Grove" & Subject == "Mathematics") %>% filter(Subgroup == "Male"| Subgroup == "Female") -> assessmentgenderForestGrove
+
+forestgrovegender <- plot_ly(assessmentgenderForestGrove, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#----------------Sugarland------------------------------------------------
+
+assessment %>% filter(School == "Sugarland" & Subject == "Mathematics") %>% filter(Subgroup == "Male"| Subgroup == "Female") -> assessmentgenderSugarland
+
+sugarlandgender <- plot_ly(assessmentgenderSugarland, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#-------------------Guilford------------------------------------
+
+assessment %>% filter(School == "Guilford" & Subject == "Mathematics") %>% filter(Subgroup == "Male"| Subgroup == "Female") -> assessmentgenderGuilford
+
+guilfordgender <- plot_ly(assessmentgenderGuilford, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#-------------------------------Rolling Ridge------------------
+
+assessment %>% filter(School == "Rolling Ridge" & Subject == "Mathematics") %>% filter(Subgroup == "Male"| Subgroup == "Female") -> assessmentgenderRollingRidge
+
+rrgender <- plot_ly(assessmentgenderRollingRidge, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#-----------------------------Sterling--------------------
+
+assessment %>% filter(School == "Sterling" & Subject == "Mathematics") %>% filter(Subgroup == "Male"| Subgroup == "Female") -> assessmentgenderSterling
+
+sterlinggender <- plot_ly(assessmentgenderSterling, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#----------------------Sully--------------------------
+
+assessment %>% filter(School == "Sully" & Subject == "Mathematics") %>% filter(Subgroup == "Male"| Subgroup == "Female") -> assessmentgenderSully
+
+sullygender <- plot_ly(assessmentgenderSully, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#------------------English------------------
+
+#-----------------Forest Grove-------------------------------------------
+
+assessment %>% filter(School == "Forest Grove" & Subject == "English Reading") %>% filter(Subgroup == "Male"| Subgroup == "Female") -> assessmentgenderForestGroveeng
+
+forestgrovegendereng <- plot_ly(assessmentgenderForestGroveeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#----------------Sugarland------------------------------------------------
+
+
+assessment %>% filter(School == "Sugarland" & Subject == "English Reading") %>% filter(Subgroup == "Male"| Subgroup == "Female") -> assessmentgenderSugarlandeng
+
+sugarlandgendereng <- plot_ly(assessmentgenderSugarlandeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#-------------------Guilford------------------------------------
+
+assessment %>% filter(School == "Guilford" & Subject == "English Reading") %>% filter(Subgroup == "Male"| Subgroup == "Female") -> assessmentgenderGuilfordeng
+
+guilfordgendereng <- plot_ly(assessmentgenderGuilfordeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#-------------------------------Rolling Ridge------------------
+
+assessment %>% filter(School == "Rolling Ridge" & Subject == "English Reading") %>% filter(Subgroup == "Male"| Subgroup == "Female") -> assessmentgenderRollingRidgeeng
+
+rrgendereng <- plot_ly(assessmentgenderRollingRidgeeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#-----------------------------Sterling--------------------
+
+
+assessment %>% filter(School == "Sterling" & Subject == "English Reading") %>% filter(Subgroup == "Male"| Subgroup == "Female") -> assessmentgenderSterlingeng
+
+sterlinggendereng <- plot_ly(assessmentgenderSterlingeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#----------------------Sully--------------------------
+
+
+assessment %>% filter(School == "Sully" & Subject == "English Reading") %>% filter(Subgroup == "Male"| Subgroup == "Female") -> assessmentgenderSullyeng
+
+sullygendereng <- plot_ly(assessmentgenderSullyeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
   title = "Percentage",
   #zerolinewidth =60,
   #standoff = 25,
@@ -994,6 +1326,12 @@ english_dis <- plot_ly(assessmentdisenglish, x = ~Year, y = ~`Percent Pass`, col
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
 ))
+
+#--------performance / assessment by Other Subgroups-----------------
+
+
+
+
 
 #----------------------white students---------------------------------------
 
@@ -1510,24 +1848,24 @@ plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverin
 
 #----------------suspension data-------------------
 
-suspension <- read_excel(paste0(getwd(),"/data/Suspensions.xlsx"),skip=0,col_names=TRUE)
-subset_forest <- suspension[c(1,2,3,4,25,26,27,28,49,50,51,52), c(1:3,5)]
-forestsuspend<-plot_ly(subset_forest, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Forest Grove", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-subset_Guilford <- suspension[c(5,6,7,8,29,30,31,32,53,54,55,56), c(1:3,5)]
-guilfordsuspend<- plot_ly(subset_Guilford, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Guilford", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-subset_rolling <- suspension[c(9,10,11,12,33,34,35,36,57,58,59,60), c(1:3,5)]
-rollingsuspend<- plot_ly(subset_rolling, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Rolling Ridge", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-subset_sterling <- suspension[c(13,14,15,16,37,38,39,40,61,62,63,64), c(1:3,5)]
-sterlingsuspend<- plot_ly(subset_sterling, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sterling", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-subset_sugarland <- suspension[c(17,18,19,20,41,42,43,44,65,66,67,68), c(1:3,5)]
-sugarlandsuspend<- plot_ly(subset_sugarland, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sugarland", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-subset_sully <- suspension[c(21,22,23,24,45,46,47,48,69,70,71,72), c(1:3,5)]
-sullysuspend<- plot_ly(subset_sully, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sully", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+# suspension <- read_excel(paste0(getwd(),"/data/Suspensions.xlsx"),skip=0,col_names=TRUE)
+# subset_forest <- suspension[c(1,2,3,4,25,26,27,28,49,50,51,52), c(1:3,5)]
+# forestsuspend<-plot_ly(subset_forest, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Forest Grove", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+# 
+# subset_Guilford <- suspension[c(5,6,7,8,29,30,31,32,53,54,55,56), c(1:3,5)]
+# guilfordsuspend<- plot_ly(subset_Guilford, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Guilford", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+# 
+# subset_rolling <- suspension[c(9,10,11,12,33,34,35,36,57,58,59,60), c(1:3,5)]
+# rollingsuspend<- plot_ly(subset_rolling, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Rolling Ridge", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+# 
+# subset_sterling <- suspension[c(13,14,15,16,37,38,39,40,61,62,63,64), c(1:3,5)]
+# sterlingsuspend<- plot_ly(subset_sterling, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sterling", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+# 
+# subset_sugarland <- suspension[c(17,18,19,20,41,42,43,44,65,66,67,68), c(1:3,5)]
+# sugarlandsuspend<- plot_ly(subset_sugarland, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sugarland", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+# 
+# subset_sully <- suspension[c(21,22,23,24,45,46,47,48,69,70,71,72), c(1:3,5)]
+# sullysuspend<- plot_ly(subset_sully, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sully", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 
@@ -1967,30 +2305,32 @@ ui <- navbarPage(title = "DSPG",
                                                                  br(),
                                                                  fluidRow(
                                                                    column(12,align = "left",
-                                                                          
+                                                                          column(6,
                                                                           radioButtons(
                                                                             "category_subject",
                                                                             label = "Select:",
                                                                             choices = c("Mathematics", "English Reading"),
-                                                                          ),
+                                                                          )),
+                                                                          column(6,
+                                                                          radioButtons(
+                                                                            "category_subgroup",
+                                                                            label = "Select:",
+                                                                            choices = c("Race", "Gender", "Other Subgroups"),
+                                                                          )),
                                                                           
-                                                                          selectInput("gradesdrop", "Select Subgroup:", width = "100%", choices = c(
-                                                                            "All Students" = "allstudentsgrades",
-                                                                            "White" = "whitegrades",
-                                                                            "Black" = "blackgrades",
-                                                                            "Asian" = "asiangrades",
-                                                                            "Hispanic" = "hispanicgrades",
-                                                                            "Male" = "malegrades",
-                                                                            "Female" = "femalegrades",
-                                                                            "Homeless" = "homelessgrades",
-                                                                            "Students with Disabilities" = "disabilitiesgrades"
-                                                                            
-                                                                          ),
-                                                                          ),
-                                                                          
-                                                                          
-                                                                          
-                                                                          withSpinner(plotlyOutput("grades", height = "500px", width = "100%")),
+                                                                          selectInput("schoolgradesdrop", "Select School:", width = "100%", choices = c(
+                                                                                       "Forest Grove" = "forestgroverace",
+                                                                                       "Guilford" = "guilfordrace",
+                                                                                       "Rolling Ridge" = "rollingrace",
+                                                                                       "Sterling" = "sterlingrace",
+                                                                                       "Sugarland" = "sugarlandrace",
+                                                                                       "Sully" = "sullyrace"
+
+                                                                                     ),
+                                                                                     ),
+
+                                                                                     withSpinner(withSpinner(plotlyOutput("schoolgrades", height = "500px", width = "100%"))),
+
                                                                           #br(""),
                                                                           #withSpinner(plotlyOutput("grades_english", height = "500px", width = "100%")),
                                                                           #br(""),
@@ -2868,6 +3208,10 @@ server <- function(input, output, session) {
     input$category_subject
   })
   
+  category_subgroup <- reactive({
+    input$category_subgroup
+  })
+  
   output$grades  <- renderPlotly({
     
     if(category_subject() == "Mathematics") {
@@ -3069,42 +3413,136 @@ server <- function(input, output, session) {
   })
   
   
-  Varsuspend <- reactive({
-    input$schoolsuspend
+  Vargrade <- reactive({
+    input$schoolgradesdrop
   }) 
   
-  output$schoolsuspendall <- renderPlotly({
+  output$schoolgrades <- renderPlotly({
     
+    if (category_subgroup() == "Race") {
     
-    if (Varsuspend() == "forestsuspend") {
+    if (category_subject() == "Mathematics") {
+    
+    if (Vargrade() == "forestgroverace") {
       
-      forestsuspend
+      forestgroverace
       
     }
     
-    else if (Varsuspend() == "guilfordsuspend") {
+    else if (Vargrade() == "guilfordrace") {
       
-      guilfordsuspend
+      guilfordrace
     }
     
-    else if (Varsuspend() == "rollingsuspend") {
+    else if (Vargrade() == "rollingrace") {
       
-      rollingsuspend
+      rrrace
     }
     
-    else if (Varsuspend() == "sterlingsuspend") {
-      sterlingsuspend
+    else if (Vargrade() == "sterlingrace") {
+      sterlingrace
     }
     
-    else if (Varsuspend() == "sugarlandsuspend") {
-      sugarlandsuspend
+    else if (Vargrade() == "sugarlandrace") {
+      sugarlandrace
     }
     
-    else if (Varsuspend() == "sullysuspend") {
-      sullysuspend
+    else if (Vargrade() == "sullyrace") {
+      sullyrace
     }
-    
-    
+    } else {
+      
+      if (Vargrade() == "forestgroverace") {
+        
+        forestgroveraceeng
+        
+      }
+      
+      else if (Vargrade() == "guilfordrace") {
+        
+        guilfordraceeng
+      }
+      
+      else if (Vargrade() == "rollingrace") {
+        
+        rrraceeng
+      }
+      
+      else if (Vargrade() == "sterlingrace") {
+        sterlingraceeng
+      }
+      
+      else if (Vargrade() == "sugarlandrace") {
+        sugarlandraceeng
+      }
+      
+      else if (Vargrade() == "sullyrace") {
+        sullyraceeng
+      }
+    }
+    } else {
+      
+      if (category_subject() == "Mathematics") {
+        
+        if (Vargrade() == "forestgroverace") {
+          
+          forestgrovegender
+          
+        }
+        
+        else if (Vargrade() == "guilfordrace") {
+          
+          guilfordgender
+        }
+        
+        else if (Vargrade() == "rollingrace") {
+          
+          rrgender
+        }
+        
+        else if (Vargrade() == "sterlingrace") {
+          sterlinggender
+        }
+        
+        else if (Vargrade() == "sugarlandrace") {
+          sugarlandgender
+        }
+        
+        else if (Vargrade() == "sullyrace") {
+          sullygender
+        }
+      } else {
+        
+        if (Vargrade() == "forestgroverace") {
+          
+          forestgrovegendereng
+          
+        }
+        
+        else if (Vargrade() == "guilfordrace") {
+          
+          guilfordgendereng
+        }
+        
+        else if (Vargrade() == "rollingrace") {
+          
+          rrgendereng
+        }
+        
+        else if (Vargrade() == "sterlingrace") {
+          sterlinggendereng
+        }
+        
+        else if (Vargrade() == "sugarlandrace") {
+          sugarlandgendereng
+        }
+        
+        else if (Vargrade() == "sullyrace") {
+          sullygendereng
+        }
+      }
+    }
+      
   })
   
   
