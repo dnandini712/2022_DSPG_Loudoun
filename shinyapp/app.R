@@ -437,7 +437,7 @@ enrollment <- read_excel(paste0(getwd(),"/data/Enrollment16-20.xlsx"))
 enr_total <- enrollment$Total
 School <- enrollment$Schools
 Year <- enrollment$Year
-enroll <- plot_ly(enrollment, x = ~Year,y = ~Total, color = ~School, type = 'scatter',mode = 'lines', hoverinfo="text", text = ~paste("Total:", Total)) %>% layout(title= "Enrollment", xaxis = list(title = ""), yaxis = list(title = "Total Students"), legend=list(title=list(text='Select School')))
+enroll <- plot_ly(enrollment, x = ~Year,y = ~Total, color = ~School, type = 'scatter',mode = 'lines', hoverinfo="text", text = ~paste("Total:", Total, "<br>", "School:",School)) %>% layout(title= "Enrollment", xaxis = list(title = ""), yaxis = list(title = "Total Students"), legend=list(title=list(text='Select School')))
 
 #-------------------attendance --------------
 
@@ -460,7 +460,7 @@ figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = '
 #text = ~paste('Total:',))
 
 figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(253, 151, 12 )'))
-cteacher <- figSTM %>% layout(title = "Total Teachers and Staff", yaxis = list(title = 'Total Educators'), xaxis = list(title = ''), barmode = 'stack')
+cteacher <- figSTM %>% layout(title = "Total Teachers and Staff 2021-2022", yaxis = list(title = 'Total Educators'), xaxis = list(title = ''), barmode = 'stack')
 
 ##--------Chronic absenteeism------------------
 
@@ -1771,8 +1771,9 @@ ui <- navbarPage(title = "DSPG",
                                        tabPanel("Size",
                                                 br(),
                                             selectInput("schooldrop2", "Select Characteristic:", width = "100%", choices = c(
-                                              "Educators" = "cteacher",
-                                              "Enrollment" = "cenrol"
+                                              "Enrollment" = "cenrol",
+                                              "Educators" = "cteacher"
+                                              
                                             ),
                                             ),
                                             
@@ -1785,7 +1786,7 @@ ui <- navbarPage(title = "DSPG",
 
                                      ),
                                      
-                                     tabPanel("Behavior",
+                                     tabPanel("Absences",
                                               br(),
                                               selectInput("schooldrop3", "Select Characteristic:", width = "100%", choices = c(
                                               
@@ -1805,22 +1806,22 @@ ui <- navbarPage(title = "DSPG",
                                               ),
                                               
                                      ),
-                                     tabPanel("Suspension",
-                                              br(),
-                                              selectInput("schoolsuspend", "Select School:", width = "100%", choices = c(
-                                                "Forest Grove" = "forestsuspend",
-                                                "Guilford" = "guilfordsuspend",
-                                                "Rolling Ridge" = "rollingsuspend",
-                                                "Sterling" = "sterlingsuspend",
-                                                "Sugarland" = "sugarlandsuspend",
-                                                "Sully" = "sullysuspend"
-                                                
-                                              ),
-                                              ),
-                                              
-                                              withSpinner(withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%"))),
-                                              
-                                     ),
+                                     # tabPanel("Suspension",
+                                     #          br(),
+                                     #          selectInput("schoolsuspend", "Select School:", width = "100%", choices = c(
+                                     #            "Forest Grove" = "forestsuspend",
+                                     #            "Guilford" = "guilfordsuspend",
+                                     #            "Rolling Ridge" = "rollingsuspend",
+                                     #            "Sterling" = "sterlingsuspend",
+                                     #            "Sugarland" = "sugarlandsuspend",
+                                     #            "Sully" = "sullysuspend"
+                                     #            
+                                     #          ),
+                                     #          ),
+                                     #          
+                                     #          withSpinner(withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%"))),
+                                     #          
+                                     # ),
                                      
                                            tabPanel( "Performance",
                                                      br(),
