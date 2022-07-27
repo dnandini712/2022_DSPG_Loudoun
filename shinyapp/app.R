@@ -966,65 +966,142 @@ math_dis <- plot_ly(assessmentdismath, x = ~Year, y = ~`Percent Pass`, color = ~
 
 assessment %>% filter(Subgroup == "Students with Disabilities" & Subject == "English Reading") -> assessmentdisenglish
 
-english_dis <- plot_ly(assessmentdisenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_dis <- plot_ly(assessmentdisenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 #----------------------white students---------------------------------------
 
 assessment %>% filter(Subgroup == "White" & Subject == "Mathematics") -> assessmentwhitemath
 
-math_white <- plot_ly(assessmentwhitemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_white <- plot_ly(assessmentwhitemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 assessment %>% filter(Subgroup == "White" & Subject == "English Reading") -> assessmentwhiteenglish
 
-english_white <- plot_ly(assessmentwhiteenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_white <- plot_ly(assessmentwhiteenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 #---------black----------------------------
 
 assessment %>% filter(Subgroup == "Black" & Subject == "Mathematics") -> assessmentblackmath
 
-math_black <- plot_ly(assessmentblackmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_black <- plot_ly(assessmentblackmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 assessment %>% filter(Subgroup == "Black" & Subject == "English Reading") -> assessmentblackenglish
 
-english_black <- plot_ly(assessmentblackenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_black <- plot_ly(assessmentblackenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 #----------asian--------------------------
 
 assessment %>% filter(Subgroup == "Asian" & Subject == "Mathematics") -> assessmentasianmath
 
-math_asian <- plot_ly(assessmentasianmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_asian <- plot_ly(assessmentasianmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 assessment %>% filter(Subgroup == "Asian" & Subject == "English Reading") -> assessmentasianenglish
 
-english_asian <- plot_ly(assessmentasianenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_asian <- plot_ly(assessmentasianenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 #--------hispanic-------------------------------
 
 assessment %>% filter(Subgroup == "Hispanic" & Subject == "Mathematics") -> assessmenthispanicmath
 
-math_hispanic <- plot_ly(assessmenthispanicmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_hispanic <- plot_ly(assessmenthispanicmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 assessment %>% filter(Subgroup == "Hispanic" & Subject == "English Reading") -> assessmenthispanicenglish
 
-english_hispanic <- plot_ly(assessmenthispanicenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_hispanic <- plot_ly(assessmenthispanicenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 #-----------male------------------------------
 
 assessment %>% filter(Subgroup == "Male" & Subject == "Mathematics") -> assessmentmalemath
 
-math_male <- plot_ly(assessmentmalemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_male <- plot_ly(assessmentmalemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 assessment %>% filter(Subgroup == "Male" & Subject == "English Reading") -> assessmentmaleenglish
 
-english_male <- plot_ly(assessmentmaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_male <- plot_ly(assessmentmaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 
@@ -1032,12 +1109,26 @@ english_male <- plot_ly(assessmentmaleenglish, x = ~Year, y = ~`Percent Pass`, c
 
 assessment %>% filter(Subgroup == "Female" & Subject == "Mathematics") -> assessmentfemalemath
 
-math_female <- plot_ly(assessmentfemalemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_female <- plot_ly(assessmentfemalemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 assessment %>% filter(Subgroup == "Female" & Subject == "English Reading") -> assessmentfemaleenglish
 
-english_female <- plot_ly(assessmentfemaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_female <- plot_ly(assessmentfemaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 
@@ -1045,18 +1136,43 @@ english_female <- plot_ly(assessmentfemaleenglish, x = ~Year, y = ~`Percent Pass
 
 assessment %>% filter(Subgroup == "Homeless" & Subject == "Mathematics") -> assessmenthomelessmath
 
+<<<<<<< HEAD
 math_homeless <- plot_ly(assessmenthomelessmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+=======
+math_homeless <- plot_ly(assessmenthomelessmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+>>>>>>> 9ec21ab3124ef736c97c1bcd1364590baa0ad6fb
 
 
 assessment %>% filter(Subgroup == "Homeless" & Subject == "English Reading") -> assessmenthomelessenglish
 
-english_homeless <- plot_ly(assessmenthomelessenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_homeless <- plot_ly(assessmenthomelessenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 #--------------breakfast------------------------------------------------------
 
 breakfast_data <- read_excel(paste0(getwd(),"/data/Breakfast.xlsx"),skip=0,col_names=TRUE)
-breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Breakfast", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Breakfast", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 #---------------------General Data-------------------------------------------
 #--------------------English Learner Status----------------------------------
@@ -1845,7 +1961,7 @@ ui <- navbarPage(title = "DSPG",
                                                                 "Male" = "malegrades",
                                                                 "Female" = "femalegrades",
                                                                 "Homeless" = "homelessgrades",
-                                                                "Student with Disabilities (Differently-abled students)" = "disabilitiesgrades"
+                                                                "Students with Disabilities" = "disabilitiesgrades"
                                                                 
                                                               ),
                                                               ),
@@ -1883,7 +1999,7 @@ ui <- navbarPage(title = "DSPG",
                                             p("We collect and visualize Standard of Learning (SOL) Mathematics and English Reading passing rates for the 2018-2019 and 2020-2021 school years. Due to the COVID-19 pandemic, changes in modality and hardships may have impacted exam scores in 2020-2021. As such, we cannot draw significant conclusions about changes over time. Performance statistics can be disaggregated into subgroups such as race, gender, and other characteristics.",style = "padding-top:15px;font-size: 14px;"),
                                             br(),
                                             p(strong("Mathematics")),
-                                            p("On average, in the 2018 – 2019 school year 75% of all students passed while in the 2020 – 2021 school year, on average only 35% of all students passed. When broken down into subgroups, white students at all schools in 2018 passed above the average rate while for Hispanic students, no schools passed above the average and at Sully, only 62% of Hispanic students passed",style = "padding-top:15px;font-size: 14px;"),
+                                            p("On average, in the 2018 – 2019 school year approximately 75% of all students passed while in the 2020 – 2021 school year, on average only about 35% of all students passed. When broken down into subgroups, white students at all schools in 2018 passed above the average rate while for Hispanic students, no schools passed above the average and at Sully, only 62% of Hispanic students passed",style = "padding-top:15px;font-size: 14px;"),
                                             br(),
                                             p(strong("Reading")),
                                             p("At all schools in the 2018 – 2019 academic year, the reading score for all students was below 70% with Sully having a 46% pass rate. For white students, the scores ranged between 74% and 97% while Hispanic student scores ranged from 41% to 59% with Sully having the lowest scores for both the 2018 – 2019 year and the 2020 – 2021 academic year.", style = "padding-top:15px;font-size: 14px;"),
@@ -2304,7 +2420,7 @@ ui <- navbarPage(title = "DSPG",
                                                       br(""),
                                                       h4(strong("Health and Social Services Availability")), 
                                                       p(("A key pillar essential to ensuring students thrive in school is access to quality health and social services. It is difficult for students to focus on academic needs if their non-academic needs are not met. Thus, providing nutritious food, weather-appropriate clothing, and medical care such as dental, vision, and preventative care can improve a student's performance. For many, barriers to these services are often a result of expense, transportation, and time availability, making it vital to provide access to these resources for all members of a community. "),align = "justify"),
-                                                      p(("Due to Sterling's unique location within Loudoun County and its proximity to Washington, D.C., Sterling residents have access to numerous health and social services. However, the map shows this is not true for all Sterling residents. The number and accessibility of services decrease for residents that require free or reduced-cost services, with many options falling outside of a ten-minute drive. For instance, a wide variety of free food pantries are available within a ten-minute drive of Sterling Elementary. However, beyond that, access to medical care and clothing is not as readily open, with many resources falling within the 20- and 45-minute boundaries. "),align = "justify"),
+                                                      p(("Due to Sterling's unique location within Loudoun County and its proximity to Washington, D.C., Sterling residents have access to numerous health and social services. However, the number and accessibility of services decrease for residents that require free or reduced-cost services, with many options falling outside of a ten-minute drive. For instance, a wide variety of free food pantries are available within a ten-minute drive of Sterling Elementary. However, beyond that, access to medical care and clothing is not as readily open, with many resources falling within the 20- and 45-minute boundaries. "),align = "justify"),
                                                       
                                                )
                                      )),
@@ -2457,37 +2573,32 @@ ui <- navbarPage(title = "DSPG",
                                           
                                    )),
                           fluidPage(style = "margin: 2px;", align = "justify",
-                                    column(6,
-                                           h2(strong("Major Takeaways")),
-                                           p("Due to the high cost of living in Loudoun County and the fact that about one third of Sterling families make less than $74,999 in a year, it is crucial to increase the availability of affordable resources especially medical and mental health services and clothing resources. Moreso, almost 40% of Sterling residents have either public health insurance or are uninsured and undocumented highlighting the need for affordable, inclusive medical care especially as the school liaisons viewed health needs for those uninsured as a major challenge."),
-                                           p("While each school provides opportunities for after-school programs, many come at a high cost limiting the number of families able to utilize these resources. An increase in after-school programs, especially athletic clubs would provide opportunities for youth to build communication skills while remaining healthy. An increase in affordable before and after school programs would also be beneficial to both the students and parents, providing opportunities for youth to expand their learning and interests. The schools also require access to more mental health resources. "),
-                                           p("Sully Elementary continues to have the lowest performance statistics on math and reading standardized exams, the highest student to teacher ratio while having the lowest enrollment, and one of the largest proportions of Hispanic students to other races. Due to all this, it may be beneficial to focus resources such as language services, social workers, and teachers to ensure that the students receive the specific help they need. "),
-                                           p("When looking at the suspension percentages throughout the six community schools, there is a significantly higher percentage of Hispanic suspension in comparison to the other races.  Although this may be a result of the much larger Hispanic population within the schools, if someone were to look at these graphs without knowledge of the school demographics, concerns would be raised. There should be alternative discipline routines rather than suspensions. Although some actions may be “suspension worthy”, the schools should revise their policies and look to enforce supplementary punishments such as detentions or in school suspension (ISS)."),
-                                           
-                                           p("The 2020-2021 academic school year saw a drop is academic performances for all six community schools. Although this was following the 2019 Covid-Pandemic, it is still important for the schools to focus on getting the students to retain the information that is being taught. Whether that requires new teaching plans or extra tutoring hours, no students should struggle alone. There should be a study-hall session during school for students to work on homework and assignments while in class so they can ask questions when needed."),
-                                           p("The number of families receiving basic supplies and services continues to grow over time especially in the wake of the pandemic making it vital that these resources expand to fit this growing need. Our research shows a lack of family engagement and mental health resources within a 10-minute drive of Sterling Elementary. The next few paragraphs discuss the strengths and weaknesses of each school which came up from our study, in terms of the four pillars. "),
-                                    p("As compared to the other schools, Forest Grove Elementary seems to have significantly fewer key partners to support their four pillars. The Parent and Teacher climate surveys suggest the same. The school’s representative state about family engagement being one of the major challenges as well. The number of enrolled students has also fallen from 2018-2019 to 2019-2020 which is similar to Rolling Ridge. However, interestingly chronic absenteeism in this school has fallen after Covid hit which is a huge success. In addition, the school reports several meetings with the Unified Mental Health Team which has helped strengthen the mental health needs of the community. "),
-                                    p("Guilford requires partners to support their Youth Development Pillar. In addition, the internet needs of the community that Guilford serves have been reported as overwhelming. However, the school is doing exceptionally well in the Health and Social Services pillar. The school also reports that for their family engagement initiatives, all families are now “very adept at using technology to help their students and support teachers and instruction”."),
-                                    p("Our research suggests Rolling Ridge Elementary needs access to more Mental Health resources and programs as compared to the other pillars. Although Rolling Ridge does not seem to have many key partners supporting the Family Engagement pillar, the school reports to be well connected with the families and working towards empowering them more to ensure they are active in the community. "),
-                                    p("Sugarland Elementary, like Forest Grove, probably has fewer key partners than the other schools as evident from the data that we have analyzed. The school reports “Family Engagement” pillar as their key challenge and hence they require more support in this area. Sugarland also has the highest levels of chronic absenteeism, although it has a relatively good teacher student ratio. "),
-                                    p("Sterling Elementary has maintained their rate of chronic absenteeism percentage even during the pandemic which is commendable. Like Rolling Ridge, Sterling Elementary also needs more access to Mental Health programs which they acknowledge as a huge challenge. The school has several partners supporting the Health and Social Services and Youth Development pillars. "),
-                                    p("Sully Elementary continues to have the lowest performance statistics on math and reading standardized exams, the highest student to teacher ratio while having the lowest enrollment, and one of the largest proportions of Hispanic students to other races. Due to all this, it may be beneficial to focus resources such as language services, social workers, and teachers to ensure that the students receive the specific help they need. "),
-                                    ),
-                                    column(6,
+                                   
+                                    column(7,
                                            h2(strong("Opportunities Within Pillars")),
                                            h4(strong("Health and Social Services")),
-                                             p("Social emotional learning can be implemented within all grades to promote communication skills and help students manage their emotions"),
-                                           p("Annual medical, dental, and vision clinics at each school offering services to those both insured and uninsured"),
-                                           h4(strong("Mental Health")),
-                                           p("Provide training on Adverse Childhood Experiences (ACEs) and how to recognize and understand the impacts these may have on students"),
-                                           h4(strong("Youth Development")),
-                                           p("Restorative justice practices such as peace circles will allow for decreases in future conflict"),
-                                           p("Increases in before and after school programs that promote health and education"),
-                                           h4(strong("Family Development")),
-                                           p("Increasing multi-language resources"),
-                                           p("Providing more opportunities for parent feedback forums")))
+                                           p("Due to the high cost of living in Loudoun County and the fact that about one third of Sterling families make less than $74,999 in a year, it is crucial to increase the availability of affordable resources especially medical and mental health services and clothing resources. More-so, almost 40% of Sterling residents have either public health insurance or are uninsured and undocumented highlighting the need for affordable, inclusive medical care especially as the school liaisons viewed health needs for those uninsured as a major challenge. Providing annual medical, dental, and vision clinics at each school for both students and families may help to relieve these stressors."),
+                                        h4(strong("Mental Health")),
+                                           p("Our research shows a lack of mental health resources within a 10-minute drive for both students and the community. A possible aid to help with this could be to implement", a(href = "https://www.cfchildren.org/what-is-social-emotional-learning/", strong("social emotional learning"), target = "_blank"), "within all grades, a process that helps students learn emotion management, communication, and self-discipline. Further, to help address students social-emotional well-being, providing training for teachers and staff on Adverse Childhood Experiences", a(href = "https://www.cdc.gov/violenceprevention/aces/fastfact.html", strong("ACEs"), target = "_blank"), "and how to recognize and understand the impacts these may have on students learning and decision making could help to catch at-risk youth early on. For schools experiencing higher rates of bullying", a(href = "https://law.wisc.edu/fjr/rjp/justice.html#:~:text=Restorative%20justice%20seeks%20to%20examine,to%20repair%20the%20harm%20done.", strong("restorative justice"),target = "_blank"), "practices such as peace circles will help to decrease future conflict as it focuses on repairing the harm done and empowering the victims ultimately creating a more-connected community."),
+                                        h4(strong("Youth Development")),
+                                          p("While each school provides opportunities for after-school programs, many come at a high cost which may limit the number of families able to utilize these resources. An increase in before- and after-school programs, especially athletic clubs, could provide opportunities for youth to build communication skills while remaining healthy and actively learning. An increase in affordable before- and after-school programs could also be beneficial to both the students and parents, providing opportunities for youth to expand their learning and interests while decreasing time parents must juggle between work and childcare. The 2020-2021 academic school year saw a drop in academic performances for all six community schools. Although this was following the COVID-19 pandemic, this could be an opportunity to provide extra tutoring hours at the local library or provide a study hall session during the school day to help alleviate the disruptions that online learning may have caused."),  
+                                        h4(strong("Family Development")),
+                                           p("Due to the high number of Hispanic students attending the community schools and low English performance scores, we suggest increasing multi-language resources for both students and parents to ensure that there is a clear line of communication for all involved in the learning process. Along with this, providing more opportunities for parent feedback forums and family events at the school may increase parent’s feelings of positive relationships and communication with the school. In our research, we found that there are few family engagement resources available within a 10-minute drive of Sterling Elementary, a possible opportunity to help reduce travel time for parents could be to host a resource fair at the schools allowing parents easy access to these resources. ")
                           
                  ),
+                 column(5, align= "justify",
+                        h2(strong("Major Takeaways for Each School")),
+                        p("The following takeaways are conclusions from the school reports that each school representative submitted in the year 2020-2021 and the various visualizations in the previous tabs from the data collected from Virginia Department of Education and Loudoun Dashboard. "),
+                        
+                        p("As compared to the other schools, Forest Grove Elementary seems to have significantly fewer key partners to support their four pillars. The Parent and Teacher climate surveys suggest the same. The school’s representative state about family engagement being one of the major challenges as well. The number of enrolled students has also fallen from 2018-2019 to 2019-2020 which is like Rolling Ridge Elementary. However, interestingly chronic absenteeism in this school has fallen after Covid hit which is a huge success. In addition, the school reports several meetings with the Unified Mental Health Team which has helped strengthen the mental health needs of the community. "),
+                        p("Guilford Elementary might require additional partners to support their Youth Development Pillar. Moreover, the internet needs of the community that Guilford serves have been reported as overwhelming. However, the school is doing exceptionally well in the Health and Social Services pillar. The school also reports that for their family engagement initiatives, all families are now “very adept at using technology to help their students and support teachers and instruction”."),
+                        p("Our research suggests Rolling Ridge Elementary might need access to more Mental Health resources and programs as compared to the other pillars. Although Rolling Ridge does not report to have many key partners supporting the Family Engagement pillar, the school reports to be well connected with the families and working towards empowering them more to ensure they are active in the community. "),
+                        p("Sugarland Elementary, like Forest Grove, probably has fewer key partners than the other schools as evident from the data that we have analyzed. The school reports “Family Engagement” pillar as their key challenge and hence it might require more support in this area. Sugarland also has the highest levels of chronic absenteeism, although it has a relatively good teacher student ratio. "),
+                        p("Sterling Elementary has maintained their rate of chronic absenteeism percentage even during the pandemic which is commendable. Like Rolling Ridge, Sterling Elementary also might need more access to Mental Health programs which they acknowledge as a huge challenge. The school has several partners supporting the Health and Social Services and Youth Development pillars. "),
+                        p("Sully Elementary continues to have the lowest performance statistics on math and reading standardized exams, the highest student to teacher ratio while having the lowest enrollment, and one of the largest proportions of Hispanic students to other races. Hence, it might be beneficial to focus on resources such as language services, social workers, and teachers. "),
+                 ),
+                 
+                 )),
                  #----------------Data Tab------------------------------------------
                  tabPanel("Data ", value = "data",
                           fluidRow(style = "margin: 6px;",
