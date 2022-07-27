@@ -1136,9 +1136,9 @@ english_female <- plot_ly(assessmentfemaleenglish, x = ~Year, y = ~`Percent Pass
 
 assessment %>% filter(Subgroup == "Homeless" & Subject == "Mathematics") -> assessmenthomelessmath
 
-<<<<<<< HEAD
+
 math_homeless <- plot_ly(assessmenthomelessmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-=======
+
 math_homeless <- plot_ly(assessmenthomelessmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
   title = "Percentage",
   #zerolinewidth =60,
@@ -1147,7 +1147,7 @@ math_homeless <- plot_ly(assessmenthomelessmath, x = ~Year, y = ~`Percent Pass`,
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
 ))
->>>>>>> 9ec21ab3124ef736c97c1bcd1364590baa0ad6fb
+
 
 
 assessment %>% filter(Subgroup == "Homeless" & Subject == "English Reading") -> assessmenthomelessenglish
