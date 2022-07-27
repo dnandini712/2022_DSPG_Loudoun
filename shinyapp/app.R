@@ -987,65 +987,142 @@ math_dis <- plot_ly(assessmentdismath, x = ~Year, y = ~`Percent Pass`, color = ~
 
 assessment %>% filter(Subgroup == "Students with Disabilities" & Subject == "English Reading") -> assessmentdisenglish
 
-english_dis <- plot_ly(assessmentdisenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_dis <- plot_ly(assessmentdisenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 #----------------------white students---------------------------------------
 
 assessment %>% filter(Subgroup == "White" & Subject == "Mathematics") -> assessmentwhitemath
 
-math_white <- plot_ly(assessmentwhitemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_white <- plot_ly(assessmentwhitemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 assessment %>% filter(Subgroup == "White" & Subject == "English Reading") -> assessmentwhiteenglish
 
-english_white <- plot_ly(assessmentwhiteenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_white <- plot_ly(assessmentwhiteenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 #---------black----------------------------
 
 assessment %>% filter(Subgroup == "Black" & Subject == "Mathematics") -> assessmentblackmath
 
-math_black <- plot_ly(assessmentblackmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_black <- plot_ly(assessmentblackmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 assessment %>% filter(Subgroup == "Black" & Subject == "English Reading") -> assessmentblackenglish
 
-english_black <- plot_ly(assessmentblackenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_black <- plot_ly(assessmentblackenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 #----------asian--------------------------
 
 assessment %>% filter(Subgroup == "Asian" & Subject == "Mathematics") -> assessmentasianmath
 
-math_asian <- plot_ly(assessmentasianmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_asian <- plot_ly(assessmentasianmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 assessment %>% filter(Subgroup == "Asian" & Subject == "English Reading") -> assessmentasianenglish
 
-english_asian <- plot_ly(assessmentasianenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_asian <- plot_ly(assessmentasianenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 #--------hispanic-------------------------------
 
 assessment %>% filter(Subgroup == "Hispanic" & Subject == "Mathematics") -> assessmenthispanicmath
 
-math_hispanic <- plot_ly(assessmenthispanicmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_hispanic <- plot_ly(assessmenthispanicmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 assessment %>% filter(Subgroup == "Hispanic" & Subject == "English Reading") -> assessmenthispanicenglish
 
-english_hispanic <- plot_ly(assessmenthispanicenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_hispanic <- plot_ly(assessmenthispanicenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 #-----------male------------------------------
 
 assessment %>% filter(Subgroup == "Male" & Subject == "Mathematics") -> assessmentmalemath
 
-math_male <- plot_ly(assessmentmalemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_male <- plot_ly(assessmentmalemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 assessment %>% filter(Subgroup == "Male" & Subject == "English Reading") -> assessmentmaleenglish
 
-english_male <- plot_ly(assessmentmaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_male <- plot_ly(assessmentmaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 
@@ -1053,12 +1130,26 @@ english_male <- plot_ly(assessmentmaleenglish, x = ~Year, y = ~`Percent Pass`, c
 
 assessment %>% filter(Subgroup == "Female" & Subject == "Mathematics") -> assessmentfemalemath
 
-math_female <- plot_ly(assessmentfemalemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_female <- plot_ly(assessmentfemalemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 assessment %>% filter(Subgroup == "Female" & Subject == "English Reading") -> assessmentfemaleenglish
 
-english_female <- plot_ly(assessmentfemaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_female <- plot_ly(assessmentfemaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 
@@ -1067,7 +1158,7 @@ english_female <- plot_ly(assessmentfemaleenglish, x = ~Year, y = ~`Percent Pass
 assessment %>% filter(Subgroup == "Homeless" & Subject == "Mathematics") -> assessmenthomelessmath
 
 math_homeless <- plot_ly(assessmenthomelessmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
-  
+  title = "Percentage",
   #zerolinewidth =60,
   #standoff = 25,
   range = list(0,90),
@@ -1078,13 +1169,27 @@ math_homeless <- plot_ly(assessmenthomelessmath, x = ~Year, y = ~`Percent Pass`,
 
 assessment %>% filter(Subgroup == "Homeless" & Subject == "English Reading") -> assessmenthomelessenglish
 
-english_homeless <- plot_ly(assessmenthomelessenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_homeless <- plot_ly(assessmenthomelessenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 #--------------breakfast------------------------------------------------------
 
 breakfast_data <- read_excel(paste0(getwd(),"/data/Breakfast.xlsx"),skip=0,col_names=TRUE)
-breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Breakfast", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Breakfast", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 #---------------------General Data-------------------------------------------
 #--------------------English Learner Status----------------------------------
@@ -1879,7 +1984,7 @@ ui <- navbarPage(title = "DSPG",
                                                                 "Male" = "malegrades",
                                                                 "Female" = "femalegrades",
                                                                 "Homeless" = "homelessgrades",
-                                                                "Student with Disabilities (Differently-abled students)" = "disabilitiesgrades"
+                                                                "Students with Disabilities" = "disabilitiesgrades"
                                                                 
                                                               ),
                                                               ),
