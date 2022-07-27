@@ -231,7 +231,7 @@ property <- figpv %>% layout(title = "Residential Property Value", showlegend = 
 propcomparison <- plot_ly(
   domain = list(x = c(0, 1), y = c(0, 1)),
   value = 378700,
-  title = list(text = "Median PV Compared to Virginia Median PV"),
+  title = list(text = "Sterling and Virginia Median Poverty Value "),
   type = "indicator",
   mode = "gauge+number+delta",
   delta = list(reference = 282800),
@@ -1581,7 +1581,7 @@ ui <- navbarPage(title = "DSPG",
                           ),
                  ), 
                  
-                 #---------------Sociodemographics Tab------------------------
+                 #---------------Sociodemographic Tab------------------------
                  tabPanel("Sociodemographics",
                           fluidRow(style = "margin: 4px;",
                                    h1(strong("Sterling Sociodemographics"), align = "center"),
@@ -1605,6 +1605,8 @@ ui <- navbarPage(title = "DSPG",
                                                                      ),   
                                                                      br(""),
                                                                      withSpinner(plotlyOutput("demo1", height = "500px", width ="100%")),
+                                                                     br(),
+                                                                     br(),
                                                                      column(12, align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
                                                                             withSpinner(plotlyOutput("demoHispanicPIE", height = "500px", width = "100%")),
@@ -1627,10 +1629,10 @@ ui <- navbarPage(title = "DSPG",
                                                                      ),     
                                                                      br(""),
                                                                      withSpinner(plotlyOutput("demo2", height = "500px", width ="100%")),
-                                                                    fluidRow(column(2,),
-                                                                             (column(10,
+                                                                    fluidRow(column(3,),
+                                                                             (column(9,
                                                                                      
-                                                                                     withSpinner(plotlyOutput("PropComp", height = "70%", width = "80%"))
+                                                                                     withSpinner(plotlyOutput("PropComp", height = "50%", width = "65%"))
                                                                                      ))
                                                                     ),
                                                                             
@@ -1673,15 +1675,15 @@ ui <- navbarPage(title = "DSPG",
                                           br(""),
                                           h4(strong("Who Makes Up Sterling, Virginia?")), 
                                           
-                                          p("We used the American Community Survey (ACS) 5-year data to understand the socioeconomic demographics of the Sterling Census Designated Place (CDP) from the years 2016 to 2020. The ACS data is a survey collected by the U.S. Census Bureau which gathers sociodemographic information on American households including age, gender, race/ethnicity, income, and employment. "),
+                                          p("We used the American Community Survey (ACS) 5-year 2016 - 2020 data to understand the socioeconomic demographics of the Sterling Census Designated Place (CDP). The ACS is administered by the U.S. Census Bureau which gathers information on American households, including sociodemographic variables such as gender, race/ethnicity, income, and employment."),
                                           br(),
-                                          p("Sterling’s population consists of slightly more males (50.5%) than females, with a median age of 34.7 years. This is different when you look at Sterlings male population in comparison to Loudoun county's 49.7% male population. Young and middle-aged adults (ages 25 to 44) account for the largest age group in Sterling while in Loudoun, middle-aged adults 35 to 49 account for the largest age group.  On average, the majority of the population identified as White between 2016-2020, followed by Asian as the second most common race. The area appears diverse, with almost half of the residents (41%) identifying as Hispanic or Latino. This is considerably larger than Loudoun County, which has only about 14% Hispanic population."),
+                                          p("Sterling’s population consists of slightly more males (50.5%) than females, with a median age of 34.7 years. Young and middle-aged adults (ages 25 to 44) account for the largest age group in Sterling. On average, the majority of the population identified as White between 2016-2020, followed by Asian as the second most common race. The area appears diverse, with almost half of the residents (41%) identifying as Hispanic or Latino. This is considerably larger than Loudoun county’s 14% Hispanic population. "),
                                           
-                                          p("Many in the Sterling community are well-educated and have a college degree. Most residents ages 25 and older have attained a high school diploma, with the largest group having earned a bachelor’s degree. This education level may contribute to the high-income level in the region. The largest median income group for families in Sterling earn $100,000 to $149,999, followed closely by both $50,000 to $74,999 bracket and $150,000 to $199,999. It should be taken into consideration however that our data is slightly skewed as the areas of the Sterling CPD includes those that are highly affluent, outweigh those located in the areas with the schools designated as Title 1. This is evident by the differences in poverty levels by groups – females tend to have a higher poverty level regardless of age. Specifically, females ages 18 to 24 face the highest poverty level, followed by females ages 35 to 44.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                          p("Many in the Sterling community are well-educated and have a college degree. Most residents ages 25 and older have attained a high school diploma, with the largest group having earned a bachelor’s degree. This education level may contribute to the high-income level in the region. The largest median income group for families in Sterling earn $100,000 to $149,999, followed closely by both $50,000 to $74,999 bracket and $150,000 to $199,999. When you take a look at the median property value visualizations, it is clear that a large percentage of homes fall into the property value range of $300,000 to $499,999. The average property value of Sterling is $378,700 which is almost $96,000 higher than the state of Virginia's $282,800 median property value. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
                                           
-                                          p("While the majority of Sterling’s population is employed (approximately 71%), there is a notable gap in the residents' health insurance. About 17% have no health insurance, which is higher than Loudoun county's 5.5%. This may point to possible opportunities provided by Community Schools as these families will be less routine screening and will delay treatment until the condition is more advanced and more costly and challenging to treat.", style = "padding-top:15px;font-size: 14px;"),
+                                          p("While majority of Sterling’s population is employed (approximately 71%), there is a noticeable gap in the residents' health insurance. About 17% have no health insurance, which is higher than Loudoun county's 5.5%. This may point to possible opportunities provided by Community Schools as these families will be less routine screening and will delay treatment until the condition is more advanced and more costly and challenging to treat.", style = "padding-top:15px;font-size: 14px;"),
                                           
-                                          p("When you take a look at the median property value visualizations, it is clear that a large percentage of homes fall into the property value range of $300,000 to $499,999. The average property value of Sterling is $378,700 which is almost $96,000 higher than the state of Virginia's $282,800 median property value.",style = "padding-top:15px;font-size: 14px;"),
+                                          #p("",style = "padding-top:15px;font-size: 14px;"),
                                         
                                           p("The labor force of Sterling primarily works in management, business, science, and art, followed by the service sector. Over half of those who commute to work have a commute time less than 30 minutes, and 75% of said commuters drive alone. Notably, only 1.8% of commuters utilized public transportation.",style = "padding-top:15px;font-size: 14px;")
                                           
