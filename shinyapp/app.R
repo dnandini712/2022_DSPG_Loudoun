@@ -2562,10 +2562,10 @@ ui <- navbarPage(title = "DSPG",
                  )),
 
                  
-                 tabPanel("Analysis",
+                 tabPanel("Recommendations",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h1(strong("Possible Service Opportunities")),
+                                   column(12, align = "center",h1(strong("Recommendations for Improvement Opportunities")),
                                           p(""),
                                           br("")
                                           
@@ -2576,29 +2576,68 @@ ui <- navbarPage(title = "DSPG",
                                    
                                     column(7,
                                            h2(strong("Opportunities Within Pillars")),
+                                           p("We present sociodemographic characteristics and performance statistics visualization to understand the student population in the six Elementary Community Schools in Sterling, Loudoun. Information on students, educators, parents, and school representatives' perceptions was also included in our analysis to understand better these schools' environments and their strengths and challenges. Using these visualizations, we analyze the findings to recommend the following potential opportunities for improvement for each pillar of the Community School Program: "),
                                            h4(strong("Health and Social Services")),
-                                           p("Due to the high cost of living in Loudoun County and the fact that about one third of Sterling families make less than $74,999 in a year, it is crucial to increase the availability of affordable resources especially medical and mental health services and clothing resources. More-so, almost 40% of Sterling residents have either public health insurance or are uninsured and undocumented highlighting the need for affordable, inclusive medical care especially as the school liaisons viewed health needs for those uninsured as a major challenge. Providing annual medical, dental, and vision clinics at each school for both students and families may help to relieve these stressors."),
-                                        h4(strong("Mental Health")),
-                                           p("Our research shows a lack of mental health resources within a 10-minute drive for both students and the community. A possible aid to help with this could be to implement", a(href = "https://www.cfchildren.org/what-is-social-emotional-learning/", strong("social emotional learning"), target = "_blank"), "within all grades, a process that helps students learn emotion management, communication, and self-discipline. Further, to help address students social-emotional well-being, providing training for teachers and staff on Adverse Childhood Experiences", a(href = "https://www.cdc.gov/violenceprevention/aces/fastfact.html", strong("ACEs"), target = "_blank"), "and how to recognize and understand the impacts these may have on students learning and decision making could help to catch at-risk youth early on. For schools experiencing higher rates of bullying", a(href = "https://law.wisc.edu/fjr/rjp/justice.html#:~:text=Restorative%20justice%20seeks%20to%20examine,to%20repair%20the%20harm%20done.", strong("restorative justice"),target = "_blank"), "practices such as peace circles will help to decrease future conflict as it focuses on repairing the harm done and empowering the victims ultimately creating a more-connected community."),
+                                            p("Community Schools address not only the needs of students but also those of family members. One recommendation is to increase the number of resources and services available to families in Health and Social Services. About 40% of Sterling residents are either uninsured or have public health insurance highlighting the need for affordable, inclusive medical care. This appears to be an important opportunity as Community Schools Liaisons highlighted “health,” “medial,” and “uninsured” as significant challenges and weaknesses facing families at these schools. Moreover, our maps show that most of these medical, dental, and vision services are within a 20-minute distance of Sterling ES (midpoint), which may prove difficult for families with unreliable transportation. The number of these resources drastically reduces if we examine only those that are free. As such, providing annual mobile medical, dental, and vision services can play a significant role for families at these community schools, which may also improve students' health and performance. Community schools could also partner with medical providers to help perform for free or at a reduced cost for preventative and restorative services.  "),
+                                            h4(strong("Mental Health")),
+                                           p("Our research shows a lack of mental health resources within a 10-minute drive for students and the community. There are also some schools where many students perceive bullying as a problem and a low level of social-emotional well-being. Thus, at such a tender age, it would be helpful to include more individual counseling and referral systems to helps students learn emotion management, communication, and self-discipline. Schools can also try to find community organizations and individuals who can provide such counseling services at no or reduced cost to families. This may strengthen families to implement early-intervention strategies to help students who display disruptive behavior and help with their emotional well-being. Engaging families may also help schools adjust any chronic absenteeism that is occurring during the semester."),
                                         h4(strong("Youth Development")),
-                                          p("While each school provides opportunities for after-school programs, many come at a high cost which may limit the number of families able to utilize these resources. An increase in before- and after-school programs, especially athletic clubs, could provide opportunities for youth to build communication skills while remaining healthy and actively learning. An increase in affordable before- and after-school programs could also be beneficial to both the students and parents, providing opportunities for youth to expand their learning and interests while decreasing time parents must juggle between work and childcare. The 2020-2021 academic school year saw a drop in academic performances for all six community schools. Although this was following the COVID-19 pandemic, this could be an opportunity to provide extra tutoring hours at the local library or provide a study hall session during the school day to help alleviate the disruptions that online learning may have caused."),  
-                                        h4(strong("Family Development")),
-                                           p("Due to the high number of Hispanic students attending the community schools and low English performance scores, we suggest increasing multi-language resources for both students and parents to ensure that there is a clear line of communication for all involved in the learning process. Along with this, providing more opportunities for parent feedback forums and family events at the school may increase parent’s feelings of positive relationships and communication with the school. In our research, we found that there are few family engagement resources available within a 10-minute drive of Sterling Elementary, a possible opportunity to help reduce travel time for parents could be to host a resource fair at the schools allowing parents easy access to these resources. ")
-                          
+                                          p("Students from low-income families tend to have less access to enrichment opportunities beyond the traditional classroom. Increasing after-school programs, such as athletic clubs, could provide opportunities for youth to build communication skills while remaining healthy and actively learning. Students and parents could also benefit from these programs as students expand their learning and interests while decreasing the time parents must juggle between work and childcare. The 2020-2021 academic school year saw a drop in academic performances for all six community schools. This was especially severe for Hispanic and Black students, that had a dramatic decline. Although this was following the COVID-19 pandemic, this could be an opportunity to provide extra tutoring hours at the local library or a study hall session during the school day to help alleviate the disruptions of online learning. "),
+                                          h4(strong("Family Development")),
+                                           p("There is a significantly large number of Hispanic students attending community schools. These students will require additional needs, such as multi-language resources for both students and parents, to ensure a clear line of communication for all involved in the learning process. Additionally, providing more opportunities for parent feedback forums and family events at the school may increase parents’ feelings of positive relationships and communication with the school as some of these parents are undocumented, as suggested by the Community School liaison.  "),
+                                          p("In our research, we found that there are few families engagement resources available within a 10-minute drive of Sterling Elementary, a possible opportunity to help reduce travel time for parents could be to host a resource fair at the schools allowing parents easy access to these resources. Community School Liaisons also indicate that “rent,” “internet,” “housing,” and “food” are also significant challenges for families at these community schools. This is also essential as some students have a large population of students who experience homelessness. Thus, helping families within these areas would be beneficial. ")
                  ),
                  column(5, align= "justify",
                         h2(strong("Major Takeaways for Each School")),
                         p("The following takeaways are conclusions from the school reports that each school representative submitted in the year 2020-2021 and the various visualizations in the previous tabs from the data collected from Virginia Department of Education and Loudoun Dashboard. "),
-                        
-                        p("As compared to the other schools, Forest Grove Elementary seems to have significantly fewer key partners to support their four pillars. The Parent and Teacher climate surveys suggest the same. The school’s representative state about family engagement being one of the major challenges as well. The number of enrolled students has also fallen from 2018-2019 to 2019-2020 which is like Rolling Ridge Elementary. However, interestingly chronic absenteeism in this school has fallen after Covid hit which is a huge success. In addition, the school reports several meetings with the Unified Mental Health Team which has helped strengthen the mental health needs of the community. "),
-                        p("Guilford Elementary might require additional partners to support their Youth Development Pillar. Moreover, the internet needs of the community that Guilford serves have been reported as overwhelming. However, the school is doing exceptionally well in the Health and Social Services pillar. The school also reports that for their family engagement initiatives, all families are now “very adept at using technology to help their students and support teachers and instruction”."),
-                        p("Our research suggests Rolling Ridge Elementary might need access to more Mental Health resources and programs as compared to the other pillars. Although Rolling Ridge does not report to have many key partners supporting the Family Engagement pillar, the school reports to be well connected with the families and working towards empowering them more to ensure they are active in the community. "),
-                        p("Sugarland Elementary, like Forest Grove, probably has fewer key partners than the other schools as evident from the data that we have analyzed. The school reports “Family Engagement” pillar as their key challenge and hence it might require more support in this area. Sugarland also has the highest levels of chronic absenteeism, although it has a relatively good teacher student ratio. "),
-                        p("Sterling Elementary has maintained their rate of chronic absenteeism percentage even during the pandemic which is commendable. Like Rolling Ridge, Sterling Elementary also might need more access to Mental Health programs which they acknowledge as a huge challenge. The school has several partners supporting the Health and Social Services and Youth Development pillars. "),
-                        p("Sully Elementary continues to have the lowest performance statistics on math and reading standardized exams, the highest student to teacher ratio while having the lowest enrollment, and one of the largest proportions of Hispanic students to other races. Hence, it might be beneficial to focus on resources such as language services, social workers, and teachers. "),
-                 ),
-                 
-                 )),
+                        h4(strong("Forest Grove")),
+                        tags$div(
+                          tags$ul(
+                            tags$li("Fewer key partners to support their four pillars "),
+                            tags$li("School representatives view family engagement as a major challenge "),
+                            tags$li("Enrollment has decreased "),
+                            tags$li("Chronic absenteeism has decreased "),
+                            tags$li("Several meetings with the Unified Mental Health Team strengthening mental health resources"))),
+                        h4(strong("Guilford")),
+                        tags$div(
+                          tags$ul(
+                            tags$li("Few partners to support youth development pillar "),
+                            tags$li("Community internet needs reported as a major challenge "),
+                            tags$li("Doing well in the health and social services and family engagement pillar "),
+                            tags$li("Parents feel adept at using technology to aid in learning "),
+                            tags$li("High proportion of Hispanic students  "),
+                            ),
+                          ),
+                        h4(strong("Rolling Ridge")),
+                        tags$div(
+                          tags$ul(
+                            tags$li("Increases in mental health resources"),
+                            tags$li("High proportion of Hispanic students "),
+                            tags$li("School reports to be well connected with families"),
+                            tags$li("Lowest student to teacher ratio of all the schools"),
+                               )),
+                          h4(strong("Sterling")),
+                          tags$div(
+                            tags$ul(
+                              tags$li("Representatives say mental health resources are a major challenge "),
+                              tags$li("Several partners in Health and Social Services and Youth Development pillar "),
+                              tags$li("Maintained levels of chronic absenteeism"),
+                            )),
+                            h4(strong("Sugarland")),
+                            tags$div(
+                              tags$ul(
+                                tags$li("Representatives view family engagement as a key challenge "),
+                                tags$li("Highest levels of chronic absenteeism  "),
+                                tags$li("Appears to have fewer key partners than other schools"),
+                              )),
+                              h4(strong("Sully")),
+                              tags$div(
+                                tags$ul(
+                                  tags$li("Low performance on math and English standardized exams "),
+                                  tags$li("Highest student to teacher ratio with the lowest enrollment "),
+                                  tags$li("Large proportion of Hispanic students "),
+                                )),
+                 ))),
                  #----------------Data Tab------------------------------------------
                  tabPanel("Data ", value = "data",
                           fluidRow(style = "margin: 6px;",
