@@ -478,7 +478,7 @@ absentieesm <- read_excel(paste0(getwd(),"/data/Chronicabseetism.xlsx"),skip=0,c
 
 absentieesm %>% filter(Subgroup == "All Students") -> absentieesm
 
-chronic <- plot_ly(absentieesm, x = ~Year, y = ~`Percent above 10`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent above 10`, "%"))%>% layout(title = "Chronic Absentieesm (Percentage of Students missing more than 10% classes)", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+chronic <- plot_ly(absentieesm, x = ~Year, y = ~`Percent above 10`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent above 10`, "%", "<br>", "School:",School))%>% layout(title = "Chronic Absentieesm", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 
