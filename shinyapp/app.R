@@ -234,18 +234,18 @@ propcomparison <- plot_ly(
   title = list(text = "Median PV Compared to Virginia Median PV"),
   type = "indicator",
   mode = "gauge+number+delta",
-  delta = list(reference = 282800),
+  delta = list(reference = 534600),
   gauge = list(
-    axis =list(range = list(NULL, 500000)),
+    axis =list(range = list(NULL, 600000)),
     steps = list(
-      list(range = c(0, 200000), color = "lightgray"),
-      list(range = c(200000, 285000), color = "gray"),
-      list(range = c(285000, 400000), color = "yellow"),
-      list(range = c(400000, 500000), color = "red")),
+      list(range = c(0, 250000), color = "lightgray"),
+      list(range = c(250000, 350000), color = "gray"),
+      list(range = c(350000, 500000), color = "yellow"),
+      list(range = c(500000, 600000), color = "red")),
     threshold = list(
-      line = list(color = "red", width = 4),
+      line = list(color = "black", width = 4),
       thickness = 0.75,
-      value = 282800))) 
+      value = 534600))) 
 propcomparison <- propcomparison %>%
   layout(margin = list(l=20,r=30))
 
@@ -1797,7 +1797,7 @@ ui <- navbarPage(title = "DSPG",
                                           
                                           p("While the majority of Sterling’s population is employed (approximately 71%), there is a notable gap in the residents' health insurance. About 17% have no health insurance, which is higher than Loudoun county's 5.5%. This may point to possible opportunities provided by Community Schools as these families will be less routine screening and will delay treatment until the condition is more advanced and more costly and challenging to treat.", style = "padding-top:15px;font-size: 14px;"),
                                           
-                                          p("When you take a look at the median property value visualizations, it is clear that a large percentage of homes fall into the property value range of $300,000 to $499,999. The average property value of Sterling is $378,700 which is almost $96,000 higher than the state of Virginia's $282,800 median property value.",style = "padding-top:15px;font-size: 14px;"),
+                                          p("When you take a look at the median property value visualizations, it is clear that a large percentage of homes fall into the property value range of $300,000 to $499,999. The average property value of Sterling is $378,700 which is almost $156,000 less than Loudoun County's median property value. The black line marker on the property value comparison visualization indicates Loudoun County's median property value.",style = "padding-top:15px;font-size: 14px;"),
                                         
                                           p("The labor force of Sterling primarily works in management, business, science, and art, followed by the service sector. Over half of those who commute to work have a commute time less than 30 minutes, and 75% of said commuters drive alone. Notably, only 1.8% of commuters utilized public transportation.",style = "padding-top:15px;font-size: 14px;")
                                           
@@ -2016,8 +2016,8 @@ ui <- navbarPage(title = "DSPG",
                             tabPanel("Climate Survey",
                                      fluidRow(style = "margin: 4px;",
                                               h1(strong("Climate Survey 2019-2020"), align = "center"),
-                                              h5(("Loudoun County Public Schools (LCSPS) surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement, as well as the implementation of key initiatives. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. LCPS uses these surveys to identify strengths and weaknesses that can guide efforts to improve student learning and the school's environment. The survey was administered online to parents, administrators (other than principals), and students (grades 3-8)."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                              h5(("The graphs below present some key indices from the school climate surveys. Each index comprises of a series of questions that are averaged for an overall score. Higher scores indicate a more favorable school climate. Graphs are visualized so one can select multiple indices for comparison. "), style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                              p("Loudoun County Public Schools (LCSPS) surveyed students, parents, and teachers/staff in February 2020 to assess their perceptions about the climate of schools and factors that influence student achievement, as well as the implementation of key initiatives. Questions included student engagement, relationship between teachers and students, bullying, and social-emotional wellbeing. LCPS uses these surveys to identify strengths and weaknesses that can guide efforts to improve student learning and the school's environment. The survey was administered online to parents, administrators (other than principals), and students (grades 3-8).", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                              p("The graphs below present some key indices from the school climate surveys. Each index comprises of a series of questions that are averaged for an overall score. Higher scores indicate a more favorable school climate. Graphs are visualized so one can select multiple indices for comparison. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
                                               p("", style = "padding-top:10px;"),
                                               
                                               
@@ -2032,7 +2032,7 @@ ui <- navbarPage(title = "DSPG",
                                                                   br(""),
                                                                   h2(strong("Student Perception"),
                                                                      column(12, align="justify",
-                                                                            p("We present four key indices based on students’ responses:", tags$b("1. Student Engagement"), "which measures whether students believe their decisions are important and they belong;", tags$b("2. Student-Teacher Relationship"), "– Students engagement with teachers;", tags$b("3. Social-Emotional Wellbeing"), "– Students believe they can discuss and work through their emotions; and", tags$b("4. Bullying"), "– Perception about bullying occurrence. Higher scores mean less bullying.", style = "padding-top:15px;font-size: 16px;"),
+                                                                            p("We present four key indices based on students’ responses:", tags$b("1. Student Engagement"), "which measures whether students believe their decisions are important and they belong;", tags$b("2. Student-Teacher Relationship"), "- Students engagement with teachers;", tags$b("3. Social-Emotional Wellbeing"), "-Students believe they can discuss and work through their emotions; and", tags$b("4. Bullying"), "- Students perception about bullying occurrence. Higher scores mean less bullying.", style = "padding-top:15px;font-size: 14px;"),
                                                                      ),
                                                                          
                                                                   )
@@ -2120,7 +2120,7 @@ ui <- navbarPage(title = "DSPG",
                                                                            br(""),
                                                                            h2(strong("Parent Perception"),
                                                                               column(12, align = "justify",
-                                                                              p("The four indices below are based on parents’ perception on:", tags$b("1. Academic Support"), "– Academic expectations and individualized instruction;", tags$b("2. Communications"), "– School and teacher communication to parents;", tags$b("3. Relationships"), "– Welcoming environment, social-emotional support, respect for students; and", tags$b("4. Instructions"), "– Measures of LCPS initiatives that helps foster deep learning and thinking ", style = "padding-top:15px;font-size: 16px;"),
+                                                                              p("The four indices below are based on parents’ perception on:", tags$b("1. Academic Support"), "– Academic expectations and individualized instruction;", tags$b("2. Communications"), "– School and teacher communication to parents;", tags$b("3. Relationships"), "– Welcoming environment, social-emotional support, respect for students; and", tags$b("4. Instructions"), "– Measures of LCPS initiatives that helps foster deep learning and thinking. ", style = "padding-top:15px;font-size: 14px;"),
                                                                               ),
                                                                               #h4(""),
                                                                               #h4("[updat this]"),
@@ -2210,7 +2210,7 @@ ui <- navbarPage(title = "DSPG",
                                                                   br(""),
                                                                   h2(strong("Teacher/Staff Perception"),
                                                                      column(12, align = "justify",
-                                                                            p("We present six key indices based on teachers/staff responses:", tags$b("1. Staff Collegiality"), "– Teacher and staff relationship;", tags$b("2. Academic Environment"), "– Teacher support and student effort;", tags$b("3. School Leadership"), "– Support from School Administrators;", tags$b("4. Managing Student Behavior"), "– Student knows how to conduct themselves;", tags$b("5. Workplace Environment"), "– Support and material availability; and", tags$b("6. Instructional Behavior"), "– Supporting students learning needs and goals.", style = "padding-top:15px;font-size: 16px;"),
+                                                                            p("We present six key indices based on teachers/staff responses:", tags$b("1. Staff Collegiality"), "– Teacher and staff relationship;", tags$b("2. Academic Environment"), "– Teacher support and student effort;", tags$b("3. School Leadership"), "– Support from School Administrators;", tags$b("4. Managing Student Behavior"), "– Student knows how to conduct themselves;", tags$b("5. Workplace Environment"), "– Support and material availability; and", tags$b("6. Instructional Behavior"), "– Supporting students learning needs and goals.", style = "padding-top:15px;font-size: 14px;"),
                                                                      ),
                                                                   ),
                                                          ),
