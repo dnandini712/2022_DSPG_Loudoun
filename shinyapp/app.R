@@ -175,16 +175,15 @@ agesterling<- plot_ly(subset_sterling1,x=~Age1, y=~Percent1,type = "bar", color 
 #-----------Race/Ethnicity--------------------
 
 labelsR = c("White", "Black", "Am.Indian", "Asian","Hawaiian","Other")
-valuesR = c(18138, 3132, 418, 5313, 144, 4570)
+valuesRACEPIE = c(18138, 3132, 418, 5313, 144, 4570)
 
-race <- plot_ly(type='pie', labels=labelsR, values=valuesR, 
+race <- plot_ly(type='pie', labels=labelsR, values=valuesRACEPIE, 
                 textinfo='label+percent',
                 hoverinfo = 'text', 
-                text = ~paste('Total:', valuesR),
-              
-
+                text = ~paste('Total:', valuesRACEPIE),
+                
+                
                 insidetextorientation='radial') %>% layout(title ='Race/Ethnicity Composition 2019', legend=list(title=list(text='Select Race')))
-
 
 #------------Hispanic Percentage-------------
 
