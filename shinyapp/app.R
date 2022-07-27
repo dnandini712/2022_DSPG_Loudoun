@@ -1763,7 +1763,7 @@ ui <- navbarPage(title = "DSPG",
                                               
                                      )), 
                             
-                            tabPanel("Education", 
+                            tabPanel("Performance", 
                                      fluidRow(style = "margin: 6px;",
                                               column(12, 
                                                      h1(strong("Education"), align = "center")),
@@ -1779,7 +1779,7 @@ ui <- navbarPage(title = "DSPG",
                                             ),
                                             
                                             withSpinner(plotlyOutput("ocuplot2", height = "500px", width = "100%")),
-                                            img(src = "StudentTeacherRatioPic.png", class = "topimage", width = "70%", height ="70%", style = "display: block; margin-left: auto; margin-right: auto;"),
+                                            img(src = "stratio.png", class = "topimage", width = "80%", height ="80%", style = "display: block; margin-left: auto; margin-right: auto;"),
 
                                             column(12,align = "right",
                                                    p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
