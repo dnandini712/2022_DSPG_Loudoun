@@ -950,10 +950,10 @@ cloud3<- wordcloud2(df3, size=0.5)
 assessment <- read_excel(paste0(getwd(),"/data/allstudentsassess.xlsx"),skip=0,col_names=TRUE)
 
 subset_math <- assessment[c(2,5,8,11,14,17,20,23,26,29,32,35), c(1:2,7:8)]
-math_all <- plot_ly(subset_math, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Math Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_all <- plot_ly(subset_math, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 subset_english <- assessment[c(1,4,7,10,13,16,19,22,25,28,31,34), c(1:2,7:8)]
-english_all <- plot_ly(subset_english, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School)) %>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_all <- plot_ly(subset_english, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School)) %>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 #-------------------students with disabilities----------------------
 
@@ -961,70 +961,70 @@ assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_nam
 
 assessment %>% filter(Subgroup == "Students with Disabilities" & Subject == "Mathematics") -> assessmentdismath
 
-math_dis <- plot_ly(assessmentdismath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Math Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_dis <- plot_ly(assessmentdismath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 assessment %>% filter(Subgroup == "Students with Disabilities" & Subject == "English Reading") -> assessmentdisenglish
 
-english_dis <- plot_ly(assessmentdisenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_dis <- plot_ly(assessmentdisenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 #----------------------white students---------------------------------------
 
 assessment %>% filter(Subgroup == "White" & Subject == "Mathematics") -> assessmentwhitemath
 
-math_white <- plot_ly(assessmentwhitemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Math Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_white <- plot_ly(assessmentwhitemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 assessment %>% filter(Subgroup == "White" & Subject == "English Reading") -> assessmentwhiteenglish
 
-english_white <- plot_ly(assessmentwhiteenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_white <- plot_ly(assessmentwhiteenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 #---------black----------------------------
 
 assessment %>% filter(Subgroup == "Black" & Subject == "Mathematics") -> assessmentblackmath
 
-math_black <- plot_ly(assessmentblackmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Math Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_black <- plot_ly(assessmentblackmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 assessment %>% filter(Subgroup == "Black" & Subject == "English Reading") -> assessmentblackenglish
 
-english_black <- plot_ly(assessmentblackenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_black <- plot_ly(assessmentblackenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 #----------asian--------------------------
 
 assessment %>% filter(Subgroup == "Asian" & Subject == "Mathematics") -> assessmentasianmath
 
-math_asian <- plot_ly(assessmentasianmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Math Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_asian <- plot_ly(assessmentasianmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 assessment %>% filter(Subgroup == "Asian" & Subject == "English Reading") -> assessmentasianenglish
 
-english_asian <- plot_ly(assessmentasianenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_asian <- plot_ly(assessmentasianenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 #--------hispanic-------------------------------
 
 assessment %>% filter(Subgroup == "Hispanic" & Subject == "Mathematics") -> assessmenthispanicmath
 
-math_hispanic <- plot_ly(assessmenthispanicmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Math Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_hispanic <- plot_ly(assessmenthispanicmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 assessment %>% filter(Subgroup == "Hispanic" & Subject == "English Reading") -> assessmenthispanicenglish
 
-english_hispanic <- plot_ly(assessmenthispanicenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_hispanic <- plot_ly(assessmenthispanicenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 #-----------male------------------------------
 
 assessment %>% filter(Subgroup == "Male" & Subject == "Mathematics") -> assessmentmalemath
 
-math_male <- plot_ly(assessmentmalemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Math Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_male <- plot_ly(assessmentmalemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 assessment %>% filter(Subgroup == "Male" & Subject == "English Reading") -> assessmentmaleenglish
 
-english_male <- plot_ly(assessmentmaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_male <- plot_ly(assessmentmaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 
@@ -1032,12 +1032,12 @@ english_male <- plot_ly(assessmentmaleenglish, x = ~Year, y = ~`Percent Pass`, c
 
 assessment %>% filter(Subgroup == "Female" & Subject == "Mathematics") -> assessmentfemalemath
 
-math_female <- plot_ly(assessmentfemalemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Math Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_female <- plot_ly(assessmentfemalemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 assessment %>% filter(Subgroup == "Female" & Subject == "English Reading") -> assessmentfemaleenglish
 
-english_female <- plot_ly(assessmentfemaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_female <- plot_ly(assessmentfemaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 
@@ -1045,12 +1045,12 @@ english_female <- plot_ly(assessmentfemaleenglish, x = ~Year, y = ~`Percent Pass
 
 assessment %>% filter(Subgroup == "Homeless" & Subject == "Mathematics") -> assessmenthomelessmath
 
-math_homeless <- plot_ly(assessmenthomelessmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Math Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_homeless <- plot_ly(assessmenthomelessmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 assessment %>% filter(Subgroup == "Homeless" & Subject == "English Reading") -> assessmenthomelessenglish
 
-english_homeless <- plot_ly(assessmenthomelessenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Performance", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_homeless <- plot_ly(assessmenthomelessenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 #--------------breakfast------------------------------------------------------
@@ -1825,10 +1825,16 @@ ui <- navbarPage(title = "DSPG",
                                      #          
                                      # ),
                                      
-                                           tabPanel( "Performance",
+                                           tabPanel( "Assessment",
                                                      br(),
                                                      fluidRow(
                                                        column(12,align = "left",
+                                                              
+                                                              radioButtons(
+                                                                "category_subject",
+                                                                label = "Select:",
+                                                                choices = c("Mathematics", "English Reading"),
+                                                              ),
                                                               
                                                               selectInput("gradesdrop", "Select Subgroup:", width = "100%", choices = c(
                                                                 "All Students" = "allstudentsgrades",
@@ -1844,11 +1850,7 @@ ui <- navbarPage(title = "DSPG",
                                                               ),
                                                               ),
                                                               
-                                                              radioButtons(
-                                                                "category_subject",
-                                                                label = "Select:",
-                                                                choices = c("Mathematics", "English Reading"),
-                                                              ),
+
                                                               
                                                               withSpinner(plotlyOutput("grades", height = "500px", width = "100%")),
                                                               #br(""),
@@ -1857,7 +1859,7 @@ ui <- navbarPage(title = "DSPG",
                                                           
                                                               #br(""),
                                                                      p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
-                                                              p("*Note: Data is not available for the missing bars", style = "font-size:12px;"),
+                                                              p("*Note: Data unavailable where missing bars.", style = "font-size:12px;"),
                                                               )
                                                               
                                                               
@@ -1871,34 +1873,14 @@ ui <- navbarPage(title = "DSPG",
                                          )),
                                      
                                      column(6, align = "justify",
-                                            br(""),
-                                            br(""),
-                                            br(""),
+                                            h4(strong("How are students performing in Community Schools?")),
                                             
-                                            p("To better understand the characteristics of the community schools regarding the classroom 
-                                                                                  environment, we pulled data from the Virginia Department of Education to visualize the number
-                                                                                  of educators, total enrollment, absences, and suspension rates. Among the six community schools, 
-                                                                                  most all have a greater number of teachers than staff except for Sterling Elementary.
-                                                                                  When looking at the total enrollment, Sterling Elementary retained a stable number of students from 
-                                                                                  2016 to 2020 right around 575 students. For Sully Elementary, they had both the lowest number of 
-                                                                                  educators as well as the lowest total enrollment of all six schools. Breaking this down further, 
-                                                                                  the student-teacher ratio of the six schools revealed that Sully had the highest student to teacher 
-                                                                                  ratio of the schools with 14 students per teacher.  ", style = "padding-top:15px;font-size: 14px;"),
+                                      
+                                            p("Sterling ES has enrolled a consistent number of students, approximately 575, from 2016 to 2020. Interestingly, the schools with the lowest number of students - Guilford, Sully, and Sugarland - have increased their enrollment since joining the Community Schools Initiative. There are slight differences in the number of educators across schools, although the student population ranged from 461 to 585 in 2019-2020. Sterling Elementary is the only school with a greater proportion of staff than teachers. Sully ES has the highest student-to-teacher ratio, with 14 students per teacher, even though it has the lowest number of students. ", style = "padding-top:15px;font-size: 14px;"),
                                             
-                                            p("Moving to absence and suspension rates, we utilized data from the Loudoun County Public Schools Dashboard 
-                                                                                  as well as the Virginia Department of Education to visualize the differences between the schools. For the 
-                                                                                  absence rates of students by quarter in the 2020-2021 school year, Forest Grove Elementary had the lowest 
-                                                                                  absence rate across the year while Sully Elementary had the largest increase throughout the year, increasing 
-                                                                                  by over two percent. To attempt to understand if this was a chronic issue, we visualized the chronic
-                                                                                  absenteeism rate which is defined as the percentage of students who miss more than ten percent of total
-                                                                                  classes throughout the year. We found that Sugarland Elementary had the highest rate at 11.1% while 
-                                                                                  Sterling had the lowest at 5.8% in 2018-2019 academic year. After the pandemic hit, these percentages shot up massively for all schools except Sterling and Forest Grove. Forest Grove's chronic absenteeism astonishingly fell. Rolling Ridge unfortunately has 17.7% students missing 1 out of 10 classes.", style = "padding-top:15px;font-size: 14px;"),
-                                            p("When you take a look at the suspension percentages amongst the six community schools, we see a much higher percentage of Hispanic children being suspended than any other race. This stays constant throughout all the six elementary schools. There are some differences in suspension rates throughout the schools, however Hispanic children appear to be getting suspended more than other the races. Some percentages go as high as 85% like in Sully Elementary. Although this could be because of the high Hispanic population of the children within the schools, there is still room for improvement to help lower these high percentages ", style = "padding-top:15px;font-size: 14px;"),
-                                            p("To understand the educational environment of the community schools, we acquired data on the yearly state standardized exams on math
-                                              and reading for the 2018 – 2019 school year and 2020 - 2021 school year. Due to the COVID-19 pandemic, changes in modality and 
-                                              hardships endured may have impacted exam scores leading us to be unable to draw any significant conclusions about changes over time. 
-                                              For both math and science, the performance statistics for each school have been shown by all students as well as broken into 
-                                              subgroups by race, gender, and other characteristics.",style = "padding-top:15px;font-size: 14px;"),
+                                            p("We utilize data from the Loudoun County Public Schools Dashboard and the Virginia Department of Education to analyze students’ behavior. Sully ES had the largest increase in absence rate across the year. There is also a substantial increase across all schools in the second and fourth quarters of the 2020-2021 school year. We acknowledge that this rate may be skewed due to the Covid-19 pandemic. As such, we analyze chronic absenteeism in the prior school year. Virginia Department of Education defines chronic absenteeism as the percentage of students who miss more than ten percent of total classes throughout the year. In 2018-2019, Sugarland, Rolling Ridge, and Sully had the highest chronic absenteeism rate, above 10%. Interestingly, Forest Grove and Sterling’s rates were consistent after the Covid-19 pandemic, whereas there was a massive increase in chronic absenteeism for other schools. Rolling Ridge had the highest rate in 2020-2021, with 17.7% of students missing 1 out of 10 classes. ", style = "padding-top:15px;font-size: 14px;"),
+                                            p("When you look at the suspension percentages amongst the six community schools, we see a much higher percentage of Hispanic children being suspended than any other race. This stays constant throughout all six elementary schools. There are some differences in suspension rates throughout the schools. However, Hispanic children appear to be getting suspended more than other races. Some percentages go as high as 85%, like in Sully Elementary. Although this could be because of the high Hispanic population of the children within the schools, there is still room for improvement to help lower these high percentages.", style = "padding-top:15px;font-size: 14px;"),
+                                            p("We collect and visualize Standard of Learning (SOL) Mathematics and English Reading passing rates for the 2018-2019 and 2020-2021 school years. Due to the COVID-19 pandemic, changes in modality and hardships may have impacted exam scores in 2020-2021. As such, we cannot draw significant conclusions about changes over time. Performance statistics can be disaggregated into subgroups such as race, gender, and other characteristics.",style = "padding-top:15px;font-size: 14px;"),
                                             br(),
                                             p(strong("Mathematics")),
                                             p("On average, in the 2018 – 2019 school year 75% of all students passed while in the 2020 – 2021 school year, on average only 35% of all students passed. When broken down into subgroups, white students at all schools in 2018 passed above the average rate while for Hispanic students, no schools passed above the average and at Sully, only 62% of Hispanic students passed",style = "padding-top:15px;font-size: 14px;"),
