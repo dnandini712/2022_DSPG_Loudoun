@@ -950,10 +950,24 @@ cloud3<- wordcloud2(df3, size=0.5)
 assessment <- read_excel(paste0(getwd(),"/data/allstudentsassess.xlsx"),skip=0,col_names=TRUE)
 
 subset_math <- assessment[c(2,5,8,11,14,17,20,23,26,29,32,35), c(1:2,7:8)]
-math_all <- plot_ly(subset_math, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_all <- plot_ly(subset_math, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 subset_english <- assessment[c(1,4,7,10,13,16,19,22,25,28,31,34), c(1:2,7:8)]
-english_all <- plot_ly(subset_english, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School)) %>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+english_all <- plot_ly(subset_english, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School)) %>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 #-------------------students with disabilities----------------------
 
@@ -961,7 +975,14 @@ assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_nam
 
 assessment %>% filter(Subgroup == "Students with Disabilities" & Subject == "Mathematics") -> assessmentdismath
 
-math_dis <- plot_ly(assessmentdismath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_dis <- plot_ly(assessmentdismath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 assessment %>% filter(Subgroup == "Students with Disabilities" & Subject == "English Reading") -> assessmentdisenglish
@@ -1045,7 +1066,14 @@ english_female <- plot_ly(assessmentfemaleenglish, x = ~Year, y = ~`Percent Pass
 
 assessment %>% filter(Subgroup == "Homeless" & Subject == "Mathematics") -> assessmenthomelessmath
 
-math_homeless <- plot_ly(assessmenthomelessmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+math_homeless <- plot_ly(assessmenthomelessmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 
 assessment %>% filter(Subgroup == "Homeless" & Subject == "English Reading") -> assessmenthomelessenglish
@@ -1725,10 +1753,16 @@ ui <- navbarPage(title = "DSPG",
                                                                 fluidRow(style = "margin: 4px;",
                                                                          withSpinner(plotlyOutput("racenine", height = "500px", width = "100%")),
                                                                          br(""),
+                                                                         
+                                                                         br(),
+                                                                         br(),
+                                                                         br(), 
+                                                                         br(),
                                                                          fluidRow( 
                                                                            column(1,),
                                                                            
                                                                            column(11, align = "left",
+                                                                                  h3(("Sterling’s Hispanic Population 2019"), align = "left"),
                                                                                   withSpinner(leafletOutput("hispanicschool", height = "400px", width = "70%"))),
                                                                          ),
                                                                          column(12,align = "right",
@@ -1746,12 +1780,12 @@ ui <- navbarPage(title = "DSPG",
                                               column(5, align = "justify",
                                                      
                                                      h4(strong("What Do Community Schools Look Like?"), align = "left"),
-                                                     p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
+                                                     p("Community schools are hubs that provide additional resources and accommodation for students and families in need using community partnerships. These schools not only focus on learning objectives but provide supplementary services, such as free meals, health care services, tutoring, and counseling services, to those in need. There are six Title 1 Community Schools - all in the Sterling area - Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary."),
                                                      
-                                                     p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling Elementary has the lowest number of students. Guilford is the only school which has more females than male while Forest Grove like the Sterling area for the gender ratio has an almost equal split. Rolling Ridge and Sully have a similar trend: the female students are about 48% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling Elementary has the most uneven distribution where there is 86 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
-                                                     p("The race and ethnicity demographics in 2019-2020 revealed that overall, Hispanic students, made up the greatest percentage of students attending the six elementary schools in Sterling, which differs from the general make-up of the Sterling area where White residents made up the majority of residents. There is a huge difference between Guilford and Forest Grove in terms of the ethnic groups of students, given that they both have similar number of total students: Guilford has significantly higher Hispanic students while Forest Grove has a lot more White and Hispanic students.", 
+                                                     p("We examine the demographic characteristics of students at the six elementary schools (ES) to better understand the population. Most schools have a similar number of students (around 500) except Sterling and Sully elementary, with about 100 fewer students. Interestingly, the gender ratio for Forest Grove, Guilford, and Sully are similar to the Sterling area gender ratio – approximately 49% of the student population are females. Sterling ratio is lower, with 91 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("The race/ethnicity composition revealed that the majority of students attending the six elementary schools identified as Hispanic, differing from Sterling’s general population, where White residents were the majority. There are also significant differences between Guilford and Forest Grove, which have similar total students. Most students in Guilford ES are Hispanic students, whereas Forest Grove has a more diverse population between Hispanic, White, and Asian groups.", 
                                                        style = "padding-top:15px;font-size: 14px;"),
-                                                     p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence,  we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary. This shows us there is not a significant correlation of the hispanic student percentage and the hispanic population density.", 
+                                                     p("The differences across ethnic groups might be due to the Hispanic population density in the areas where these schools are located. Hence, we mapped the schools and collected the average total Hispanic population between the years 2016 to 2020. We present this information by census blocks, and hovering over each block will show the total Hispanic population. Areas surrounding the schools have a large number of residents identifying as Hispanic. This is significant for neighborhoods near Rolling Ridge, Sully, Sterling, and Guilford.", 
                                                        style = "padding-top:15px;font-size: 14px;"),
                                                      ),
                                                             
