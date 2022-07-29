@@ -462,6 +462,37 @@ School <- attendance$`School Name`
 ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(title = "Student Absences by 2020-2021 Quarter",caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",
                                                                                                                                                                                                                                       plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
 attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("Percent:",Percent, "%","<br>","School:",School)) %>% layout(title = "Student Absences by 2020-2021 Quarter", legend=list(title=list(text='Select School')), yaxis = list(title = "Percentage"), xaxis = list(title = ""))
+
+# suspensions --------------------------------------------------
+suspensions <- read_excel((paste0(getwd(),"/data/suspensiondata.xlsx")))
+suspension18 <- suspensions[2:25,1:4]
+suspension19 <- suspensions[26:49,1:4]
+suspension20 <- suspensions[50:73,1:4]
+suspension18guilford <- suspension18[5:8,3:4]
+suspension18forest <- suspension18[1:4,3:4]
+suspension18rolling <- suspension18[9:12,3:4]
+suspension18sterling <- suspension18[13:16,3:4]
+suspension18sugarland <- suspension18[17:20,3:4]
+suspension18sully <- suspension18[21:24,3:4]
+susforest18 <- plot_ly(suspension18forest, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Forest Grove", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
+susguilford18 <- plot_ly(suspension18guilford, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Guilford", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
+susrolling18 <- plot_ly(suspension18rolling, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Rolling Ridge", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
+sussterling18 <- plot_ly(suspension18sterling, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Sterling", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
+sussugarland18 <- plot_ly(suspension18sugarland, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Sugarland", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
+sussully18 <- plot_ly(suspension18sully, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Sully", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
+suspension19guilford <- suspension19[5:8,3:4]
+suspension19rolling <- suspension19[9:12,3:4]
+suspension19sterling <- suspension19[13:16,3:4]
+suspension19forest <- suspension19[1:4,3:4]
+suspension19sully <- suspension19[21:24,3:4]
+suspension19sugarland <- suspension19[16:19,3:4]
+susguildford19 <- plot_ly(suspension19guilford, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Guilford", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
+susrolling19 <- plot_ly(suspension19rolling, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Rolling Ridge", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
+sussterling19 <- plot_ly(suspension19sterling, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Sterling", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
+susforest19 <- plot_ly(suspension19forest, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Forest Grove", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
+sussully19 <- plot_ly(suspension19sully, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Sully", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
+sussugarland19 <- plot_ly(suspension19sugarland, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Sugarland", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
+
 #---------------Number of Teachers/Staff--------------------------
 
 Schools <- c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
@@ -3151,22 +3182,29 @@ ui <- navbarPage(title = "DSPG",
                                                                 ),
                                                                 
                                                        ),
-                                                       # tabPanel("Suspension",
-                                                       #          br(),
-                                                       #          selectInput("schoolsuspend", "Select School:", width = "100%", choices = c(
-                                                       #            "Forest Grove" = "forestsuspend",
-                                                       #            "Guilford" = "guilfordsuspend",
-                                                       #            "Rolling Ridge" = "rollingsuspend",
-                                                       #            "Sterling" = "sterlingsuspend",
-                                                       #            "Sugarland" = "sugarlandsuspend",
-                                                       #            "Sully" = "sullysuspend"
-                                                       #            
-                                                       #          ),
-                                                       #          ),
-                                                       #          
-                                                       #          withSpinner(withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%"))),
-                                                       #          
-                                                       # ),
+                                                       tabPanel("Suspension",
+                                                                br(),
+                                                                fluidRow(
+                                                                  column(12, align = "left",
+                                                                         radioButtons(
+                                                                           "categoryyear",
+                                                                           label = "Select Year:",
+                                                                           choices = c(2018,2019)
+                                                                         ),
+                                                                         selectInput("schoolsuspend", "Select School:", width = "100%", choices = c(
+                                                                           "Forest Grove" = "susforest",
+                                                                           "Guilford" = "susguilford",
+                                                                           "Rolling Ridge" = "susrolling",
+                                                                           "Sterling" = "sussterling",
+                                                                           "Sugarland" = "sussugarland",
+                                                                           "Sully" = "sussully"
+                                                                           
+                                                                         ),
+                                                                         ),
+                                                                         
+                                                                         withSpinner(withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%"))),
+                                                                         
+                                                                  ))),
                                                        
                                                        tabPanel( "Assessment",
                                                                  br(),
@@ -4315,44 +4353,82 @@ server <- function(input, output, session) {
   })
   
   
+  categoryyear<- reactive({
+    input$categoryyear
+  }) 
+  
+  
   Varsuspend <- reactive({
     input$schoolsuspend
   }) 
   
   output$schoolsuspendall <- renderPlotly({
     
-    
-    if (Varsuspend() == "forestsuspend") {
+    if (categoryyear() == "2018") {
+      if(Varsuspend() == "susforest"){
+        
+        susforest18
+      }
       
-      forestsuspend
+      
+      else if (Varsuspend() == "susguilford") {
+        
+        susguilford18
+        
+      }
+      
+      else if (Varsuspend() == "susrolling") {
+        
+        susrolling18
+      }
+      
+      else if (Varsuspend() == "susterling") {
+        sussterling18
+      }
+      
+      else if (Varsuspend() == "sussugarland"){
+        sussugarland18
+      }
+      
+      else if (Varsuspend() == "sussully"){
+        sussully18
+      }
+    } else {
+      
+      {
+        if(Varsuspend() == "susforest"){
+          
+          susforest19
+        }
+        
+        
+        else if (Varsuspend() == "susguilford") {
+          
+          susguilford19
+          
+        }
+        
+        else if (Varsuspend() == "susrolling") {
+          
+          susrolling19
+        }
+        
+        else if (Varsuspend() == "susterling") {
+          sussterling19
+        }
+        
+        else if (Varsuspend() == "sussugarland"){
+          sussugarland19
+        }
+        
+        else if (Varsuspend() == "sussully"){
+          sussully19
+        }
+      }
+      
       
     }
-    
-    else if (Varsuspend() == "guilfordsuspend") {
-      
-      guilfordsuspend
-    }
-    
-    else if (Varsuspend() == "rollingsuspend") {
-      
-      rollingsuspend
-    }
-    
-    else if (Varsuspend() == "sterlingsuspend") {
-      sterlingsuspend
-    }
-    
-    else if (Varsuspend() == "sugarlandsuspend") {
-      sugarlandsuspend
-    }
-    
-    else if (Varsuspend() == "sullysuspend") {
-      sullysuspend
-    }
-    
-    
   })
-  
   
   
   
