@@ -3606,22 +3606,22 @@ ui <- navbarPage(title = "DSPG",
                                           p("In our research, we found that there are few families engagement resources available within a 10-minute drive of Sterling Elementary, a possible opportunity to help reduce travel time for parents could be to host a resource fair at the schools allowing parents easy access to these resources. Community School Liaisons also indicate that “rent,” “internet,” “housing,” and “food” are also significant challenges for families at these community schools. This is also essential as some students have a large population of students who experience homelessness. Thus, helping families within these areas would be beneficial. ")
                  ),
                  column(5, align= "justify",
-                        h2(strong("Major Takeaways for Each School")),
+                        h2(strong("Individual School Key Takeaways")),
                         p("The following takeaways are conclusions from the school reports that each school representative submitted in the year 2020-2021 and the various visualizations in the previous tabs from the data collected from Virginia Department of Education and Loudoun Dashboard. "),
                         h4(strong("Forest Grove")),
                         tags$div(
                           tags$ul(
-                            tags$li("Fewer key partners to support their four pillars "),
+                            tags$li("Few key partners to support their four pillars"),
                             tags$li("School representatives view family engagement as a major challenge "),
-                            tags$li("Enrollment has decreased "),
-                            tags$li("Chronic absenteeism has decreased "),
-                            tags$li("Several meetings with the Unified Mental Health Team strengthening mental health resources"))),
+                            tags$li("Decrease in enrollment rate "),
+                            tags$li("Decrease in chronic absenteeism "),
+                            tags$li("Strengthen Mental Health resources – meetings with Unified Mental Health Team"))),
                         h4(strong("Guilford")),
                         tags$div(
                           tags$ul(
                             tags$li("Few partners to support youth development pillar "),
                             tags$li("Community internet needs reported as a major challenge "),
-                            tags$li("Doing well in the health and social services and family engagement pillar "),
+                            tags$li("Good support in Health and Social Services and Family Engagement pillars "),
                             tags$li("Parents feel adept at using technology to aid in learning "),
                             tags$li("High proportion of Hispanic students  "),
                             ),
@@ -3629,29 +3629,29 @@ ui <- navbarPage(title = "DSPG",
                         h4(strong("Rolling Ridge")),
                         tags$div(
                           tags$ul(
-                            tags$li("Increases in mental health resources"),
+                            tags$li("Increases in Mental Health resources"),
                             tags$li("High proportion of Hispanic students "),
                             tags$li("School reports to be well connected with families"),
-                            tags$li("Lowest student to teacher ratio of all the schools"),
+                            tags$li("Lowest student to teacher ratio"),
                                )),
                           h4(strong("Sterling")),
                           tags$div(
                             tags$ul(
-                              tags$li("Representatives say mental health resources are a major challenge "),
+                              tags$li("Mental Health resources are a major challenge as reported by School representative "),
                               tags$li("Several partners in Health and Social Services and Youth Development pillar "),
-                              tags$li("Maintained levels of chronic absenteeism"),
+                              tags$li("Maintained levels of chronic absenteeism during pandemic"),
                             )),
                             h4(strong("Sugarland")),
                             tags$div(
                               tags$ul(
-                                tags$li("Representatives view family engagement as a key challenge "),
+                                tags$li("Representatives view Family Engagement as a key challenge "),
                                 tags$li("Highest levels of chronic absenteeism  "),
-                                tags$li("Appears to have fewer key partners than other schools"),
+                                tags$li("Appears to have least number of key partners"),
                               )),
                               h4(strong("Sully")),
                               tags$div(
                                 tags$ul(
-                                  tags$li("Low performance on math and English standardized exams "),
+                                  tags$li("Low performance on Math and English standardized exams "),
                                   tags$li("Highest student to teacher ratio with the lowest enrollment "),
                                   tags$li("Large proportion of Hispanic students "),
                                 )),
