@@ -86,9 +86,11 @@ options(spinner.color = prettyblue, spinner.color.background = '#ffffff', spinne
 colors <- c("#232d4b","#2c4f6b","#0e879c","#60999a","#d1e0bf","#d9e12b","#e6ce3a","#e6a01d","#e57200","#fdfdfd")
 
 
-# data -----------------------------------------------------------
+#Data -----------------------------------------------------------
 
-# Sterling Map -----------------------------------------------------
+#The Initiative Tab Data ------------------------------------------
+
+#Sterling’s Elementary Community Schools-----------------------------------------------------
 
 blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia",
           "Block Group 2, Census Tract 6112.05, Loudoun County, Virginia",
@@ -110,6 +112,7 @@ blocks<-c("Block Group 1, Census Tract 6112.05, Loudoun County, Virginia",
           "Block Group 1, Census Tract 6116.01, Loudoun County, Virginia",
           "Block Group 2, Census Tract 6116.01, Loudoun County, Virginia", 
           "Block Group 3, Census Tract 6112.02, Loudoun County, Virginia")
+
 va20_2 <- readRDS(paste0(getwd(),"/data/va20_2.RDS" )) %>%
   filter(NAME %in% blocks)
 
@@ -146,6 +149,8 @@ map1<-leaflet(data = map) %>% addTiles() %>%
               fillOpacity = 0.5)  %>% addPolygons(data = va_20_CDP,color="red",weight = 0.5,smoothFactor = 0.2,fillOpacity = 0.5) %>%
   addMarkers(~Longitude, ~Latitude, popup = popups, label = ~as.character(Name))
 
+#Sociodemographics Tab Data
+#Demographic Subtab Data
 
 #----------Gender---------------------------------------------
 
@@ -185,22 +190,25 @@ race <- plot_ly(type='pie', labels=labelsR, values=valuesRACEPIE,
                 
                 insidetextorientation='radial') %>% layout(title ='Race/Ethnicity Composition 2019', legend=list(title=list(text='Select Race')))
 
-#------------Hispanic Percentage-------------
+#Income Sub tab----
 
-labelsHispanicPIE = c('Hispanic or Latino','Not Hispanic or Latino')
-valuesHispanicPIE = c(12472, 17799)
+#------------------educational attainment-------------------------
 
-HispanicPercentagePIE <- plot_ly(type='pie', labels=labelsHispanicPIE, values=valuesHispanicPIE, 
-                                 textinfo='label+percent',
-                                 insidetextorientation='radial',
-                                 hoverinfo = 'text', 
-                            
+#sterling <- read_excel(paste0(getwd(),"/data/Loudouncountyeducation.xlsx"),skip=2,col_names=TRUE)
+df2 <- data.frame(
+  levels=c("Less than 9th grade",
+           "9th to 12th grade, no diploma","High School graduate",
+           "Some college or no degree","Associate's degree",
+           "Bachelor's Degree",
+           "Graduate or professional"),
+  Total=c(2193, 1943, 4050, 3094, 1396, 4706, 2402))
 
-                                 text = ~paste('Total Population:', valuesHispanicPIE)) %>% layout(title ='Hispanic Population In Sterling 2019', legend=list(title=list(text='')))
+df2$levels <- factor(df2$levels, levels = df2$levels)
+p<-ggplot(df2,aes(levels, Total, )) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "", y = "Total Population", caption = " Source : S1501 ACS 5-yr data 2016-2020", title = "Population 25 and Over Educational Attainment by Degree") + coord_flip()
 
+education <- ggplotly(p, tooltip = c("", "Total"))
 
-
-#-------income--------------------------------
+#-------family income--------------------------------
 medianin <- read_excel(paste0(getwd(),"/data/incomemedian.xlsx"))
 
 subset_medianin <- medianin[4:13, 1:5]
@@ -214,6 +222,37 @@ subset_medianin$new_pop<-gsub("%$","",subset_medianin$...4)
 pop_nop <- subset_medianin$new_pop
 pop_num <- as.numeric(pop_nop)
 income <- plot_ly(subset_medianin,x=~mi_cat.fac,y=~pop_num,color = ~mi_cat.fac,type = "bar", hoverinfo = "text",text = ~paste("Percent:",pop_num,"%","<br>","Income Level:",mi_cat.fac)) %>% layout(title = "Median Income Distribution",xaxis = list(title="") ,yaxis= list(title = "Percentage"))
+
+#------------------poverty status-------------------------------
+
+poverty_as1<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
+                         sheet = "Data")
+
+subset_poverty_as1 <- poverty_as1[3:28, 1:4]
+
+#subset_poverty_as$Estimate[1:26]
+povas_pop1 <- subset_poverty_as1$Estimate
+povas_pop1 <- as.numeric(povas_pop1)
+povas_cat1 <- subset_poverty_as1$Label
+
+Total1 <- povas_pop1
+
+cat1 <- as.character(povas_cat1)
+
+pov <- plot_ly(subset_poverty_as1, x = cat1, y = Total1, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Total:",Total1,"<br>","Age:",cat1,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = cat1))
+
+#---------------------Health Coverage----------------------------
+
+
+sterling <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
+subset_sterling <- sterling[c(103:105),]
+subset_sterling$...4 <- as.numeric(gsub("%", "", subset_sterling$...4) )
+subset_sterling$`EMPLOYMENT STATUS` <- reorder(subset_sterling$`EMPLOYMENT STATUS`, subset_sterling$...4)
+health <- ggplot(subset_sterling, aes(x =`EMPLOYMENT STATUS`,y = (subset_sterling$...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5, aes(text = paste0(...4, "%"))) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020") + ggtitle("Distribution of Health Insurance") + guides(fill = guide_legend(title = ""))+ theme(axis.text.y = element_text(angle=0), axis.ticks.y= element_blank())+ coord_flip()#
+
+
+healthin <- ggplotly(health, tooltip = c("text"))
+
 #---------Property Value---------------------------------
 
 dfpv <- read_excel(paste0(getwd(), "/data/Property_Value.xlsx"), col_names = TRUE)
@@ -249,16 +288,40 @@ propcomparison <- plot_ly(
 propcomparison <- propcomparison %>%
   layout(margin = list(l=20,r=30))
 
-propcomparison
 
-#------------Housing Occupancy---------------------------
+#-----------Occupation/Work sub tab-----------------------------------------
 
-lbls.HOUSING = c("Owners", "Renters")
-slices.HOUSING = c(6839, 2412)
 
-housing <- plot_ly(type='pie', labels=lbls.HOUSING, values=slices.HOUSING, 
-                   textinfo='label+percent',
-                   insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Occupants')))
+#------------------Employment-----------------
+sterling <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
+subset_sterling <- sterling[(4:5), c(1:2,4)]
+employed <- as.numeric(sub("%", "", subset_sterling[1, "...4"]))
+unemployed <- as.numeric(sub("%", "", subset_sterling[2, "...4"]))
+subset_sterling[, "...4"] <- c(employed, unemployed)
+
+
+labor <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + 
+  
+  geom_bar(position = "stack", stat="identity", width = 0.25, aes(text = paste0("Percentage: ",...4, "%\n", "Total: ",...2))) + 
+  
+  labs(x = "", y= "Percentage", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment Status")+ guides(fill = guide_legend(title = ""))+ scale_y_continuous(limits = c(0,85))
+employment <- ggplotly(labor, tooltip = c("text"))
+
+
+
+#-------------------work occupation----------------------
+
+subset_sterling <- sterling[c(29:33),]
+subset_sterling$`EMPLOYMENT STATUS` <- gsub(" occupations", "", subset_sterling$`EMPLOYMENT STATUS`)
+subset_sterling$`...2` <- gsub(",", "", subset_sterling$`...2`)
+percNum <- c()
+for(i in 1:5){
+  percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
+}
+subset_sterling[, "...4"] <- percNum
+occupation <- ggplot(subset_sterling, aes(x = reorder(`EMPLOYMENT STATUS`,...4), y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5, aes(text = paste0("Percentage: ",...4, "%\n", "Total: ", ...2)))+ theme(axis.text.x = element_text(angle=0), legend.position="none") + labs(x = "", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment by Sector") + coord_flip()
+
+occuplot <- ggplotly(occupation, tooltip = c("text"))
 
 #-------------Commuter Time------------------------------
 
@@ -270,6 +333,7 @@ commutertime <- plot_ly(type='funnelarea', labels=labelsCT, values=valuesCT, sor
                         textinfo='percent',
                         hoverinfo = 'text', text = ~paste('Total Number of Commuters:', valuestotalCT),
                         insidetextorientation='radial') %>% layout(title ='Commuter Time to Work', showlegend=TRUE, legend=list(title=list(text='')), legend=list(x=1, y=0.5))
+
 
 #-----------------Commuter mode--------------------------
 my_colors <- c("#CA001B", "#1D28B0", "#D71DA4", "#00A3AD", "#FF8200", "#753BBD", "#00B5E2", "#008578", "#EB6FBD", "#FE5000", "#6CC24A", "#D9D9D6", "#AD0C27", "#950078")
@@ -285,24 +349,33 @@ perc <- round(valuesR / sum(valuesR)*100, 1)
 commutermode <- plot_ly(type='pie', labels=~labelsR, values=~valuesR, hoverinfo = "none", 
                         text = ~paste0(labelsR, "\n", perc, "%"), 
                         textinfo='text') %>% layout(title ='Mode of Transportation to Work', legend=list(title=list(text='')), hoverinfo = "none")
-#------------------poverty-------------------------------
+#------------Hispanic Percentage-------------
 
-poverty_as1<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
-                         sheet = "Data")
+labelsHispanicPIE = c('Hispanic or Latino','Not Hispanic or Latino')
+valuesHispanicPIE = c(12472, 17799)
 
-subset_poverty_as1 <- poverty_as1[3:28, 1:4]
+HispanicPercentagePIE <- plot_ly(type='pie', labels=labelsHispanicPIE, values=valuesHispanicPIE, 
+                                 textinfo='label+percent',
+                                 insidetextorientation='radial',
+                                 hoverinfo = 'text', 
+                            
 
-#subset_poverty_as$Estimate[1:26]
-povas_pop1 <- subset_poverty_as1$Estimate
-povas_pop1 <- as.numeric(povas_pop1)
-povas_cat1 <- subset_poverty_as1$Label
+                                 text = ~paste('Total Population:', valuesHispanicPIE)) %>% layout(title ='Hispanic Population In Sterling 2019', legend=list(title=list(text='')))
 
-Total1 <- povas_pop1
 
-cat1 <- as.character(povas_cat1)
 
-pov <- plot_ly(subset_poverty_as1, x = cat1, y = Total1, color = ~Sex, type = "bar", hoverinfo = "text",text = ~paste("Total:",Total1,"<br>","Age:",cat1,"<br>","Sex:",Sex)) %>% layout(title = "Poverty by Age and Sex",xaxis = list(title="",barmode = "group", categoryorder = "array", categoryarray = cat1))
-#-#--------gender by school-------------------------------------------------
+
+#------------Housing Occupancy---------------------------
+
+lbls.HOUSING = c("Owners", "Renters")
+slices.HOUSING = c(6839, 2412)
+
+housing <- plot_ly(type='pie', labels=lbls.HOUSING, values=slices.HOUSING, 
+                   textinfo='label+percent',
+                   insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Occupants')))
+
+
+#---------gender by school-------------------------------------------------
 
 
 genders <- data.frame(Sex=rep(c("Male", "Female"), each=6),
@@ -328,65 +401,6 @@ quarter <- attendance$`School Quarter`
 School <- attendance$`School Name`
 attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
 
-
-
-#------------------employment-----------------
-sterling <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
-subset_sterling <- sterling[(4:5), c(1:2,4)]
-employed <- as.numeric(sub("%", "", subset_sterling[1, "...4"]))
-unemployed <- as.numeric(sub("%", "", subset_sterling[2, "...4"]))
-subset_sterling[, "...4"] <- c(employed, unemployed)
-
-
-labor <- ggplot(subset_sterling, aes(x = `EMPLOYMENT STATUS`, y = ...4, fill = `EMPLOYMENT STATUS`)) + 
-  
-  geom_bar(position = "stack", stat="identity", width = 0.25, aes(text = paste0("Percentage: ",...4, "%\n", "Total: ",...2))) + 
-  
-  labs(x = "", y= "Percentage", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment Status")+ guides(fill = guide_legend(title = ""))+ scale_y_continuous(limits = c(0,85))
-employment <- ggplotly(labor, tooltip = c("text"))
-
-
-#-------------------work occupation----------------------
-
-subset_sterling <- sterling[c(29:33),]
-subset_sterling$`EMPLOYMENT STATUS` <- gsub(" occupations", "", subset_sterling$`EMPLOYMENT STATUS`)
-subset_sterling$`...2` <- gsub(",", "", subset_sterling$`...2`)
-percNum <- c()
-for(i in 1:5){
-  percNum <- c(percNum, as.numeric(sub("%", "", subset_sterling[i, "...4"])))
-}
-subset_sterling[, "...4"] <- percNum
-occupation <- ggplot(subset_sterling, aes(x = reorder(`EMPLOYMENT STATUS`,...4), y = (...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5, aes(text = paste0("Percentage: ",...4, "%\n", "Total: ", ...2)))+ theme(axis.text.x = element_text(angle=0), legend.position="none") + labs(x = "", y = "Percentages", caption = " Source : DP03 ACS 5-yr data 2016-2020", title = "Employment by Sector") + coord_flip()
-
-occuplot <- ggplotly(occupation, tooltip = c("text"))
-
-
-#------------------education-------------------------
-
-#sterling <- read_excel(paste0(getwd(),"/data/Loudouncountyeducation.xlsx"),skip=2,col_names=TRUE)
-df2 <- data.frame(
-  levels=c("Less than 9th grade",
-           "9th to 12th grade, no diploma","High School graduate",
-           "Some college or no degree","Associate's degree",
-           "Bachelor's Degree",
-           "Graduate or professional"),
-  Total=c(2193, 1943, 4050, 3094, 1396, 4706, 2402))
-
-df2$levels <- factor(df2$levels, levels = df2$levels)
-p<-ggplot(df2,aes(levels, Total, )) + geom_col(fill = "skyblue") + theme(axis.text.x = element_text(angle=0)) +labs(x = "", y = "Total Population", caption = " Source : S1501 ACS 5-yr data 2016-2020", title = "Population 25 and Over Educational Attainment by Degree") + coord_flip()
-
-education <- ggplotly(p, tooltip = c("", "Total"))
-#---------------------health insurance----------------------------
-
-
-sterling <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
-subset_sterling <- sterling[c(103:105),]
-subset_sterling$...4 <- as.numeric(gsub("%", "", subset_sterling$...4) )
-subset_sterling$`EMPLOYMENT STATUS` <- reorder(subset_sterling$`EMPLOYMENT STATUS`, subset_sterling$...4)
-health <- ggplot(subset_sterling, aes(x =`EMPLOYMENT STATUS`,y = (subset_sterling$...4), fill = `EMPLOYMENT STATUS`)) + geom_bar(position = "stack", stat="identity", width = 0.5, aes(text = paste0(...4, "%"))) + labs(x = "Insurance Type", y= "Percentage", caption = " Source : DP03 ACS 5 -yr data 2016-2020") + ggtitle("Distribution of Health Insurance") + guides(fill = guide_legend(title = ""))+ theme(axis.text.y = element_text(angle=0), axis.ticks.y= element_blank())+ coord_flip()#
-
-
-healthin <- ggplotly(health, tooltip = c("text"))
 
 
 #-------------------------------race by school ----------------------------
