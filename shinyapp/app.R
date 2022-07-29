@@ -77,12 +77,6 @@ library(scales)
 library(ggwordcloud)
 library(wordcloud2)
 library(collapsibleTree)
-library(tm)
-library(SnowballC)
-library(wordcloud)
-library(RColorBrewer)
-
-
 #---------------------------------------------------------------
 
 prettyblue <- "#232D4B"
@@ -364,8 +358,8 @@ HispanicPercentagePIE <- plot_ly(type='pie', labels=labelsHispanicPIE, values=va
                                  textinfo='label+percent',
                                  insidetextorientation='radial',
                                  hoverinfo = 'text', 
-                            
-
+                                 
+                                 
                                  text = ~paste('Total Population:', valuesHispanicPIE)) %>% layout(title ='Hispanic Population In Sterling 2019', legend=list(title=list(text='')))
 
 
@@ -380,12 +374,6 @@ housing <- plot_ly(type='pie', labels=lbls.HOUSING, values=slices.HOUSING,
                    textinfo='label+percent',
                    insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Occupants')))
 
-
-# SCHOOLS TAB DATA----------------
-
-# DEMOGRAPHICS SUB TAB-------------------
-
-# GENDER SUB TAB
 
 #---------gender by school-------------------------------------------------
 
@@ -404,7 +392,18 @@ genders<- ggplot(data=genders, aes(x=School, y=Total, fill = forcats::fct_rev(Se
 genders <-ggplotly(genders, tooltip = c("text"))
 
 
-#-------------------------------Race/ETHNICITY by school ----------------------------
+#attendance --------------
+
+attendance <- read_excel(paste0(getwd(),"/data/absencerate.xlsx"))
+att_per <- attendance$`Absence Rate`
+att_rate <- att_per*100
+quarter <- attendance$`School Quarter`
+School <- attendance$`School Name`
+attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
+
+
+
+#-------------------------------race by school ----------------------------
 
 races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
 
@@ -446,11 +445,6 @@ hispanicschool <- leaflet(data = total) %>%
             values = ~va20_2$estimate,
             opacity = 0.5, title = "Hispanic Population") %>%
   addMarkers( ~Longitude, ~Latitude, popup = popups, label = ~as.character(Name), labelOptions = FALSE) 
-
-#--------------------------Performance Sub tab ------------------------------
-
-# Size 
-
 #-----------enrollment-----------------
 
 enrollment <- read_excel(paste0(getwd(),"/data/Enrollment16-20.xlsx"))
@@ -459,7 +453,16 @@ School <- enrollment$Schools
 Year <- enrollment$Year
 enroll <- plot_ly(enrollment, x = ~Year,y = ~Total, color = ~School, type = 'scatter',mode = 'lines', hoverinfo="text", text = ~paste("Total:", Total, "<br>", "School:",School)) %>% layout(title= "Enrollment", xaxis = list(title = ""), yaxis = list(title = "Total Students"), legend=list(title=list(text='Select School')))
 
-#---------------Educators - Number of Teachers/Staff--------------------------
+#-------------------attendance --------------
+
+att_per <- attendance$`Absence Rate`
+Percent <- att_per*100
+Quarter <- attendance$`School Quarter`
+School <- attendance$`School Name`
+ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(title = "Student Absences by 2020-2021 Quarter",caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",
+                                                                                                                                                                                                                                      plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
+attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("Percent:",Percent, "%","<br>","School:",School)) %>% layout(title = "Student Absences by 2020-2021 Quarter", legend=list(title=list(text='Select School')), yaxis = list(title = "Percentage"), xaxis = list(title = ""))
+#---------------Number of Teachers/Staff--------------------------
 
 Schools <- c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
 Teachers <- c(32, 52, 66, 55, 59, 35)
@@ -472,19 +475,6 @@ figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = '
 
 figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(253, 151, 12 )'))
 cteacher <- figSTM %>% layout(title = "Total Teachers and Staff 2021-2022", yaxis = list(title = 'Total Educators'), xaxis = list(title = ''), barmode = 'stack')
-
-#Absenses---------
-#Absenses --------------
-
-attendance <- read_excel(paste0(getwd(),"/data/absencerate.xlsx"))
-
-att_per <- attendance$`Absence Rate`
-Percent <- att_per*100
-Quarter <- attendance$`School Quarter`
-School <- attendance$`School Name`
-ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(title = "Student Absences by 2020-2021 Quarter",caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",
-                                                                                                                                                                                                                                      plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
-attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("Percent:",Percent, "%","<br>","School:",School)) %>% layout(title = "Student Absences by 2020-2021 Quarter", legend=list(title=list(text='Select School')), yaxis = list(title = "Percentage"), xaxis = list(title = ""))
 
 ##--------Chronic absenteeism------------------
 
@@ -504,10 +494,367 @@ absentieesm %>% filter(Subgroup == "All Students") -> absentieesm
 
 chronic <- plot_ly(absentieesm, x = ~Year, y = ~`Percent above 10`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent above 10`, "%", "<br>", "School:",School))%>% layout(title = "Chronic Absenteeism", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
-#----------------- Assessment Sub Tab --------------------------
-#---------------- all students -------------------------------
-#------------------- students by race ----------------------
-#------------------ Mathematics -------------------------------
+
+
+#--------------free or not free resources ---------------------------------------
+
+costs <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"))
+foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
+#---------------map_health and isochrones-----------------------------------------
+
+#install.packages("remotes")
+#remotes::install_github("tlorusso/traveltimeR")
+
+YourAPIKey <- "32f6ed99d0636fe05d01a5ff5a99c6e7"
+YourAppId <- "190b7348"
+
+traveltime10 <- read_sf("data/iso_10_sterling.shp")
+traveltime20 <- read_sf("data/iso_20_sterling.shp")
+traveltime45 <- read_sf("data/iso_45_sterling.shp")
+# traveltime10 <- traveltime_map(appId=YourAppId,
+#                                apiKey=YourAPIKey,
+#                                location=c(39.009006,-77.4029155),
+#                                traveltime=600,
+#                                type="driving",
+#                                departure="2022-08-09T08:00:00+01:00")
+# # ... and within 60 minutes?
+# traveltime20 <- traveltime_map(appId=YourAppId,
+#                                apiKey=YourAPIKey,
+#                                location=c(39.009006,-77.4029155),
+#                                traveltime=1200,
+#                                type="driving",
+#                                departure="2022-08-09T08:00:00+01:00")
+# traveltime45 <- traveltime_map(appId = YourAppId,
+#                                apiKey = YourAPIKey,
+#                                location = c(39.009006,-77.4029155),
+#                                traveltime= 2700,
+#                                type = "driving",
+#                                departure = "2022-08-09T08:00:00+01:00")
+map<- read_excel(paste0(getwd(),"/data/school_locations.xlsx"))
+
+subset_map <- map[1,c(1,4,5)]
+
+healthsep <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(healthsep$Name1),
+        "<br />",
+        "<strong>Description:</strong>",
+        healthsep$Description1 ,
+        "<br />",
+        "<strong>Serves:</strong>",
+        healthsep$Serves1, 
+        "<br />",
+        "<strong>Hours:</strong>",
+        healthsep$Hours1,
+        "<br />",
+        "<strong>Language:</strong>",
+        healthsep$Language,
+        "<br />",
+        "<strong>Address:</strong>",
+        healthsep$Address1,
+        "<a href = ",healthsep$Website1, "> Website </a>",
+        "<br />"),
+  
+  htmltools::HTML
+)
+
+popup <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(costs$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        costs$Description ,
+        "<br />",
+        "<strong>Serves:</strong>",
+        costs$Serves, 
+        "<br />",
+        "<strong>Hours:</strong>",
+        costs$Hours,
+        "<br />",
+        "<strong>Language:</strong>",
+        costs$Language,
+        "<br />",
+        "<strong>Address:</strong>",
+        costs$Address,
+        "<a href = ",costs$Website, "> Website </a>",
+        "<br />"),
+  
+  htmltools::HTML
+)
+
+healthfree <- read_excel(paste0(getwd(), "/data/resourcecost.xlsx"),sheet = "Health Free")
+
+
+
+pal <- colorFactor(c("#91003f", "#005824", "#d7301f","#CC6677","#DDCC77","#88419d"), domain = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"))
+pal1 <- colorFactor(c("#91003f","#005824","#d7301f","#88419d","#DDCC77","#CC6677","#AA4499","#882255"),domain = c("Food Pantry","Clothing","Counseling","Dental Care","Vision Care","Medical Services","Speech and Hearing Services","Physical Therapy"))
+
+
+leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=costs,~Longitude,~Latitude,popup = ~popup, label = ~as.character(Name),group = ~Resource,color = ~pal(Resource),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addLayersControl(overlayGroups = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"),options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
+  setView(-77.4029155,39.009006, zoom = 11) -> health_free
+
+
+
+leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=foods,~Longitude1,~Latitude1,popup=~popups,label=~as.character(Name1),color= ~pal1(Resource1),group = ~Resource1,weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> health_all
+#--------------youth development map --------------------------
+
+youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 3.xlsx"))
+popups3 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(youth$Name3),
+        "<br />",
+        "<strong>Description:</strong>",
+        youth$Description3 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        youth$Hours3, 
+        "<br />",
+        "<strong>Address:</strong>",
+        youth$Address3,
+        "<a href = ",youth$Website3, "> Website </a>",
+        "<br />"),
+  
+  
+  htmltools::HTML
+)
+
+pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
+
+leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=youth,~Longitude3,~Latitude3,popup=~popups3,label=~as.character(Name3),color= ~pal3(Type),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1,group = ~Type)%>%
+  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
+
+
+youthfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth Free")
+
+popups4 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(youthfree$Name4),
+        "<br />",
+        "<strong>Description:</strong>",
+        youthfree$Description4 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        youthfree$Hours4, 
+        "<br />",
+        "<strong>Address:</strong>",
+        youthfree$Address4,
+        "<a href = ",youthfree$Website4, "> Website </a>",
+        "<br />"),
+  htmltools::HTML
+)
+
+pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
+
+leaflet(data = youthfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=youthfree,~Longitude4,~Latitude4,popup=~popups4,label=~as.character(Name4),color= ~pal3(Type),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1,group = ~Type)%>%
+  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> youth_free
+
+
+#---------mental health resources map------------------------
+
+ment <- read_excel(paste0(getwd(),"/data/mentalhealthres.xlsx"),sheet = "Mental")
+
+popups2 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(ment$Name2),
+        "<br />",
+        "<strong>Description:</strong>",
+        ment$Description2 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        ment$Hours2, 
+        "<br />",
+        "<strong>Address:</strong>",
+        ment$Address2,
+        "<a href = ",ment$Website2, "> Website </a>",
+        "<br />"),
+  
+  
+  htmltools::HTML
+)
+
+pal2 <- colorFactor(c("red", "blue", "green"), domain = c("Family Therapy", "Family Counseling", "Bereavement"))
+
+leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=ment,~Longitude2,~Latitude2,popup=~popups2,label=~as.character(Name2),group=~Resources2,color=~pal2(Resources2),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resources2,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
+
+mentfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Mental Free")
+
+popups5 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(mentfree$Name5),
+        "<br />",
+        "<strong>Description:</strong>",
+        mentfree$Description5 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        mentfree$Hours5, 
+        "<br />",
+        "<strong>Address:</strong>",
+        mentfree$Address5,
+        "<a href = ",mentfree$Website5, "> Website </a>",
+        "<br />"),
+  
+  
+  htmltools::HTML
+)
+
+leaflet(data = mentfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data = mentfree, ~Longitude5,~Latitude5,popup = ~popups5,label = ~as.character(Name5),group = ~Resource5,color = ~pal2(Resource5),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resource5,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> mental_free
+
+
+#----------------------family engagement map-------------------
+
+familyengage <- read_excel(paste0(getwd(),"/data/ListOfResources.xlsx"),sheet = "Family Engagement")
+
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(familyengage$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        familyengage$Description ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        familyengage$Hours, 
+        "<br />",
+        "<strong>Address:</strong>",
+        familyengage$Address,
+        "<br />",
+        "<a href = ",familyengage$Website, "> Website </a>",
+        "<br />",
+        "<strong>Serves:</strong>",
+        familyengage$Serves),
+  
+  
+  htmltools::HTML
+)
+
+pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Housing", "Holiday Help", "Education", "Essentials supply", "Employment help", "Other"))
+
+leaflet(data = familyengage) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=familyengage,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal8(Resources),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_family
+
+famfree <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family Free")
+
+popups9 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(famfree$Name8),
+        "<br />",
+        "<strong>Description:</strong>",
+        famfree$Description8 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        famfree$Hours8, 
+        "<br />",
+        "<strong>Address:</strong>",
+        famfree$Address8,
+        "<br />",
+        "<a href = ",famfree$Website8, "> Website </a>",
+        "<br />",
+        "<strong>Serves:</strong>",
+        famfree$Serves8),
+  
+  
+  htmltools::HTML
+)
+
+pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Education", "Employment help","Essentials Supply","Housing", "Holiday Help","Other"))
+
+leaflet(data = famfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=famfree,~Longitude8,~Latitude8,popup=~popups9,label=~as.character(Name8),group=~Resource8,color=~pal8(Resource8),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resource8,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> fam_free
+
+
+#resource table ----------------------------
+list <- read_excel(paste0(getwd(),"/data/allresources.xlsx")) 
+
+
+#-----------------Performance Graphs - assessment  --------------------------
+#----------------all students-------------------------------
+
+#-------------------students by race----------------------
+#------------------Mathematics-------------------------------
+
 
 assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
@@ -524,6 +871,8 @@ forestgroverace <- plot_ly(assessmentraceForestGrove, x = ~Year, y = ~`Percent P
 
 #----------------Sugarland------------------------------------------------
 
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
 assessment %>% filter(School == "Sugarland" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSugarland
 
 sugarlandrace <- plot_ly(assessmentraceSugarland, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
@@ -536,6 +885,8 @@ sugarlandrace <- plot_ly(assessmentraceSugarland, x = ~Year, y = ~`Percent Pass`
 ))
 
 #-------------------Guilford------------------------------------
+
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Guilford" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceGuilford
 
@@ -550,6 +901,8 @@ guilfordrace <- plot_ly(assessmentraceGuilford, x = ~Year, y = ~`Percent Pass`, 
 
 #-------------------------------Rolling Ridge------------------
 
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
 assessment %>% filter(School == "Rolling Ridge" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceRollingRidge
 
 rrrace <- plot_ly(assessmentraceRollingRidge, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
@@ -562,6 +915,8 @@ rrrace <- plot_ly(assessmentraceRollingRidge, x = ~Year, y = ~`Percent Pass`, co
 ))
 
 #-----------------------------Sterling--------------------
+
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Sterling" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSterling
 
@@ -576,6 +931,8 @@ sterlingrace <- plot_ly(assessmentraceSterling, x = ~Year, y = ~`Percent Pass`, 
 
 #----------------------Sully--------------------------
 
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
 assessment %>% filter(School == "Sully" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSully
 
 sullyrace <- plot_ly(assessmentraceSully, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
@@ -589,7 +946,8 @@ sullyrace <- plot_ly(assessmentraceSully, x = ~Year, y = ~`Percent Pass`, color 
 
 #------------------English------------------
 
-#-----------------Forest Grove------------------------------------------
+#-----------------Forest Grove-------------------------------------------
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Forest Grove" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceForestGroveeng
 
@@ -604,6 +962,8 @@ forestgroveraceeng <- plot_ly(assessmentraceForestGroveeng, x = ~Year, y = ~`Per
 
 #----------------Sugarland------------------------------------------------
 
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
 assessment %>% filter(School == "Sugarland" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSugarlandeng
 
 sugarlandraceeng <- plot_ly(assessmentraceSugarlandeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
@@ -616,6 +976,8 @@ sugarlandraceeng <- plot_ly(assessmentraceSugarlandeng, x = ~Year, y = ~`Percent
 ))
 
 #-------------------Guilford------------------------------------
+
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Guilford" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceGuilfordeng
 
@@ -630,6 +992,8 @@ guilfordraceeng <- plot_ly(assessmentraceGuilfordeng, x = ~Year, y = ~`Percent P
 
 #-------------------------------Rolling Ridge------------------
 
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
 assessment %>% filter(School == "Rolling Ridge" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceRollingRidgeeng
 
 rrraceeng <- plot_ly(assessmentraceRollingRidgeeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
@@ -643,6 +1007,8 @@ rrraceeng <- plot_ly(assessmentraceRollingRidgeeng, x = ~Year, y = ~`Percent Pas
 
 #-----------------------------Sterling--------------------
 
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
 assessment %>% filter(School == "Sterling" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSterlingeng
 
 sterlingraceeng <- plot_ly(assessmentraceSterlingeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
@@ -655,6 +1021,8 @@ sterlingraceeng <- plot_ly(assessmentraceSterlingeng, x = ~Year, y = ~`Percent P
 ))
 
 #----------------------Sully--------------------------
+
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Sully" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSullyeng
 
@@ -1207,7 +1575,120 @@ english_homeless <- plot_ly(assessmenthomelessenglish, x = ~Year, y = ~`Percent 
 ))
 
 
-#-----------------Performance Graphs - Assessment  --------------------------
+
+
+
+#-------------word clouds--------------------
+#------------cloud_1-------------------------
+
+#install.packages("tm")  # for text mining
+#install.packages("SnowballC") # for text stemming
+#install.packages("wordcloud") # word-cloud generator 
+#install.packages("RColorBrewer") # color palettes
+# Load
+library("tm")
+library("SnowballC")
+library("wordcloud")
+library("RColorBrewer")
+
+
+text1 <- "Internet needs were very overwhelming in our community, virtual presence of students created difficulties with individual telecounseling, student engagement in school an ongoing concern time to provide for the basic needs; finding mental health providers for elementary aged students (this was a huge challenge); medical care for undocumented and uninsured Parent involvement internet access; monetary stressors - rent, food, hygiene and cleanliness supplies needs and health (COVID) and mental health needs Maintaining the same level of connectedness with families in the DL model as those attending in person.parent engagement, parent attendance, finding medical care for undocumented and uninsured, finding housing assistance for undocumented Our challenge is the overall transiency of our student population turnover; community mental health and medical supports; undocumented and uninsured medical care parent involvement Youth development activities We would like to continue to diversify our community partner list community mental health and medical supports, undocumented and uninsured medical care"
+
+#docs <- Corpus(VectorSource(text))
+
+
+Clean_String <- function(string){
+  # Lowercase
+  temp <- tolower(string)
+  # Remove everything that is not a number or letter (may want to keep more 
+  # stuff in your actual analyses). 
+  temp <- stringr::str_replace_all(temp,"[^a-zA-Z\\s]", " ")
+  # Shrink down to just one white space
+  temp <- stringr::str_replace_all(temp,"[\\s]+", " ")
+  temp <- stringr::str_replace_all(temp,";", " ")
+  # Split it
+  temp <- stringr::str_split(temp, " ")[[1]]
+  # Get rid of trailing "" if necessary
+  indexes <- which(temp == "")
+  if(length(indexes) > 0){
+    temp <- temp[-indexes]
+  } 
+  return(temp)
+}
+
+clean1 <- Clean_String(text1)
+
+docs1 <- Corpus(VectorSource(clean1))
+
+docs1 <- tm_map(docs1, removeWords, c("to", "challenge", "concern", "level", "aged", "created", "elementary", "basic", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "continue", "provide"))
+
+
+dtm1 <- TermDocumentMatrix(docs1) 
+matrix1 <- as.matrix(dtm1) 
+words1 <- sort(rowSums(matrix1),decreasing=TRUE) 
+df1 <- data.frame(word = names(words1),freq=words1)
+
+
+
+set.seed(1234) # for reproducibility 
+cloud1 <- wordcloud2(df1, size=0.5)
+
+#---------Cloud 2-----------------------
+
+text2 <- "Many families attended our family outreach and engagement initiatives, teaching families how to operate Schoology.  Families are now very adept at using technology to help their students and support teachers and instruction
+student attendance and active engagement; virtual home visits
+Reduction of gaggle reports
+Virtual Home Visits and United Mental Health screening; hot spots, 1-1 technology
+Staying connected with families and working to empower families to be active in the school community. We offered support to families throughout the year and were responsive to needs as they arose. We worked together collaboratively.
+We have the Principal of the Year, School is a warm and welcoming place - Principal and VP tell students every day that they are loved and wanted, staff have risen to the occasion to offer quality instruction in this challenging time Excellent teachers and supportive and caring administration, cohesive working environment. positive climate, PEP, Parent Liaison always actively engaged and helping all families with many needs
+family involvement; welcoming environment
+Students feel safe and supported at school, equity is promoted throughout the school building, teamwork among staff 
+UMHT initiatives (MTSS tiered support)
+Collaboration and a warm atmosphere. Care for our community
+vision, teamwork, the people who work here "
+
+clean2 <- Clean_String(text2)
+
+docs2 <- Corpus(VectorSource(clean2))
+
+docs2 <- tm_map(docs2, removeWords, c("day", "now", "help", "pep", "people", "arose", "to", "risen", "offer", "offered", "warm", "spots", "their", "every", "they", "tell", "that", "who", "are", "all", "many", "here", "always", "among", "mtss", "umht", "how", "feel", "adept", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "hot","wanted", "tiered", "using", "staying", "excellent", "worked", "actively", "throughout"))
+
+
+dtm2 <- TermDocumentMatrix(docs2) 
+matrix2 <- as.matrix(dtm2) 
+words2 <- sort(rowSums(matrix2),decreasing=TRUE) 
+df2 <- data.frame(word = names(words2),freq=words2)
+
+
+cloud2 <- wordcloud2(df2, size=0.5)
+
+#---------------cloud3------------------
+
+text3 <- "Continue working with our excellent business partners and community agencies.  Utilize the support of many agencies and local people interested in supporting our students and families.   Provide in-person assistance to families and students
+seek resources for the areas listed above; streamline supports for the most needy
+Increase parent involvement, more youth development opportunities, and resuming after school clubs and programs 
+Continuation of services provided pre-COVID and expansion of Youth Development Activities
+I would like to increase opportunities for after-school youth development programs at Rolling Ridge. We also hope to continue to offer virtual opportunities in addition to our in-person programs to offer working parents flexibility. As always, we will seek feedback from families to better meet their needs.
+community partnerships, return to PEP, engage parents in meaningful and timely ways, create opportunities for stakeholder input 4 times per year.  "
+
+clean3 <- Clean_String(text3)
+
+docs3 <- Corpus(VectorSource(clean3))
+
+docs3 <- tm_map(docs3, removeWords, c("better","rolling","return", "above", "will", "covid", "areas", "listed", "input", "to", "per", "pre", "utilize", "most", "also", "more", "many", "ways", "local", "pep", "times", "ridge", "year", "needy", "people", "after", "person", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "umht", "hot", "to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "their", "from", "always"))
+
+
+dtm3 <- TermDocumentMatrix(docs3) 
+matrix3 <- as.matrix(dtm3) 
+words3 <- sort(rowSums(matrix3),decreasing=TRUE) 
+df3 <- data.frame(word = names(words3),freq=words3)
+
+cloud3<- wordcloud2(df3, size=0.5)
+
+
+
+
+#-----------------Performance Graphs - assessment  --------------------------
 #-------------------students by race----------------------
 #------------------Mathematics-------------------------------
 
@@ -1733,150 +2214,215 @@ sullyalleng <- plot_ly(assessmentallSullyeng, x = ~Year, y = ~`Percent Pass`, co
   #zeroline = F
 ))
 
-#Climate surveys
 
-#--------------Teacher/Staff Climate Surveys------------------------
-newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
-subsetnewsurveydataSTAFF <- newsurveydata[3:8,c(1,2:5,7:8)]
+assessment %>% filter(Subgroup == "Students with Disabilities" & Subject == "English Reading") -> assessmentdisenglish
 
-#Teacher & Staff Survey Q1 - Staff Collegiality
-staffquestion1 <- subsetnewsurveydataSTAFF[1:6,1:2]
-question1 <- staffquestion1$SCHOOLS
-staffquestion1percentage <- staffquestion1$`Question 1`
-staffquestion1percentage <- as.numeric(staffquestion1percentage)
-staffquestion1percentage <- staffquestion1percentage*100
-one <- ggplot(staffquestion1,aes(x=question1,y=staffquestion1percentage,fill=question1, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion1$SCHOOLS)))+labs(title="Staff Collegiality",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion1percentage, y = staffquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
-teacherandstaffanswer1 <- ggplotly(one, tooltip = c("text"))
+english_dis <- plot_ly(assessmentdisenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
-#Teacher & Staff Survey Q2 - Academic Environment
-staffquestion2 <- subsetnewsurveydataSTAFF[1:6,c(1,3)]
-question2 <- staffquestion2$SCHOOLS
-staffquestion2percentage <- staffquestion2$`Question 2`
-staffquestion2percentage <- as.numeric(staffquestion2percentage)
-staffquestion2percentage <- staffquestion2percentage*100
-two <- ggplot(staffquestion2,aes(x=question2,y=staffquestion2percentage,fill=question2, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion2$SCHOOLS)))+labs(title="Academic Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion2percentage, y = staffquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
-teacherandstaffanswer2 <- ggplotly(two, tooltip = c("text"))
 
-#Teacher & Staff Survey Q3 - School Leadership
-staffquestion3 <- subsetnewsurveydataSTAFF[1:6,c(1,4)]
-question3 <- staffquestion3$SCHOOLS
-staffquestion3percentage <- staffquestion3$`Question 3`
-staffquestion3percentage <- as.numeric(staffquestion3percentage)
-staffquestion3percentage <- staffquestion3percentage*100
-three <- ggplot(staffquestion3,aes(x=question3,y=staffquestion3percentage,fill=question3, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion3$SCHOOLS)))+labs(title="School Leadership",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion3percentage, y = staffquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
-teacherandstaffanswer3 <- ggplotly(three, tooltip = c("text"))
 
-#Teacher & Staff Survey Q4 - Managing Student Behavior
-staffquestion4 <- subsetnewsurveydataSTAFF[1:6,c(1,5)]
-question4 <- staffquestion4$SCHOOLS
-staffquestion4percentage <- staffquestion4$`Question 4`
-staffquestion4percentage <- as.numeric(staffquestion4percentage)
-staffquestion4percentage <- staffquestion4percentage*100
-four <- ggplot(staffquestion4,aes(x=question4,y=staffquestion4percentage,fill=question4, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion4$SCHOOLS)))+labs(title="Managing Student Behavior",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion4percentage, y = staffquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
-teacherandstaffanswer4 <- ggplotly(four, tooltip = c("text"))
 
-#Teacher & Staff Survey Q6 - Workplace Environment
-staffquestion6 <- subsetnewsurveydataSTAFF[1:6,c(1,6)]
-question6 <- staffquestion6$SCHOOLS
-staffquestion6percentage <- staffquestion6$`Question 6`
-staffquestion6percentage <- as.numeric(staffquestion6percentage)
-staffquestion6percentage <- staffquestion6percentage*100
-six <- ggplot(staffquestion6,aes(x=question6,y=staffquestion6percentage,fill=question6, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion6$SCHOOLS)))+labs(title="Workplace Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion6percentage, y = staffquestion6percentage), size = 3, position = position_stack(vjust = 1.02))
-teacherandstaffanswer6 <- ggplotly(six, tooltip = c("text"))
+#----------------------white students---------------------------------------
 
-#Teacher & Staff Survey Q7 - Instructional Practices 
-staffquestion7 <- subsetnewsurveydataSTAFF[1:6,c(1,7)]
-question7 <- staffquestion7$SCHOOLS
-staffquestion7percentage <- staffquestion7$`Question 7`
-staffquestion7percentage <- as.numeric(staffquestion7percentage)
-staffquestion7percentage <- staffquestion7percentage*100
-seven <- ggplot(staffquestion7,aes(x=question7,y=staffquestion7percentage,fill=question7, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion7$SCHOOLS)))+labs(title="Instructional Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion7percentage, y = staffquestion7percentage), size = 3, position = position_stack(vjust = 1.02))
-teacherandstaffanswer7 <- ggplotly(seven, tooltip = c("text"))
+assessment %>% filter(Subgroup == "White" & Subject == "Mathematics") -> assessmentwhitemath
 
-#--------------Parent Climate Surveys--------------------------------
-newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
-subsetnewsurveydataPARENT <- newsurveydata[19:24,c(1,2:5)]
+math_white <- plot_ly(assessmentwhitemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
-#Parent Survey Q1 - Academic Support 
-parentquestion1 <- subsetnewsurveydataPARENT[1:6,1:2]
-question8 <- parentquestion1$SCHOOLS
-parentquestion1percentage <- parentquestion1$`Question 1`
-parentquestion1percentage <- as.numeric(parentquestion1percentage)
-parentquestion1percentage <- parentquestion1percentage*100
-eight <- ggplot(parentquestion1,aes(x=question8,y=parentquestion1percentage,fill=question8, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion1$SCHOOLS)))+labs(title="Academic Support",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion1percentage, y = parentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
-parentanswer1 <- ggplotly(eight, tooltip = c("text"))
 
-#Parent Survey Q2 - Communications
-parentquestion2 <- subsetnewsurveydataPARENT[1:6,c(1,3)]
-question9 <- parentquestion2$SCHOOLS
-parentquestion2percentage <- parentquestion2$`Question 2`
-parentquestion2percentage <- as.numeric(parentquestion2percentage)
-parentquestion2percentage <- parentquestion2percentage*100
-nine <- ggplot(parentquestion2,aes(x=question9,y=parentquestion2percentage,fill=question9, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion2$SCHOOLS)))+labs(title="Communications",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion2percentage, y = parentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
-parentanswer2 <- ggplotly(nine, tooltip = c("text"))
+assessment %>% filter(Subgroup == "White" & Subject == "English Reading") -> assessmentwhiteenglish
 
-#Parent Survey Q3 - Relationships
-parentquestion3 <- subsetnewsurveydataPARENT[1:6,c(1,4)]
-question10 <- parentquestion3$SCHOOLS
-parentquestion3percentage <- parentquestion3$`Question 3`
-parentquestion3percentage <- as.numeric(parentquestion3percentage)
-parentquestion3percentage <- parentquestion3percentage*100
-ten <- ggplot(parentquestion3,aes(x=question10,y=parentquestion3percentage,fill=question10, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion3$SCHOOLS)))+labs(title="Relationships",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion3percentage, y = parentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
-parentanswer3 <- ggplotly(ten, tooltip = c("text"))
+english_white <- plot_ly(assessmentwhiteenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
-#Parent Survey Q4 - Instructions
-parentquestion4 <- subsetnewsurveydataPARENT[1:6,c(1,5)]
-question11 <- parentquestion4$SCHOOLS
-parentquestion4percentage <- parentquestion4$`Question 4`
-parentquestion4percentage <- as.numeric(parentquestion4percentage)
-parentquestion4percentage <- parentquestion4percentage*100
-eleven <- ggplot(parentquestion4,aes(x=question11,y=parentquestion4percentage,fill=question11, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion4$SCHOOLS)))+labs(title="Instructions",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion4percentage, y = parentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
-parentanswer4 <- ggplotly(eleven, tooltip = c("text"))
+#---------black----------------------------
 
-#--------------Student Climate Surveys-------------------------------
-newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
-subsetnewsurveydataSTUDENT <- newsurveydata[11:16,c(1,2:4,6)]
+assessment %>% filter(Subgroup == "Black" & Subject == "Mathematics") -> assessmentblackmath
 
-#Student Survey Q1 - Student Engagement
-studentquestion1 <- subsetnewsurveydataSTUDENT[1:6,1:2]
-question12 <- studentquestion1$SCHOOLS
-studentquestion1percentage <- studentquestion1$`Question 1`
-studentquestion1percentage <- as.numeric(studentquestion1percentage)
-studentquestion1percentage <- studentquestion1percentage*100
-twelve <- ggplot(studentquestion1,aes(x=question12,y=studentquestion1percentage,fill=question12, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion1$SCHOOLS)))+labs(title="Student Engagement",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion1percentage, y = studentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
-studentanswer1 <- ggplotly(twelve, tooltip = c("text"))
+math_black <- plot_ly(assessmentblackmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
-#Student Survey Q2 - Student-Teacher Relationship
-studentquestion2 <- subsetnewsurveydataSTUDENT[1:6,c(1,3)]
-question13 <- studentquestion2$SCHOOLS
-studentquestion2percentage <- studentquestion2$`Question 2`
-studentquestion2percentage <- as.numeric(studentquestion2percentage)
-studentquestion2percentage <- studentquestion2percentage*100
-thirteen <- ggplot(studentquestion2,aes(x=question13,y=studentquestion2percentage,fill=question13, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion2$SCHOOLS)))+labs(title="Student-Teacher Relationship",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion2percentage, y = studentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
-studentanswer2 <- ggplotly(thirteen, tooltip = c("text"))
 
-#Student Survey Q3 - Social-Emotional Wellbeing
-studentquestion3 <- subsetnewsurveydataSTUDENT[1:6,c(1,4)]
-question14 <- studentquestion3$SCHOOLS
-studentquestion3percentage <- studentquestion3$`Question 3`
-studentquestion3percentage <- as.numeric(studentquestion3percentage)
-studentquestion3percentage <- studentquestion3percentage*100
-fourteen <- ggplot(studentquestion3,aes(x=question14,y=studentquestion3percentage,fill=question14, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion3$SCHOOLS)))+labs(title="Social-Emotional Wellbeing",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion3percentage, y = studentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
-studentanswer3 <- ggplotly(fourteen, tooltip = c("text"))
+assessment %>% filter(Subgroup == "Black" & Subject == "English Reading") -> assessmentblackenglish
 
-#Student Survey Q5 - Bullying
-studentquestion5 <- subsetnewsurveydataSTUDENT[1:6,c(1,5)]
-question16 <- studentquestion5$SCHOOLS
-studentquestion5percentage <- studentquestion5$`Question 5`
-studentquestion5percentage <- as.numeric(studentquestion5percentage)
-studentquestion5percentage <- studentquestion5percentage*100
-sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
-studentanswer5 <- ggplotly(sixteen, tooltip = c("text"))
+english_black <- plot_ly(assessmentblackenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
-#Representatives' Reports ----------------------------------------------------
 
-#Some Facts
+#----------asian--------------------------
 
+assessment %>% filter(Subgroup == "Asian" & Subject == "Mathematics") -> assessmentasianmath
+
+math_asian <- plot_ly(assessmentasianmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+
+assessment %>% filter(Subgroup == "Asian" & Subject == "English Reading") -> assessmentasianenglish
+
+english_asian <- plot_ly(assessmentasianenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+
+#--------hispanic-------------------------------
+
+assessment %>% filter(Subgroup == "Hispanic" & Subject == "Mathematics") -> assessmenthispanicmath
+
+math_hispanic <- plot_ly(assessmenthispanicmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+
+assessment %>% filter(Subgroup == "Hispanic" & Subject == "English Reading") -> assessmenthispanicenglish
+
+english_hispanic <- plot_ly(assessmenthispanicenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+
+#-----------male------------------------------
+
+assessment %>% filter(Subgroup == "Male" & Subject == "Mathematics") -> assessmentmalemath
+
+math_male <- plot_ly(assessmentmalemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+
+assessment %>% filter(Subgroup == "Male" & Subject == "English Reading") -> assessmentmaleenglish
+
+english_male <- plot_ly(assessmentmaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+
+
+#-------------female-----------------------
+
+assessment %>% filter(Subgroup == "Female" & Subject == "Mathematics") -> assessmentfemalemath
+
+math_female <- plot_ly(assessmentfemalemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+
+assessment %>% filter(Subgroup == "Female" & Subject == "English Reading") -> assessmentfemaleenglish
+
+english_female <- plot_ly(assessmentfemaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+
+
+#-----------homeless-------------------------
+
+assessment %>% filter(Subgroup == "Homeless" & Subject == "Mathematics") -> assessmenthomelessmath
+
+math_homeless <- plot_ly(assessmenthomelessmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+
+assessment %>% filter(Subgroup == "Homeless" & Subject == "English Reading") -> assessmenthomelessenglish
+
+english_homeless <- plot_ly(assessmenthomelessenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+#--------------breakfast------------------------------------------------------
+
+breakfast_data <- read_excel(paste0(getwd(),"/data/Breakfast.xlsx"),skip=0,col_names=TRUE)
+breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Breakfast", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#---------------------General Data-------------------------------------------
 #--------------------English Learner Status----------------------------------
 
 generaldata <- read_excel(paste0(getwd(),"/data/generaldata.xlsx"),skip=0,col_names=TRUE)
@@ -2041,142 +2587,182 @@ figHOME <- figHOME %>% layout(
 )
 
 
-#weekend meals
+figHOME
+
+#--------------Teacher/Staff Climate Surveys------------------------
+newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
+subsetnewsurveydataSTAFF <- newsurveydata[3:8,c(1,2:5,7:8)]
+
+#Teacher & Staff Survey Q1 - Staff Collegiality
+staffquestion1 <- subsetnewsurveydataSTAFF[1:6,1:2]
+question1 <- staffquestion1$SCHOOLS
+staffquestion1percentage <- staffquestion1$`Question 1`
+staffquestion1percentage <- as.numeric(staffquestion1percentage)
+staffquestion1percentage <- staffquestion1percentage*100
+one <- ggplot(staffquestion1,aes(x=question1,y=staffquestion1percentage,fill=question1, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion1$SCHOOLS)))+labs(title="Staff Collegiality",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion1percentage, y = staffquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer1 <- ggplotly(one, tooltip = c("text"))
+
+#Teacher & Staff Survey Q2 - Academic Environment
+staffquestion2 <- subsetnewsurveydataSTAFF[1:6,c(1,3)]
+question2 <- staffquestion2$SCHOOLS
+staffquestion2percentage <- staffquestion2$`Question 2`
+staffquestion2percentage <- as.numeric(staffquestion2percentage)
+staffquestion2percentage <- staffquestion2percentage*100
+two <- ggplot(staffquestion2,aes(x=question2,y=staffquestion2percentage,fill=question2, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion2$SCHOOLS)))+labs(title="Academic Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion2percentage, y = staffquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer2 <- ggplotly(two, tooltip = c("text"))
+
+#Teacher & Staff Survey Q3 - School Leadership
+staffquestion3 <- subsetnewsurveydataSTAFF[1:6,c(1,4)]
+question3 <- staffquestion3$SCHOOLS
+staffquestion3percentage <- staffquestion3$`Question 3`
+staffquestion3percentage <- as.numeric(staffquestion3percentage)
+staffquestion3percentage <- staffquestion3percentage*100
+three <- ggplot(staffquestion3,aes(x=question3,y=staffquestion3percentage,fill=question3, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion3$SCHOOLS)))+labs(title="School Leadership",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion3percentage, y = staffquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer3 <- ggplotly(three, tooltip = c("text"))
+
+#Teacher & Staff Survey Q4 - Managing Student Behavior
+staffquestion4 <- subsetnewsurveydataSTAFF[1:6,c(1,5)]
+question4 <- staffquestion4$SCHOOLS
+staffquestion4percentage <- staffquestion4$`Question 4`
+staffquestion4percentage <- as.numeric(staffquestion4percentage)
+staffquestion4percentage <- staffquestion4percentage*100
+four <- ggplot(staffquestion4,aes(x=question4,y=staffquestion4percentage,fill=question4, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion4$SCHOOLS)))+labs(title="Managing Student Behavior",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion4percentage, y = staffquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer4 <- ggplotly(four, tooltip = c("text"))
+
+#Teacher & Staff Survey Q6 - Workplace Environment
+staffquestion6 <- subsetnewsurveydataSTAFF[1:6,c(1,6)]
+question6 <- staffquestion6$SCHOOLS
+staffquestion6percentage <- staffquestion6$`Question 6`
+staffquestion6percentage <- as.numeric(staffquestion6percentage)
+staffquestion6percentage <- staffquestion6percentage*100
+six <- ggplot(staffquestion6,aes(x=question6,y=staffquestion6percentage,fill=question6, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion6$SCHOOLS)))+labs(title="Workplace Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion6percentage, y = staffquestion6percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer6 <- ggplotly(six, tooltip = c("text"))
+
+#Teacher & Staff Survey Q7 - Instructional Practices 
+staffquestion7 <- subsetnewsurveydataSTAFF[1:6,c(1,7)]
+question7 <- staffquestion7$SCHOOLS
+staffquestion7percentage <- staffquestion7$`Question 7`
+staffquestion7percentage <- as.numeric(staffquestion7percentage)
+staffquestion7percentage <- staffquestion7percentage*100
+seven <- ggplot(staffquestion7,aes(x=question7,y=staffquestion7percentage,fill=question7, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion7$SCHOOLS)))+labs(title="Instructional Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion7percentage, y = staffquestion7percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer7 <- ggplotly(seven, tooltip = c("text"))
+
+#--------------Parent Climate Surveys--------------------------------
+newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
+subsetnewsurveydataPARENT <- newsurveydata[19:24,c(1,2:5)]
+
+#Parent Survey Q1 - Academic Support 
+parentquestion1 <- subsetnewsurveydataPARENT[1:6,1:2]
+question8 <- parentquestion1$SCHOOLS
+parentquestion1percentage <- parentquestion1$`Question 1`
+parentquestion1percentage <- as.numeric(parentquestion1percentage)
+parentquestion1percentage <- parentquestion1percentage*100
+eight <- ggplot(parentquestion1,aes(x=question8,y=parentquestion1percentage,fill=question8, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion1$SCHOOLS)))+labs(title="Academic Support",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion1percentage, y = parentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+parentanswer1 <- ggplotly(eight, tooltip = c("text"))
+
+#Parent Survey Q2 - Communications
+parentquestion2 <- subsetnewsurveydataPARENT[1:6,c(1,3)]
+question9 <- parentquestion2$SCHOOLS
+parentquestion2percentage <- parentquestion2$`Question 2`
+parentquestion2percentage <- as.numeric(parentquestion2percentage)
+parentquestion2percentage <- parentquestion2percentage*100
+nine <- ggplot(parentquestion2,aes(x=question9,y=parentquestion2percentage,fill=question9, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion2$SCHOOLS)))+labs(title="Communications",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion2percentage, y = parentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+parentanswer2 <- ggplotly(nine, tooltip = c("text"))
+
+#Parent Survey Q3 - Relationships
+parentquestion3 <- subsetnewsurveydataPARENT[1:6,c(1,4)]
+question10 <- parentquestion3$SCHOOLS
+parentquestion3percentage <- parentquestion3$`Question 3`
+parentquestion3percentage <- as.numeric(parentquestion3percentage)
+parentquestion3percentage <- parentquestion3percentage*100
+ten <- ggplot(parentquestion3,aes(x=question10,y=parentquestion3percentage,fill=question10, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion3$SCHOOLS)))+labs(title="Relationships",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion3percentage, y = parentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+parentanswer3 <- ggplotly(ten, tooltip = c("text"))
+
+#Parent Survey Q4 - Instructions
+parentquestion4 <- subsetnewsurveydataPARENT[1:6,c(1,5)]
+question11 <- parentquestion4$SCHOOLS
+parentquestion4percentage <- parentquestion4$`Question 4`
+parentquestion4percentage <- as.numeric(parentquestion4percentage)
+parentquestion4percentage <- parentquestion4percentage*100
+eleven <- ggplot(parentquestion4,aes(x=question11,y=parentquestion4percentage,fill=question11, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion4$SCHOOLS)))+labs(title="Instructions",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion4percentage, y = parentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+parentanswer4 <- ggplotly(eleven, tooltip = c("text"))
+
+#--------------Student Climate Surveys-------------------------------
+newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
+subsetnewsurveydataSTUDENT <- newsurveydata[11:16,c(1,2:4,6)]
+
+#Student Survey Q1 - Student Engagement
+studentquestion1 <- subsetnewsurveydataSTUDENT[1:6,1:2]
+question12 <- studentquestion1$SCHOOLS
+studentquestion1percentage <- studentquestion1$`Question 1`
+studentquestion1percentage <- as.numeric(studentquestion1percentage)
+studentquestion1percentage <- studentquestion1percentage*100
+twelve <- ggplot(studentquestion1,aes(x=question12,y=studentquestion1percentage,fill=question12, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion1$SCHOOLS)))+labs(title="Student Engagement",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion1percentage, y = studentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+studentanswer1 <- ggplotly(twelve, tooltip = c("text"))
+
+#Student Survey Q2 - Student-Teacher Relationship
+studentquestion2 <- subsetnewsurveydataSTUDENT[1:6,c(1,3)]
+question13 <- studentquestion2$SCHOOLS
+studentquestion2percentage <- studentquestion2$`Question 2`
+studentquestion2percentage <- as.numeric(studentquestion2percentage)
+studentquestion2percentage <- studentquestion2percentage*100
+thirteen <- ggplot(studentquestion2,aes(x=question13,y=studentquestion2percentage,fill=question13, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion2$SCHOOLS)))+labs(title="Student-Teacher Relationship",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion2percentage, y = studentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+studentanswer2 <- ggplotly(thirteen, tooltip = c("text"))
+
+#Student Survey Q3 - Social-Emotional Wellbeing
+studentquestion3 <- subsetnewsurveydataSTUDENT[1:6,c(1,4)]
+question14 <- studentquestion3$SCHOOLS
+studentquestion3percentage <- studentquestion3$`Question 3`
+studentquestion3percentage <- as.numeric(studentquestion3percentage)
+studentquestion3percentage <- studentquestion3percentage*100
+fourteen <- ggplot(studentquestion3,aes(x=question14,y=studentquestion3percentage,fill=question14, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion3$SCHOOLS)))+labs(title="Social-Emotional Wellbeing",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion3percentage, y = studentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+studentanswer3 <- ggplotly(fourteen, tooltip = c("text"))
+
+#Student Survey Q5 - Bullying
+studentquestion5 <- subsetnewsurveydataSTUDENT[1:6,c(1,5)]
+question16 <- studentquestion5$SCHOOLS
+studentquestion5percentage <- studentquestion5$`Question 5`
+studentquestion5percentage <- as.numeric(studentquestion5percentage)
+studentquestion5percentage <- studentquestion5percentage*100
+sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
+studentanswer5 <- ggplotly(sixteen, tooltip = c("text"))
+
+# manually scraped health and social services --------------------------------
+
 healthscrape <- read_excel(paste0(getwd(),"/data/manualscrappingdata.xlsx"))
 subset_healthscrape <- healthscrape[2:5,c(2,5)]
 Total <- subset_healthscrape$...5
 Year <- subset_healthscrape$...2
 plot_ly(data = subset_healthscrape, x = ~Year, y = ~Total, type = "scatter",mode="line",hoverinfo = "text",text = ~paste("Year:",Year,"Total:",Total)) %>% layout(yaxis = list(tickvals = list(100,200,300,400,500,600,700,800,900)),title = "Families Who Received Weekend Meals") -> weekendmeals
 
-#Basic supplies
-
 subset_healthscrape2 <- healthscrape[c(2,4),c(2,4)]
 Year2 <- subset_healthscrape2$...2
 Total2 <- subset_healthscrape2$...4
 plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
 
+#----------------suspension data-------------------
 
-#breakfast
+suspension <- read_excel(paste0(getwd(),"/data/Suspensions.xlsx"),skip=0,col_names=TRUE)
+subset_forest <- suspension[c(1,2,3,4,25,26,27,28,49,50,51,52), c(1:3,5)]
+forestsuspend<-plot_ly(subset_forest, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Forest Grove", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
-breakfast_data <- read_excel(paste0(getwd(),"/data/Breakfast.xlsx"),skip=0,col_names=TRUE)
-breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Breakfast", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
+subset_Guilford <- suspension[c(5,6,7,8,29,30,31,32,53,54,55,56), c(1:3,5)]
+guilfordsuspend<- plot_ly(subset_Guilford, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Guilford", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
-#Responses 
+subset_rolling <- suspension[c(9,10,11,12,33,34,35,36,57,58,59,60), c(1:3,5)]
+rollingsuspend<- plot_ly(subset_rolling, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Rolling Ridge", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
-#-------------word clouds--------------------
-#------------Challenges and Weaknesses-------------------------
+subset_sterling <- suspension[c(13,14,15,16,37,38,39,40,61,62,63,64), c(1:3,5)]
+sterlingsuspend<- plot_ly(subset_sterling, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sterling", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
-#install.packages("tm")  # for text mining
-#install.packages("SnowballC") # for text stemming
-#install.packages("wordcloud") # word-cloud generator 
-#install.packages("RColorBrewer") # color palettes
+subset_sugarland <- suspension[c(17,18,19,20,41,42,43,44,65,66,67,68), c(1:3,5)]
+sugarlandsuspend<- plot_ly(subset_sugarland, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sugarland", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
-text1 <- "Internet needs were very overwhelming in our community, virtual presence of students created difficulties with individual telecounseling, student engagement in school an ongoing concern time to provide for the basic needs; finding mental health providers for elementary aged students (this was a huge challenge); medical care for undocumented and uninsured Parent involvement internet access; monetary stressors - rent, food, hygiene and cleanliness supplies needs and health (COVID) and mental health needs Maintaining the same level of connectedness with families in the DL model as those attending in person.parent engagement, parent attendance, finding medical care for undocumented and uninsured, finding housing assistance for undocumented Our challenge is the overall transiency of our student population turnover; community mental health and medical supports; undocumented and uninsured medical care parent involvement Youth development activities We would like to continue to diversify our community partner list community mental health and medical supports, undocumented and uninsured medical care"
-
-#docs <- Corpus(VectorSource(text))
-
-
-Clean_String <- function(string){
-  # Lowercase
-  temp <- tolower(string)
-  # Remove everything that is not a number or letter (may want to keep more 
-  # stuff in your actual analyses). 
-  temp <- stringr::str_replace_all(temp,"[^a-zA-Z\\s]", " ")
-  # Shrink down to just one white space
-  temp <- stringr::str_replace_all(temp,"[\\s]+", " ")
-  temp <- stringr::str_replace_all(temp,";", " ")
-  # Split it
-  temp <- stringr::str_split(temp, " ")[[1]]
-  # Get rid of trailing "" if necessary
-  indexes <- which(temp == "")
-  if(length(indexes) > 0){
-    temp <- temp[-indexes]
-  } 
-  return(temp)
-}
-
-clean1 <- Clean_String(text1)
-
-docs1 <- Corpus(VectorSource(clean1))
-
-docs1 <- tm_map(docs1, removeWords, c("to", "challenge", "concern", "level", "aged", "created", "elementary", "basic", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "continue", "provide"))
-
-
-dtm1 <- TermDocumentMatrix(docs1) 
-matrix1 <- as.matrix(dtm1) 
-words1 <- sort(rowSums(matrix1),decreasing=TRUE) 
-df1 <- data.frame(word = names(words1),freq=words1)
+subset_sully <- suspension[c(21,22,23,24,45,46,47,48,69,70,71,72), c(1:3,5)]
+sullysuspend<- plot_ly(subset_sully, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sully", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
 
 
-set.seed(1234) # for reproducibility 
-cloud1 <- wordcloud2(df1, size=0.5)
-
-#---------Cloud 2-----------------------
-
-text2 <- "Many families attended our family outreach and engagement initiatives, teaching families how to operate Schoology.  Families are now very adept at using technology to help their students and support teachers and instruction
-student attendance and active engagement; virtual home visits
-Reduction of gaggle reports
-Virtual Home Visits and United Mental Health screening; hot spots, 1-1 technology
-Staying connected with families and working to empower families to be active in the school community. We offered support to families throughout the year and were responsive to needs as they arose. We worked together collaboratively.
-We have the Principal of the Year, School is a warm and welcoming place - Principal and VP tell students every day that they are loved and wanted, staff have risen to the occasion to offer quality instruction in this challenging time Excellent teachers and supportive and caring administration, cohesive working environment. positive climate, PEP, Parent Liaison always actively engaged and helping all families with many needs
-family involvement; welcoming environment
-Students feel safe and supported at school, equity is promoted throughout the school building, teamwork among staff 
-UMHT initiatives (MTSS tiered support)
-Collaboration and a warm atmosphere. Care for our community
-vision, teamwork, the people who work here "
-
-clean2 <- Clean_String(text2)
-
-docs2 <- Corpus(VectorSource(clean2))
-
-docs2 <- tm_map(docs2, removeWords, c("day", "now", "help", "pep", "people", "arose", "to", "risen", "offer", "offered", "warm", "spots", "their", "every", "they", "tell", "that", "who", "are", "all", "many", "here", "always", "among", "mtss", "umht", "how", "feel", "adept", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "hot","wanted", "tiered", "using", "staying", "excellent", "worked", "actively", "throughout"))
-
-
-dtm2 <- TermDocumentMatrix(docs2) 
-matrix2 <- as.matrix(dtm2) 
-words2 <- sort(rowSums(matrix2),decreasing=TRUE) 
-df2 <- data.frame(word = names(words2),freq=words2)
-
-
-cloud2 <- wordcloud2(df2, size=0.5)
-
-#---------------cloud3------------------
-
-text3 <- "Continue working with our excellent business partners and community agencies.  Utilize the support of many agencies and local people interested in supporting our students and families.   Provide in-person assistance to families and students
-seek resources for the areas listed above; streamline supports for the most needy
-Increase parent involvement, more youth development opportunities, and resuming after school clubs and programs 
-Continuation of services provided pre-COVID and expansion of Youth Development Activities
-I would like to increase opportunities for after-school youth development programs at Rolling Ridge. We also hope to continue to offer virtual opportunities in addition to our in-person programs to offer working parents flexibility. As always, we will seek feedback from families to better meet their needs.
-community partnerships, return to PEP, engage parents in meaningful and timely ways, create opportunities for stakeholder input 4 times per year.  "
-
-clean3 <- Clean_String(text3)
-
-docs3 <- Corpus(VectorSource(clean3))
-
-docs3 <- tm_map(docs3, removeWords, c("better","rolling","return", "above", "will", "covid", "areas", "listed", "input", "to", "per", "pre", "utilize", "most", "also", "more", "many", "ways", "local", "pep", "times", "ridge", "year", "needy", "people", "after", "person", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "umht", "hot", "to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "their", "from", "always"))
-
-
-dtm3 <- TermDocumentMatrix(docs3) 
-matrix3 <- as.matrix(dtm3) 
-words3 <- sort(rowSums(matrix3),decreasing=TRUE) 
-df3 <- data.frame(word = names(words3),freq=words3)
-
-cloud3<- wordcloud2(df3, size=0.5)
-
-
-
-
-
-
-#Partners sub tab
 #----------------------Collapsible Tree - Key Partners and Programs--------------------
 
 Tree <- read_excel(paste0(getwd(),"/data/treedata.xlsx")) 
@@ -2199,366 +2785,12 @@ Tree %>% collapsibleTree(hierarchy = c("Four Pillars", "Name", "Key Partners"),
                            
                          ))-> tree1
 
+#--------------- teacherstudent ratio---------------------------
+
+#teacherstudentratio <- img(src = "StudentTeacherRatioPic.png", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;")
 
 
-#Resources TAB
-
-
-
-#--------------free or not free resources ---------------------------------------
-
-costs <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"))
-foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
-#---------------map_health and isochrones-----------------------------------------
-
-#install.packages("remotes")
-#remotes::install_github("tlorusso/traveltimeR")
-
-YourAPIKey <- "32f6ed99d0636fe05d01a5ff5a99c6e7"
-YourAppId <- "190b7348"
-
-traveltime10 <- read_sf("data/iso_10_sterling.shp")
-traveltime20 <- read_sf("data/iso_20_sterling.shp")
-traveltime45 <- read_sf("data/iso_45_sterling.shp")
-# traveltime10 <- traveltime_map(appId=YourAppId,
-#                                apiKey=YourAPIKey,
-#                                location=c(39.009006,-77.4029155),
-#                                traveltime=600,
-#                                type="driving",
-#                                departure="2022-08-09T08:00:00+01:00")
-# # ... and within 60 minutes?
-# traveltime20 <- traveltime_map(appId=YourAppId,
-#                                apiKey=YourAPIKey,
-#                                location=c(39.009006,-77.4029155),
-#                                traveltime=1200,
-#                                type="driving",
-#                                departure="2022-08-09T08:00:00+01:00")
-# traveltime45 <- traveltime_map(appId = YourAppId,
-#                                apiKey = YourAPIKey,
-#                                location = c(39.009006,-77.4029155),
-#                                traveltime= 2700,
-#                                type = "driving",
-#                                departure = "2022-08-09T08:00:00+01:00")
-map<- read_excel(paste0(getwd(),"/data/school_locations.xlsx"))
-
-subset_map <- map[1,c(1,4,5)]
-
-healthsep <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
-popups <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(healthsep$Name1),
-        "<br />",
-        "<strong>Description:</strong>",
-        healthsep$Description1 ,
-        "<br />",
-        "<strong>Serves:</strong>",
-        healthsep$Serves1, 
-        "<br />",
-        "<strong>Hours:</strong>",
-        healthsep$Hours1,
-        "<br />",
-        "<strong>Language:</strong>",
-        healthsep$Language,
-        "<br />",
-        "<strong>Address:</strong>",
-        healthsep$Address1,
-        "<a href = ",healthsep$Website1, "> Website </a>",
-        "<br />"),
-  
-  htmltools::HTML
-)
-
-popup <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(costs$Name),
-        "<br />",
-        "<strong>Description:</strong>",
-        costs$Description ,
-        "<br />",
-        "<strong>Serves:</strong>",
-        costs$Serves, 
-        "<br />",
-        "<strong>Hours:</strong>",
-        costs$Hours,
-        "<br />",
-        "<strong>Language:</strong>",
-        costs$Language,
-        "<br />",
-        "<strong>Address:</strong>",
-        costs$Address,
-        "<a href = ",costs$Website, "> Website </a>",
-        "<br />"),
-  
-  htmltools::HTML
-)
-
-healthfree <- read_excel(paste0(getwd(), "/data/resourcecost.xlsx"),sheet = "Health Free")
-
-
-
-pal <- colorFactor(c("#91003f", "#005824", "#d7301f","#CC6677","#DDCC77","#88419d"), domain = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"))
-pal1 <- colorFactor(c("#91003f","#005824","#d7301f","#88419d","#DDCC77","#CC6677","#AA4499","#882255"),domain = c("Food Pantry","Clothing","Counseling","Dental Care","Vision Care","Medical Services","Speech and Hearing Services","Physical Therapy"))
-
-
-leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=costs,~Longitude,~Latitude,popup = ~popup, label = ~as.character(Name),group = ~Resource,color = ~pal(Resource),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1) %>%
-  addLayersControl(overlayGroups = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"),options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
-  setView(-77.4029155,39.009006, zoom = 11) -> health_free
-
-
-
-leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=foods,~Longitude1,~Latitude1,popup=~popups,label=~as.character(Name1),color= ~pal1(Resource1),group = ~Resource1,weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> health_all
-#--------------youth development map --------------------------
-
-youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 3.xlsx"))
-popups3 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(youth$Name3),
-        "<br />",
-        "<strong>Description:</strong>",
-        youth$Description3 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        youth$Hours3, 
-        "<br />",
-        "<strong>Address:</strong>",
-        youth$Address3,
-        "<a href = ",youth$Website3, "> Website </a>",
-        "<br />"),
-  
-  
-  htmltools::HTML
-)
-
-pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
-
-leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=youth,~Longitude3,~Latitude3,popup=~popups3,label=~as.character(Name3),color= ~pal3(Type),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1,group = ~Type)%>%
-  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
-
-
-youthfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth Free")
-
-popups4 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(youthfree$Name4),
-        "<br />",
-        "<strong>Description:</strong>",
-        youthfree$Description4 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        youthfree$Hours4, 
-        "<br />",
-        "<strong>Address:</strong>",
-        youthfree$Address4,
-        "<a href = ",youthfree$Website4, "> Website </a>",
-        "<br />"),
-  htmltools::HTML
-)
-
-pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
-
-leaflet(data = youthfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=youthfree,~Longitude4,~Latitude4,popup=~popups4,label=~as.character(Name4),color= ~pal3(Type),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1,group = ~Type)%>%
-  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> youth_free
-
-
-#---------mental health resources map------------------------
-
-ment <- read_excel(paste0(getwd(),"/data/mentalhealthres.xlsx"),sheet = "Mental")
-
-popups2 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(ment$Name2),
-        "<br />",
-        "<strong>Description:</strong>",
-        ment$Description2 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        ment$Hours2, 
-        "<br />",
-        "<strong>Address:</strong>",
-        ment$Address2,
-        "<a href = ",ment$Website2, "> Website </a>",
-        "<br />"),
-  
-  
-  htmltools::HTML
-)
-
-pal2 <- colorFactor(c("red", "blue", "green"), domain = c("Family Therapy", "Family Counseling", "Bereavement"))
-
-leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=ment,~Longitude2,~Latitude2,popup=~popups2,label=~as.character(Name2),group=~Resources2,color=~pal2(Resources2),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resources2,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
-
-mentfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Mental Free")
-
-popups5 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(mentfree$Name5),
-        "<br />",
-        "<strong>Description:</strong>",
-        mentfree$Description5 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        mentfree$Hours5, 
-        "<br />",
-        "<strong>Address:</strong>",
-        mentfree$Address5,
-        "<a href = ",mentfree$Website5, "> Website </a>",
-        "<br />"),
-  
-  
-  htmltools::HTML
-)
-
-leaflet(data = mentfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data = mentfree, ~Longitude5,~Latitude5,popup = ~popups5,label = ~as.character(Name5),group = ~Resource5,color = ~pal2(Resource5),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resource5,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> mental_free
-
-
-#----------------------family engagement map-------------------
-
-familyengage <- read_excel(paste0(getwd(),"/data/ListOfResources.xlsx"),sheet = "Family Engagement")
-
-popups <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(familyengage$Name),
-        "<br />",
-        "<strong>Description:</strong>",
-        familyengage$Description ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        familyengage$Hours, 
-        "<br />",
-        "<strong>Address:</strong>",
-        familyengage$Address,
-        "<br />",
-        "<a href = ",familyengage$Website, "> Website </a>",
-        "<br />",
-        "<strong>Serves:</strong>",
-        familyengage$Serves),
-  
-  
-  htmltools::HTML
-)
-
-pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Housing", "Holiday Help", "Education", "Essentials supply", "Employment help", "Other"))
-
-leaflet(data = familyengage) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=familyengage,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal8(Resources),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_family
-
-famfree <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family Free")
-
-popups9 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(famfree$Name8),
-        "<br />",
-        "<strong>Description:</strong>",
-        famfree$Description8 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        famfree$Hours8, 
-        "<br />",
-        "<strong>Address:</strong>",
-        famfree$Address8,
-        "<br />",
-        "<a href = ",famfree$Website8, "> Website </a>",
-        "<br />",
-        "<strong>Serves:</strong>",
-        famfree$Serves8),
-  
-  
-  htmltools::HTML
-)
-
-pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Education", "Employment help","Essentials Supply","Housing", "Holiday Help","Other"))
-
-leaflet(data = famfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=famfree,~Longitude8,~Latitude8,popup=~popups9,label=~as.character(Name8),group=~Resource8,color=~pal8(Resource8),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resource8,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> fam_free
-
-
-#List of all resources ----------------------------
-list <- read_excel(paste0(getwd(),"/data/allresources.xlsx")) 
-
-
-# JSCODE --- CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
+# CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
                 var vars = {};
                 var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
@@ -2754,19 +2986,18 @@ ui <- navbarPage(title = "DSPG",
                                                                        "Family Income" = "faminc",
                                                                        "Poverty Status" = "pov", 
                                                                        "Health Coverage" = "health",
-                                                                       "Property Value" = "property",
-                                                                       "Housing Occupancy" = "housing"
+                                                                       "Property Value" = "property"
                                                                      ),
                                                                      ),     
                                                                      br(""),
                                                                      withSpinner(plotlyOutput("demo2", height = "500px", width ="100%")),
-                                                                    fluidRow(column(2,),
-                                                                             (column(10,
-                                                                                     
-                                                                                     withSpinner(plotlyOutput("PropComp", height = "70%", width = "80%"))
-                                                                                     ))
-                                                                    ),
-                                                                            
+                                                                     fluidRow(column(2,),
+                                                                              (column(10,
+                                                                                      
+                                                                                      withSpinner(plotlyOutput("PropComp", height = "70%", width = "80%"))
+                                                                              ))
+                                                                     ),
+                                                                     
                                                                      column(12, align = "right",
                                                                             p("Source: American Community 2019 5-Year Estimates", style = "font-size:12px;"),
                                                                      ),
@@ -2815,10 +3046,10 @@ ui <- navbarPage(title = "DSPG",
                                           p("While the majority of Sterling’s population is employed (approximately 71%), there is a notable gap in the residents' health insurance. About 17% have no health insurance, which is higher than Loudoun county's 5.5%. This may point to possible opportunities provided by Community Schools as these families will be less routine screening and will delay treatment until the condition is more advanced and more costly and challenging to treat.", style = "padding-top:15px;font-size: 14px;"),
                                           
                                           p("When you take a look at the median property value visualizations, it is clear that a large percentage of homes fall into the property value range of $300,000 to $499,999. The average property value of Sterling is $378,700 which is almost $156,000 less than Loudoun County's median property value. The black line marker on the property value comparison visualization indicates Loudoun County's median property value.",style = "padding-top:15px;font-size: 14px;"),
-                                        
+                                          
                                           p("The labor force of Sterling primarily works in management, business, science, and art, followed by the service sector. Over half of those who commute to work have a commute time less than 30 minutes, and 75% of said commuters drive alone. Notably, only 1.8% of commuters utilized public transportation.",style = "padding-top:15px;font-size: 14px;")
                                           
-                                        
+                                          
                                           
                                    )
                                    
@@ -2853,7 +3084,7 @@ ui <- navbarPage(title = "DSPG",
                                                                          
                                                                          
                                                                 )),
-                                                      
+                                                       
                                                        tabPanel("Race/Ethnicity",
                                                                 fluidRow(style = "margin: 4px;",
                                                                          withSpinner(plotlyOutput("racenine", height = "500px", width = "100%")),
@@ -2886,10 +3117,10 @@ ui <- navbarPage(title = "DSPG",
                                                        style = "padding-top:15px;font-size: 14px;"),
                                                      p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence,  we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary. This shows us there is not a significant correlation of the hispanic student percentage and the hispanic population density.", 
                                                        style = "padding-top:15px;font-size: 14px;"),
-                                                     ),
-                                                            
-
-                                                     
+                                              ),
+                                              
+                                              
+                                              
                                               
                                               
                                               
@@ -2901,133 +3132,133 @@ ui <- navbarPage(title = "DSPG",
                                               column(12, 
                                                      h1(strong("Education"), align = "center")),
                                               
-                                     column(6, align = "left",
-                                     tabsetPanel(
-                                       tabPanel("Size",
-                                                br(),
-                                            selectInput("schooldrop2", "Select Characteristic:", width = "100%", choices = c(
-                                              "Enrollment" = "cenrol",
-                                              "Educators" = "cteacher"
-                                              
-                                            ),
-                                            ),
-                                            
-                                            withSpinner(plotlyOutput("ocuplot2", height = "500px", width = "100%")),
-                                            img(src = "stratiohyphen.png", class = "topimage", width = "80%", height ="80%", style = "display: block; margin-left: auto; margin-right: auto;"),
-
-                                            column(12,align = "right",
-                                                   p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
-                                            ),
-
-                                     ),
-                                     
-                                     tabPanel("Absences",
-                                              br(),
-                                              selectInput("schooldrop3", "Select Characteristic:", width = "100%", choices = c(
-                                              
-                                                "Absences" = "attend", 
-                                                "Chronic Absenteeism" = "chronic"
-                                                
-                                                
-                                              ),
-                                              ),
-                                              
-                                              withSpinner(plotlyOutput("ocuplot3", height = "500px", width = "100%")),
-                                             
-                                              
-                                              
-                                              column(12,align = "right",
-                                                     p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
-                                              ),
-                                              
-                                     ),
-                                     # tabPanel("Suspension",
-                                     #          br(),
-                                     #          selectInput("schoolsuspend", "Select School:", width = "100%", choices = c(
-                                     #            "Forest Grove" = "forestsuspend",
-                                     #            "Guilford" = "guilfordsuspend",
-                                     #            "Rolling Ridge" = "rollingsuspend",
-                                     #            "Sterling" = "sterlingsuspend",
-                                     #            "Sugarland" = "sugarlandsuspend",
-                                     #            "Sully" = "sullysuspend"
-                                     #            
-                                     #          ),
-                                     #          ),
-                                     #          
-                                     #          withSpinner(withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%"))),
-                                     #          
-                                     # ),
-                                     
-                                           tabPanel( "Assessment",
-                                                     br(),
-                                                     fluidRow(
-                                                       column(12,align = "left",
-                                                              column(6,
-                                                                     radioButtons(
-                                                                       "category_subject",
-                                                                       label = "Select:",
-                                                                       choices = c("Mathematics", "English Reading"),
-                                                                     )),
-                                                              column(6,
-                                                                     radioButtons(
-                                                                       "category_subgroup",
-                                                                       label = "Select:",
-                                                                       choices = c("Race", "Gender", "Other Subgroups"),
-                                                                     )),
-                                                              
-                                                              selectInput("schoolgradesdrop", "Select School:", width = "100%", choices = c(
-                                                                "Forest Grove" = "forestgroverace",
-                                                                "Guilford" = "guilfordrace",
-                                                                "Rolling Ridge" = "rollingrace",
-                                                                "Sterling" = "sterlingrace",
-                                                                "Sugarland" = "sugarlandrace",
-                                                                "Sully" = "sullyrace"
+                                              column(6, align = "left",
+                                                     tabsetPanel(
+                                                       tabPanel("Size",
+                                                                br(),
+                                                                selectInput("schooldrop2", "Select Characteristic:", width = "100%", choices = c(
+                                                                  "Enrollment" = "cenrol",
+                                                                  "Educators" = "cteacher"
+                                                                  
+                                                                ),
+                                                                ),
                                                                 
-                                                              ),
-                                                              ),
-                                                              
-                                                              withSpinner(withSpinner(plotlyOutput("schoolgrades", height = "500px", width = "100%"))),
-                                                              
-                                                              #br(""),
-                                                              #withSpinner(plotlyOutput("grades_english", height = "500px", width = "100%")),
-                                                              #br(""),
-                                                              
-                                                              #br(""),
-                                                              p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
-                                                              p("*Note: Data unavailable where missing bars.", style = "font-size:12px;"),
-                                                       )
+                                                                withSpinner(plotlyOutput("ocuplot2", height = "500px", width = "100%")),
+                                                                img(src = "stratiohyphen.png", class = "topimage", width = "80%", height ="80%", style = "display: block; margin-left: auto; margin-right: auto;"),
+                                                                
+                                                                column(12,align = "right",
+                                                                       p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
+                                                                ),
+                                                                
+                                                       ),
                                                        
+                                                       tabPanel("Absences",
+                                                                br(),
+                                                                selectInput("schooldrop3", "Select Characteristic:", width = "100%", choices = c(
+                                                                  
+                                                                  "Absences" = "attend", 
+                                                                  "Chronic Absenteeism" = "chronic"
+                                                                  
+                                                                  
+                                                                ),
+                                                                ),
+                                                                
+                                                                withSpinner(plotlyOutput("ocuplot3", height = "500px", width = "100%")),
+                                                                
+                                                                
+                                                                
+                                                                column(12,align = "right",
+                                                                       p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
+                                                                ),
+                                                                
+                                                       ),
+                                                       # tabPanel("Suspension",
+                                                       #          br(),
+                                                       #          selectInput("schoolsuspend", "Select School:", width = "100%", choices = c(
+                                                       #            "Forest Grove" = "forestsuspend",
+                                                       #            "Guilford" = "guilfordsuspend",
+                                                       #            "Rolling Ridge" = "rollingsuspend",
+                                                       #            "Sterling" = "sterlingsuspend",
+                                                       #            "Sugarland" = "sugarlandsuspend",
+                                                       #            "Sully" = "sullysuspend"
+                                                       #            
+                                                       #          ),
+                                                       #          ),
+                                                       #          
+                                                       #          withSpinner(withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%"))),
+                                                       #          
+                                                       # ),
                                                        
-                                                     )      
-                                                              
+                                                       tabPanel( "Assessment",
+                                                                 br(),
+                                                                 fluidRow(
+                                                                   column(12,align = "left",
+                                                                          column(6,
+                                                                                 radioButtons(
+                                                                                   "category_subject",
+                                                                                   label = "Select:",
+                                                                                   choices = c("Mathematics", "English Reading"),
+                                                                                 )),
+                                                                          column(6,
+                                                                                 radioButtons(
+                                                                                   "category_subgroup",
+                                                                                   label = "Select:",
+                                                                                   choices = c("Race", "Gender", "Other Subgroups"),
+                                                                                 )),
+                                                                          
+                                                                          selectInput("schoolgradesdrop", "Select School:", width = "100%", choices = c(
+                                                                            "Forest Grove" = "forestgroverace",
+                                                                            "Guilford" = "guilfordrace",
+                                                                            "Rolling Ridge" = "rollingrace",
+                                                                            "Sterling" = "sterlingrace",
+                                                                            "Sugarland" = "sugarlandrace",
+                                                                            "Sully" = "sullyrace"
+                                                                            
+                                                                          ),
+                                                                          ),
+                                                                          
+                                                                          withSpinner(withSpinner(plotlyOutput("schoolgrades", height = "500px", width = "100%"))),
+                                                                          
+                                                                          #br(""),
+                                                                          #withSpinner(plotlyOutput("grades_english", height = "500px", width = "100%")),
+                                                                          #br(""),
+                                                                          
+                                                                          #br(""),
+                                                                          p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
+                                                                          p("*Note: Data unavailable where missing bars.", style = "font-size:12px;"),
+                                                                   )
+                                                                   
+                                                                   
+                                                                 )      
+                                                                 
+                                                                 
+                                                                 
+                                                                 
+                                                       ),
+                                                       
+                                                     )),
+                                              
+                                              column(6, align = "justify",
+                                                     h4(strong("How are students performing in Community Schools?")),
                                                      
-                                             
-                                             
-                                           ),
-                                           
-                                         )),
-                                     
-                                     column(6, align = "justify",
-                                            h4(strong("How are students performing in Community Schools?")),
-                                            
-                                      
-                                            p("Sterling ES has enrolled a consistent number of students, approximately 575, from 2016 to 2020. Interestingly, the schools with the lowest number of students - Guilford, Sully, and Sugarland - have increased their enrollment since joining the Community Schools Initiative. There are slight differences in the number of educators across schools, although the student population ranged from 461 to 585 in 2019-2020. Sterling Elementary is the only school with a greater proportion of staff than teachers. Sully ES has the highest student-to-teacher ratio, with 14 students per teacher, even though it has the lowest number of students. ", style = "padding-top:15px;font-size: 14px;"),
-                                            
-                                            p("We utilize data from the Loudoun County Public Schools Dashboard and the Virginia Department of Education to analyze students’ behavior. Sully ES had the largest increase in absence rate across the year. There is also a substantial increase across all schools in the second and fourth quarters of the 2020-2021 school year. We acknowledge that this rate may be skewed due to the Covid-19 pandemic. As such, we analyze chronic absenteeism in the prior school year. Virginia Department of Education defines chronic absenteeism as the percentage of students who miss more than ten percent of total classes throughout the year. In 2018-2019, Sugarland, Rolling Ridge, and Sully had the highest chronic absenteeism rate, above 10%. Interestingly, Forest Grove and Sterling’s rates were consistent after the Covid-19 pandemic, whereas there was a massive increase in chronic absenteeism for other schools. Rolling Ridge had the highest rate in 2020-2021, with 17.7% of students missing 1 out of 10 classes. ", style = "padding-top:15px;font-size: 14px;"),
-                                            p("When you look at the suspension percentages amongst the six community schools, we see a much higher percentage of Hispanic children being suspended than any other race. This stays constant throughout all six elementary schools. There are some differences in suspension rates throughout the schools. However, Hispanic children appear to be getting suspended more than other races. Some percentages go as high as 85%, like in Sully Elementary. Although this could be because of the high Hispanic population of the children within the schools, there is still room for improvement to help lower these high percentages.", style = "padding-top:15px;font-size: 14px;"),
-                                            p("We collect and visualize Standard of Learning (SOL) Mathematics and English Reading passing rates for the 2018-2019 and 2020-2021 school years. Due to the COVID-19 pandemic, changes in modality and hardships may have impacted exam scores in 2020-2021. As such, we cannot draw significant conclusions about changes over time. Performance statistics can be disaggregated into subgroups such as race, gender, and other characteristics. Interestingly, students tend to perform better in Mathematics than in English, with the average pass rate for Mathematics being around 75% for all students, whereas the pass rate for English is approximately 60%.",style = "padding-top:15px;font-size: 14px;"),
-                                            br(),
-                                            p(strong("Mathematics")),
-                                            p("Generally, White, and Asian students perform better than their Black and Hispanic counterparts. There is a significant decline in pass rates for all students in the academic year 2020-2021; however, the reduction is steeper for Black and Hispanic students. On average, Rolling Ridge, Sterling, Sugarland, and Sully had lower pass rates (below 80%) among all race/ethnic groups compared to Forest Grove, Guilford, and Rolling Ridge (above 80%) in the academic year 2018-2019. ",style = "padding-top:15px;font-size: 14px;"),
-                                            p("Generally, males tend to have higher pass rates than females regardless of year or school. Homeless and differently-abled students have lower pass rates after the pandemic years. There are variations across schools as students from these subgroups perform poorer in Sully, Sterling, and Guilford than other ES. Moreover, these students had a massive decline in pass rates suggesting possible opportunities to provide resources for these already vulnerable students.",style = "padding-top:15px;font-size: 14px;"),
-                                            br(),
-                                            p(strong("English Reading")),
-                                            p("Some trends in English Reading scores are not very different than the statistics in Mathematics. On average, Hispanic students in all schools perform poorer than the other racial subgroups. Guilford and Forest Grove had White and Black students performing better, whereas in the rest the White and Asian students have higher passing rates. Generally, Asian and White students’ pass rates have either remained steady or fallen marginally whereas Hispanic students seem to have been worst hit by the pandemic. ",style = "padding-top:15px;font-size: 14px;"),
-                                            p("Females tend to do better than males on an average, especially after the pandemic.  Homeless students have lower pass rates after the pandemic years in all schools except in Sully. Students with disabilities do better after the pandemic in Guilford and Sully. However, the passing rates are still very low as compared to the average for these vulnerable groups, suggesting further potential opportunities. ",style = "padding-top:15px;font-size: 14px;"),
-                                            
-                                     )
-                            )),
-                                     
+                                                     
+                                                     p("Sterling ES has enrolled a consistent number of students, approximately 575, from 2016 to 2020. Interestingly, the schools with the lowest number of students - Guilford, Sully, and Sugarland - have increased their enrollment since joining the Community Schools Initiative. There are slight differences in the number of educators across schools, although the student population ranged from 461 to 585 in 2019-2020. Sterling Elementary is the only school with a greater proportion of staff than teachers. Sully ES has the highest student-to-teacher ratio, with 14 students per teacher, even though it has the lowest number of students. ", style = "padding-top:15px;font-size: 14px;"),
+                                                     
+                                                     p("We utilize data from the Loudoun County Public Schools Dashboard and the Virginia Department of Education to analyze students’ behavior. Sully ES had the largest increase in absence rate across the year. There is also a substantial increase across all schools in the second and fourth quarters of the 2020-2021 school year. We acknowledge that this rate may be skewed due to the Covid-19 pandemic. As such, we analyze chronic absenteeism in the prior school year. Virginia Department of Education defines chronic absenteeism as the percentage of students who miss more than ten percent of total classes throughout the year. In 2018-2019, Sugarland, Rolling Ridge, and Sully had the highest chronic absenteeism rate, above 10%. Interestingly, Forest Grove and Sterling’s rates were consistent after the Covid-19 pandemic, whereas there was a massive increase in chronic absenteeism for other schools. Rolling Ridge had the highest rate in 2020-2021, with 17.7% of students missing 1 out of 10 classes. ", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("When you look at the suspension percentages amongst the six community schools, we see a much higher percentage of Hispanic children being suspended than any other race. This stays constant throughout all six elementary schools. There are some differences in suspension rates throughout the schools. However, Hispanic children appear to be getting suspended more than other races. Some percentages go as high as 85%, like in Sully Elementary. Although this could be because of the high Hispanic population of the children within the schools, there is still room for improvement to help lower these high percentages.", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("We collect and visualize Standard of Learning (SOL) Mathematics and English Reading passing rates for the 2018-2019 and 2020-2021 school years. Due to the COVID-19 pandemic, changes in modality and hardships may have impacted exam scores in 2020-2021. As such, we cannot draw significant conclusions about changes over time. Performance statistics can be disaggregated into subgroups such as race, gender, and other characteristics. Interestingly, students tend to perform better in Mathematics than in English, with the average pass rate for Mathematics being around 75% for all students, whereas the pass rate for English is approximately 60%.",style = "padding-top:15px;font-size: 14px;"),
+                                                     br(),
+                                                     p(strong("Mathematics")),
+                                                     p("Generally, White, and Asian students perform better than their Black and Hispanic counterparts. There is a significant decline in pass rates for all students in the academic year 2020-2021; however, the reduction is steeper for Black and Hispanic students. On average, Rolling Ridge, Sterling, Sugarland, and Sully had lower pass rates (below 80%) among all race/ethnic groups compared to Forest Grove, Guilford, and Rolling Ridge (above 80%) in the academic year 2018-2019. ",style = "padding-top:15px;font-size: 14px;"),
+                                                     p("Generally, males tend to have higher pass rates than females regardless of year or school. Homeless and differently-abled students have lower pass rates after the pandemic years. There are variations across schools as students from these subgroups perform poorer in Sully, Sterling, and Guilford than other ES. Moreover, these students had a massive decline in pass rates suggesting possible opportunities to provide resources for these already vulnerable students.",style = "padding-top:15px;font-size: 14px;"),
+                                                     br(),
+                                                     p(strong("English Reading")),
+                                                     p("Some trends in English Reading scores are not very different than the statistics in Mathematics. On average, Hispanic students in all schools perform poorer than the other racial subgroups. Guilford and Forest Grove had White and Black students performing better, whereas in the rest the White and Asian students have higher passing rates. Generally, Asian and White students’ pass rates have either remained steady or fallen marginally whereas Hispanic students seem to have been worst hit by the pandemic. ",style = "padding-top:15px;font-size: 14px;"),
+                                                     p("Females tend to do better than males on an average, especially after the pandemic.  Homeless students have lower pass rates after the pandemic years in all schools except in Sully. Students with disabilities do better after the pandemic in Guilford and Sully. However, the passing rates are still very low as compared to the average for these vulnerable groups, suggesting further potential opportunities. ",style = "padding-top:15px;font-size: 14px;"),
+                                                     
+                                              )
+                                     )),
+                            
                             
                             
                             
@@ -3053,7 +3284,7 @@ ui <- navbarPage(title = "DSPG",
                                                                      column(12, align="justify",
                                                                             p("We present four key indices based on students’ responses:", tags$b("1. Student Engagement"), "which measures whether students believe their decisions are important and they belong;", tags$b("2. Student-Teacher Relationship"), "- Students engagement with teachers;", tags$b("3. Social-Emotional Wellbeing"), "-Students believe they can discuss and work through their emotions; and", tags$b("4. Bullying"), "- Students perception about bullying occurrence. Higher scores mean less bullying.", style = "padding-top:15px;font-size: 14px;"),
                                                                      ),
-                                                                         
+                                                                     
                                                                   )
                                                          ),
                                                          column(6, align = "center",h4(strong("")),
@@ -3113,17 +3344,17 @@ ui <- navbarPage(title = "DSPG",
                                                                 
                                                          ),
                                                          column(12, align = "justify",
-                                                         column(6, align = "justify",
-                                                                br(),
-                                                                p("Most students feel like they belong at their schools and help their class to make decisions at school. There are some differences across schools as on average over 80% of students in Forest Grove, Sugarland, and Sully believe these statements whereas only 70% have these beliefs in Guilford, Rolling Ridge, and Sterling.", align = "justify"),
-                                                                p("Student-Teacher Relationship measures “Teachers and other adults at this school treat me with respect” and “There are teachers or adults at this school I could talk with if I need help with something.” This index is important as students, especially at a young age, should feel comfortable confiding in and talking to their teachers. Interestingly, only 72% of students on average in Sterling indicate a good student-teacher relationship. This is significantly lower than all other elementary community schools, with an overwhelming majority of students having an excellent relationship with teachers. This significant difference suggests a potential opportunity for the Community School program to help Sterling’s student-teacher relationship. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                         ), 
-                                                         column(6, align= "justify",
-                                                                p("There are some differences in students' perceptions about their social-emotional well-being across schools. Social-emotional measures students ability to understand and manage their emotions. It includes questions such as", dQuote("I work out disagreements with other students by talking with them"), "and", dQuote("I can control myself when I am upset."), "On average, less than 80% of Guilford, Rolling Ridge, and Sterling students indicate good social-emotional well-being. This may play a role in students' perception of bullying. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                p("The bullying category includes questions such as", dQuote("I have stopped other people from bullying when I have seen it at school"), "and", dQuote("I have been bullied by students at school this year.(Disagree)."), "The index has been recorded so that a higher score indicates less bullying. These scores are significantly lower than other categories. On average, just a little over 50% of students across all schools believe that bullying is not a problem, meaning at least half of the student population believes it is a problem. Students' perception on bullying and social-emotional well-being suggests community schools can implement more services and resources in the Mental Health pillar to help address these concerns. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                
-                                                         ))
-                                                        
+                                                                column(6, align = "justify",
+                                                                       br(),
+                                                                       p("Most students feel like they belong at their schools and help their class to make decisions at school. There are some differences across schools as on average over 80% of students in Forest Grove, Sugarland, and Sully believe these statements whereas only 70% have these beliefs in Guilford, Rolling Ridge, and Sterling.", align = "justify"),
+                                                                       p("Student-Teacher Relationship measures “Teachers and other adults at this school treat me with respect” and “There are teachers or adults at this school I could talk with if I need help with something.” This index is important as students, especially at a young age, should feel comfortable confiding in and talking to their teachers. Interestingly, only 72% of students on average in Sterling indicate a good student-teacher relationship. This is significantly lower than all other elementary community schools, with an overwhelming majority of students having an excellent relationship with teachers. This significant difference suggests a potential opportunity for the Community School program to help Sterling’s student-teacher relationship. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                ), 
+                                                                column(6, align= "justify",
+                                                                       p("There are some differences in students' perceptions about their social-emotional well-being across schools. Social-emotional measures students ability to understand and manage their emotions. It includes questions such as", dQuote("I work out disagreements with other students by talking with them"), "and", dQuote("I can control myself when I am upset."), "On average, less than 80% of Guilford, Rolling Ridge, and Sterling students indicate good social-emotional well-being. This may play a role in students' perception of bullying. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                       p("The bullying category includes questions such as", dQuote("I have stopped other people from bullying when I have seen it at school"), "and", dQuote("I have been bullied by students at school this year.(Disagree)."), "The index has been recorded so that a higher score indicates less bullying. These scores are significantly lower than other categories. On average, just a little over 50% of students across all schools believe that bullying is not a problem, meaning at least half of the student population believes it is a problem. Students' perception on bullying and social-emotional well-being suggests community schools can implement more services and resources in the Mental Health pillar to help address these concerns. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                       
+                                                                ))
+                                                         
                                                          
                                                 ), 
                                                 
@@ -3136,7 +3367,7 @@ ui <- navbarPage(title = "DSPG",
                                                                            br(""),
                                                                            h2(strong("Parent Perception"),
                                                                               column(12, align = "justify",
-                                                                              p("The four indices below are based on parents’ perception on:", tags$b("1. Academic Support"), "– Academic expectations and individualized instruction;", tags$b("2. Communications"), "– School and teacher communication to parents;", tags$b("3. Relationships"), "– Welcoming environment, social-emotional support, respect for students; and", tags$b("4. Instructions"), "– Measures of LCPS initiatives that helps foster deep learning and thinking. ", style = "padding-top:15px;font-size: 14px;"),
+                                                                                     p("The four indices below are based on parents’ perception on:", tags$b("1. Academic Support"), "– Academic expectations and individualized instruction;", tags$b("2. Communications"), "– School and teacher communication to parents;", tags$b("3. Relationships"), "– Welcoming environment, social-emotional support, respect for students; and", tags$b("4. Instructions"), "– Measures of LCPS initiatives that helps foster deep learning and thinking. ", style = "padding-top:15px;font-size: 14px;"),
                                                                               ),
                                                                               #h4(""),
                                                                               #h4("[updat this]"),
@@ -3212,8 +3443,8 @@ ui <- navbarPage(title = "DSPG",
                                                                                 p("Parents' perceptions across schools appear to be consistent across most categories. On average, over 90% of parents from all schools believe that:", tags$b("1."), "schools have high academic expectations and individualized instruction;", tags$b("2."), "there is a welcoming environment for students and families, and", tags$b("3."), "their child is engaging in deep learning and critical thinking. Communication is the only category with are slight differences in parents’ responses. Parents from Forest Grove and Sugarland rank their schools’ communication process lower than other schools; however, it is still significantly high at 85% and 86%, respectively. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
                                                                          )),
                                                                   
-                                                                
-                                                              
+                                                                  
+                                                                  
                                                          )
                                                 ),
                                                 
@@ -3300,21 +3531,21 @@ ui <- navbarPage(title = "DSPG",
                                                          ),
                                                          column(12, align = "justify",
                                                                 br(),
-                                                         column(6, align = "justify",
-                                                                p("Staff Collegiality comprises of the following questions:", dQuote("Teachers and other adults at this school support one another to meet the needs of all students"), "and", dQuote("Teachers and other adults at this school have taught me things that have helped me do my job better"), style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                p("Academic Environment comprises of the following questions:", dQuote("Teachers and other adults at this school provide students the support they need to succeed"), "and", dQuote("Students put forth the effort required to learn the material"), style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                p("School Leadership comprises of the following questions:", dQuote("I feel comfortable raising issues and concerns that are important to me with school administrators;"), dQuote("This school’s administrators support the professional development of staff;"), dQuote("This school’s administrators support teachers’ efforts to maintain discipline in the classrooms;"), "and", dQuote("This school's administrators set high expectations for all students."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                         ),
-                                                         column(6, align = "justify",
-                                                                p("Managing Student Behavior comprises of the following questions:", dQuote("Students know how this school defines inappropriate behavior;"), dQuote("Students know there are consequences for breaking school rules;"), dQuote("Teachers and other adults at this school consistently enforce rules for student behavior;"), dQuote("Students are acknowledged for positive behavior;"), dQuote("There are supports to help a student who consistently misbehaves develop positive behavior;"), "and", dQuote("We use data to evaluate and, if needed, adjust this school’s student conduct policies."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                p("Workplace Environment comprises of the following questions:", dQuote("The physical environment of my workspace supports my work responsibilities;"), dQuote("My school provides me with sufficient access to appropriate supplies and materials;"), "and", dQuote("I have the support I need to incorporate technology into my work responsibilities."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                p("Instructional Environment comprises of the following questions:", dQuote("The physical environment of my classroom supports my teaching and my students’ learning;"), dQuote("My school provides me with sufficient access to appropriate instructional materials;"), "and", dQuote("I have the support I need to incorporate technology into my instruction."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                
-                                                         ),
-                                                         br(""),
-                                                         br(""),
-                                                         br(""),
-                                                        ))),
+                                                                column(6, align = "justify",
+                                                                       p("Staff Collegiality comprises of the following questions:", dQuote("Teachers and other adults at this school support one another to meet the needs of all students"), "and", dQuote("Teachers and other adults at this school have taught me things that have helped me do my job better"), style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                       p("Academic Environment comprises of the following questions:", dQuote("Teachers and other adults at this school provide students the support they need to succeed"), "and", dQuote("Students put forth the effort required to learn the material"), style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                       p("School Leadership comprises of the following questions:", dQuote("I feel comfortable raising issues and concerns that are important to me with school administrators;"), dQuote("This school’s administrators support the professional development of staff;"), dQuote("This school’s administrators support teachers’ efforts to maintain discipline in the classrooms;"), "and", dQuote("This school's administrators set high expectations for all students."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                ),
+                                                                column(6, align = "justify",
+                                                                       p("Managing Student Behavior comprises of the following questions:", dQuote("Students know how this school defines inappropriate behavior;"), dQuote("Students know there are consequences for breaking school rules;"), dQuote("Teachers and other adults at this school consistently enforce rules for student behavior;"), dQuote("Students are acknowledged for positive behavior;"), dQuote("There are supports to help a student who consistently misbehaves develop positive behavior;"), "and", dQuote("We use data to evaluate and, if needed, adjust this school’s student conduct policies."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                       p("Workplace Environment comprises of the following questions:", dQuote("The physical environment of my workspace supports my work responsibilities;"), dQuote("My school provides me with sufficient access to appropriate supplies and materials;"), "and", dQuote("I have the support I need to incorporate technology into my work responsibilities."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                       p("Instructional Environment comprises of the following questions:", dQuote("The physical environment of my classroom supports my teaching and my students’ learning;"), dQuote("My school provides me with sufficient access to appropriate instructional materials;"), "and", dQuote("I have the support I need to incorporate technology into my instruction."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                       
+                                                                ),
+                                                                br(""),
+                                                                br(""),
+                                                                br(""),
+                                                         ))),
                                               # column(12, 
                                               # h4("References: "),
                                               # p("[1] U.S Department of Education, Office of Elementary and Secondary Education. Full-Service Community Schools Program (FSCS). Retrieved from:", a(href =  "https://oese.ed.gov/offices/office-of-discretionary-grants-support-services/school-choice-improvement-programs/full-service-community-schools-program-fscs/", "https://oese.ed.gov/offices/office-of-discretionary-grants-support-services/school-choice-improvement-programs/full-service-community-schools-program-fscs/"), style = "font-size:12px;"),
@@ -3343,61 +3574,61 @@ ui <- navbarPage(title = "DSPG",
                                                        withSpinner(plotlyOutput("generaldatafilledlinegraphs", height = "500px", width = "100%")),
                                                 ),
                                                 column(6, align = "justify",
-                                                p("For students attending Loudoun County Public Schools learning English as a second language, they are placed in the English Learners (EL) program. At the community schools, a slight increase in students participating in the EL program was seen from the years 2018 to 2021 going from 67% to just about 70%."),
-                                                p("It is important for all students who needs special education to have a developed and credited Individual Education Plan (IEP). In the community schools, we see a positive increase in IEP status from the school year 2018-2019 to 2019-2020 rising from 10% to 11%. Noticeably, it falls again, this time to 9% in the 2021-2022 academic school year."),
-                                                p("For most students, especially within community schools, their parents are not always able to afford school lunch prices. Throughout the academic school years of 2018 to 2022 in our community schools, we see the percentage of students receiving free and reduced lunch fluctuate, but primarily stay between the percentages of 72% and 74%."),
-                                                p("For students attending the community schools, we see 13% are homeless in the 2018-2019 academic school year. After rising to a whopping 16% the following school year, we see a noticeably two-year decline in students facing homelessness. This is a great trend that we hope we can continue as a result of this project."),
-                                                p("Over 800 families received weekend meals in 2020 and 2021, jumping from 600 in 2019 and only 135 in 2018"),
-                                                p("538 families received basic supplies in 2018, 832 families received basic supplies in 2020. This increase in both basic supplies and weekend meals indicates a growing need for more resources"),
-                                                p("About 80% of students at Guilford and Sully ate breakfast at school in 2020 – 2021, forest grove saw an increase from 23% to 65% of students who ate breakfast from 2019 to 2020. Over half of the students at Sugarland eat breakfast at school"),
-                                       )),
+                                                       p("For students attending Loudoun County Public Schools learning English as a second language, they are placed in the English Learners (EL) program. At the community schools, a slight increase in students participating in the EL program was seen from the years 2018 to 2021 going from 67% to just about 70%."),
+                                                       p("It is important for all students who needs special education to have a developed and credited Individual Education Plan (IEP). In the community schools, we see a positive increase in IEP status from the school year 2018-2019 to 2019-2020 rising from 10% to 11%. Noticeably, it falls again, this time to 9% in the 2021-2022 academic school year."),
+                                                       p("For most students, especially within community schools, their parents are not always able to afford school lunch prices. Throughout the academic school years of 2018 to 2022 in our community schools, we see the percentage of students receiving free and reduced lunch fluctuate, but primarily stay between the percentages of 72% and 74%."),
+                                                       p("For students attending the community schools, we see 13% are homeless in the 2018-2019 academic school year. After rising to a whopping 16% the following school year, we see a noticeably two-year decline in students facing homelessness. This is a great trend that we hope we can continue as a result of this project."),
+                                                       p("Over 800 families received weekend meals in 2020 and 2021, jumping from 600 in 2019 and only 135 in 2018"),
+                                                       p("538 families received basic supplies in 2018, 832 families received basic supplies in 2020. This increase in both basic supplies and weekend meals indicates a growing need for more resources"),
+                                                       p("About 80% of students at Guilford and Sully ate breakfast at school in 2020 – 2021, forest grove saw an increase from 23% to 65% of students who ate breakfast from 2019 to 2020. Over half of the students at Sugarland eat breakfast at school"),
+                                                )),
                                        tabPanel("Responses",
-                                     fluidPage(style = "margin: 2px;",
-                                               fluidRow(
-                                                
-                                                 column(12, align = "left",
-                                                        radioButtons(
-                                                          "category",
+                                                fluidPage(style = "margin: 2px;",
+                                                          fluidRow(
+                                                            
+                                                            column(12, align = "left",
+                                                                   radioButtons(
+                                                                     "category",
+                                                                     
+                                                                     label = "Select:",
+                                                                     choices = c("Challenges and Weaknesses", "Strengths and Successes", "Future Goals"),
+                                                                   ))),
                                                           
-                                                          label = "Select:",
-                                                          choices = c("Challenges and Weaknesses", "Strengths and Successes", "Future Goals"),
-                                                        ))),
-                                               
-                                               column(5, align = "left",
-                                                      wordcloud2Output("wordcloud")
-                                               ),
-                                               
-                                               column(7, align = "justify",
-                                                      p("Loudoun County Public Schools surveyed each school representative in 2020-2021 to obtain information on the state of the Elementary Community Schools. Questions ranged from strengths, weaknesses, and utilization of different programs. We present word clouds to highlight representatives’ major responses.  The bigger the word appears, the more often it is mentioned in the representative’s response. Hovering over the word will show the number of times the school representatives used the term in their response. "),
-                                                      h4(strong("Challenges and Weaknesses Faced")),
-                                                      p("Challenges and Weaknesses consist of responses to two questions: 'What are your school's biggest challenges?' and 'What are your school's biggest weaknesses?'. The word cloud suggests that the biggest challenges for Elementary Community Schools in Sterling are mental health and ensuring care for the undocumented and uninsured, especially for Forest Grove and Sterling. Parent involvement is also a significant concern for representatives in Sugarland."),
-                                                      h4(strong("Strengths and Successes")), 
-                                                      p("Responses suggest that schools generally do well in the Family Engagement pillar, except for Sugarland. There is also a strong sense of community and teamwork. Teachers and staff at these schools also feel valued. If there is a negative word, for example, 'gaggle' - it means there has been a decrease in that area in one or many schools, depending on the size of the word: so in this case, one school, Sugarland saw a reduction of gaggle reports. ('Gaggle is a student surveillance application, in which student work and behavior are scrutinized for indicators of violence or a mental health crisis, and profanity and sexuality are policed.')"),
-                                                      h4(strong("Future Goals")),
-                                                      p("Future Goals primarily focus on creating more opportunities to engage and offer to students and parents. Representatives would like to focus on program development as the schools continue working with the students and their families. Another major goal for all schools is the partnership creation and development with community members to help expand programs. This is evident by numerous terms such as agencies, stakeholder, partners, partnerships, involvement, community, meaningful services addition, and assistance.")
-                                               )
-                                     )),
-                                    
-                                     tabPanel("Partners",
-                                              column(9, 
-                                                     
-                                                     collapsibleTreeOutput("tree1",height = "600px", width = "100%") 
-                                                     
-                                                     ),
-                                              
-                                              column(3, align = "justify",
-                                                     br(),
-                                                     br(),
-                                                     br(),
-                                                     br(),
-                                                     br(),
-                                                     p("The school representatives were also asked about the key partners which help support the activities for each of the pillars. This interactive tree shows these key partners and programs in each of these schools for the year 2020-2021. One can zoom in and out or scroll around the tree for visual ease. The tree has been categorised pillar-wise to help in conducting a school wise comparative analysis, to note the different partners and thus can help to find further partnership possibilities. The size of the node is determined by the number of entries it contains, hence bigger circles of the schools point to more partnerships. As an example, Sterling Elementary has the highest number of partners for Youth Development activities, hence the blue circle is the largest. This tree is however not exhaustive since there were a few missing information (for eg., Forest Grove has no information on their key partners for the Youth Development Pillar).")
-                                                     )
-                                              
-                                              
-                                              )
-                                    
-                                     
+                                                          column(5, align = "left",
+                                                                 wordcloud2Output("wordcloud")
+                                                          ),
+                                                          
+                                                          column(7, align = "justify",
+                                                                 p("Loudoun County Public Schools surveyed each school representative in 2020-2021 to obtain information on the state of the Elementary Community Schools. Questions ranged from strengths, weaknesses, and utilization of different programs. We present word clouds to highlight representatives’ major responses.  The bigger the word appears, the more often it is mentioned in the representative’s response. Hovering over the word will show the number of times the school representatives used the term in their response. "),
+                                                                 h4(strong("Challenges and Weaknesses Faced")),
+                                                                 p("Challenges and Weaknesses consist of responses to two questions: 'What are your school's biggest challenges?' and 'What are your school's biggest weaknesses?'. The word cloud suggests that the biggest challenges for Elementary Community Schools in Sterling are mental health and ensuring care for the undocumented and uninsured, especially for Forest Grove and Sterling. Parent involvement is also a significant concern for representatives in Sugarland."),
+                                                                 h4(strong("Strengths and Successes")), 
+                                                                 p("Responses suggest that schools generally do well in the Family Engagement pillar, except for Sugarland. There is also a strong sense of community and teamwork. Teachers and staff at these schools also feel valued. If there is a negative word, for example, 'gaggle' - it means there has been a decrease in that area in one or many schools, depending on the size of the word: so in this case, one school, Sugarland saw a reduction of gaggle reports. ('Gaggle is a student surveillance application, in which student work and behavior are scrutinized for indicators of violence or a mental health crisis, and profanity and sexuality are policed.')"),
+                                                                 h4(strong("Future Goals")),
+                                                                 p("Future Goals primarily focus on creating more opportunities to engage and offer to students and parents. Representatives would like to focus on program development as the schools continue working with the students and their families. Another major goal for all schools is the partnership creation and development with community members to help expand programs. This is evident by numerous terms such as agencies, stakeholder, partners, partnerships, involvement, community, meaningful services addition, and assistance.")
+                                                          )
+                                                )),
+                                       
+                                       tabPanel("Partners",
+                                                column(9, 
+                                                       
+                                                       collapsibleTreeOutput("tree1",height = "600px", width = "100%") 
+                                                       
+                                                ),
+                                                
+                                                column(3, align = "justify",
+                                                       br(),
+                                                       br(),
+                                                       br(),
+                                                       br(),
+                                                       br(),
+                                                       p("The school representatives were also asked about the key partners which help support the activities for each of the pillars. This interactive tree shows these key partners and programs in each of these schools for the year 2020-2021. One can zoom in and out or scroll around the tree for visual ease. The tree has been categorised pillar-wise to help in conducting a school wise comparative analysis, to note the different partners and thus can help to find further partnership possibilities. The size of the node is determined by the number of entries it contains, hence bigger circles of the schools point to more partnerships. As an example, Sterling Elementary has the highest number of partners for Youth Development activities, hence the blue circle is the largest. This tree is however not exhaustive since there were a few missing information (for eg., Forest Grove has no information on their key partners for the Youth Development Pillar).")
+                                                )
+                                                
+                                                
+                                       )
+                                       
+                                       
                                      ))
                             
                             #tabPanel(h4("Weaknesses and biggest challenges")),
@@ -3572,11 +3803,11 @@ ui <- navbarPage(title = "DSPG",
                                               column(12, align = "center",h1(strong("All Services")),
                                                      DT::dataTableOutput("resourcetable"),
                                                      p(""),
-           
+                                                     
                                               )),
-
-                 )),
-
+                                     
+                            )),
+                 
                  
                  tabPanel("Recommendations",
                           fluidRow(style = "margin: 6px;",
@@ -3589,71 +3820,71 @@ ui <- navbarPage(title = "DSPG",
                                           
                                    )),
                           fluidPage(style = "margin: 2px;", align = "justify",
-                                   
+                                    
                                     column(7,
                                            h2(strong("Opportunities Within Pillars")),
                                            p("We present sociodemographic characteristics and performance statistics visualization to understand the student population in the six Elementary Community Schools in Sterling, Loudoun. Information on students, educators, parents, and school representatives' perceptions was also included in our analysis to understand better these schools' environments and their strengths and challenges. Using these visualizations, we analyze the findings to recommend the following potential opportunities for improvement for each pillar of the Community School Program: "),
                                            h4(strong("Health and Social Services")),
-                                            p("Community Schools address not only the needs of students but also those of family members. One recommendation is to increase the number of resources and services available to families in Health and Social Services. About 40% of Sterling residents are either uninsured or have public health insurance highlighting the need for affordable, inclusive medical care. This appears to be an important opportunity as Community Schools Liaisons highlighted “health,” “medial,” and “uninsured” as significant challenges and weaknesses facing families at these schools. Moreover, our maps show that most of these medical, dental, and vision services are within a 20-minute distance of Sterling ES (midpoint), which may prove difficult for families with unreliable transportation. The number of these resources drastically reduces if we examine only those that are free. As such, providing annual mobile medical, dental, and vision services can play a significant role for families at these community schools, which may also improve students' health and performance. Community schools could also partner with medical providers to help perform for free or at a reduced cost for preventative and restorative services.  "),
-                                            h4(strong("Mental Health")),
+                                           p("Community Schools address not only the needs of students but also those of family members. One recommendation is to increase the number of resources and services available to families in Health and Social Services. About 40% of Sterling residents are either uninsured or have public health insurance highlighting the need for affordable, inclusive medical care. This appears to be an important opportunity as Community Schools Liaisons highlighted “health,” “medial,” and “uninsured” as significant challenges and weaknesses facing families at these schools. Moreover, our maps show that most of these medical, dental, and vision services are within a 20-minute distance of Sterling ES (midpoint), which may prove difficult for families with unreliable transportation. The number of these resources drastically reduces if we examine only those that are free. As such, providing annual mobile medical, dental, and vision services can play a significant role for families at these community schools, which may also improve students' health and performance. Community schools could also partner with medical providers to help perform for free or at a reduced cost for preventative and restorative services.  "),
+                                           h4(strong("Mental Health")),
                                            p("Our research shows a lack of mental health resources within a 10-minute drive for students and the community. There are also some schools where many students perceive bullying as a problem and a low level of social-emotional well-being. Thus, at such a tender age, it would be helpful to include more individual counseling and referral systems to helps students learn emotion management, communication, and self-discipline. Schools can also try to find community organizations and individuals who can provide such counseling services at no or reduced cost to families. This may strengthen families to implement early-intervention strategies to help students who display disruptive behavior and help with their emotional well-being. Engaging families may also help schools adjust any chronic absenteeism that is occurring during the semester."),
-                                        h4(strong("Youth Development")),
-                                          p("Students from low-income families tend to have less access to enrichment opportunities beyond the traditional classroom. Increasing after-school programs, such as athletic clubs, could provide opportunities for youth to build communication skills while remaining healthy and actively learning. Students and parents could also benefit from these programs as students expand their learning and interests while decreasing the time parents must juggle between work and childcare. The 2020-2021 academic school year saw a drop in academic performances for all six community schools. This was especially severe for Hispanic and Black students, that had a dramatic decline. Although this was following the COVID-19 pandemic, this could be an opportunity to provide extra tutoring hours at the local library or a study hall session during the school day to help alleviate the disruptions of online learning. "),
-                                          h4(strong("Family Development")),
+                                           h4(strong("Youth Development")),
+                                           p("Students from low-income families tend to have less access to enrichment opportunities beyond the traditional classroom. Increasing after-school programs, such as athletic clubs, could provide opportunities for youth to build communication skills while remaining healthy and actively learning. Students and parents could also benefit from these programs as students expand their learning and interests while decreasing the time parents must juggle between work and childcare. The 2020-2021 academic school year saw a drop in academic performances for all six community schools. This was especially severe for Hispanic and Black students, that had a dramatic decline. Although this was following the COVID-19 pandemic, this could be an opportunity to provide extra tutoring hours at the local library or a study hall session during the school day to help alleviate the disruptions of online learning. "),
+                                           h4(strong("Family Development")),
                                            p("There is a significantly large number of Hispanic students attending community schools. These students will require additional needs, such as multi-language resources for both students and parents, to ensure a clear line of communication for all involved in the learning process. Additionally, providing more opportunities for parent feedback forums and family events at the school may increase parents’ feelings of positive relationships and communication with the school as some of these parents are undocumented, as suggested by the Community School liaison.  "),
-                                          p("In our research, we found that there are few families engagement resources available within a 10-minute drive of Sterling Elementary, a possible opportunity to help reduce travel time for parents could be to host a resource fair at the schools allowing parents easy access to these resources. Community School Liaisons also indicate that “rent,” “internet,” “housing,” and “food” are also significant challenges for families at these community schools. This is also essential as some students have a large population of students who experience homelessness. Thus, helping families within these areas would be beneficial. ")
-                 ),
-                 column(5, align= "justify",
-                        h2(strong("Individual School Key Takeaways")),
-                        p("The following takeaways are conclusions from the school reports that each school representative submitted in the year 2020-2021 and the various visualizations in the previous tabs from the data collected from Virginia Department of Education and Loudoun Dashboard. "),
-                        h4(strong("Forest Grove")),
-                        tags$div(
-                          tags$ul(
-                            tags$li("Few key partners to support their four pillars"),
-                            tags$li("School representatives view family engagement as a major challenge "),
-                            tags$li("Decrease in enrollment rate "),
-                            tags$li("Decrease in chronic absenteeism "),
-                            tags$li("Strengthen Mental Health resources – meetings with Unified Mental Health Team"))),
-                        h4(strong("Guilford")),
-                        tags$div(
-                          tags$ul(
-                            tags$li("Few partners to support youth development pillar "),
-                            tags$li("Community internet needs reported as a major challenge "),
-                            tags$li("Good support in Health and Social Services and Family Engagement pillars "),
-                            tags$li("Parents feel adept at using technology to aid in learning "),
-                            tags$li("High proportion of Hispanic students  "),
-                            ),
-                          ),
-                        h4(strong("Rolling Ridge")),
-                        tags$div(
-                          tags$ul(
-                            tags$li("Increases in Mental Health resources"),
-                            tags$li("High proportion of Hispanic students "),
-                            tags$li("School reports to be well connected with families"),
-                            tags$li("Lowest student to teacher ratio"),
-                               )),
-                          h4(strong("Sterling")),
-                          tags$div(
-                            tags$ul(
-                              tags$li("Mental Health resources are a major challenge as reported by School representative "),
-                              tags$li("Several partners in Health and Social Services and Youth Development pillar "),
-                              tags$li("Maintained levels of chronic absenteeism during pandemic"),
-                            )),
-                            h4(strong("Sugarland")),
-                            tags$div(
-                              tags$ul(
-                                tags$li("Representatives view Family Engagement as a key challenge "),
-                                tags$li("Highest levels of chronic absenteeism  "),
-                                tags$li("Appears to have least number of key partners"),
-                              )),
-                              h4(strong("Sully")),
-                              tags$div(
-                                tags$ul(
-                                  tags$li("Low performance on Math and English standardized exams "),
-                                  tags$li("Highest student to teacher ratio with the lowest enrollment "),
-                                  tags$li("Large proportion of Hispanic students "),
-                                )),
-                 ))),
+                                           p("In our research, we found that there are few families engagement resources available within a 10-minute drive of Sterling Elementary, a possible opportunity to help reduce travel time for parents could be to host a resource fair at the schools allowing parents easy access to these resources. Community School Liaisons also indicate that “rent,” “internet,” “housing,” and “food” are also significant challenges for families at these community schools. This is also essential as some students have a large population of students who experience homelessness. Thus, helping families within these areas would be beneficial. ")
+                                    ),
+                                    column(5, align= "justify",
+                                           h2(strong("Individual School Key Takeaways")),
+                                           p("The following takeaways are conclusions from the school reports that each school representative submitted in the year 2020-2021 and the various visualizations in the previous tabs from the data collected from Virginia Department of Education and Loudoun Dashboard. "),
+                                           h4(strong("Forest Grove")),
+                                           tags$div(
+                                             tags$ul(
+                                               tags$li("Few key partners to support their four pillars"),
+                                               tags$li("School representatives view family engagement as a major challenge "),
+                                               tags$li("Decrease in enrollment rate "),
+                                               tags$li("Decrease in chronic absenteeism "),
+                                               tags$li("Strengthen Mental Health resources – meetings with Unified Mental Health Team"))),
+                                           h4(strong("Guilford")),
+                                           tags$div(
+                                             tags$ul(
+                                               tags$li("Few partners to support youth development pillar "),
+                                               tags$li("Community internet needs reported as a major challenge "),
+                                               tags$li("Good support in Health and Social Services and Family Engagement pillars "),
+                                               tags$li("Parents feel adept at using technology to aid in learning "),
+                                               tags$li("High proportion of Hispanic students  "),
+                                             ),
+                                           ),
+                                           h4(strong("Rolling Ridge")),
+                                           tags$div(
+                                             tags$ul(
+                                               tags$li("Increases in Mental Health resources"),
+                                               tags$li("High proportion of Hispanic students "),
+                                               tags$li("School reports to be well connected with families"),
+                                               tags$li("Lowest student to teacher ratio"),
+                                             )),
+                                           h4(strong("Sterling")),
+                                           tags$div(
+                                             tags$ul(
+                                               tags$li("Mental Health resources are a major challenge as reported by School representative "),
+                                               tags$li("Several partners in Health and Social Services and Youth Development pillar "),
+                                               tags$li("Maintained levels of chronic absenteeism during pandemic"),
+                                             )),
+                                           h4(strong("Sugarland")),
+                                           tags$div(
+                                             tags$ul(
+                                               tags$li("Representatives view Family Engagement as a key challenge "),
+                                               tags$li("Highest levels of chronic absenteeism  "),
+                                               tags$li("Appears to have least number of key partners"),
+                                             )),
+                                           h4(strong("Sully")),
+                                           tags$div(
+                                             tags$ul(
+                                               tags$li("Low performance on Math and English standardized exams "),
+                                               tags$li("Highest student to teacher ratio with the lowest enrollment "),
+                                               tags$li("Large proportion of Hispanic students "),
+                                             )),
+                                    ))),
                  #----------------Data Tab------------------------------------------
                  tabPanel("Data ", value = "data",
                           fluidRow(style = "margin: 6px;",
@@ -3668,7 +3899,7 @@ ui <- navbarPage(title = "DSPG",
                                           br(), 
                                           br(),
                                           br(),
-                                        
+                                          
                                           img(src = 'VDOEimage.png', style = "display: inline; float: left;", width = "200px"),
                                           p(strong("Virginia Department of Education:"), "The Virginia Department of Education records the information for all Virginia schools county wise. We graphed the demographics such as like enrollment ,chronic absenteeism,  absences and number of educators for the 6 Sterling Community Schools for the years 2016 – 2020. ", style = "padding-top:20px;", align = "justify"), 
                                           br(), 
@@ -3699,7 +3930,7 @@ ui <- navbarPage(title = "DSPG",
                           )
                           
                  ),
-      #---------------Meet the Team Tab-------------------------           
+                 #---------------Meet the Team Tab-------------------------           
                  tabPanel("Meet the Team", value = "team",
                           fluidRow(style = "margin-left: 100px; margin-right: 100px;",
                                    h1(strong("Team"), align = "center"),
@@ -3721,19 +3952,19 @@ ui <- navbarPage(title = "DSPG",
                                           img(src = "Amanda Ljuba.jpg", style = "display: inline; margin-right: 5px; border: 1px solid #C0C0C0;", width = "150px"),
                                           img(src = "Jontayvion Osborne.jpg", style = "display: inline; margin-right: 5px; border: 1px solid #C0C0C0;", width = "150px"),
                                           img(src = "Chaudhry Abdullah Rizwan.jpg", style = "display: inline; border: 1px solid #C0C0C0;", width = "150px"),
-                                         
+                                          
                                           p("", style = "padding-top:10px;"), 
                                           p(a(href = 'https://www.linkedin.com/in/nandini-das-390577104/', 'Nandini Das', target = '_blank'), "(Virginia Tech, Graduate in Economics Department);"),
                                           p(a(href = 'https://www.linkedin.com/in/amanda-ljuba-9824551b9', 'Amanda Ljuba', target = '_blank'), "(Virginia Tech, Undergraduate in Sociology with a concentration in Social Inequality);"),
                                           p(a(href = 'https://www.linkedin.com/in/jontayvion-osborne-a3b7961a7', 'Jontayvion Osborne', target = '_blank'), "Austin Peay State University, Undergraduate in Business Management and Minor in Marketing) ;"),
                                           p(a(href = 'https://www.linkedin.com/in/chaudhry-abdullah-rizwan-a1641522b/', 'Chaudhry Abdullah Rizwan', target = '_blank'), "(Virginia Tech, Undergraduate in Computational Modeling and Data Analytics and Economics, Minors in Computer Science and Mathematics)."),
-                                         
+                                          
                                           p("", style = "padding-top:10px;") 
                                    ),
                                    column(6, align = "center",
                                           h4(strong("VT Faculty Team Member")),
                                           img(src = "faculty-chanita.png", style = "display: inline; margin-right: 5px; border: 1px solid #C0C0C0;", width = "150px"),
-                                         
+                                          
                                           p("", style = "padding-top:10px;"), 
                                           p(a(href = "https://aaec.vt.edu/people/faculty/holmes-chanita.html", 'Chanita Holmes', target = '_blank'), "(Project Lead, Virgina Tech, Research Assistant Professor)") , 
                                           
@@ -3751,18 +3982,42 @@ ui <- navbarPage(title = "DSPG",
                  )
                  
 )
+
+
 #---------------------- server -----------------------------------------------------------
 server <- function(input, output, session) {
   # Run JavaScript Code
   runjs(jscode)
   
-  # The Initiative
+  # Render map 
   output$map1 <- renderLeaflet({
     map1
   })
- 
   
-  #Sociodemographics
+  
+  
+  
+  output$weekendmeals <- renderPlotly({
+    weekendmeals
+  })
+  
+  output$basicsupplies <- renderPlotly({
+    basicsupplies
+  })
+  
+  
+  Var <- reactive({
+    input$demosdrop
+  })
+  
+  
+  
+  
+  output$demoHispanicPIE <- renderPlotly({
+    if (Var3() == "race") {
+      HispanicPercentagePIE
+    }
+  })
   
   Var3 <- reactive({
     input$demos1drop
@@ -3822,13 +4077,6 @@ server <- function(input, output, session) {
       
     }
     
-    else if (Var4() == "housing") {
-      
-      housing
-      
-      
-    }
-    
   })
   
   output$PropComp <- renderPlotly({
@@ -3870,27 +4118,146 @@ server <- function(input, output, session) {
   })
   
   
-  output$demoHispanicPIE <- renderPlotly({
-    if (Var3() == "race") {
-      HispanicPercentagePIE
-    }
+  #---------performance graphs--------------
+  
+  Varperf <- reactive({
+    input$gradesdrop
   })
   
-  #Schools 
+  category_subject <- reactive({
+    input$category_subject
+  })
+  
+  output$grades  <- renderPlotly({
+    
+    if(category_subject() == "Mathematics") {
+      
+      if (Varperf() == "allstudentsgrades") {
+        
+        math_all 
+        
+      }
+      
+      else if (Varperf() == "blackgrades") {
+        
+        math_black
+        
+      }
+      
+      else if (Varperf() == "whitegrades") {
+        
+        math_white
+        
+      }
+      
+      
+      else if (Varperf() == "asiangrades") {
+        
+        math_asian
+      }
+      
+      else if (Varperf() == "disabilitiesgrades") {
+        
+        math_dis
+        
+        
+      }
+      
+      else if (Varperf() == "hispanicgrades") {
+        
+        math_hispanic
+        
+        
+      }
+      
+      else if (Varperf() == "malegrades") {
+        
+        math_male
+        
+        
+      }
+      
+      
+      else if (Varperf() == "femalegrades") {
+        
+        math_female
+        
+        
+      }
+      
+      else if (Varperf() == "homelessgrades") {
+        
+        math_homeless
+        
+        
+      }
+    } else  {
+      if  (Varperf() == "allstudentsgrades") {
+        
+        english_all 
+        
+      }
+      
+      else if (Varperf() == "whitegrades") {
+        
+        english_white
+        
+      }
+      
+      else if (Varperf() == "blackgrades") {
+        
+        english_black
+        
+      }
+      
+      else if (Varperf() == "asiangrades") {
+        
+        english_asian
+      }
+      
+      else if (Varperf() == "disabilitiesgrades") {
+        
+        english_dis
+        
+        
+      }
+      
+      else if (Varperf() == "hispanicgrades") {
+        
+        english_hispanic
+        
+        
+      }
+      
+      else if (Varperf() == "malegrades") {
+        
+        english_male
+        
+        
+      }
+      
+      
+      else if (Varperf() == "femalegrades") {
+        
+        english_female
+        
+        
+      }
+      
+      else if (Varperf() == "homelessgrades") {
+        
+        english_homeless
+        
+        
+      }}
+    
+    
+  })
+  
+  
+  
   
   #School Demos
-  
-  
-  output$hispanicschool <- renderLeaflet({
-    
-    
-    hispanicschool
-    
-    
-    
-  })
-  
-  
   Var2 <- reactive({
     input$schooldrop1
   }) 
@@ -3962,277 +4329,71 @@ server <- function(input, output, session) {
   })
   
   
-  output$weekendmeals <- renderPlotly({
-    weekendmeals
-  })
-  
-  output$basicsupplies <- renderPlotly({
-    basicsupplies
-  })
-  
-  #---------performance graphs--------------
-  
-  Varperf <- reactive({
-    input$gradesdrop
-  })
-  
-  category_subject <- reactive({
-    input$category_subject
-  })
-  
-  category_subject <- reactive({
-    input$category_subject
-  })
-  
-  category_subgroup <- reactive({
-    input$category_subgroup
-  })
-  
-  
-  Vargrade <- reactive({
-    input$schoolgradesdrop
+  Varsuspend <- reactive({
+    input$schoolsuspend
   }) 
   
-  output$schoolgrades <- renderPlotly({
+  output$schoolsuspendall <- renderPlotly({
     
-    if (category_subgroup() == "Race") {
+    
+    if (Varsuspend() == "forestsuspend") {
       
-      if (category_subject() == "Mathematics") {
-        
-        if (Vargrade() == "forestgroverace") {
-          
-          forestgroverace
-          
-        }
-        
-        else if (Vargrade() == "guilfordrace") {
-          
-          guilfordrace
-        }
-        
-        else if (Vargrade() == "rollingrace") {
-          
-          rrrace
-        }
-        
-        else if (Vargrade() == "sterlingrace") {
-          sterlingrace
-        }
-        
-        else if (Vargrade() == "sugarlandrace") {
-          sugarlandrace
-        }
-        
-        else if (Vargrade() == "sullyrace") {
-          sullyrace
-        }
-      } else if (category_subject() == "English Reading") {
-        
-        if (Vargrade() == "forestgroverace") {
-          
-          forestgroveraceeng
-          
-        }
-        
-        else if (Vargrade() == "guilfordrace") {
-          
-          guilfordraceeng
-        }
-        
-        else if (Vargrade() == "rollingrace") {
-          
-          rrraceeng
-        }
-        
-        else if (Vargrade() == "sterlingrace") {
-          sterlingraceeng
-        }
-        
-        else if (Vargrade() == "sugarlandrace") {
-          sugarlandraceeng
-        }
-        
-        else if (Vargrade() == "sullyrace") {
-          sullyraceeng
-        }
-      } 
-    } else if (category_subgroup() == "Gender") {
+      forestsuspend
       
-      if (category_subject() == "Mathematics") {
-        
-        if (Vargrade() == "forestgroverace") {
-          
-          forestgrovegender
-          
-        }
-        
-        else if (Vargrade() == "guilfordrace") {
-          
-          guilfordgender
-        }
-        
-        else if (Vargrade() == "rollingrace") {
-          
-          rrgender
-        }
-        
-        else if (Vargrade() == "sterlingrace") {
-          sterlinggender
-        }
-        
-        else if (Vargrade() == "sugarlandrace") {
-          sugarlandgender
-        }
-        
-        else if (Vargrade() == "sullyrace") {
-          sullygender
-        }
-      } else {
-        
-        if (Vargrade() == "forestgroverace") {
-          
-          forestgrovegendereng
-          
-        }
-        
-        else if (Vargrade() == "guilfordrace") {
-          
-          guilfordgendereng
-        }
-        
-        else if (Vargrade() == "rollingrace") {
-          
-          rrgendereng
-        }
-        
-        else if (Vargrade() == "sterlingrace") {
-          sterlinggendereng
-        }
-        
-        else if (Vargrade() == "sugarlandrace") {
-          sugarlandgendereng
-        }
-        
-        else if (Vargrade() == "sullyrace") {
-          sullygendereng
-        }
-      }
-    }  else {
-      
-      if (category_subject() == "Mathematics") {
-        
-        if (Vargrade() == "forestgroverace") {
-          
-          forestgroveall
-          
-        }
-        
-        else if (Vargrade() == "guilfordrace") {
-          
-          guilfordall
-        }
-        
-        else if (Vargrade() == "rollingrace") {
-          
-          rrall
-        }
-        
-        else if (Vargrade() == "sterlingrace") {
-          sterlingall
-        }
-        
-        else if (Vargrade() == "sugarlandrace") {
-          sugarlandall
-        }
-        
-        else if (Vargrade() == "sullyrace") {
-          sullyall
-        }
-      } else {
-        
-        if (Vargrade() == "forestgroverace") {
-          
-          forestgrovealleng
-          
-        }
-        
-        else if (Vargrade() == "guilfordrace") {
-          
-          guilfordalleng
-        }
-        
-        else if (Vargrade() == "rollingrace") {
-          
-          rralleng
-        }
-        
-        else if (Vargrade() == "sterlingrace") {
-          sterlingalleng
-        }
-        
-        else if (Vargrade() == "sugarlandrace") {
-          sugarlandalleng
-        }
-        
-        else if (Vargrade() == "sullyrace") {
-          sullyalleng
-        }
-      }
     }
     
+    else if (Varsuspend() == "guilfordsuspend") {
+      
+      guilfordsuspend
+    }
+    
+    else if (Varsuspend() == "rollingsuspend") {
+      
+      rollingsuspend
+    }
+    
+    else if (Varsuspend() == "sterlingsuspend") {
+      sterlingsuspend
+    }
+    
+    else if (Varsuspend() == "sugarlandsuspend") {
+      sugarlandsuspend
+    }
+    
+    else if (Varsuspend() == "sullysuspend") {
+      sullysuspend
+    }
+    
+    
   })
-
-    # Varsuspend <- reactive({
-    #   input$schoolsuspend
-    # }) 
-    # 
-    # output$schoolsuspendall <- renderPlotly({
-    #   
-    #   
-    #   if (Varsuspend() == "forestsuspend") {
-    #     
-    #     forestsuspend
-    #     
-    #   }
-    #   
-    #   else if (Varsuspend() == "guilfordsuspend") {
-    #     
-    #     guilfordsuspend
-    #   }
-    #   
-    #   else if (Varsuspend() == "rollingsuspend") {
-    #     
-    #     rollingsuspend
-    #   }
-    #   
-    #   else if (Varsuspend() == "sterlingsuspend") {
-    #     sterlingsuspend
-    #   }
-    #   
-    #   else if (Varsuspend() == "sugarlandsuspend") {
-    #     sugarlandsuspend
-    #   }
-    #   
-    #   else if (Varsuspend() == "sullysuspend") {
-    #     sullysuspend
-    #   }
-    #   
-    #   
-    # })
-
-   #  observeEvent(c(input$schooldrop2, input$ocuplot2, teacherstudentratio), {
-   #    req(input$schooldrop2)
-   #   if (VarSchool() == "tsratio") {
-   #      hide("ocuplot2")
-   #   } else {
-   #      show("ocuplot2")
-   #     hide(teacherstudentratio)
-   #    
-   #    }
-   # 
-   # })
-   #  
   
+  
+  
+  
+  #  observeEvent(c(input$schooldrop2, input$ocuplot2, teacherstudentratio), {
+  #    req(input$schooldrop2)
+  #   if (VarSchool() == "tsratio") {
+  #      hide("ocuplot2")
+  #   } else {
+  #      show("ocuplot2")
+  #     hide(teacherstudentratio)
+  #    
+  #    }
+  # 
+  # })
+  #  
+  
+  
+  
+  
+  output$hispanicschool <- renderLeaflet({
+    
+    
+    hispanicschool
+    
+    
+    
+  })
   
   #------------Climate Surveys-----------
   
@@ -4619,10 +4780,25 @@ server <- function(input, output, session) {
   })
   
   
+  
+  
+  
+  output$math_all<- renderPlotly({
+    math_all
+  })
+  
+  output$english_all<- renderPlotly({
+    english_all
+  })
+  
+  output$science_all<- renderPlotly({
+    science_all
+  })
+  
   gendad <- reactive({
     input$generalDATA
   })
-
+  
   output$generaldatafilledlinegraphs <- renderPlotly({
     if (gendad() == "figELS") {
       figELS
@@ -4652,9 +4828,6 @@ server <- function(input, output, session) {
       breakfast
     }
   })
-  
-  
-  #Resources
   
   output$map_health <- renderLeaflet({
     if(input$health_category == "Free Services"){
@@ -4709,7 +4882,215 @@ server <- function(input, output, session) {
     
   })
   
-
+  category_subject <- reactive({
+    input$category_subject
+  })
+  
+  category_subgroup <- reactive({
+    input$category_subgroup
+  })
+  
+  
+  Vargrade <- reactive({
+    input$schoolgradesdrop
+  }) 
+  
+  output$schoolgrades <- renderPlotly({
+    
+    if (category_subgroup() == "Race") {
+      
+      if (category_subject() == "Mathematics") {
+        
+        if (Vargrade() == "forestgroverace") {
+          
+          forestgroverace
+          
+        }
+        
+        else if (Vargrade() == "guilfordrace") {
+          
+          guilfordrace
+        }
+        
+        else if (Vargrade() == "rollingrace") {
+          
+          rrrace
+        }
+        
+        else if (Vargrade() == "sterlingrace") {
+          sterlingrace
+        }
+        
+        else if (Vargrade() == "sugarlandrace") {
+          sugarlandrace
+        }
+        
+        else if (Vargrade() == "sullyrace") {
+          sullyrace
+        }
+      } else if (category_subject() == "English Reading") {
+        
+        if (Vargrade() == "forestgroverace") {
+          
+          forestgroveraceeng
+          
+        }
+        
+        else if (Vargrade() == "guilfordrace") {
+          
+          guilfordraceeng
+        }
+        
+        else if (Vargrade() == "rollingrace") {
+          
+          rrraceeng
+        }
+        
+        else if (Vargrade() == "sterlingrace") {
+          sterlingraceeng
+        }
+        
+        else if (Vargrade() == "sugarlandrace") {
+          sugarlandraceeng
+        }
+        
+        else if (Vargrade() == "sullyrace") {
+          sullyraceeng
+        }
+      } 
+    } else if (category_subgroup() == "Gender") {
+      
+      if (category_subject() == "Mathematics") {
+        
+        if (Vargrade() == "forestgroverace") {
+          
+          forestgrovegender
+          
+        }
+        
+        else if (Vargrade() == "guilfordrace") {
+          
+          guilfordgender
+        }
+        
+        else if (Vargrade() == "rollingrace") {
+          
+          rrgender
+        }
+        
+        else if (Vargrade() == "sterlingrace") {
+          sterlinggender
+        }
+        
+        else if (Vargrade() == "sugarlandrace") {
+          sugarlandgender
+        }
+        
+        else if (Vargrade() == "sullyrace") {
+          sullygender
+        }
+      } else {
+        
+        if (Vargrade() == "forestgroverace") {
+          
+          forestgrovegendereng
+          
+        }
+        
+        else if (Vargrade() == "guilfordrace") {
+          
+          guilfordgendereng
+        }
+        
+        else if (Vargrade() == "rollingrace") {
+          
+          rrgendereng
+        }
+        
+        else if (Vargrade() == "sterlingrace") {
+          sterlinggendereng
+        }
+        
+        else if (Vargrade() == "sugarlandrace") {
+          sugarlandgendereng
+        }
+        
+        else if (Vargrade() == "sullyrace") {
+          sullygendereng
+        }
+      }
+    }  else {
+      
+      if (category_subject() == "Mathematics") {
+        
+        if (Vargrade() == "forestgroverace") {
+          
+          forestgroveall
+          
+        }
+        
+        else if (Vargrade() == "guilfordrace") {
+          
+          guilfordall
+        }
+        
+        else if (Vargrade() == "rollingrace") {
+          
+          rrall
+        }
+        
+        else if (Vargrade() == "sterlingrace") {
+          sterlingall
+        }
+        
+        else if (Vargrade() == "sugarlandrace") {
+          sugarlandall
+        }
+        
+        else if (Vargrade() == "sullyrace") {
+          sullyall
+        }
+      } else {
+        
+        if (Vargrade() == "forestgroverace") {
+          
+          forestgrovealleng
+          
+        }
+        
+        else if (Vargrade() == "guilfordrace") {
+          
+          guilfordalleng
+        }
+        
+        else if (Vargrade() == "rollingrace") {
+          
+          rralleng
+        }
+        
+        else if (Vargrade() == "sterlingrace") {
+          sterlingalleng
+        }
+        
+        else if (Vargrade() == "sugarlandrace") {
+          sugarlandalleng
+        }
+        
+        else if (Vargrade() == "sullyrace") {
+          sullyalleng
+        }
+      }
+    }
+    
+  })
+  
+  
+  
+  
+  
+  
+  
+  
   
 }
 shinyApp(ui = ui, server = server)
