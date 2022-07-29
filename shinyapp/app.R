@@ -2740,29 +2740,6 @@ Year2 <- subset_healthscrape2$...2
 Total2 <- subset_healthscrape2$...4
 plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
 
-#----------------suspension data-------------------
-
-suspension <- read_excel(paste0(getwd(),"/data/Suspensions.xlsx"),skip=0,col_names=TRUE)
-subset_forest <- suspension[c(1,2,3,4,25,26,27,28,49,50,51,52), c(1:3,5)]
-forestsuspend<-plot_ly(subset_forest, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Forest Grove", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-subset_Guilford <- suspension[c(5,6,7,8,29,30,31,32,53,54,55,56), c(1:3,5)]
-guilfordsuspend<- plot_ly(subset_Guilford, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Guilford", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-subset_rolling <- suspension[c(9,10,11,12,33,34,35,36,57,58,59,60), c(1:3,5)]
-rollingsuspend<- plot_ly(subset_rolling, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Rolling Ridge", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-subset_sterling <- suspension[c(13,14,15,16,37,38,39,40,61,62,63,64), c(1:3,5)]
-sterlingsuspend<- plot_ly(subset_sterling, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sterling", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-subset_sugarland <- suspension[c(17,18,19,20,41,42,43,44,65,66,67,68), c(1:3,5)]
-sugarlandsuspend<- plot_ly(subset_sugarland, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sugarland", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-subset_sully <- suspension[c(21,22,23,24,45,46,47,48,69,70,71,72), c(1:3,5)]
-sullysuspend<- plot_ly(subset_sully, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sully", xaxis = list(title = ""), yaxis = list(title="Percentage"))
-
-
-
 #----------------------Collapsible Tree - Key Partners and Programs--------------------
 
 Tree <- read_excel(paste0(getwd(),"/data/treedata.xlsx")) 
@@ -2986,7 +2963,8 @@ ui <- navbarPage(title = "DSPG",
                                                                        "Family Income" = "faminc",
                                                                        "Poverty Status" = "pov", 
                                                                        "Health Coverage" = "health",
-                                                                       "Property Value" = "property"
+                                                                       "Property Value" = "property",
+                                                                       "Housing Occupancy" = "housing"
                                                                      ),
                                                                      ),     
                                                                      br(""),
@@ -3014,6 +2992,7 @@ ui <- navbarPage(title = "DSPG",
                                                                        "Work Occupation" = "workoccu",
                                                                        "Commuter Time" = "commutertime",
                                                                        "Commuter Mode" = "commutermode"
+                                                                       
                                                                      ),
                                                                      ),         
                                                                      br(""),
@@ -4077,6 +4056,13 @@ server <- function(input, output, session) {
       
     }
     
+    else {
+      
+      housing
+      
+      
+    }
+    
   })
   
   output$PropComp <- renderPlotly({
@@ -5083,13 +5069,6 @@ server <- function(input, output, session) {
     }
     
   })
-  
-  
-  
-  
-  
-  
-  
   
   
 }
