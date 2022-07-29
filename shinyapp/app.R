@@ -231,7 +231,7 @@ property <- figpv %>% layout(title = "Residential Property Value", showlegend = 
 propcomparison <- plot_ly(
   domain = list(x = c(0, 1), y = c(0, 1)),
   value = 378700,
-  title = list(text = "Median PV Compared to Virginia Median PV"),
+  title = list(text = "Median PV Compared to Loudoun County Median PV"),
   type = "indicator",
   mode = "gauge+number+delta",
   delta = list(reference = 534600),
@@ -3330,13 +3330,10 @@ ui <- navbarPage(title = "DSPG",
                                                                 
                                                          ),
                                                          column(12, align = "justify",
-                                                                br(),
                                                          column(6, align = "justify",
+                                                                br(),
                                                                 p("Most students feel like they belong at their schools and help their class to make decisions at school. There are some differences across schools as on average over 80% of students in Forest Grove, Sugarland, and Sully believe these statements whereas only 70% have these beliefs in Guilford, Rolling Ridge, and Sterling.", align = "justify"),
                                                                 p("Student-Teacher Relationship measures “Teachers and other adults at this school treat me with respect” and “There are teachers or adults at this school I could talk with if I need help with something.” This index is important as students, especially at a young age, should feel comfortable confiding in and talking to their teachers. Interestingly, only 72% of students on average in Sterling indicate a good student-teacher relationship. This is significantly lower than all other elementary community schools, with an overwhelming majority of students having an excellent relationship with teachers. This significant difference suggests a potential opportunity for the Community School program to help Sterling’s student-teacher relationship. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
-                                                                #h4(""),
-                                                                #h4("[updat this]"),
-                                                                
                                                          ), 
                                                          column(6, align= "justify",
                                                                 p("There are some differences in students' perceptions about their social-emotional well-being across schools. Social-emotional measures students ability to understand and manage their emotions. It includes questions such as", dQuote("I work out disagreements with other students by talking with them"), "and", dQuote("I can control myself when I am upset."), "On average, less than 80% of Guilford, Rolling Ridge, and Sterling students indicate good social-emotional well-being. This may play a role in students' perception of bullying. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
