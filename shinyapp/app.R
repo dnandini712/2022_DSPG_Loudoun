@@ -1207,362 +1207,6 @@ english_homeless <- plot_ly(assessmenthomelessenglish, x = ~Year, y = ~`Percent 
 ))
 
 
-
-
-
-#--------------free or not free resources ---------------------------------------
-
-costs <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"))
-foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
-#---------------map_health and isochrones-----------------------------------------
-
-#install.packages("remotes")
-#remotes::install_github("tlorusso/traveltimeR")
-
-YourAPIKey <- "32f6ed99d0636fe05d01a5ff5a99c6e7"
-YourAppId <- "190b7348"
-
-traveltime10 <- read_sf("data/iso_10_sterling.shp")
-traveltime20 <- read_sf("data/iso_20_sterling.shp")
-traveltime45 <- read_sf("data/iso_45_sterling.shp")
-# traveltime10 <- traveltime_map(appId=YourAppId,
-#                                apiKey=YourAPIKey,
-#                                location=c(39.009006,-77.4029155),
-#                                traveltime=600,
-#                                type="driving",
-#                                departure="2022-08-09T08:00:00+01:00")
-# # ... and within 60 minutes?
-# traveltime20 <- traveltime_map(appId=YourAppId,
-#                                apiKey=YourAPIKey,
-#                                location=c(39.009006,-77.4029155),
-#                                traveltime=1200,
-#                                type="driving",
-#                                departure="2022-08-09T08:00:00+01:00")
-# traveltime45 <- traveltime_map(appId = YourAppId,
-#                                apiKey = YourAPIKey,
-#                                location = c(39.009006,-77.4029155),
-#                                traveltime= 2700,
-#                                type = "driving",
-#                                departure = "2022-08-09T08:00:00+01:00")
-map<- read_excel(paste0(getwd(),"/data/school_locations.xlsx"))
-
-subset_map <- map[1,c(1,4,5)]
-
-healthsep <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
-popups <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(healthsep$Name1),
-        "<br />",
-        "<strong>Description:</strong>",
-        healthsep$Description1 ,
-        "<br />",
-        "<strong>Serves:</strong>",
-        healthsep$Serves1, 
-        "<br />",
-        "<strong>Hours:</strong>",
-        healthsep$Hours1,
-        "<br />",
-        "<strong>Language:</strong>",
-        healthsep$Language,
-        "<br />",
-        "<strong>Address:</strong>",
-        healthsep$Address1,
-        "<a href = ",healthsep$Website1, "> Website </a>",
-        "<br />"),
-  
-  htmltools::HTML
-)
-
-popup <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(costs$Name),
-        "<br />",
-        "<strong>Description:</strong>",
-        costs$Description ,
-        "<br />",
-        "<strong>Serves:</strong>",
-        costs$Serves, 
-        "<br />",
-        "<strong>Hours:</strong>",
-        costs$Hours,
-        "<br />",
-        "<strong>Language:</strong>",
-        costs$Language,
-        "<br />",
-        "<strong>Address:</strong>",
-        costs$Address,
-        "<a href = ",costs$Website, "> Website </a>",
-        "<br />"),
-  
-  htmltools::HTML
-)
-
-healthfree <- read_excel(paste0(getwd(), "/data/resourcecost.xlsx"),sheet = "Health Free")
-
-
-
-pal <- colorFactor(c("#91003f", "#005824", "#d7301f","#CC6677","#DDCC77","#88419d"), domain = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"))
-pal1 <- colorFactor(c("#91003f","#005824","#d7301f","#88419d","#DDCC77","#CC6677","#AA4499","#882255"),domain = c("Food Pantry","Clothing","Counseling","Dental Care","Vision Care","Medical Services","Speech and Hearing Services","Physical Therapy"))
-
-
-leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=costs,~Longitude,~Latitude,popup = ~popup, label = ~as.character(Name),group = ~Resource,color = ~pal(Resource),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1) %>%
-  addLayersControl(overlayGroups = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"),options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
-  setView(-77.4029155,39.009006, zoom = 11) -> health_free
-
-
-
-leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=foods,~Longitude1,~Latitude1,popup=~popups,label=~as.character(Name1),color= ~pal1(Resource1),group = ~Resource1,weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> health_all
-#--------------youth development map --------------------------
-
-youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 3.xlsx"))
-popups3 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(youth$Name3),
-        "<br />",
-        "<strong>Description:</strong>",
-        youth$Description3 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        youth$Hours3, 
-        "<br />",
-        "<strong>Address:</strong>",
-        youth$Address3,
-        "<a href = ",youth$Website3, "> Website </a>",
-        "<br />"),
-  
-  
-  htmltools::HTML
-)
-
-pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
-
-leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=youth,~Longitude3,~Latitude3,popup=~popups3,label=~as.character(Name3),color= ~pal3(Type),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1,group = ~Type)%>%
-  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
-
-
-youthfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth Free")
-
-popups4 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(youthfree$Name4),
-        "<br />",
-        "<strong>Description:</strong>",
-        youthfree$Description4 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        youthfree$Hours4, 
-        "<br />",
-        "<strong>Address:</strong>",
-        youthfree$Address4,
-        "<a href = ",youthfree$Website4, "> Website </a>",
-        "<br />"),
-  htmltools::HTML
-)
-
-pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
-
-leaflet(data = youthfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=youthfree,~Longitude4,~Latitude4,popup=~popups4,label=~as.character(Name4),color= ~pal3(Type),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1,group = ~Type)%>%
-  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> youth_free
-
-
-#---------mental health resources map------------------------
-
-ment <- read_excel(paste0(getwd(),"/data/mentalhealthres.xlsx"),sheet = "Mental")
-
-popups2 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(ment$Name2),
-        "<br />",
-        "<strong>Description:</strong>",
-        ment$Description2 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        ment$Hours2, 
-        "<br />",
-        "<strong>Address:</strong>",
-        ment$Address2,
-        "<a href = ",ment$Website2, "> Website </a>",
-        "<br />"),
-  
-  
-  htmltools::HTML
-)
-
-pal2 <- colorFactor(c("red", "blue", "green"), domain = c("Family Therapy", "Family Counseling", "Bereavement"))
-
-leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=ment,~Longitude2,~Latitude2,popup=~popups2,label=~as.character(Name2),group=~Resources2,color=~pal2(Resources2),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resources2,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
-
-mentfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Mental Free")
-
-popups5 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(mentfree$Name5),
-        "<br />",
-        "<strong>Description:</strong>",
-        mentfree$Description5 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        mentfree$Hours5, 
-        "<br />",
-        "<strong>Address:</strong>",
-        mentfree$Address5,
-        "<a href = ",mentfree$Website5, "> Website </a>",
-        "<br />"),
-  
-  
-  htmltools::HTML
-)
-
-leaflet(data = mentfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data = mentfree, ~Longitude5,~Latitude5,popup = ~popups5,label = ~as.character(Name5),group = ~Resource5,color = ~pal2(Resource5),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resource5,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> mental_free
-
-
-#----------------------family engagement map-------------------
-
-familyengage <- read_excel(paste0(getwd(),"/data/ListOfResources.xlsx"),sheet = "Family Engagement")
-
-popups <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(familyengage$Name),
-        "<br />",
-        "<strong>Description:</strong>",
-        familyengage$Description ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        familyengage$Hours, 
-        "<br />",
-        "<strong>Address:</strong>",
-        familyengage$Address,
-        "<br />",
-        "<a href = ",familyengage$Website, "> Website </a>",
-        "<br />",
-        "<strong>Serves:</strong>",
-        familyengage$Serves),
-  
-  
-  htmltools::HTML
-)
-
-pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Housing", "Holiday Help", "Education", "Essentials supply", "Employment help", "Other"))
-
-leaflet(data = familyengage) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=familyengage,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal8(Resources),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_family
-
-famfree <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family Free")
-
-popups9 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(famfree$Name8),
-        "<br />",
-        "<strong>Description:</strong>",
-        famfree$Description8 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        famfree$Hours8, 
-        "<br />",
-        "<strong>Address:</strong>",
-        famfree$Address8,
-        "<br />",
-        "<a href = ",famfree$Website8, "> Website </a>",
-        "<br />",
-        "<strong>Serves:</strong>",
-        famfree$Serves8),
-  
-  
-  htmltools::HTML
-)
-
-pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Education", "Employment help","Essentials Supply","Housing", "Holiday Help","Other"))
-
-leaflet(data = famfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=famfree,~Longitude8,~Latitude8,popup=~popups9,label=~as.character(Name8),group=~Resource8,color=~pal8(Resource8),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resource8,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> fam_free
-
-
-#resource table ----------------------------
-list <- read_excel(paste0(getwd(),"/data/allresources.xlsx")) 
-
-
 #-----------------Performance Graphs - Assessment  --------------------------
 #-------------------students by race----------------------
 #------------------Mathematics-------------------------------
@@ -2557,7 +2201,361 @@ Tree %>% collapsibleTree(hierarchy = c("Four Pillars", "Name", "Key Partners"),
 
 
 
+#Resources TAB
 
+
+
+#--------------free or not free resources ---------------------------------------
+
+costs <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"))
+foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
+#---------------map_health and isochrones-----------------------------------------
+
+#install.packages("remotes")
+#remotes::install_github("tlorusso/traveltimeR")
+
+YourAPIKey <- "32f6ed99d0636fe05d01a5ff5a99c6e7"
+YourAppId <- "190b7348"
+
+traveltime10 <- read_sf("data/iso_10_sterling.shp")
+traveltime20 <- read_sf("data/iso_20_sterling.shp")
+traveltime45 <- read_sf("data/iso_45_sterling.shp")
+# traveltime10 <- traveltime_map(appId=YourAppId,
+#                                apiKey=YourAPIKey,
+#                                location=c(39.009006,-77.4029155),
+#                                traveltime=600,
+#                                type="driving",
+#                                departure="2022-08-09T08:00:00+01:00")
+# # ... and within 60 minutes?
+# traveltime20 <- traveltime_map(appId=YourAppId,
+#                                apiKey=YourAPIKey,
+#                                location=c(39.009006,-77.4029155),
+#                                traveltime=1200,
+#                                type="driving",
+#                                departure="2022-08-09T08:00:00+01:00")
+# traveltime45 <- traveltime_map(appId = YourAppId,
+#                                apiKey = YourAPIKey,
+#                                location = c(39.009006,-77.4029155),
+#                                traveltime= 2700,
+#                                type = "driving",
+#                                departure = "2022-08-09T08:00:00+01:00")
+map<- read_excel(paste0(getwd(),"/data/school_locations.xlsx"))
+
+subset_map <- map[1,c(1,4,5)]
+
+healthsep <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(healthsep$Name1),
+        "<br />",
+        "<strong>Description:</strong>",
+        healthsep$Description1 ,
+        "<br />",
+        "<strong>Serves:</strong>",
+        healthsep$Serves1, 
+        "<br />",
+        "<strong>Hours:</strong>",
+        healthsep$Hours1,
+        "<br />",
+        "<strong>Language:</strong>",
+        healthsep$Language,
+        "<br />",
+        "<strong>Address:</strong>",
+        healthsep$Address1,
+        "<a href = ",healthsep$Website1, "> Website </a>",
+        "<br />"),
+  
+  htmltools::HTML
+)
+
+popup <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(costs$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        costs$Description ,
+        "<br />",
+        "<strong>Serves:</strong>",
+        costs$Serves, 
+        "<br />",
+        "<strong>Hours:</strong>",
+        costs$Hours,
+        "<br />",
+        "<strong>Language:</strong>",
+        costs$Language,
+        "<br />",
+        "<strong>Address:</strong>",
+        costs$Address,
+        "<a href = ",costs$Website, "> Website </a>",
+        "<br />"),
+  
+  htmltools::HTML
+)
+
+healthfree <- read_excel(paste0(getwd(), "/data/resourcecost.xlsx"),sheet = "Health Free")
+
+
+
+pal <- colorFactor(c("#91003f", "#005824", "#d7301f","#CC6677","#DDCC77","#88419d"), domain = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"))
+pal1 <- colorFactor(c("#91003f","#005824","#d7301f","#88419d","#DDCC77","#CC6677","#AA4499","#882255"),domain = c("Food Pantry","Clothing","Counseling","Dental Care","Vision Care","Medical Services","Speech and Hearing Services","Physical Therapy"))
+
+
+leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=costs,~Longitude,~Latitude,popup = ~popup, label = ~as.character(Name),group = ~Resource,color = ~pal(Resource),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addLayersControl(overlayGroups = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"),options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
+  setView(-77.4029155,39.009006, zoom = 11) -> health_free
+
+
+
+leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=foods,~Longitude1,~Latitude1,popup=~popups,label=~as.character(Name1),color= ~pal1(Resource1),group = ~Resource1,weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> health_all
+#--------------youth development map --------------------------
+
+youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 3.xlsx"))
+popups3 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(youth$Name3),
+        "<br />",
+        "<strong>Description:</strong>",
+        youth$Description3 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        youth$Hours3, 
+        "<br />",
+        "<strong>Address:</strong>",
+        youth$Address3,
+        "<a href = ",youth$Website3, "> Website </a>",
+        "<br />"),
+  
+  
+  htmltools::HTML
+)
+
+pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
+
+leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=youth,~Longitude3,~Latitude3,popup=~popups3,label=~as.character(Name3),color= ~pal3(Type),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1,group = ~Type)%>%
+  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
+
+
+youthfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth Free")
+
+popups4 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(youthfree$Name4),
+        "<br />",
+        "<strong>Description:</strong>",
+        youthfree$Description4 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        youthfree$Hours4, 
+        "<br />",
+        "<strong>Address:</strong>",
+        youthfree$Address4,
+        "<a href = ",youthfree$Website4, "> Website </a>",
+        "<br />"),
+  htmltools::HTML
+)
+
+pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
+
+leaflet(data = youthfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=youthfree,~Longitude4,~Latitude4,popup=~popups4,label=~as.character(Name4),color= ~pal3(Type),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1,group = ~Type)%>%
+  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> youth_free
+
+
+#---------mental health resources map------------------------
+
+ment <- read_excel(paste0(getwd(),"/data/mentalhealthres.xlsx"),sheet = "Mental")
+
+popups2 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(ment$Name2),
+        "<br />",
+        "<strong>Description:</strong>",
+        ment$Description2 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        ment$Hours2, 
+        "<br />",
+        "<strong>Address:</strong>",
+        ment$Address2,
+        "<a href = ",ment$Website2, "> Website </a>",
+        "<br />"),
+  
+  
+  htmltools::HTML
+)
+
+pal2 <- colorFactor(c("red", "blue", "green"), domain = c("Family Therapy", "Family Counseling", "Bereavement"))
+
+leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=ment,~Longitude2,~Latitude2,popup=~popups2,label=~as.character(Name2),group=~Resources2,color=~pal2(Resources2),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resources2,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
+
+mentfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Mental Free")
+
+popups5 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(mentfree$Name5),
+        "<br />",
+        "<strong>Description:</strong>",
+        mentfree$Description5 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        mentfree$Hours5, 
+        "<br />",
+        "<strong>Address:</strong>",
+        mentfree$Address5,
+        "<a href = ",mentfree$Website5, "> Website </a>",
+        "<br />"),
+  
+  
+  htmltools::HTML
+)
+
+leaflet(data = mentfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data = mentfree, ~Longitude5,~Latitude5,popup = ~popups5,label = ~as.character(Name5),group = ~Resource5,color = ~pal2(Resource5),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resource5,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> mental_free
+
+
+#----------------------family engagement map-------------------
+
+familyengage <- read_excel(paste0(getwd(),"/data/ListOfResources.xlsx"),sheet = "Family Engagement")
+
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(familyengage$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        familyengage$Description ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        familyengage$Hours, 
+        "<br />",
+        "<strong>Address:</strong>",
+        familyengage$Address,
+        "<br />",
+        "<a href = ",familyengage$Website, "> Website </a>",
+        "<br />",
+        "<strong>Serves:</strong>",
+        familyengage$Serves),
+  
+  
+  htmltools::HTML
+)
+
+pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Housing", "Holiday Help", "Education", "Essentials supply", "Employment help", "Other"))
+
+leaflet(data = familyengage) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=familyengage,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal8(Resources),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_family
+
+famfree <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family Free")
+
+popups9 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(famfree$Name8),
+        "<br />",
+        "<strong>Description:</strong>",
+        famfree$Description8 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        famfree$Hours8, 
+        "<br />",
+        "<strong>Address:</strong>",
+        famfree$Address8,
+        "<br />",
+        "<a href = ",famfree$Website8, "> Website </a>",
+        "<br />",
+        "<strong>Serves:</strong>",
+        famfree$Serves8),
+  
+  
+  htmltools::HTML
+)
+
+pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Education", "Employment help","Essentials Supply","Housing", "Holiday Help","Other"))
+
+leaflet(data = famfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=famfree,~Longitude8,~Latitude8,popup=~popups9,label=~as.character(Name8),group=~Resource8,color=~pal8(Resource8),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resource8,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> fam_free
+
+
+#List of all resources ----------------------------
+list <- read_excel(paste0(getwd(),"/data/allresources.xlsx")) 
 
 
 # JSCODE --- CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
@@ -3753,42 +3751,18 @@ ui <- navbarPage(title = "DSPG",
                  )
                  
 )
-
-
 #---------------------- server -----------------------------------------------------------
 server <- function(input, output, session) {
   # Run JavaScript Code
   runjs(jscode)
   
-  # Render map 
+  # The Initiative
   output$map1 <- renderLeaflet({
     map1
   })
+ 
   
-
-
-  
-  output$weekendmeals <- renderPlotly({
-    weekendmeals
-  })
-  
-  output$basicsupplies <- renderPlotly({
-    basicsupplies
-  })
-  
-  
-  Var <- reactive({
-    input$demosdrop
-  })
-  
-  
-
-  
-  output$demoHispanicPIE <- renderPlotly({
-    if (Var3() == "race") {
-      HispanicPercentagePIE
-    }
-  })
+  #Sociodemographics
   
   Var3 <- reactive({
     input$demos1drop
@@ -3896,146 +3870,27 @@ server <- function(input, output, session) {
   })
   
   
-  #---------performance graphs--------------
-
-  Varperf <- reactive({
-    input$gradesdrop
+  output$demoHispanicPIE <- renderPlotly({
+    if (Var3() == "race") {
+      HispanicPercentagePIE
+    }
   })
   
-  category_subject <- reactive({
-    input$category_subject
-  })
+  #Schools 
   
-  output$grades  <- renderPlotly({
-    
-    if(category_subject() == "Mathematics") {
-    
-    if (Varperf() == "allstudentsgrades") {
-      
-      math_all 
-   
-    }
-    
-    else if (Varperf() == "blackgrades") {
-      
-      math_black
-      
-    }
-    
-    else if (Varperf() == "whitegrades") {
-      
-      math_white
-      
-    }
-    
-    
-    else if (Varperf() == "asiangrades") {
-      
-      math_asian
-    }
-    
-    else if (Varperf() == "disabilitiesgrades") {
-      
-      math_dis
-      
-      
-    }
-    
-    else if (Varperf() == "hispanicgrades") {
-      
-      math_hispanic
-      
-      
-    }
-    
-    else if (Varperf() == "malegrades") {
-      
-      math_male
-      
-      
-    }
-    
-    
-    else if (Varperf() == "femalegrades") {
-      
-      math_female
-      
-      
-    }
-    
-    else if (Varperf() == "homelessgrades") {
-      
-      math_homeless
-      
-      
-    }
-    } else  {
-      if  (Varperf() == "allstudentsgrades") {
-      
-      english_all 
-      
-    }
-      
-      else if (Varperf() == "whitegrades") {
-        
-        english_white
-        
-      }
-      
-      else if (Varperf() == "blackgrades") {
-        
-        english_black
-        
-      }
-      
-      else if (Varperf() == "asiangrades") {
-        
-        english_asian
-      }
-      
-      else if (Varperf() == "disabilitiesgrades") {
-        
-        english_dis
-        
-        
-      }
-      
-      else if (Varperf() == "hispanicgrades") {
-        
-        english_hispanic
-        
-        
-      }
-      
-      else if (Varperf() == "malegrades") {
-        
-        english_male
-        
-        
-      }
-      
-      
-      else if (Varperf() == "femalegrades") {
-        
-        english_female
-        
-        
-      }
-      
-      else if (Varperf() == "homelessgrades") {
-        
-        english_homeless
-        
-        
-      }}
-    
-    
-  })
-  
-  
-  
-
   #School Demos
+  
+  
+  output$hispanicschool <- renderLeaflet({
+    
+    
+    hispanicschool
+    
+    
+    
+  })
+  
+  
   Var2 <- reactive({
     input$schooldrop1
   }) 
@@ -4069,14 +3924,14 @@ server <- function(input, output, session) {
   })
   
   output$ocuplot2<- renderPlotly({
-
     
-     if (VarSchool() == "cteacher") {
+    
+    if (VarSchool() == "cteacher") {
       
       cteacher
       
     }
-
+    
     else if (VarSchool() == "cenrol") {
       enroll
       
@@ -4092,8 +3947,8 @@ server <- function(input, output, session) {
   
   output$ocuplot3<- renderPlotly({
     
-
-     if (VarSchool3() == "chronic") {
+    
+    if (VarSchool3() == "chronic") {
       
       chronic
       
@@ -4105,49 +3960,266 @@ server <- function(input, output, session) {
     }
     
   })
+  
+  
+  output$weekendmeals <- renderPlotly({
+    weekendmeals
+  })
+  
+  output$basicsupplies <- renderPlotly({
+    basicsupplies
+  })
+  
+  #---------performance graphs--------------
+  
+  Varperf <- reactive({
+    input$gradesdrop
+  })
+  
+  category_subject <- reactive({
+    input$category_subject
+  })
+  
+  category_subject <- reactive({
+    input$category_subject
+  })
+  
+  category_subgroup <- reactive({
+    input$category_subgroup
+  })
+  
+  
+  Vargrade <- reactive({
+    input$schoolgradesdrop
+  }) 
+  
+  output$schoolgrades <- renderPlotly({
     
-    
-    Varsuspend <- reactive({
-      input$schoolsuspend
-    }) 
-    
-    output$schoolsuspendall <- renderPlotly({
+    if (category_subgroup() == "Race") {
       
-      
-      if (Varsuspend() == "forestsuspend") {
+      if (category_subject() == "Mathematics") {
         
-        forestsuspend
+        if (Vargrade() == "forestgroverace") {
+          
+          forestgroverace
+          
+        }
         
-      }
-      
-      else if (Varsuspend() == "guilfordsuspend") {
+        else if (Vargrade() == "guilfordrace") {
+          
+          guilfordrace
+        }
         
-        guilfordsuspend
-      }
-      
-      else if (Varsuspend() == "rollingsuspend") {
+        else if (Vargrade() == "rollingrace") {
+          
+          rrrace
+        }
         
-        rollingsuspend
+        else if (Vargrade() == "sterlingrace") {
+          sterlingrace
+        }
+        
+        else if (Vargrade() == "sugarlandrace") {
+          sugarlandrace
+        }
+        
+        else if (Vargrade() == "sullyrace") {
+          sullyrace
+        }
+      } else if (category_subject() == "English Reading") {
+        
+        if (Vargrade() == "forestgroverace") {
+          
+          forestgroveraceeng
+          
+        }
+        
+        else if (Vargrade() == "guilfordrace") {
+          
+          guilfordraceeng
+        }
+        
+        else if (Vargrade() == "rollingrace") {
+          
+          rrraceeng
+        }
+        
+        else if (Vargrade() == "sterlingrace") {
+          sterlingraceeng
+        }
+        
+        else if (Vargrade() == "sugarlandrace") {
+          sugarlandraceeng
+        }
+        
+        else if (Vargrade() == "sullyrace") {
+          sullyraceeng
+        }
+      } 
+    } else if (category_subgroup() == "Gender") {
+      
+      if (category_subject() == "Mathematics") {
+        
+        if (Vargrade() == "forestgroverace") {
+          
+          forestgrovegender
+          
+        }
+        
+        else if (Vargrade() == "guilfordrace") {
+          
+          guilfordgender
+        }
+        
+        else if (Vargrade() == "rollingrace") {
+          
+          rrgender
+        }
+        
+        else if (Vargrade() == "sterlingrace") {
+          sterlinggender
+        }
+        
+        else if (Vargrade() == "sugarlandrace") {
+          sugarlandgender
+        }
+        
+        else if (Vargrade() == "sullyrace") {
+          sullygender
+        }
+      } else {
+        
+        if (Vargrade() == "forestgroverace") {
+          
+          forestgrovegendereng
+          
+        }
+        
+        else if (Vargrade() == "guilfordrace") {
+          
+          guilfordgendereng
+        }
+        
+        else if (Vargrade() == "rollingrace") {
+          
+          rrgendereng
+        }
+        
+        else if (Vargrade() == "sterlingrace") {
+          sterlinggendereng
+        }
+        
+        else if (Vargrade() == "sugarlandrace") {
+          sugarlandgendereng
+        }
+        
+        else if (Vargrade() == "sullyrace") {
+          sullygendereng
+        }
       }
+    }  else {
       
-      else if (Varsuspend() == "sterlingsuspend") {
-        sterlingsuspend
+      if (category_subject() == "Mathematics") {
+        
+        if (Vargrade() == "forestgroverace") {
+          
+          forestgroveall
+          
+        }
+        
+        else if (Vargrade() == "guilfordrace") {
+          
+          guilfordall
+        }
+        
+        else if (Vargrade() == "rollingrace") {
+          
+          rrall
+        }
+        
+        else if (Vargrade() == "sterlingrace") {
+          sterlingall
+        }
+        
+        else if (Vargrade() == "sugarlandrace") {
+          sugarlandall
+        }
+        
+        else if (Vargrade() == "sullyrace") {
+          sullyall
+        }
+      } else {
+        
+        if (Vargrade() == "forestgroverace") {
+          
+          forestgrovealleng
+          
+        }
+        
+        else if (Vargrade() == "guilfordrace") {
+          
+          guilfordalleng
+        }
+        
+        else if (Vargrade() == "rollingrace") {
+          
+          rralleng
+        }
+        
+        else if (Vargrade() == "sterlingrace") {
+          sterlingalleng
+        }
+        
+        else if (Vargrade() == "sugarlandrace") {
+          sugarlandalleng
+        }
+        
+        else if (Vargrade() == "sullyrace") {
+          sullyalleng
+        }
       }
-      
-      else if (Varsuspend() == "sugarlandsuspend") {
-        sugarlandsuspend
-      }
-      
-      else if (Varsuspend() == "sullysuspend") {
-        sullysuspend
-      }
-      
-      
-    })
+    }
     
-    
-    
-    
+  })
+
+    # Varsuspend <- reactive({
+    #   input$schoolsuspend
+    # }) 
+    # 
+    # output$schoolsuspendall <- renderPlotly({
+    #   
+    #   
+    #   if (Varsuspend() == "forestsuspend") {
+    #     
+    #     forestsuspend
+    #     
+    #   }
+    #   
+    #   else if (Varsuspend() == "guilfordsuspend") {
+    #     
+    #     guilfordsuspend
+    #   }
+    #   
+    #   else if (Varsuspend() == "rollingsuspend") {
+    #     
+    #     rollingsuspend
+    #   }
+    #   
+    #   else if (Varsuspend() == "sterlingsuspend") {
+    #     sterlingsuspend
+    #   }
+    #   
+    #   else if (Varsuspend() == "sugarlandsuspend") {
+    #     sugarlandsuspend
+    #   }
+    #   
+    #   else if (Varsuspend() == "sullysuspend") {
+    #     sullysuspend
+    #   }
+    #   
+    #   
+    # })
+
    #  observeEvent(c(input$schooldrop2, input$ocuplot2, teacherstudentratio), {
    #    req(input$schooldrop2)
    #   if (VarSchool() == "tsratio") {
@@ -4161,17 +4233,6 @@ server <- function(input, output, session) {
    # })
    #  
   
-  
-  
-  
-  output$hispanicschool <- renderLeaflet({
-    
-    
-    hispanicschool
-    
-    
-    
-  })
   
   #------------Climate Surveys-----------
   
@@ -4558,21 +4619,6 @@ server <- function(input, output, session) {
   })
   
   
-  
-  
-  
-  output$math_all<- renderPlotly({
-    math_all
-  })
-  
-  output$english_all<- renderPlotly({
-    english_all
-  })
-  
-  output$science_all<- renderPlotly({
-    science_all
-  })
-  
   gendad <- reactive({
     input$generalDATA
   })
@@ -4606,6 +4652,9 @@ server <- function(input, output, session) {
       breakfast
     }
   })
+  
+  
+  #Resources
   
   output$map_health <- renderLeaflet({
     if(input$health_category == "Free Services"){
@@ -4660,215 +4709,7 @@ server <- function(input, output, session) {
     
   })
   
-  category_subject <- reactive({
-    input$category_subject
-  })
-  
-  category_subgroup <- reactive({
-    input$category_subgroup
-  })
-  
-  
-  Vargrade <- reactive({
-    input$schoolgradesdrop
-  }) 
-  
-  output$schoolgrades <- renderPlotly({
-    
-    if (category_subgroup() == "Race") {
-      
-      if (category_subject() == "Mathematics") {
-        
-        if (Vargrade() == "forestgroverace") {
-          
-          forestgroverace
-          
-        }
-        
-        else if (Vargrade() == "guilfordrace") {
-          
-          guilfordrace
-        }
-        
-        else if (Vargrade() == "rollingrace") {
-          
-          rrrace
-        }
-        
-        else if (Vargrade() == "sterlingrace") {
-          sterlingrace
-        }
-        
-        else if (Vargrade() == "sugarlandrace") {
-          sugarlandrace
-        }
-        
-        else if (Vargrade() == "sullyrace") {
-          sullyrace
-        }
-      } else if (category_subject() == "English Reading") {
-        
-        if (Vargrade() == "forestgroverace") {
-          
-          forestgroveraceeng
-          
-        }
-        
-        else if (Vargrade() == "guilfordrace") {
-          
-          guilfordraceeng
-        }
-        
-        else if (Vargrade() == "rollingrace") {
-          
-          rrraceeng
-        }
-        
-        else if (Vargrade() == "sterlingrace") {
-          sterlingraceeng
-        }
-        
-        else if (Vargrade() == "sugarlandrace") {
-          sugarlandraceeng
-        }
-        
-        else if (Vargrade() == "sullyrace") {
-          sullyraceeng
-        }
-      } 
-    } else if (category_subgroup() == "Gender") {
-      
-      if (category_subject() == "Mathematics") {
-        
-        if (Vargrade() == "forestgroverace") {
-          
-          forestgrovegender
-          
-        }
-        
-        else if (Vargrade() == "guilfordrace") {
-          
-          guilfordgender
-        }
-        
-        else if (Vargrade() == "rollingrace") {
-          
-          rrgender
-        }
-        
-        else if (Vargrade() == "sterlingrace") {
-          sterlinggender
-        }
-        
-        else if (Vargrade() == "sugarlandrace") {
-          sugarlandgender
-        }
-        
-        else if (Vargrade() == "sullyrace") {
-          sullygender
-        }
-      } else {
-        
-        if (Vargrade() == "forestgroverace") {
-          
-          forestgrovegendereng
-          
-        }
-        
-        else if (Vargrade() == "guilfordrace") {
-          
-          guilfordgendereng
-        }
-        
-        else if (Vargrade() == "rollingrace") {
-          
-          rrgendereng
-        }
-        
-        else if (Vargrade() == "sterlingrace") {
-          sterlinggendereng
-        }
-        
-        else if (Vargrade() == "sugarlandrace") {
-          sugarlandgendereng
-        }
-        
-        else if (Vargrade() == "sullyrace") {
-          sullygendereng
-        }
-      }
-    }  else {
-      
-      if (category_subject() == "Mathematics") {
-        
-        if (Vargrade() == "forestgroverace") {
-          
-          forestgroveall
-          
-        }
-        
-        else if (Vargrade() == "guilfordrace") {
-          
-          guilfordall
-        }
-        
-        else if (Vargrade() == "rollingrace") {
-          
-          rrall
-        }
-        
-        else if (Vargrade() == "sterlingrace") {
-          sterlingall
-        }
-        
-        else if (Vargrade() == "sugarlandrace") {
-          sugarlandall
-        }
-        
-        else if (Vargrade() == "sullyrace") {
-          sullyall
-        }
-      } else {
-        
-        if (Vargrade() == "forestgroverace") {
-          
-          forestgrovealleng
-          
-        }
-        
-        else if (Vargrade() == "guilfordrace") {
-          
-          guilfordalleng
-        }
-        
-        else if (Vargrade() == "rollingrace") {
-          
-          rralleng
-        }
-        
-        else if (Vargrade() == "sterlingrace") {
-          sterlingalleng
-        }
-        
-        else if (Vargrade() == "sugarlandrace") {
-          sugarlandalleng
-        }
-        
-        else if (Vargrade() == "sullyrace") {
-          sullyalleng
-        }
-      }
-    }
-    
-  })
-  
-  
-  
-  
-  
-  
-  
-  
+
   
 }
 shinyApp(ui = ui, server = server)
