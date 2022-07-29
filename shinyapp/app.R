@@ -77,6 +77,12 @@ library(scales)
 library(ggwordcloud)
 library(wordcloud2)
 library(collapsibleTree)
+library(tm)
+library(SnowballC)
+library(wordcloud)
+library(RColorBrewer)
+
+
 #---------------------------------------------------------------
 
 prettyblue <- "#232D4B"
@@ -375,6 +381,12 @@ housing <- plot_ly(type='pie', labels=lbls.HOUSING, values=slices.HOUSING,
                    insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Occupants')))
 
 
+# SCHOOLS TAB DATA----------------
+
+# DEMOGRAPHICS SUB TAB-------------------
+
+# GENDER SUB TAB
+
 #---------gender by school-------------------------------------------------
 
 
@@ -392,18 +404,7 @@ genders<- ggplot(data=genders, aes(x=School, y=Total, fill = forcats::fct_rev(Se
 genders <-ggplotly(genders, tooltip = c("text"))
 
 
-#attendance --------------
-
-attendance <- read_excel(paste0(getwd(),"/data/absencerate.xlsx"))
-att_per <- attendance$`Absence Rate`
-att_rate <- att_per*100
-quarter <- attendance$`School Quarter`
-School <- attendance$`School Name`
-attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
-
-
-
-#-------------------------------race by school ----------------------------
+#-------------------------------Race/ETHNICITY by school ----------------------------
 
 races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
 
@@ -413,7 +414,7 @@ Race <- nineteensub$Race
 Percentage <- nineteensub$Percentage
 School <- nineteensub$`School Name`
 racenine <- ggplot(nineteensub,aes(x=School,y=Percentage,fill=Race, group=Race))+ geom_col(position = "dodge",aes(text = paste0("Percentage:",Percentage, "%", "\n","Race:",Race,"\n","School:",School)))+labs(title="Race/Ethnicity Demographics for 2019-2020",y="Percentage",x = "",caption = "Source: VDOE Fall Membership Report 2016-2020") + theme(plot.caption.position = "plot",
-                                                                                                                                                                                                                                         plot.caption = element_text(hjust = 1)) + guides(fill=guide_legend(title="Race/Ethnicity"))
+                                                                                                                                                                                                                                                                                                                                                          plot.caption = element_text(hjust = 1)) + guides(fill=guide_legend(title="Race/Ethnicity"))
 racenine <- ggplotly(racenine,tooltip=c("text"))
 
 #-----------hispanic population-----------------
@@ -445,6 +446,11 @@ hispanicschool <- leaflet(data = total) %>%
             values = ~va20_2$estimate,
             opacity = 0.5, title = "Hispanic Population") %>%
   addMarkers( ~Longitude, ~Latitude, popup = popups, label = ~as.character(Name), labelOptions = FALSE) 
+
+#--------------------------Performance Sub tab ------------------------------
+
+# Size 
+
 #-----------enrollment-----------------
 
 enrollment <- read_excel(paste0(getwd(),"/data/Enrollment16-20.xlsx"))
@@ -453,16 +459,7 @@ School <- enrollment$Schools
 Year <- enrollment$Year
 enroll <- plot_ly(enrollment, x = ~Year,y = ~Total, color = ~School, type = 'scatter',mode = 'lines', hoverinfo="text", text = ~paste("Total:", Total, "<br>", "School:",School)) %>% layout(title= "Enrollment", xaxis = list(title = ""), yaxis = list(title = "Total Students"), legend=list(title=list(text='Select School')))
 
-#-------------------attendance --------------
-
-att_per <- attendance$`Absence Rate`
-Percent <- att_per*100
-Quarter <- attendance$`School Quarter`
-School <- attendance$`School Name`
-ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(title = "Student Absences by 2020-2021 Quarter",caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",
-                                                                                                                                                                                                                                      plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
-attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("Percent:",Percent, "%","<br>","School:",School)) %>% layout(title = "Student Absences by 2020-2021 Quarter", legend=list(title=list(text='Select School')), yaxis = list(title = "Percentage"), xaxis = list(title = ""))
-#---------------Number of Teachers/Staff--------------------------
+#---------------Educators - Number of Teachers/Staff--------------------------
 
 Schools <- c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
 Teachers <- c(32, 52, 66, 55, 59, 35)
@@ -475,6 +472,19 @@ figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = '
 
 figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(253, 151, 12 )'))
 cteacher <- figSTM %>% layout(title = "Total Teachers and Staff 2021-2022", yaxis = list(title = 'Total Educators'), xaxis = list(title = ''), barmode = 'stack')
+
+#Absenses---------
+#Absenses --------------
+
+attendance <- read_excel(paste0(getwd(),"/data/absencerate.xlsx"))
+
+att_per <- attendance$`Absence Rate`
+Percent <- att_per*100
+Quarter <- attendance$`School Quarter`
+School <- attendance$`School Name`
+ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(title = "Student Absences by 2020-2021 Quarter",caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",
+                                                                                                                                                                                                                                      plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
+attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("Percent:",Percent, "%","<br>","School:",School)) %>% layout(title = "Student Absences by 2020-2021 Quarter", legend=list(title=list(text='Select School')), yaxis = list(title = "Percentage"), xaxis = list(title = ""))
 
 ##--------Chronic absenteeism------------------
 
@@ -494,367 +504,10 @@ absentieesm %>% filter(Subgroup == "All Students") -> absentieesm
 
 chronic <- plot_ly(absentieesm, x = ~Year, y = ~`Percent above 10`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent above 10`, "%", "<br>", "School:",School))%>% layout(title = "Chronic Absenteeism", xaxis = list(title = ""), yaxis = list(title="Percentage"))
 
-
-
-#--------------free or not free resources ---------------------------------------
-
-costs <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"))
-foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
-#---------------map_health and isochrones-----------------------------------------
-
-#install.packages("remotes")
-#remotes::install_github("tlorusso/traveltimeR")
-
-YourAPIKey <- "32f6ed99d0636fe05d01a5ff5a99c6e7"
-YourAppId <- "190b7348"
-
-traveltime10 <- read_sf("data/iso_10_sterling.shp")
-traveltime20 <- read_sf("data/iso_20_sterling.shp")
-traveltime45 <- read_sf("data/iso_45_sterling.shp")
-# traveltime10 <- traveltime_map(appId=YourAppId,
-#                                apiKey=YourAPIKey,
-#                                location=c(39.009006,-77.4029155),
-#                                traveltime=600,
-#                                type="driving",
-#                                departure="2022-08-09T08:00:00+01:00")
-# # ... and within 60 minutes?
-# traveltime20 <- traveltime_map(appId=YourAppId,
-#                                apiKey=YourAPIKey,
-#                                location=c(39.009006,-77.4029155),
-#                                traveltime=1200,
-#                                type="driving",
-#                                departure="2022-08-09T08:00:00+01:00")
-# traveltime45 <- traveltime_map(appId = YourAppId,
-#                                apiKey = YourAPIKey,
-#                                location = c(39.009006,-77.4029155),
-#                                traveltime= 2700,
-#                                type = "driving",
-#                                departure = "2022-08-09T08:00:00+01:00")
-map<- read_excel(paste0(getwd(),"/data/school_locations.xlsx"))
-
-subset_map <- map[1,c(1,4,5)]
-
-healthsep <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
-popups <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(healthsep$Name1),
-        "<br />",
-        "<strong>Description:</strong>",
-        healthsep$Description1 ,
-        "<br />",
-        "<strong>Serves:</strong>",
-        healthsep$Serves1, 
-        "<br />",
-        "<strong>Hours:</strong>",
-        healthsep$Hours1,
-        "<br />",
-        "<strong>Language:</strong>",
-        healthsep$Language,
-        "<br />",
-        "<strong>Address:</strong>",
-        healthsep$Address1,
-        "<a href = ",healthsep$Website1, "> Website </a>",
-        "<br />"),
-  
-  htmltools::HTML
-)
-
-popup <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(costs$Name),
-        "<br />",
-        "<strong>Description:</strong>",
-        costs$Description ,
-        "<br />",
-        "<strong>Serves:</strong>",
-        costs$Serves, 
-        "<br />",
-        "<strong>Hours:</strong>",
-        costs$Hours,
-        "<br />",
-        "<strong>Language:</strong>",
-        costs$Language,
-        "<br />",
-        "<strong>Address:</strong>",
-        costs$Address,
-        "<a href = ",costs$Website, "> Website </a>",
-        "<br />"),
-  
-  htmltools::HTML
-)
-
-healthfree <- read_excel(paste0(getwd(), "/data/resourcecost.xlsx"),sheet = "Health Free")
-
-
-
-pal <- colorFactor(c("#91003f", "#005824", "#d7301f","#CC6677","#DDCC77","#88419d"), domain = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"))
-pal1 <- colorFactor(c("#91003f","#005824","#d7301f","#88419d","#DDCC77","#CC6677","#AA4499","#882255"),domain = c("Food Pantry","Clothing","Counseling","Dental Care","Vision Care","Medical Services","Speech and Hearing Services","Physical Therapy"))
-
-
-leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=costs,~Longitude,~Latitude,popup = ~popup, label = ~as.character(Name),group = ~Resource,color = ~pal(Resource),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1) %>%
-  addLayersControl(overlayGroups = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"),options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
-  setView(-77.4029155,39.009006, zoom = 11) -> health_free
-
-
-
-leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=foods,~Longitude1,~Latitude1,popup=~popups,label=~as.character(Name1),color= ~pal1(Resource1),group = ~Resource1,weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> health_all
-#--------------youth development map --------------------------
-
-youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 3.xlsx"))
-popups3 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(youth$Name3),
-        "<br />",
-        "<strong>Description:</strong>",
-        youth$Description3 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        youth$Hours3, 
-        "<br />",
-        "<strong>Address:</strong>",
-        youth$Address3,
-        "<a href = ",youth$Website3, "> Website </a>",
-        "<br />"),
-  
-  
-  htmltools::HTML
-)
-
-pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
-
-leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=youth,~Longitude3,~Latitude3,popup=~popups3,label=~as.character(Name3),color= ~pal3(Type),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1,group = ~Type)%>%
-  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
-
-
-youthfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth Free")
-
-popups4 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(youthfree$Name4),
-        "<br />",
-        "<strong>Description:</strong>",
-        youthfree$Description4 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        youthfree$Hours4, 
-        "<br />",
-        "<strong>Address:</strong>",
-        youthfree$Address4,
-        "<a href = ",youthfree$Website4, "> Website </a>",
-        "<br />"),
-  htmltools::HTML
-)
-
-pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
-
-leaflet(data = youthfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=youthfree,~Longitude4,~Latitude4,popup=~popups4,label=~as.character(Name4),color= ~pal3(Type),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1,group = ~Type)%>%
-  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> youth_free
-
-
-#---------mental health resources map------------------------
-
-ment <- read_excel(paste0(getwd(),"/data/mentalhealthres.xlsx"),sheet = "Mental")
-
-popups2 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(ment$Name2),
-        "<br />",
-        "<strong>Description:</strong>",
-        ment$Description2 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        ment$Hours2, 
-        "<br />",
-        "<strong>Address:</strong>",
-        ment$Address2,
-        "<a href = ",ment$Website2, "> Website </a>",
-        "<br />"),
-  
-  
-  htmltools::HTML
-)
-
-pal2 <- colorFactor(c("red", "blue", "green"), domain = c("Family Therapy", "Family Counseling", "Bereavement"))
-
-leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=ment,~Longitude2,~Latitude2,popup=~popups2,label=~as.character(Name2),group=~Resources2,color=~pal2(Resources2),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resources2,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
-
-mentfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Mental Free")
-
-popups5 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(mentfree$Name5),
-        "<br />",
-        "<strong>Description:</strong>",
-        mentfree$Description5 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        mentfree$Hours5, 
-        "<br />",
-        "<strong>Address:</strong>",
-        mentfree$Address5,
-        "<a href = ",mentfree$Website5, "> Website </a>",
-        "<br />"),
-  
-  
-  htmltools::HTML
-)
-
-leaflet(data = mentfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data = mentfree, ~Longitude5,~Latitude5,popup = ~popups5,label = ~as.character(Name5),group = ~Resource5,color = ~pal2(Resource5),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resource5,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> mental_free
-
-
-#----------------------family engagement map-------------------
-
-familyengage <- read_excel(paste0(getwd(),"/data/ListOfResources.xlsx"),sheet = "Family Engagement")
-
-popups <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(familyengage$Name),
-        "<br />",
-        "<strong>Description:</strong>",
-        familyengage$Description ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        familyengage$Hours, 
-        "<br />",
-        "<strong>Address:</strong>",
-        familyengage$Address,
-        "<br />",
-        "<a href = ",familyengage$Website, "> Website </a>",
-        "<br />",
-        "<strong>Serves:</strong>",
-        familyengage$Serves),
-  
-  
-  htmltools::HTML
-)
-
-pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Housing", "Holiday Help", "Education", "Essentials supply", "Employment help", "Other"))
-
-leaflet(data = familyengage) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=familyengage,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal8(Resources),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_family
-
-famfree <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family Free")
-
-popups9 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(famfree$Name8),
-        "<br />",
-        "<strong>Description:</strong>",
-        famfree$Description8 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        famfree$Hours8, 
-        "<br />",
-        "<strong>Address:</strong>",
-        famfree$Address8,
-        "<br />",
-        "<a href = ",famfree$Website8, "> Website </a>",
-        "<br />",
-        "<strong>Serves:</strong>",
-        famfree$Serves8),
-  
-  
-  htmltools::HTML
-)
-
-pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Education", "Employment help","Essentials Supply","Housing", "Holiday Help","Other"))
-
-leaflet(data = famfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=famfree,~Longitude8,~Latitude8,popup=~popups9,label=~as.character(Name8),group=~Resource8,color=~pal8(Resource8),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resource8,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> fam_free
-
-
-#resource table ----------------------------
-list <- read_excel(paste0(getwd(),"/data/allresources.xlsx")) 
-
-
-#-----------------Performance Graphs - assessment  --------------------------
-#----------------all students-------------------------------
-
-#-------------------students by race----------------------
-#------------------Mathematics-------------------------------
-
+#----------------- Assessment Sub Tab --------------------------
+#---------------- all students -------------------------------
+#------------------- students by race ----------------------
+#------------------ Mathematics -------------------------------
 
 assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
@@ -871,8 +524,6 @@ forestgroverace <- plot_ly(assessmentraceForestGrove, x = ~Year, y = ~`Percent P
 
 #----------------Sugarland------------------------------------------------
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
-
 assessment %>% filter(School == "Sugarland" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSugarland
 
 sugarlandrace <- plot_ly(assessmentraceSugarland, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
@@ -885,8 +536,6 @@ sugarlandrace <- plot_ly(assessmentraceSugarland, x = ~Year, y = ~`Percent Pass`
 ))
 
 #-------------------Guilford------------------------------------
-
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Guilford" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceGuilford
 
@@ -901,8 +550,6 @@ guilfordrace <- plot_ly(assessmentraceGuilford, x = ~Year, y = ~`Percent Pass`, 
 
 #-------------------------------Rolling Ridge------------------
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
-
 assessment %>% filter(School == "Rolling Ridge" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceRollingRidge
 
 rrrace <- plot_ly(assessmentraceRollingRidge, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
@@ -915,8 +562,6 @@ rrrace <- plot_ly(assessmentraceRollingRidge, x = ~Year, y = ~`Percent Pass`, co
 ))
 
 #-----------------------------Sterling--------------------
-
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Sterling" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSterling
 
@@ -931,8 +576,6 @@ sterlingrace <- plot_ly(assessmentraceSterling, x = ~Year, y = ~`Percent Pass`, 
 
 #----------------------Sully--------------------------
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
-
 assessment %>% filter(School == "Sully" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSully
 
 sullyrace <- plot_ly(assessmentraceSully, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
@@ -946,8 +589,7 @@ sullyrace <- plot_ly(assessmentraceSully, x = ~Year, y = ~`Percent Pass`, color 
 
 #------------------English------------------
 
-#-----------------Forest Grove-------------------------------------------
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+#-----------------Forest Grove------------------------------------------
 
 assessment %>% filter(School == "Forest Grove" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceForestGroveeng
 
@@ -962,8 +604,6 @@ forestgroveraceeng <- plot_ly(assessmentraceForestGroveeng, x = ~Year, y = ~`Per
 
 #----------------Sugarland------------------------------------------------
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
-
 assessment %>% filter(School == "Sugarland" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSugarlandeng
 
 sugarlandraceeng <- plot_ly(assessmentraceSugarlandeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
@@ -976,8 +616,6 @@ sugarlandraceeng <- plot_ly(assessmentraceSugarlandeng, x = ~Year, y = ~`Percent
 ))
 
 #-------------------Guilford------------------------------------
-
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Guilford" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceGuilfordeng
 
@@ -992,8 +630,6 @@ guilfordraceeng <- plot_ly(assessmentraceGuilfordeng, x = ~Year, y = ~`Percent P
 
 #-------------------------------Rolling Ridge------------------
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
-
 assessment %>% filter(School == "Rolling Ridge" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceRollingRidgeeng
 
 rrraceeng <- plot_ly(assessmentraceRollingRidgeeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
@@ -1007,8 +643,6 @@ rrraceeng <- plot_ly(assessmentraceRollingRidgeeng, x = ~Year, y = ~`Percent Pas
 
 #-----------------------------Sterling--------------------
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
-
 assessment %>% filter(School == "Sterling" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSterlingeng
 
 sterlingraceeng <- plot_ly(assessmentraceSterlingeng, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Reading Pass Rate", xaxis = list(title = ""), yaxis = list(
@@ -1021,8 +655,6 @@ sterlingraceeng <- plot_ly(assessmentraceSterlingeng, x = ~Year, y = ~`Percent P
 ))
 
 #----------------------Sully--------------------------
-
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Sully" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSullyeng
 
@@ -1578,117 +1210,360 @@ english_homeless <- plot_ly(assessmenthomelessenglish, x = ~Year, y = ~`Percent 
 
 
 
-#-------------word clouds--------------------
-#------------cloud_1-------------------------
+#--------------free or not free resources ---------------------------------------
 
-#install.packages("tm")  # for text mining
-#install.packages("SnowballC") # for text stemming
-#install.packages("wordcloud") # word-cloud generator 
-#install.packages("RColorBrewer") # color palettes
-# Load
-library("tm")
-library("SnowballC")
-library("wordcloud")
-library("RColorBrewer")
+costs <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"))
+foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
+#---------------map_health and isochrones-----------------------------------------
 
+#install.packages("remotes")
+#remotes::install_github("tlorusso/traveltimeR")
 
-text1 <- "Internet needs were very overwhelming in our community, virtual presence of students created difficulties with individual telecounseling, student engagement in school an ongoing concern time to provide for the basic needs; finding mental health providers for elementary aged students (this was a huge challenge); medical care for undocumented and uninsured Parent involvement internet access; monetary stressors - rent, food, hygiene and cleanliness supplies needs and health (COVID) and mental health needs Maintaining the same level of connectedness with families in the DL model as those attending in person.parent engagement, parent attendance, finding medical care for undocumented and uninsured, finding housing assistance for undocumented Our challenge is the overall transiency of our student population turnover; community mental health and medical supports; undocumented and uninsured medical care parent involvement Youth development activities We would like to continue to diversify our community partner list community mental health and medical supports, undocumented and uninsured medical care"
+YourAPIKey <- "32f6ed99d0636fe05d01a5ff5a99c6e7"
+YourAppId <- "190b7348"
 
-#docs <- Corpus(VectorSource(text))
+traveltime10 <- read_sf("data/iso_10_sterling.shp")
+traveltime20 <- read_sf("data/iso_20_sterling.shp")
+traveltime45 <- read_sf("data/iso_45_sterling.shp")
+# traveltime10 <- traveltime_map(appId=YourAppId,
+#                                apiKey=YourAPIKey,
+#                                location=c(39.009006,-77.4029155),
+#                                traveltime=600,
+#                                type="driving",
+#                                departure="2022-08-09T08:00:00+01:00")
+# # ... and within 60 minutes?
+# traveltime20 <- traveltime_map(appId=YourAppId,
+#                                apiKey=YourAPIKey,
+#                                location=c(39.009006,-77.4029155),
+#                                traveltime=1200,
+#                                type="driving",
+#                                departure="2022-08-09T08:00:00+01:00")
+# traveltime45 <- traveltime_map(appId = YourAppId,
+#                                apiKey = YourAPIKey,
+#                                location = c(39.009006,-77.4029155),
+#                                traveltime= 2700,
+#                                type = "driving",
+#                                departure = "2022-08-09T08:00:00+01:00")
+map<- read_excel(paste0(getwd(),"/data/school_locations.xlsx"))
 
+subset_map <- map[1,c(1,4,5)]
 
-Clean_String <- function(string){
-  # Lowercase
-  temp <- tolower(string)
-  # Remove everything that is not a number or letter (may want to keep more 
-  # stuff in your actual analyses). 
-  temp <- stringr::str_replace_all(temp,"[^a-zA-Z\\s]", " ")
-  # Shrink down to just one white space
-  temp <- stringr::str_replace_all(temp,"[\\s]+", " ")
-  temp <- stringr::str_replace_all(temp,";", " ")
-  # Split it
-  temp <- stringr::str_split(temp, " ")[[1]]
-  # Get rid of trailing "" if necessary
-  indexes <- which(temp == "")
-  if(length(indexes) > 0){
-    temp <- temp[-indexes]
-  } 
-  return(temp)
-}
+healthsep <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(healthsep$Name1),
+        "<br />",
+        "<strong>Description:</strong>",
+        healthsep$Description1 ,
+        "<br />",
+        "<strong>Serves:</strong>",
+        healthsep$Serves1, 
+        "<br />",
+        "<strong>Hours:</strong>",
+        healthsep$Hours1,
+        "<br />",
+        "<strong>Language:</strong>",
+        healthsep$Language,
+        "<br />",
+        "<strong>Address:</strong>",
+        healthsep$Address1,
+        "<a href = ",healthsep$Website1, "> Website </a>",
+        "<br />"),
+  
+  htmltools::HTML
+)
 
-clean1 <- Clean_String(text1)
+popup <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(costs$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        costs$Description ,
+        "<br />",
+        "<strong>Serves:</strong>",
+        costs$Serves, 
+        "<br />",
+        "<strong>Hours:</strong>",
+        costs$Hours,
+        "<br />",
+        "<strong>Language:</strong>",
+        costs$Language,
+        "<br />",
+        "<strong>Address:</strong>",
+        costs$Address,
+        "<a href = ",costs$Website, "> Website </a>",
+        "<br />"),
+  
+  htmltools::HTML
+)
 
-docs1 <- Corpus(VectorSource(clean1))
-
-docs1 <- tm_map(docs1, removeWords, c("to", "challenge", "concern", "level", "aged", "created", "elementary", "basic", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "continue", "provide"))
-
-
-dtm1 <- TermDocumentMatrix(docs1) 
-matrix1 <- as.matrix(dtm1) 
-words1 <- sort(rowSums(matrix1),decreasing=TRUE) 
-df1 <- data.frame(word = names(words1),freq=words1)
-
-
-
-set.seed(1234) # for reproducibility 
-cloud1 <- wordcloud2(df1, size=0.5)
-
-#---------Cloud 2-----------------------
-
-text2 <- "Many families attended our family outreach and engagement initiatives, teaching families how to operate Schoology.  Families are now very adept at using technology to help their students and support teachers and instruction
-student attendance and active engagement; virtual home visits
-Reduction of gaggle reports
-Virtual Home Visits and United Mental Health screening; hot spots, 1-1 technology
-Staying connected with families and working to empower families to be active in the school community. We offered support to families throughout the year and were responsive to needs as they arose. We worked together collaboratively.
-We have the Principal of the Year, School is a warm and welcoming place - Principal and VP tell students every day that they are loved and wanted, staff have risen to the occasion to offer quality instruction in this challenging time Excellent teachers and supportive and caring administration, cohesive working environment. positive climate, PEP, Parent Liaison always actively engaged and helping all families with many needs
-family involvement; welcoming environment
-Students feel safe and supported at school, equity is promoted throughout the school building, teamwork among staff 
-UMHT initiatives (MTSS tiered support)
-Collaboration and a warm atmosphere. Care for our community
-vision, teamwork, the people who work here "
-
-clean2 <- Clean_String(text2)
-
-docs2 <- Corpus(VectorSource(clean2))
-
-docs2 <- tm_map(docs2, removeWords, c("day", "now", "help", "pep", "people", "arose", "to", "risen", "offer", "offered", "warm", "spots", "their", "every", "they", "tell", "that", "who", "are", "all", "many", "here", "always", "among", "mtss", "umht", "how", "feel", "adept", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "hot","wanted", "tiered", "using", "staying", "excellent", "worked", "actively", "throughout"))
-
-
-dtm2 <- TermDocumentMatrix(docs2) 
-matrix2 <- as.matrix(dtm2) 
-words2 <- sort(rowSums(matrix2),decreasing=TRUE) 
-df2 <- data.frame(word = names(words2),freq=words2)
-
-
-cloud2 <- wordcloud2(df2, size=0.5)
-
-#---------------cloud3------------------
-
-text3 <- "Continue working with our excellent business partners and community agencies.  Utilize the support of many agencies and local people interested in supporting our students and families.   Provide in-person assistance to families and students
-seek resources for the areas listed above; streamline supports for the most needy
-Increase parent involvement, more youth development opportunities, and resuming after school clubs and programs 
-Continuation of services provided pre-COVID and expansion of Youth Development Activities
-I would like to increase opportunities for after-school youth development programs at Rolling Ridge. We also hope to continue to offer virtual opportunities in addition to our in-person programs to offer working parents flexibility. As always, we will seek feedback from families to better meet their needs.
-community partnerships, return to PEP, engage parents in meaningful and timely ways, create opportunities for stakeholder input 4 times per year.  "
-
-clean3 <- Clean_String(text3)
-
-docs3 <- Corpus(VectorSource(clean3))
-
-docs3 <- tm_map(docs3, removeWords, c("better","rolling","return", "above", "will", "covid", "areas", "listed", "input", "to", "per", "pre", "utilize", "most", "also", "more", "many", "ways", "local", "pep", "times", "ridge", "year", "needy", "people", "after", "person", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "umht", "hot", "to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "their", "from", "always"))
-
-
-dtm3 <- TermDocumentMatrix(docs3) 
-matrix3 <- as.matrix(dtm3) 
-words3 <- sort(rowSums(matrix3),decreasing=TRUE) 
-df3 <- data.frame(word = names(words3),freq=words3)
-
-cloud3<- wordcloud2(df3, size=0.5)
+healthfree <- read_excel(paste0(getwd(), "/data/resourcecost.xlsx"),sheet = "Health Free")
 
 
 
+pal <- colorFactor(c("#91003f", "#005824", "#d7301f","#CC6677","#DDCC77","#88419d"), domain = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"))
+pal1 <- colorFactor(c("#91003f","#005824","#d7301f","#88419d","#DDCC77","#CC6677","#AA4499","#882255"),domain = c("Food Pantry","Clothing","Counseling","Dental Care","Vision Care","Medical Services","Speech and Hearing Services","Physical Therapy"))
 
-#-----------------Performance Graphs - assessment  --------------------------
+
+leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=costs,~Longitude,~Latitude,popup = ~popup, label = ~as.character(Name),group = ~Resource,color = ~pal(Resource),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addLayersControl(overlayGroups = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"),options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
+  setView(-77.4029155,39.009006, zoom = 11) -> health_free
+
+
+
+leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=foods,~Longitude1,~Latitude1,popup=~popups,label=~as.character(Name1),color= ~pal1(Resource1),group = ~Resource1,weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> health_all
+#--------------youth development map --------------------------
+
+youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 3.xlsx"))
+popups3 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(youth$Name3),
+        "<br />",
+        "<strong>Description:</strong>",
+        youth$Description3 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        youth$Hours3, 
+        "<br />",
+        "<strong>Address:</strong>",
+        youth$Address3,
+        "<a href = ",youth$Website3, "> Website </a>",
+        "<br />"),
+  
+  
+  htmltools::HTML
+)
+
+pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
+
+leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=youth,~Longitude3,~Latitude3,popup=~popups3,label=~as.character(Name3),color= ~pal3(Type),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1,group = ~Type)%>%
+  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
+
+
+youthfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth Free")
+
+popups4 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(youthfree$Name4),
+        "<br />",
+        "<strong>Description:</strong>",
+        youthfree$Description4 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        youthfree$Hours4, 
+        "<br />",
+        "<strong>Address:</strong>",
+        youthfree$Address4,
+        "<a href = ",youthfree$Website4, "> Website </a>",
+        "<br />"),
+  htmltools::HTML
+)
+
+pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
+
+leaflet(data = youthfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=youthfree,~Longitude4,~Latitude4,popup=~popups4,label=~as.character(Name4),color= ~pal3(Type),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1,group = ~Type)%>%
+  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> youth_free
+
+
+#---------mental health resources map------------------------
+
+ment <- read_excel(paste0(getwd(),"/data/mentalhealthres.xlsx"),sheet = "Mental")
+
+popups2 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(ment$Name2),
+        "<br />",
+        "<strong>Description:</strong>",
+        ment$Description2 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        ment$Hours2, 
+        "<br />",
+        "<strong>Address:</strong>",
+        ment$Address2,
+        "<a href = ",ment$Website2, "> Website </a>",
+        "<br />"),
+  
+  
+  htmltools::HTML
+)
+
+pal2 <- colorFactor(c("red", "blue", "green"), domain = c("Family Therapy", "Family Counseling", "Bereavement"))
+
+leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=ment,~Longitude2,~Latitude2,popup=~popups2,label=~as.character(Name2),group=~Resources2,color=~pal2(Resources2),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resources2,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
+
+mentfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Mental Free")
+
+popups5 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(mentfree$Name5),
+        "<br />",
+        "<strong>Description:</strong>",
+        mentfree$Description5 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        mentfree$Hours5, 
+        "<br />",
+        "<strong>Address:</strong>",
+        mentfree$Address5,
+        "<a href = ",mentfree$Website5, "> Website </a>",
+        "<br />"),
+  
+  
+  htmltools::HTML
+)
+
+leaflet(data = mentfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data = mentfree, ~Longitude5,~Latitude5,popup = ~popups5,label = ~as.character(Name5),group = ~Resource5,color = ~pal2(Resource5),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resource5,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> mental_free
+
+
+#----------------------family engagement map-------------------
+
+familyengage <- read_excel(paste0(getwd(),"/data/ListOfResources.xlsx"),sheet = "Family Engagement")
+
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(familyengage$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        familyengage$Description ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        familyengage$Hours, 
+        "<br />",
+        "<strong>Address:</strong>",
+        familyengage$Address,
+        "<br />",
+        "<a href = ",familyengage$Website, "> Website </a>",
+        "<br />",
+        "<strong>Serves:</strong>",
+        familyengage$Serves),
+  
+  
+  htmltools::HTML
+)
+
+pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Housing", "Holiday Help", "Education", "Essentials supply", "Employment help", "Other"))
+
+leaflet(data = familyengage) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=familyengage,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal8(Resources),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_family
+
+famfree <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family Free")
+
+popups9 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(famfree$Name8),
+        "<br />",
+        "<strong>Description:</strong>",
+        famfree$Description8 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        famfree$Hours8, 
+        "<br />",
+        "<strong>Address:</strong>",
+        famfree$Address8,
+        "<br />",
+        "<a href = ",famfree$Website8, "> Website </a>",
+        "<br />",
+        "<strong>Serves:</strong>",
+        famfree$Serves8),
+  
+  
+  htmltools::HTML
+)
+
+pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Education", "Employment help","Essentials Supply","Housing", "Holiday Help","Other"))
+
+leaflet(data = famfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=famfree,~Longitude8,~Latitude8,popup=~popups9,label=~as.character(Name8),group=~Resource8,color=~pal8(Resource8),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resource8,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> fam_free
+
+
+#resource table ----------------------------
+list <- read_excel(paste0(getwd(),"/data/allresources.xlsx")) 
+
+
+#-----------------Performance Graphs - Assessment  --------------------------
 #-------------------students by race----------------------
 #------------------Mathematics-------------------------------
 
@@ -2214,215 +2089,150 @@ sullyalleng <- plot_ly(assessmentallSullyeng, x = ~Year, y = ~`Percent Pass`, co
   #zeroline = F
 ))
 
+#Climate surveys
 
-assessment %>% filter(Subgroup == "Students with Disabilities" & Subject == "English Reading") -> assessmentdisenglish
+#--------------Teacher/Staff Climate Surveys------------------------
+newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
+subsetnewsurveydataSTAFF <- newsurveydata[3:8,c(1,2:5,7:8)]
 
-english_dis <- plot_ly(assessmentdisenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
+#Teacher & Staff Survey Q1 - Staff Collegiality
+staffquestion1 <- subsetnewsurveydataSTAFF[1:6,1:2]
+question1 <- staffquestion1$SCHOOLS
+staffquestion1percentage <- staffquestion1$`Question 1`
+staffquestion1percentage <- as.numeric(staffquestion1percentage)
+staffquestion1percentage <- staffquestion1percentage*100
+one <- ggplot(staffquestion1,aes(x=question1,y=staffquestion1percentage,fill=question1, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion1$SCHOOLS)))+labs(title="Staff Collegiality",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion1percentage, y = staffquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer1 <- ggplotly(one, tooltip = c("text"))
 
+#Teacher & Staff Survey Q2 - Academic Environment
+staffquestion2 <- subsetnewsurveydataSTAFF[1:6,c(1,3)]
+question2 <- staffquestion2$SCHOOLS
+staffquestion2percentage <- staffquestion2$`Question 2`
+staffquestion2percentage <- as.numeric(staffquestion2percentage)
+staffquestion2percentage <- staffquestion2percentage*100
+two <- ggplot(staffquestion2,aes(x=question2,y=staffquestion2percentage,fill=question2, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion2$SCHOOLS)))+labs(title="Academic Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion2percentage, y = staffquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer2 <- ggplotly(two, tooltip = c("text"))
 
+#Teacher & Staff Survey Q3 - School Leadership
+staffquestion3 <- subsetnewsurveydataSTAFF[1:6,c(1,4)]
+question3 <- staffquestion3$SCHOOLS
+staffquestion3percentage <- staffquestion3$`Question 3`
+staffquestion3percentage <- as.numeric(staffquestion3percentage)
+staffquestion3percentage <- staffquestion3percentage*100
+three <- ggplot(staffquestion3,aes(x=question3,y=staffquestion3percentage,fill=question3, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion3$SCHOOLS)))+labs(title="School Leadership",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion3percentage, y = staffquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer3 <- ggplotly(three, tooltip = c("text"))
 
+#Teacher & Staff Survey Q4 - Managing Student Behavior
+staffquestion4 <- subsetnewsurveydataSTAFF[1:6,c(1,5)]
+question4 <- staffquestion4$SCHOOLS
+staffquestion4percentage <- staffquestion4$`Question 4`
+staffquestion4percentage <- as.numeric(staffquestion4percentage)
+staffquestion4percentage <- staffquestion4percentage*100
+four <- ggplot(staffquestion4,aes(x=question4,y=staffquestion4percentage,fill=question4, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion4$SCHOOLS)))+labs(title="Managing Student Behavior",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion4percentage, y = staffquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer4 <- ggplotly(four, tooltip = c("text"))
 
-#----------------------white students---------------------------------------
+#Teacher & Staff Survey Q6 - Workplace Environment
+staffquestion6 <- subsetnewsurveydataSTAFF[1:6,c(1,6)]
+question6 <- staffquestion6$SCHOOLS
+staffquestion6percentage <- staffquestion6$`Question 6`
+staffquestion6percentage <- as.numeric(staffquestion6percentage)
+staffquestion6percentage <- staffquestion6percentage*100
+six <- ggplot(staffquestion6,aes(x=question6,y=staffquestion6percentage,fill=question6, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion6$SCHOOLS)))+labs(title="Workplace Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion6percentage, y = staffquestion6percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer6 <- ggplotly(six, tooltip = c("text"))
 
-assessment %>% filter(Subgroup == "White" & Subject == "Mathematics") -> assessmentwhitemath
+#Teacher & Staff Survey Q7 - Instructional Practices 
+staffquestion7 <- subsetnewsurveydataSTAFF[1:6,c(1,7)]
+question7 <- staffquestion7$SCHOOLS
+staffquestion7percentage <- staffquestion7$`Question 7`
+staffquestion7percentage <- as.numeric(staffquestion7percentage)
+staffquestion7percentage <- staffquestion7percentage*100
+seven <- ggplot(staffquestion7,aes(x=question7,y=staffquestion7percentage,fill=question7, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion7$SCHOOLS)))+labs(title="Instructional Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion7percentage, y = staffquestion7percentage), size = 3, position = position_stack(vjust = 1.02))
+teacherandstaffanswer7 <- ggplotly(seven, tooltip = c("text"))
 
-math_white <- plot_ly(assessmentwhitemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
+#--------------Parent Climate Surveys--------------------------------
+newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
+subsetnewsurveydataPARENT <- newsurveydata[19:24,c(1,2:5)]
 
+#Parent Survey Q1 - Academic Support 
+parentquestion1 <- subsetnewsurveydataPARENT[1:6,1:2]
+question8 <- parentquestion1$SCHOOLS
+parentquestion1percentage <- parentquestion1$`Question 1`
+parentquestion1percentage <- as.numeric(parentquestion1percentage)
+parentquestion1percentage <- parentquestion1percentage*100
+eight <- ggplot(parentquestion1,aes(x=question8,y=parentquestion1percentage,fill=question8, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion1$SCHOOLS)))+labs(title="Academic Support",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion1percentage, y = parentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+parentanswer1 <- ggplotly(eight, tooltip = c("text"))
 
-assessment %>% filter(Subgroup == "White" & Subject == "English Reading") -> assessmentwhiteenglish
+#Parent Survey Q2 - Communications
+parentquestion2 <- subsetnewsurveydataPARENT[1:6,c(1,3)]
+question9 <- parentquestion2$SCHOOLS
+parentquestion2percentage <- parentquestion2$`Question 2`
+parentquestion2percentage <- as.numeric(parentquestion2percentage)
+parentquestion2percentage <- parentquestion2percentage*100
+nine <- ggplot(parentquestion2,aes(x=question9,y=parentquestion2percentage,fill=question9, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion2$SCHOOLS)))+labs(title="Communications",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion2percentage, y = parentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+parentanswer2 <- ggplotly(nine, tooltip = c("text"))
 
-english_white <- plot_ly(assessmentwhiteenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
+#Parent Survey Q3 - Relationships
+parentquestion3 <- subsetnewsurveydataPARENT[1:6,c(1,4)]
+question10 <- parentquestion3$SCHOOLS
+parentquestion3percentage <- parentquestion3$`Question 3`
+parentquestion3percentage <- as.numeric(parentquestion3percentage)
+parentquestion3percentage <- parentquestion3percentage*100
+ten <- ggplot(parentquestion3,aes(x=question10,y=parentquestion3percentage,fill=question10, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion3$SCHOOLS)))+labs(title="Relationships",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion3percentage, y = parentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+parentanswer3 <- ggplotly(ten, tooltip = c("text"))
 
-#---------black----------------------------
+#Parent Survey Q4 - Instructions
+parentquestion4 <- subsetnewsurveydataPARENT[1:6,c(1,5)]
+question11 <- parentquestion4$SCHOOLS
+parentquestion4percentage <- parentquestion4$`Question 4`
+parentquestion4percentage <- as.numeric(parentquestion4percentage)
+parentquestion4percentage <- parentquestion4percentage*100
+eleven <- ggplot(parentquestion4,aes(x=question11,y=parentquestion4percentage,fill=question11, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion4$SCHOOLS)))+labs(title="Instructions",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion4percentage, y = parentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
+parentanswer4 <- ggplotly(eleven, tooltip = c("text"))
 
-assessment %>% filter(Subgroup == "Black" & Subject == "Mathematics") -> assessmentblackmath
+#--------------Student Climate Surveys-------------------------------
+newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
+subsetnewsurveydataSTUDENT <- newsurveydata[11:16,c(1,2:4,6)]
 
-math_black <- plot_ly(assessmentblackmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
+#Student Survey Q1 - Student Engagement
+studentquestion1 <- subsetnewsurveydataSTUDENT[1:6,1:2]
+question12 <- studentquestion1$SCHOOLS
+studentquestion1percentage <- studentquestion1$`Question 1`
+studentquestion1percentage <- as.numeric(studentquestion1percentage)
+studentquestion1percentage <- studentquestion1percentage*100
+twelve <- ggplot(studentquestion1,aes(x=question12,y=studentquestion1percentage,fill=question12, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion1$SCHOOLS)))+labs(title="Student Engagement",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion1percentage, y = studentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
+studentanswer1 <- ggplotly(twelve, tooltip = c("text"))
 
+#Student Survey Q2 - Student-Teacher Relationship
+studentquestion2 <- subsetnewsurveydataSTUDENT[1:6,c(1,3)]
+question13 <- studentquestion2$SCHOOLS
+studentquestion2percentage <- studentquestion2$`Question 2`
+studentquestion2percentage <- as.numeric(studentquestion2percentage)
+studentquestion2percentage <- studentquestion2percentage*100
+thirteen <- ggplot(studentquestion2,aes(x=question13,y=studentquestion2percentage,fill=question13, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion2$SCHOOLS)))+labs(title="Student-Teacher Relationship",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion2percentage, y = studentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
+studentanswer2 <- ggplotly(thirteen, tooltip = c("text"))
 
-assessment %>% filter(Subgroup == "Black" & Subject == "English Reading") -> assessmentblackenglish
+#Student Survey Q3 - Social-Emotional Wellbeing
+studentquestion3 <- subsetnewsurveydataSTUDENT[1:6,c(1,4)]
+question14 <- studentquestion3$SCHOOLS
+studentquestion3percentage <- studentquestion3$`Question 3`
+studentquestion3percentage <- as.numeric(studentquestion3percentage)
+studentquestion3percentage <- studentquestion3percentage*100
+fourteen <- ggplot(studentquestion3,aes(x=question14,y=studentquestion3percentage,fill=question14, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion3$SCHOOLS)))+labs(title="Social-Emotional Wellbeing",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion3percentage, y = studentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
+studentanswer3 <- ggplotly(fourteen, tooltip = c("text"))
 
-english_black <- plot_ly(assessmentblackenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
+#Student Survey Q5 - Bullying
+studentquestion5 <- subsetnewsurveydataSTUDENT[1:6,c(1,5)]
+question16 <- studentquestion5$SCHOOLS
+studentquestion5percentage <- studentquestion5$`Question 5`
+studentquestion5percentage <- as.numeric(studentquestion5percentage)
+studentquestion5percentage <- studentquestion5percentage*100
+sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
+studentanswer5 <- ggplotly(sixteen, tooltip = c("text"))
 
+#Representatives' Reports ----------------------------------------------------
 
-#----------asian--------------------------
+#Some Facts
 
-assessment %>% filter(Subgroup == "Asian" & Subject == "Mathematics") -> assessmentasianmath
-
-math_asian <- plot_ly(assessmentasianmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
-
-
-assessment %>% filter(Subgroup == "Asian" & Subject == "English Reading") -> assessmentasianenglish
-
-english_asian <- plot_ly(assessmentasianenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
-
-
-#--------hispanic-------------------------------
-
-assessment %>% filter(Subgroup == "Hispanic" & Subject == "Mathematics") -> assessmenthispanicmath
-
-math_hispanic <- plot_ly(assessmenthispanicmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
-
-
-assessment %>% filter(Subgroup == "Hispanic" & Subject == "English Reading") -> assessmenthispanicenglish
-
-english_hispanic <- plot_ly(assessmenthispanicenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
-
-
-#-----------male------------------------------
-
-assessment %>% filter(Subgroup == "Male" & Subject == "Mathematics") -> assessmentmalemath
-
-math_male <- plot_ly(assessmentmalemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
-
-
-assessment %>% filter(Subgroup == "Male" & Subject == "English Reading") -> assessmentmaleenglish
-
-english_male <- plot_ly(assessmentmaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
-
-
-
-#-------------female-----------------------
-
-assessment %>% filter(Subgroup == "Female" & Subject == "Mathematics") -> assessmentfemalemath
-
-math_female <- plot_ly(assessmentfemalemath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
-
-
-assessment %>% filter(Subgroup == "Female" & Subject == "English Reading") -> assessmentfemaleenglish
-
-english_female <- plot_ly(assessmentfemaleenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
-
-
-
-#-----------homeless-------------------------
-
-assessment %>% filter(Subgroup == "Homeless" & Subject == "Mathematics") -> assessmenthomelessmath
-
-math_homeless <- plot_ly(assessmenthomelessmath, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
-
-
-assessment %>% filter(Subgroup == "Homeless" & Subject == "English Reading") -> assessmenthomelessenglish
-
-english_homeless <- plot_ly(assessmenthomelessenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
-#--------------breakfast------------------------------------------------------
-
-breakfast_data <- read_excel(paste0(getwd(),"/data/Breakfast.xlsx"),skip=0,col_names=TRUE)
-breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Breakfast", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
-
-#---------------------General Data-------------------------------------------
 #--------------------English Learner Status----------------------------------
 
 generaldata <- read_excel(paste0(getwd(),"/data/generaldata.xlsx"),skip=0,col_names=TRUE)
@@ -2587,182 +2397,142 @@ figHOME <- figHOME %>% layout(
 )
 
 
-figHOME
-
-#--------------Teacher/Staff Climate Surveys------------------------
-newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
-subsetnewsurveydataSTAFF <- newsurveydata[3:8,c(1,2:5,7:8)]
-
-#Teacher & Staff Survey Q1 - Staff Collegiality
-staffquestion1 <- subsetnewsurveydataSTAFF[1:6,1:2]
-question1 <- staffquestion1$SCHOOLS
-staffquestion1percentage <- staffquestion1$`Question 1`
-staffquestion1percentage <- as.numeric(staffquestion1percentage)
-staffquestion1percentage <- staffquestion1percentage*100
-one <- ggplot(staffquestion1,aes(x=question1,y=staffquestion1percentage,fill=question1, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion1$SCHOOLS)))+labs(title="Staff Collegiality",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion1percentage, y = staffquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
-teacherandstaffanswer1 <- ggplotly(one, tooltip = c("text"))
-
-#Teacher & Staff Survey Q2 - Academic Environment
-staffquestion2 <- subsetnewsurveydataSTAFF[1:6,c(1,3)]
-question2 <- staffquestion2$SCHOOLS
-staffquestion2percentage <- staffquestion2$`Question 2`
-staffquestion2percentage <- as.numeric(staffquestion2percentage)
-staffquestion2percentage <- staffquestion2percentage*100
-two <- ggplot(staffquestion2,aes(x=question2,y=staffquestion2percentage,fill=question2, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion2$SCHOOLS)))+labs(title="Academic Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion2percentage, y = staffquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
-teacherandstaffanswer2 <- ggplotly(two, tooltip = c("text"))
-
-#Teacher & Staff Survey Q3 - School Leadership
-staffquestion3 <- subsetnewsurveydataSTAFF[1:6,c(1,4)]
-question3 <- staffquestion3$SCHOOLS
-staffquestion3percentage <- staffquestion3$`Question 3`
-staffquestion3percentage <- as.numeric(staffquestion3percentage)
-staffquestion3percentage <- staffquestion3percentage*100
-three <- ggplot(staffquestion3,aes(x=question3,y=staffquestion3percentage,fill=question3, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion3$SCHOOLS)))+labs(title="School Leadership",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion3percentage, y = staffquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
-teacherandstaffanswer3 <- ggplotly(three, tooltip = c("text"))
-
-#Teacher & Staff Survey Q4 - Managing Student Behavior
-staffquestion4 <- subsetnewsurveydataSTAFF[1:6,c(1,5)]
-question4 <- staffquestion4$SCHOOLS
-staffquestion4percentage <- staffquestion4$`Question 4`
-staffquestion4percentage <- as.numeric(staffquestion4percentage)
-staffquestion4percentage <- staffquestion4percentage*100
-four <- ggplot(staffquestion4,aes(x=question4,y=staffquestion4percentage,fill=question4, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion4$SCHOOLS)))+labs(title="Managing Student Behavior",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion4percentage, y = staffquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
-teacherandstaffanswer4 <- ggplotly(four, tooltip = c("text"))
-
-#Teacher & Staff Survey Q6 - Workplace Environment
-staffquestion6 <- subsetnewsurveydataSTAFF[1:6,c(1,6)]
-question6 <- staffquestion6$SCHOOLS
-staffquestion6percentage <- staffquestion6$`Question 6`
-staffquestion6percentage <- as.numeric(staffquestion6percentage)
-staffquestion6percentage <- staffquestion6percentage*100
-six <- ggplot(staffquestion6,aes(x=question6,y=staffquestion6percentage,fill=question6, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion6$SCHOOLS)))+labs(title="Workplace Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion6percentage, y = staffquestion6percentage), size = 3, position = position_stack(vjust = 1.02))
-teacherandstaffanswer6 <- ggplotly(six, tooltip = c("text"))
-
-#Teacher & Staff Survey Q7 - Instructional Practices 
-staffquestion7 <- subsetnewsurveydataSTAFF[1:6,c(1,7)]
-question7 <- staffquestion7$SCHOOLS
-staffquestion7percentage <- staffquestion7$`Question 7`
-staffquestion7percentage <- as.numeric(staffquestion7percentage)
-staffquestion7percentage <- staffquestion7percentage*100
-seven <- ggplot(staffquestion7,aes(x=question7,y=staffquestion7percentage,fill=question7, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",staffquestion7$SCHOOLS)))+labs(title="Instructional Environment",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = staffquestion7percentage, y = staffquestion7percentage), size = 3, position = position_stack(vjust = 1.02))
-teacherandstaffanswer7 <- ggplotly(seven, tooltip = c("text"))
-
-#--------------Parent Climate Surveys--------------------------------
-newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
-subsetnewsurveydataPARENT <- newsurveydata[19:24,c(1,2:5)]
-
-#Parent Survey Q1 - Academic Support 
-parentquestion1 <- subsetnewsurveydataPARENT[1:6,1:2]
-question8 <- parentquestion1$SCHOOLS
-parentquestion1percentage <- parentquestion1$`Question 1`
-parentquestion1percentage <- as.numeric(parentquestion1percentage)
-parentquestion1percentage <- parentquestion1percentage*100
-eight <- ggplot(parentquestion1,aes(x=question8,y=parentquestion1percentage,fill=question8, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion1$SCHOOLS)))+labs(title="Academic Support",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion1percentage, y = parentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
-parentanswer1 <- ggplotly(eight, tooltip = c("text"))
-
-#Parent Survey Q2 - Communications
-parentquestion2 <- subsetnewsurveydataPARENT[1:6,c(1,3)]
-question9 <- parentquestion2$SCHOOLS
-parentquestion2percentage <- parentquestion2$`Question 2`
-parentquestion2percentage <- as.numeric(parentquestion2percentage)
-parentquestion2percentage <- parentquestion2percentage*100
-nine <- ggplot(parentquestion2,aes(x=question9,y=parentquestion2percentage,fill=question9, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion2$SCHOOLS)))+labs(title="Communications",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion2percentage, y = parentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
-parentanswer2 <- ggplotly(nine, tooltip = c("text"))
-
-#Parent Survey Q3 - Relationships
-parentquestion3 <- subsetnewsurveydataPARENT[1:6,c(1,4)]
-question10 <- parentquestion3$SCHOOLS
-parentquestion3percentage <- parentquestion3$`Question 3`
-parentquestion3percentage <- as.numeric(parentquestion3percentage)
-parentquestion3percentage <- parentquestion3percentage*100
-ten <- ggplot(parentquestion3,aes(x=question10,y=parentquestion3percentage,fill=question10, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion3$SCHOOLS)))+labs(title="Relationships",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion3percentage, y = parentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
-parentanswer3 <- ggplotly(ten, tooltip = c("text"))
-
-#Parent Survey Q4 - Instructions
-parentquestion4 <- subsetnewsurveydataPARENT[1:6,c(1,5)]
-question11 <- parentquestion4$SCHOOLS
-parentquestion4percentage <- parentquestion4$`Question 4`
-parentquestion4percentage <- as.numeric(parentquestion4percentage)
-parentquestion4percentage <- parentquestion4percentage*100
-eleven <- ggplot(parentquestion4,aes(x=question11,y=parentquestion4percentage,fill=question11, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",parentquestion4$SCHOOLS)))+labs(title="Instructions",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = parentquestion4percentage, y = parentquestion4percentage), size = 3, position = position_stack(vjust = 1.02))
-parentanswer4 <- ggplotly(eleven, tooltip = c("text"))
-
-#--------------Student Climate Surveys-------------------------------
-newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
-subsetnewsurveydataSTUDENT <- newsurveydata[11:16,c(1,2:4,6)]
-
-#Student Survey Q1 - Student Engagement
-studentquestion1 <- subsetnewsurveydataSTUDENT[1:6,1:2]
-question12 <- studentquestion1$SCHOOLS
-studentquestion1percentage <- studentquestion1$`Question 1`
-studentquestion1percentage <- as.numeric(studentquestion1percentage)
-studentquestion1percentage <- studentquestion1percentage*100
-twelve <- ggplot(studentquestion1,aes(x=question12,y=studentquestion1percentage,fill=question12, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion1$SCHOOLS)))+labs(title="Student Engagement",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion1percentage, y = studentquestion1percentage), size = 3, position = position_stack(vjust = 1.02))
-studentanswer1 <- ggplotly(twelve, tooltip = c("text"))
-
-#Student Survey Q2 - Student-Teacher Relationship
-studentquestion2 <- subsetnewsurveydataSTUDENT[1:6,c(1,3)]
-question13 <- studentquestion2$SCHOOLS
-studentquestion2percentage <- studentquestion2$`Question 2`
-studentquestion2percentage <- as.numeric(studentquestion2percentage)
-studentquestion2percentage <- studentquestion2percentage*100
-thirteen <- ggplot(studentquestion2,aes(x=question13,y=studentquestion2percentage,fill=question13, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion2$SCHOOLS)))+labs(title="Student-Teacher Relationship",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion2percentage, y = studentquestion2percentage), size = 3, position = position_stack(vjust = 1.02))
-studentanswer2 <- ggplotly(thirteen, tooltip = c("text"))
-
-#Student Survey Q3 - Social-Emotional Wellbeing
-studentquestion3 <- subsetnewsurveydataSTUDENT[1:6,c(1,4)]
-question14 <- studentquestion3$SCHOOLS
-studentquestion3percentage <- studentquestion3$`Question 3`
-studentquestion3percentage <- as.numeric(studentquestion3percentage)
-studentquestion3percentage <- studentquestion3percentage*100
-fourteen <- ggplot(studentquestion3,aes(x=question14,y=studentquestion3percentage,fill=question14, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion3$SCHOOLS)))+labs(title="Social-Emotional Wellbeing",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion3percentage, y = studentquestion3percentage), size = 3, position = position_stack(vjust = 1.02))
-studentanswer3 <- ggplotly(fourteen, tooltip = c("text"))
-
-#Student Survey Q5 - Bullying
-studentquestion5 <- subsetnewsurveydataSTUDENT[1:6,c(1,5)]
-question16 <- studentquestion5$SCHOOLS
-studentquestion5percentage <- studentquestion5$`Question 5`
-studentquestion5percentage <- as.numeric(studentquestion5percentage)
-studentquestion5percentage <- studentquestion5percentage*100
-sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
-studentanswer5 <- ggplotly(sixteen, tooltip = c("text"))
-
-# manually scraped health and social services --------------------------------
-
+#weekend meals
 healthscrape <- read_excel(paste0(getwd(),"/data/manualscrappingdata.xlsx"))
 subset_healthscrape <- healthscrape[2:5,c(2,5)]
 Total <- subset_healthscrape$...5
 Year <- subset_healthscrape$...2
 plot_ly(data = subset_healthscrape, x = ~Year, y = ~Total, type = "scatter",mode="line",hoverinfo = "text",text = ~paste("Year:",Year,"Total:",Total)) %>% layout(yaxis = list(tickvals = list(100,200,300,400,500,600,700,800,900)),title = "Families Who Received Weekend Meals") -> weekendmeals
 
+#Basic supplies
+
 subset_healthscrape2 <- healthscrape[c(2,4),c(2,4)]
 Year2 <- subset_healthscrape2$...2
 Total2 <- subset_healthscrape2$...4
 plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
 
-#----------------suspension data-------------------
 
-suspension <- read_excel(paste0(getwd(),"/data/Suspensions.xlsx"),skip=0,col_names=TRUE)
-subset_forest <- suspension[c(1,2,3,4,25,26,27,28,49,50,51,52), c(1:3,5)]
-forestsuspend<-plot_ly(subset_forest, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Forest Grove", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+#breakfast
 
-subset_Guilford <- suspension[c(5,6,7,8,29,30,31,32,53,54,55,56), c(1:3,5)]
-guilfordsuspend<- plot_ly(subset_Guilford, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Guilford", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+breakfast_data <- read_excel(paste0(getwd(),"/data/Breakfast.xlsx"),skip=0,col_names=TRUE)
+breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Breakfast", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
-subset_rolling <- suspension[c(9,10,11,12,33,34,35,36,57,58,59,60), c(1:3,5)]
-rollingsuspend<- plot_ly(subset_rolling, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Rolling Ridge", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+#Responses 
 
-subset_sterling <- suspension[c(13,14,15,16,37,38,39,40,61,62,63,64), c(1:3,5)]
-sterlingsuspend<- plot_ly(subset_sterling, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sterling", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+#-------------word clouds--------------------
+#------------Challenges and Weaknesses-------------------------
 
-subset_sugarland <- suspension[c(17,18,19,20,41,42,43,44,65,66,67,68), c(1:3,5)]
-sugarlandsuspend<- plot_ly(subset_sugarland, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sugarland", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+#install.packages("tm")  # for text mining
+#install.packages("SnowballC") # for text stemming
+#install.packages("wordcloud") # word-cloud generator 
+#install.packages("RColorBrewer") # color palettes
 
-subset_sully <- suspension[c(21,22,23,24,45,46,47,48,69,70,71,72), c(1:3,5)]
-sullysuspend<- plot_ly(subset_sully, x = ~Year, y = ~`Percent of the Student Population`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent of the Student Population`, "%", "<br>", "Subgroup: ", Subgroup))%>% layout(title = "Sully", xaxis = list(title = ""), yaxis = list(title="Percentage"))
+text1 <- "Internet needs were very overwhelming in our community, virtual presence of students created difficulties with individual telecounseling, student engagement in school an ongoing concern time to provide for the basic needs; finding mental health providers for elementary aged students (this was a huge challenge); medical care for undocumented and uninsured Parent involvement internet access; monetary stressors - rent, food, hygiene and cleanliness supplies needs and health (COVID) and mental health needs Maintaining the same level of connectedness with families in the DL model as those attending in person.parent engagement, parent attendance, finding medical care for undocumented and uninsured, finding housing assistance for undocumented Our challenge is the overall transiency of our student population turnover; community mental health and medical supports; undocumented and uninsured medical care parent involvement Youth development activities We would like to continue to diversify our community partner list community mental health and medical supports, undocumented and uninsured medical care"
+
+#docs <- Corpus(VectorSource(text))
+
+
+Clean_String <- function(string){
+  # Lowercase
+  temp <- tolower(string)
+  # Remove everything that is not a number or letter (may want to keep more 
+  # stuff in your actual analyses). 
+  temp <- stringr::str_replace_all(temp,"[^a-zA-Z\\s]", " ")
+  # Shrink down to just one white space
+  temp <- stringr::str_replace_all(temp,"[\\s]+", " ")
+  temp <- stringr::str_replace_all(temp,";", " ")
+  # Split it
+  temp <- stringr::str_split(temp, " ")[[1]]
+  # Get rid of trailing "" if necessary
+  indexes <- which(temp == "")
+  if(length(indexes) > 0){
+    temp <- temp[-indexes]
+  } 
+  return(temp)
+}
+
+clean1 <- Clean_String(text1)
+
+docs1 <- Corpus(VectorSource(clean1))
+
+docs1 <- tm_map(docs1, removeWords, c("to", "challenge", "concern", "level", "aged", "created", "elementary", "basic", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "continue", "provide"))
+
+
+dtm1 <- TermDocumentMatrix(docs1) 
+matrix1 <- as.matrix(dtm1) 
+words1 <- sort(rowSums(matrix1),decreasing=TRUE) 
+df1 <- data.frame(word = names(words1),freq=words1)
 
 
 
+set.seed(1234) # for reproducibility 
+cloud1 <- wordcloud2(df1, size=0.5)
+
+#---------Cloud 2-----------------------
+
+text2 <- "Many families attended our family outreach and engagement initiatives, teaching families how to operate Schoology.  Families are now very adept at using technology to help their students and support teachers and instruction
+student attendance and active engagement; virtual home visits
+Reduction of gaggle reports
+Virtual Home Visits and United Mental Health screening; hot spots, 1-1 technology
+Staying connected with families and working to empower families to be active in the school community. We offered support to families throughout the year and were responsive to needs as they arose. We worked together collaboratively.
+We have the Principal of the Year, School is a warm and welcoming place - Principal and VP tell students every day that they are loved and wanted, staff have risen to the occasion to offer quality instruction in this challenging time Excellent teachers and supportive and caring administration, cohesive working environment. positive climate, PEP, Parent Liaison always actively engaged and helping all families with many needs
+family involvement; welcoming environment
+Students feel safe and supported at school, equity is promoted throughout the school building, teamwork among staff 
+UMHT initiatives (MTSS tiered support)
+Collaboration and a warm atmosphere. Care for our community
+vision, teamwork, the people who work here "
+
+clean2 <- Clean_String(text2)
+
+docs2 <- Corpus(VectorSource(clean2))
+
+docs2 <- tm_map(docs2, removeWords, c("day", "now", "help", "pep", "people", "arose", "to", "risen", "offer", "offered", "warm", "spots", "their", "every", "they", "tell", "that", "who", "are", "all", "many", "here", "always", "among", "mtss", "umht", "how", "feel", "adept", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "hot","wanted", "tiered", "using", "staying", "excellent", "worked", "actively", "throughout"))
+
+
+dtm2 <- TermDocumentMatrix(docs2) 
+matrix2 <- as.matrix(dtm2) 
+words2 <- sort(rowSums(matrix2),decreasing=TRUE) 
+df2 <- data.frame(word = names(words2),freq=words2)
+
+
+cloud2 <- wordcloud2(df2, size=0.5)
+
+#---------------cloud3------------------
+
+text3 <- "Continue working with our excellent business partners and community agencies.  Utilize the support of many agencies and local people interested in supporting our students and families.   Provide in-person assistance to families and students
+seek resources for the areas listed above; streamline supports for the most needy
+Increase parent involvement, more youth development opportunities, and resuming after school clubs and programs 
+Continuation of services provided pre-COVID and expansion of Youth Development Activities
+I would like to increase opportunities for after-school youth development programs at Rolling Ridge. We also hope to continue to offer virtual opportunities in addition to our in-person programs to offer working parents flexibility. As always, we will seek feedback from families to better meet their needs.
+community partnerships, return to PEP, engage parents in meaningful and timely ways, create opportunities for stakeholder input 4 times per year.  "
+
+clean3 <- Clean_String(text3)
+
+docs3 <- Corpus(VectorSource(clean3))
+
+docs3 <- tm_map(docs3, removeWords, c("better","rolling","return", "above", "will", "covid", "areas", "listed", "input", "to", "per", "pre", "utilize", "most", "also", "more", "many", "ways", "local", "pep", "times", "ridge", "year", "needy", "people", "after", "person", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "umht", "hot", "to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "their", "from", "always"))
+
+
+dtm3 <- TermDocumentMatrix(docs3) 
+matrix3 <- as.matrix(dtm3) 
+words3 <- sort(rowSums(matrix3),decreasing=TRUE) 
+df3 <- data.frame(word = names(words3),freq=words3)
+
+cloud3<- wordcloud2(df3, size=0.5)
+
+
+
+
+
+
+#Partners sub tab
 #----------------------Collapsible Tree - Key Partners and Programs--------------------
 
 Tree <- read_excel(paste0(getwd(),"/data/treedata.xlsx")) 
@@ -2785,12 +2555,12 @@ Tree %>% collapsibleTree(hierarchy = c("Four Pillars", "Name", "Key Partners"),
                            
                          ))-> tree1
 
-#--------------- teacherstudent ratio---------------------------
-
-#teacherstudentratio <- img(src = "StudentTeacherRatioPic.png", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;")
 
 
-# CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
+
+
+
+# JSCODE --- CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
 jscode <- "function getUrlVars() {
                 var vars = {};
                 var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
@@ -2986,7 +2756,8 @@ ui <- navbarPage(title = "DSPG",
                                                                        "Family Income" = "faminc",
                                                                        "Poverty Status" = "pov", 
                                                                        "Health Coverage" = "health",
-                                                                       "Property Value" = "property"
+                                                                       "Property Value" = "property",
+                                                                       "Housing Occupancy" = "housing"
                                                                      ),
                                                                      ),     
                                                                      br(""),
@@ -4073,6 +3844,13 @@ server <- function(input, output, session) {
     else if (Var4() == "property") {
       
       property
+      
+      
+    }
+    
+    else if (Var4() == "housing") {
+      
+      housing
       
       
     }
