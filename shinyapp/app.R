@@ -231,7 +231,7 @@ property <- figpv %>% layout(title = "Residential Property Value", showlegend = 
 propcomparison <- plot_ly(
   domain = list(x = c(0, 1), y = c(0, 1)),
   value = 378700,
-  title = list(text = "Median PV Compared to Virginia Median PV"),
+  title = list(text = "Median PV Compared to Loudoun County Median PV"),
   type = "indicator",
   mode = "gauge+number+delta",
   delta = list(reference = 534600),
