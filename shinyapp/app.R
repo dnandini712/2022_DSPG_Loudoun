@@ -2915,7 +2915,8 @@ ui <- navbarPage(title = "DSPG",
                                            
                                            h3(strong("The Sterling Region")),
                                            
-                                           p("The", a(href = "https://www.lcps.org/Page/236420s",strong("Community School Initiative"), target = "_blank"), "in the Loudoun County Public School started in 2016 with Sterling Elementary, a Title 1 school, due to the generous support of 100WomenStrong. According to the Virginia Department of Education, Title 1 schools are provided “financial assistance through state educational agencies to school divisions and public schools with high numbers or percentages of children from low-income families to help ensure that all children meet challenging state academic content and achievement standards.”"),
+                                           p("The", a(href = "https://www.lcps.org/Page/236420",strong("Community School Initiative"), target = "_blank"), "(CSI) in the Loudoun County Public Schools started in 2015 with Sterling Elementary, a Title 1 school, due to the generous support of 100WomenStrong. According to the Virginia Department of Education, Title 1 schools are provided “financial assistance through state educational agencies to school divisions and public schools with high numbers or percentages of children from low-income families to help ensure that all children meet challenging state academic content and achievement standards.” Title I funds originiate as federal funds."),
+                                          br(""),
                                            p("The Community School program in Loudoun focuses on four key areas to promote academic achievement: "),
                                            strong(tags$ol(
                                              tags$li(("Health and Social Services" ), style = "font-size:18px;"),
@@ -2924,8 +2925,7 @@ ui <- navbarPage(title = "DSPG",
                                              tags$li(("Youth Development Opportunities"), style = "font-size:18px;")
                                              
                                            )),
-                                           p("Over the past several years, the Community School initiative has grown to include six Title 1 elementary schools from the Sterling area of Loudoun County in 2022."),
-                                           p("The interactive map shows the location of the six elementary schools in Sterling. Most schools are in the Sterling Census Designated Place (shaded orange). Sugarland Elementary, however, falls in the Greater Sterling region. We estimated, shown in yellow, by selecting the respective blocks assigned by the US Census Bureau."),
+                                           p("Over the past several years, the CSI has expanded to all six Title one elementary with the addition of one full-time social worker to attain a 1 social worker per every 2 schools’ ratio.  Since 2018, LCPS has increased staffing to include one full time social worker, school nurse, and Family Liaison at each Community School in addition to other initiatives designed to support students and families within the community. The interactive map shows the location of the six elementary schools in Sterling. Most schools are in the Sterling Census Designated Place (shaded orange). Sugarland Elementary, however, falls in the Greater Sterling region. The yellow area roughly mimics the Sugarland Elementary school zone using Census Blocks guidelines.")
                                     ),
                                     
                                     
