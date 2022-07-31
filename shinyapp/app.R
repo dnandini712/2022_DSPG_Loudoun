@@ -11,8 +11,8 @@
 #Nothing is calculated in the server. 
 
 #For the isochrones to run: install the following packages 
-install.packages("remotes")
-remotes::install_github("tlorusso/traveltimeR")
+#install.packages("remotes")
+#remotes::install_github("tlorusso/traveltimeR")
 
   
 #Load Packages ---------------------------------------------------------------
@@ -260,7 +260,7 @@ Numberpv=c(58,6,46,204,1137,4653,709,26)
 
 figpv <- dfpv %>% plot_ly(labels = ~`HOUSING OCCUPANCY`, values = ~dfpv$count, sort = FALSE, direction = "counterclockwise", marker = list(line = list(width = 1, pull = 3)), hoverinfo = 'text', text = ~paste('Number of Property Values:', Numberpv), textinfo = "percent")
 figpv <- figpv %>% add_pie(hole = 0.5, domain = list(x = c(0.25,1), y = c(0,0.9)))
-property <- figpv %>% layout(title = "Residential Property Value", showlegend = TRUE, 
+property <- figpv %>% layout(title = "Residential Property Value (PV)", showlegend = TRUE, 
                              legend=list(title=list(text='Select Value')),
                              xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                              yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
@@ -270,7 +270,7 @@ property <- figpv %>% layout(title = "Residential Property Value", showlegend = 
 propcomparison <- plot_ly(
   domain = list(x = c(0, 1), y = c(0, 1)),
   value = 378700,
-  title = list(text = "Median PV Compared to Loudoun County Median PV"),
+  title = list(text = "Sterling & Loudoun's Median PV"),
   type = "indicator",
   mode = "gauge+number+delta",
   delta = list(reference = 534600),
@@ -372,7 +372,7 @@ slices.HOUSING = c(6839, 2412)
 
 housing <- plot_ly(type='pie', labels=lbls.HOUSING, values=slices.HOUSING, 
                    textinfo='label+percent',
-                   insidetextorientation='radial') %>% layout(title ='', legend=list(title=list(text='Occupants')))
+                   insidetextorientation='radial') %>% layout(title ='Housing Occupancy', legend=list(title=list(text='Occupants')))
 
 
 #---------gender by school-------------------------------------------------
@@ -462,36 +462,6 @@ School <- attendance$`School Name`
 ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(title = "Student Absences by 2020-2021 Quarter",caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",
                                                                                                                                                                                                                                       plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
 attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("Percent:",Percent, "%","<br>","School:",School)) %>% layout(title = "Student Absences by 2020-2021 Quarter", legend=list(title=list(text='Select School')), yaxis = list(title = "Percentage"), xaxis = list(title = ""))
-
-# suspensions --------------------------------------------------
-suspensions <- read_excel((paste0(getwd(),"/data/suspensiondata.xlsx")))
-suspension18 <- suspensions[2:25,1:4]
-suspension19 <- suspensions[26:49,1:4]
-suspension20 <- suspensions[50:73,1:4]
-suspension18guilford <- suspension18[5:8,3:4]
-suspension18forest <- suspension18[1:4,3:4]
-suspension18rolling <- suspension18[9:12,3:4]
-suspension18sterling <- suspension18[13:16,3:4]
-suspension18sugarland <- suspension18[17:20,3:4]
-suspension18sully <- suspension18[21:24,3:4]
-susforest18 <- plot_ly(suspension18forest, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Forest Grove", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
-susguilford18 <- plot_ly(suspension18guilford, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Guilford", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
-susrolling18 <- plot_ly(suspension18rolling, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Rolling Ridge", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
-sussterling18 <- plot_ly(suspension18sterling, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Sterling", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
-sussugarland18 <- plot_ly(suspension18sugarland, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Sugarland", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
-sussully18 <- plot_ly(suspension18sully, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Sully", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
-suspension19guilford <- suspension19[5:8,3:4]
-suspension19rolling <- suspension19[9:12,3:4]
-suspension19sterling <- suspension19[13:16,3:4]
-suspension19forest <- suspension19[1:4,3:4]
-suspension19sully <- suspension19[21:24,3:4]
-suspension19sugarland <- suspension19[16:19,3:4]
-susguildford19 <- plot_ly(suspension19guilford, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Guilford", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
-susrolling19 <- plot_ly(suspension19rolling, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Rolling Ridge", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
-sussterling19 <- plot_ly(suspension19sterling, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Sterling", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
-susforest19 <- plot_ly(suspension19forest, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Forest Grove", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
-sussully19 <- plot_ly(suspension19sully, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Sully", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
-sussugarland19 <- plot_ly(suspension19sugarland, x = ~Race, y = ~Total, type = "bar") %>% layout(title = "Suspensions at Sugarland", xaxis = list(title = "Race"), yaxis = list(title = "Total", tickvals = list(1,2,3,4,5,6),range = list(0,6)))
 
 #---------------Number of Teachers/Staff--------------------------
 
@@ -1938,12 +1908,13 @@ ui <- navbarPage(title = "DSPG",
                                    column(6,
                                           h2(strong("Background")), align = "center",
                                           h4(strong("")),
-                                          p("Loudoun County Public Schools", a(href = "https://www.lcps.org/loudoun", strong("(LCPS)"), target = "_blank"), "is the third largest school division in Virginia, serving over 80,000 students in 97 facilities.  With over 18 high schools, 17 middle schools, 60 elementary schools, and 2 educational centers there are considerable variations in the needs of these schools. For instance, 6 of the 60", a(href = "https://www.lcps.org/Page/834", strong("elementary schools"), target = "_blank"), "in Loudoun are Title 1 Schools. According to the U.S Department of Education", a(href = "https://www2.ed.gov/programs/titleiparta/index.html", strong("Title 1 Schools"), target = "_blank"), "are provided financial assistance through state educational agencies to school divisions and public schools with high numbers or percentages of children from low-income families to help ensure that all children meet challenging state academic content and achievement standards. Notably, all six of these Title 1 elementary schools are located in the Sterling area in Loudoun county.", align = "justify"), 
+                                          p("Loudoun County Public Schools", a(href = "https://www.lcps.org/loudoun", strong("(LCPS)"), target = "_blank"), "is the third largest school division in Virginia, serving over 80,000 students in 97 facilities. With over 18 high schools, 17 middle schools, 60 elementary schools, and 2 educational centers there are considerable variations in the needs of these schools. For instance, 6 of the 60", a(href = "https://www.lcps.org/Page/834", strong("elementary schools"), target = "_blank"), "in Loudoun are Title 1 Schools. According to the U.S Department of Education", a(href = "https://www2.ed.gov/programs/titleiparta/index.html", strong("Title 1 Schools"), target = "_blank"), "are provided federal funds to school divisions and public schools with high numbers or percentages of children from low-income families to help ensure that all children meet challenging state academic content and achievement standards. Notably, all six of these Title 1 elementary schools are located in the Sterling area in Loudoun county. ", align = "justify"), 
+                                          
                                           h4(strong("Sterling")), 
-                                          p("The six Title 1 schools in Sterling are Sterling Elementary, Sugarland Elementary, Sully Elementary, Guilford Elementary, Rolling Ridge Elementary, and Forest Grove Elementary. To provide additional resources to these schools, LCPS started a Community Initiative Program in 2015. This program is a partnership between school and community resources that focus on academics, health and social services, youth and community development, and community engagement to help improve student learning, strong families, and healthier communities.", align = "justify"),
+                                          p("The six Title 1 schools in Sterling are Sterling Elementary, Sugarland Elementary, Sully Elementary, Guilford Elementary, Rolling Ridge Elementary, and Forest Grove Elementary. To provide additional resources to these schools, LCPS started a Community Initiative Program (CIP) in 2015. This program is a partnership between school and community resources that focus on academics, health and social services, youth and community development, and community engagement to help improve student learning, strong families, and healthier communities. In 2015, the CIP was supported at one Title one school, Sterling Elementary.  In 2018, the program was expanded to all six Title one elementary schools as part of their Community School Initiative (CSI) with the addition of one full-time social worker to attain a 1 social worker per every 2 schools’ ratio.  Since 2018, LCPS has increased staffing to include one full time social worker, school nurse, and Family Liaison at each Community School in addition to other initiatives designed to support students and families within the community", align = "justify"),
                                           
                                           h4(strong("What is the project question?")),
-                                          p("Potential partners of Loudoun County Public Schools are eager to provide services to the Community Schools. However, a lack of data makes it unclear what resources would be most beneficial for this region. Scraping data and visualizing it would help our stakeholders to find potential improvement opportunities that can help improve the lives of the students in these targeted elementary schools. ", align = "justify"),
+                                          p("Potential partners of Loudoun County Public Schools may be eager to provide services to the Community Schools; however, a lack of data makes it unclear what resources would be most beneficial for this region. Scraping data and visualizing it would help our stakeholders to find potential improvement opportunities that can help improve the lives of the students in these targeted elementary schools.", align = "justify"),
                                           fluidRow(style = "margin: 12px;",
                                                    column(12, align ="center", 
                                                           img(src='lcps_com_school_initiative.png', width = 210, height = 210)
@@ -1980,7 +1951,8 @@ ui <- navbarPage(title = "DSPG",
                                            
                                            h3(strong("The Sterling Region")),
                                            
-                                           p("The", a(href = "https://www.lcps.org/Page/236420s",strong("Community School Initiative"), target = "_blank"), "in the Loudoun County Public School started in 2016 with Sterling Elementary, a Title 1 school, due to the generous support of 100WomenStrong. According to the Virginia Department of Education, Title 1 schools are provided “financial assistance through state educational agencies to school divisions and public schools with high numbers or percentages of children from low-income families to help ensure that all children meet challenging state academic content and achievement standards.”"),
+                                           p("The", a(href = "https://www.lcps.org/Page/236420",strong("Community School Initiative"), target = "_blank"), "(CSI) in the Loudoun County Public Schools started in 2015 with Sterling Elementary, a Title 1 school, due to the generous support of 100WomenStrong. According to the Virginia Department of Education, Title 1 schools are provided “financial assistance through state educational agencies to school divisions and public schools with high numbers or percentages of children from low-income families to help ensure that all children meet challenging state academic content and achievement standards.” Title I funds originiate as federal funds."),
+                                           br(),
                                            p("The Community School program in Loudoun focuses on four key areas to promote academic achievement: "),
                                            strong(tags$ol(
                                              tags$li(("Health and Social Services" ), style = "font-size:18px;"),
@@ -1989,7 +1961,7 @@ ui <- navbarPage(title = "DSPG",
                                              tags$li(("Youth Development Opportunities"), style = "font-size:18px;")
                                              
                                            )),
-                                           p("Over the past several years, the Community School initiative has grown to include six Title 1 elementary schools from the Sterling area of Loudoun County in 2022."),
+                                           p("Over the past several years, the CSI has expanded to all six Title one elementary with the addition of one full-time social worker to attain a 1 social worker per every 2 schools’ ratio.  Since 2018, LCPS has increased staffing to include one full time social worker, school nurse, and Family Liaison at each Community School in addition to other initiatives designed to support students and families within the community. The interactive map shows the location of the six elementary schools in Sterling. Most schools are in the Sterling Census Designated Place (shaded orange). Sugarland Elementary, however, falls in the Greater Sterling region. The yellow area roughly mimics the Sugarland Elementary school zone using Census Blocks guidelines."),
                                            p("The interactive map shows the location of the six elementary schools in Sterling. Most schools are in the Sterling Census Designated Place (shaded orange). Sugarland Elementary, however, falls in the Greater Sterling region. We estimated, shown in yellow, by selecting the respective blocks assigned by the US Census Bureau."),
                                     ),
                                     
@@ -2057,10 +2029,10 @@ ui <- navbarPage(title = "DSPG",
                                                                      selectInput("demos2drop", "Select Socioeconomic Characteristic:", width = "100%", choices = c(
                                                                        "Educational Attainment" = "edu",
                                                                        "Family Income" = "faminc",
-                                                                       "Poverty Status" = "pov", 
-                                                                       "Health Coverage" = "health",
+                                                                       "Housing Occupancy" = "housing",
                                                                        "Property Value" = "property",
-                                                                       "Housing Occupancy" = "housing"
+                                                                       "Poverty Status" = "pov", 
+                                                                       "Health Coverage" = "health"
                                                                      ),
                                                                      ),     
                                                                      br(""),
@@ -2068,7 +2040,7 @@ ui <- navbarPage(title = "DSPG",
                                                                      fluidRow(column(2,),
                                                                               (column(10,
                                                                                       
-                                                                                      withSpinner(plotlyOutput("PropComp", height = "70%", width = "80%"))
+                                                                                      withSpinner(plotlyOutput("PropComp", height = "500%", width = "70%"))
                                                                               ))
                                                                      ),
                                                                      
@@ -2112,17 +2084,17 @@ ui <- navbarPage(title = "DSPG",
                                           br(""),
                                           h4(strong("Who Makes Up Sterling, Virginia?")), 
                                           
-                                          p("We used the American Community Survey (ACS) 5-year data to understand the socioeconomic demographics of the Sterling Census Designated Place (CDP) from the years 2016 to 2020. The ACS data is a survey collected by the U.S. Census Bureau which gathers sociodemographic information on American households including age, gender, race/ethnicity, income, and employment. "),
+                                          p("We used the American Community Survey (ACS) 5-year 2016 - 2020 data to understand the socioeconomic demographics of the Sterling Census Designated Place (CDP). The ACS is administered by the U.S. Census Bureau which gathers information on American households, including sociodemographic variables such as gender, race/ethnicity, income, and employment. "),
                                           br(),
-                                          p("Sterling’s population consists of slightly more males (50.5%) than females, with a median age of 34.7 years. This is different when you look at Sterlings male population in comparison to Loudoun county's 49.7% male population. Young and middle-aged adults (ages 25 to 44) account for the largest age group in Sterling while in Loudoun, middle-aged adults 35 to 49 account for the largest age group.  On average, the majority of the population identified as White between 2016-2020, followed by Asian as the second most common race. The area appears diverse, with almost half of the residents (41%) identifying as Hispanic or Latino. This is considerably larger than Loudoun County, which has only about 14% Hispanic population."),
+                                          p("Sterling’s population consists of slightly more males (50.5%) than females, with a median age of 34.7 years. Young and middle-aged adults (ages 25 to 44) account for the largest age group in Sterling. On average, the majority of the population identified as White between 2016-2020, followed by Asian as the second most common race. The area appears diverse, with almost half of the residents (41%) identifying as Hispanic or Latino. This is considerably larger than Loudoun county’s 14% Hispanic population.  "),
                                           
-                                          p("Many in the Sterling community are well-educated and have a college degree. Most residents ages 25 and older have attained a high school diploma, with the largest group having earned a bachelor’s degree. This education level may contribute to the high-income level in the region. The largest median income group for families in Sterling earn $100,000 to $149,999, followed closely by both $50,000 to $74,999 bracket and $150,000 to $199,999. It should be taken into consideration however that our data is slightly skewed as the areas of the Sterling CPD includes those that are highly affluent, outweigh those located in the areas with the schools designated as Title 1. This is evident by the differences in poverty levels by groups – females tend to have a higher poverty level regardless of age. Specifically, females ages 18 to 24 face the highest poverty level, followed by females ages 35 to 44.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                          p("Many in the Sterling community are well-educated and have a college degree. Most residents ages 25 and older have attained a high school diploma, with the largest group having earned a bachelor’s degree. This education level may contribute to the high-income level in the region. The largest median income group for families in Sterling earn $100,000 to $149,999, followed closely by both $50,000 to $74,999 bracket and $150,000 to $199,999.  There is also considerable investment in homeownership as approximately 75% of families own their home. Additionally, 68% residential property is valued between $300,000 to $499,9999. Note that there may be some considerable variation of wealth in this region as some areas may be highly affluent which may outweigh those located in less affluent areas such as those with Title 1 schools. For instance, the average residential property value may seem high, however, it is $156,000 less than the average residential property value in Loudoun County.  ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
                                           
-                                          p("While the majority of Sterling’s population is employed (approximately 71%), there is a notable gap in the residents' health insurance. About 17% have no health insurance, which is higher than Loudoun county's 5.5%. This may point to possible opportunities provided by Community Schools as these families will be less routine screening and will delay treatment until the condition is more advanced and more costly and challenging to treat.", style = "padding-top:15px;font-size: 14px;"),
+                                          p("Given the possible variation in income, we examine the differences in poverty levels by groups – females tend to have a higher poverty level regardless of age. Specifically, females ages 18 to 24 face the highest poverty level, followed by females ages 35 to 44.  ", style = "padding-top:15px;font-size: 14px;"),
                                           
-                                          p("When you take a look at the median property value visualizations, it is clear that a large percentage of homes fall into the property value range of $300,000 to $499,999. The average property value of Sterling is $378,700 which is almost $156,000 less than Loudoun County's median property value. The black line marker on the property value comparison visualization indicates Loudoun County's median property value.",style = "padding-top:15px;font-size: 14px;"),
+                                          p("While majority of Sterling’s population is employed (approximately 71%), there is a noticeable gap in the residents' health insurance. About 17% have no health insurance, which is higher than Loudoun county's 5.5%. This may point to possible opportunities provided by Community Schools as these families will be less routine screening and will delay treatment until the condition is more advanced and more costly and challenging to treat. ",style = "padding-top:15px;font-size: 14px;"),
                                           
-                                          p("The labor force of Sterling primarily works in management, business, science, and art, followed by the service sector. Over half of those who commute to work have a commute time less than 30 minutes, and 75% of said commuters drive alone. Notably, only 1.8% of commuters utilized public transportation.",style = "padding-top:15px;font-size: 14px;")
+                                          p("The labor force of Sterling primarily works in management, business, science, and art, followed by the service sector. Over half of those who commute to work have a commute time less than 30 minutes, and 75% of said commuters drive alone. Notably, only 1.8% of commuters utilized public transportation. ",style = "padding-top:15px;font-size: 14px;")
                                           
                                           
                                           
@@ -2185,13 +2157,13 @@ ui <- navbarPage(title = "DSPG",
                                               column(5, align = "justify",
                                                      
                                                      h4(strong("What Do Community Schools Look Like?"), align = "left"),
-                                                     p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary. "),
+                                                     p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need through partnerships with community, business, and governmental organizations. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary."),
                                                      
-                                                     p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling Elementary has the lowest number of students. Guilford is the only school which has more females than male while Forest Grove like the Sterling area for the gender ratio has an almost equal split. Rolling Ridge and Sully have a similar trend: the female students are about 48% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling Elementary has the most uneven distribution where there is 86 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
-                                                     p("The race and ethnicity demographics in 2019-2020 revealed that overall, Hispanic students, made up the greatest percentage of students attending the six elementary schools in Sterling, which differs from the general make-up of the Sterling area where White residents made up the majority of residents. There is a huge difference between Guilford and Forest Grove in terms of the ethnic groups of students, given that they both have similar number of total students: Guilford has significantly higher Hispanic students while Forest Grove has a lot more White and Hispanic students.", 
-                                                       style = "padding-top:15px;font-size: 14px;"),
-                                                     p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence,  we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary. This shows us there is not a significant correlation of the hispanic student percentage and the hispanic population density.", 
-                                                       style = "padding-top:15px;font-size: 14px;"),
+                                                     p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling Elementary has the lowest number of students. Guilford is the only school which has more females than male while Forest Grove like the Sterling area for the gender ratio has an almost equal split. Rolling Ridge and Sully have a similar trend: the female students are about 48% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling Elementary has the most uneven distribution where there are 86 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("The race and ethnicity demographics in 2019-2020 revealed that overall, Hispanic students, made up the greatest percentage of students attending the six elementary schools in Sterling, which differs from the general make-up of the Sterling area where White residents made up the majority of residents. There is a huge difference between Guilford and Forest Grove in terms of the ethnic groups of students, given that they both have similar number of total students: Guilford has higher Hispanic students while Forest Grove has a lot more White and Hispanic students. ",  style = "padding-top:15px;font-size: 14px;"),
+                                                     p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence, we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary.",  style = "padding-top:15px;font-size: 14px;"),
+                                                     p("The high Hispanic population may explain the large percentage of English learners in these Community Schools. English Learners (EL) are students learning English in schools who generally come from diverse backgrounds and non-English speaking homes. The percentage of Els increases from 67% in 2018-2019 to a high of 70% in 2020-2021.  "),
+                                                     p("The Department of Education defines Individualized Educational Plan (IEP) as an individualized plan created by teachers, parents, school administrators, and service personnel to improve educational results for a child with a disability. From 2018-2019, approximately 11% of Sterling’s Community Schools students had an individualized educational plan. There is also a significant portion of students who are facing homelessness in these schools. 13% of students facing homelessness attended Community Schools in Sterling in 2018-2019. This number increased to over 15% in 2019-2020, with a noticeable two-year decline in 2020 -2021 and 2021-2022. ")
                                               ),
                                               
                                               
@@ -2205,7 +2177,7 @@ ui <- navbarPage(title = "DSPG",
                             tabPanel("Performance", 
                                      fluidRow(style = "margin: 6px;",
                                               column(12, 
-                                                     h1(strong("Education"), align = "center")),
+                                                     h1(strong("Education in Community Schools"), align = "center")),
                                               
                                               column(6, align = "left",
                                                      tabsetPanel(
@@ -2247,29 +2219,6 @@ ui <- navbarPage(title = "DSPG",
                                                                 ),
                                                                 
                                                        ),
-                                                       tabPanel("Suspension",
-                                                                br(),
-                                                                fluidRow(
-                                                                  column(12, align = "left",
-                                                                         radioButtons(
-                                                                           "categoryyear",
-                                                                           label = "Select Year:",
-                                                                           choices = c(2018,2019)
-                                                                         ),
-                                                                         selectInput("schoolsuspend", "Select School:", width = "100%", choices = c(
-                                                                           "Forest Grove" = "susforest",
-                                                                           "Guilford" = "susguilford",
-                                                                           "Rolling Ridge" = "susrolling",
-                                                                           "Sterling" = "sussterling",
-                                                                           "Sugarland" = "sussugarland",
-                                                                           "Sully" = "sussully"
-                                                                           
-                                                                         ),
-                                                                         ),
-                                                                         
-                                                                         withSpinner(withSpinner(plotlyOutput("schoolsuspendall", height = "500px", width = "100%"))),
-                                                                         
-                                                                  ))),
                                                        
                                                        tabPanel( "Assessment",
                                                                  br(),
@@ -2324,19 +2273,19 @@ ui <- navbarPage(title = "DSPG",
                                                      h4(strong("How are students performing in Community Schools?")),
                                                      
                                                      
-                                                     p("Sterling ES has enrolled a consistent number of students, approximately 575, from 2016 to 2020. Interestingly, the schools with the lowest number of students - Guilford, Sully, and Sugarland - have increased their enrollment since joining the Community Schools Initiative. There are slight differences in the number of educators across schools, although the student population ranged from 461 to 585 in 2019-2020. Sterling Elementary is the only school with a greater proportion of staff than teachers. Sully ES has the highest student-to-teacher ratio, with 14 students per teacher, even though it has the lowest number of students. ", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("Due to the COVID-19 pandemic, changes in modality and hardships may have impacted students' behavior and exam performance in 2020-2021. As such, we cannot draw significant conclusions about changes over time. However, we include information from 2020-2021 as this may highlight possible opportunities for Community Schools' in assisting an already vulnerable population.  ", style = "padding-top:15px;font-size: 14px;"),
                                                      
-                                                     p("We utilize data from the Loudoun County Public Schools Dashboard and the Virginia Department of Education to analyze students’ behavior. Sully ES had the largest increase in absence rate across the year. There is also a substantial increase across all schools in the second and fourth quarters of the 2020-2021 school year. We acknowledge that this rate may be skewed due to the Covid-19 pandemic. As such, we analyze chronic absenteeism in the prior school year. Virginia Department of Education defines chronic absenteeism as the percentage of students who miss more than ten percent of total classes throughout the year. In 2018-2019, Sugarland, Rolling Ridge, and Sully had the highest chronic absenteeism rate, above 10%. Interestingly, Forest Grove and Sterling’s rates were consistent after the Covid-19 pandemic, whereas there was a massive increase in chronic absenteeism for other schools. Rolling Ridge had the highest rate in 2020-2021, with 17.7% of students missing 1 out of 10 classes. ", style = "padding-top:15px;font-size: 14px;"),
-                                                     p("When you look at the suspension percentages amongst the six community schools, we see a much higher percentage of Hispanic children being suspended than any other race. This stays constant throughout all six elementary schools. There are some differences in suspension rates throughout the schools. However, Hispanic children appear to be getting suspended more than other races. Some percentages go as high as 85%, like in Sully Elementary. Although this could be because of the high Hispanic population of the children within the schools, there is still room for improvement to help lower these high percentages.", style = "padding-top:15px;font-size: 14px;"),
-                                                     p("We collect and visualize Standard of Learning (SOL) Mathematics and English Reading passing rates for the 2018-2019 and 2020-2021 school years. Due to the COVID-19 pandemic, changes in modality and hardships may have impacted exam scores in 2020-2021. As such, we cannot draw significant conclusions about changes over time. Performance statistics can be disaggregated into subgroups such as race, gender, and other characteristics. Interestingly, students tend to perform better in Mathematics than in English, with the average pass rate for Mathematics being around 75% for all students, whereas the pass rate for English is approximately 60%.",style = "padding-top:15px;font-size: 14px;"),
+                                                     p("Sterling ES has enrolled a consistent number of students, approximately 575, from 2016 to 2020. Interestingly, the schools with the lowest number of students - Guilford, Sully, and Sugarland - have increased their enrollment since joining the Community Schools Initiative. There are slight differences in the number of educators across schools, although the student population ranged from 461 to 585 in 2019-2020. Rolling Ridge has the lowest student to teacher ratio, whereas Sterling Elementary is the only school with a greater proportion of staff than teachers. Sully ES has the highest student-to-teacher ratio, with 14 students per teacher, even though it has the lowest number of students. ", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("We utilize data from the Loudoun County Public Schools Dashboard and the Virginia Department of Education to analyze students’ behavior. Sully ES had the largest increase in absence rate across the year. There are also increases across all schools in the second and fourth quarters of the 2020-2021 school year. We acknowledge that this rate may be skewed due to the Covid-19 pandemic. As such, we analyze chronic absenteeism in the prior school year.  ", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("Chronic Absenteeism is defined by the Virginia Department of Education as the percentage of students missing 10% or more of the academic year for any reason, including excused absences, unexcused absences, and suspensions. In 2018-2019, before the pandemic, the average chronic absenteeism was about 9% across all schools. Sterling and Guilford had the lowest rate, with about 6% of students missing 1 out of 10 classes. Sugarland, Rolling Ridge, and Sully had the highest chronic absenteeism rate, above 10%. Interestingly, Forest Grove and Sterling’s rates were consistent after the Covid-19 pandemic, whereas there were increases in chronic absenteeism for other schools. Surprisingly, chronic absenteeism at Forest Grove reduced slightly during the pandemic, moving from approximately 8% in the 2018-2019 school year to 5% in 2020-2021. Rolling Ridge had the highest rate in 2020-2021, with 17.7% of students missing 1 out of 10 classes.",style = "padding-top:15px;font-size: 14px;"),
+                                                     p("We collect and visualize Standard of Learning (SOL) Mathematics and English Reading passing rates for the 2018-2019 and 2020-2021 school years. Performance statistics can be disaggregated into subgroups such as race, gender, and other characteristics. Students tend to perform better in Mathematics than in English, with the average pass rate for Mathematics being around 75% for all students, whereas the pass rate for English is approximately 60% in 2018-2019 "),
                                                      br(),
-                                                     p(strong("Mathematics")),
-                                                     p("Generally, White, and Asian students perform better than their Black and Hispanic counterparts. There is a significant decline in pass rates for all students in the academic year 2020-2021; however, the reduction is steeper for Black and Hispanic students. On average, Rolling Ridge, Sterling, Sugarland, and Sully had lower pass rates (below 80%) among all race/ethnic groups compared to Forest Grove, Guilford, and Rolling Ridge (above 80%) in the academic year 2018-2019. ",style = "padding-top:15px;font-size: 14px;"),
-                                                     p("Generally, males tend to have higher pass rates than females regardless of year or school. Homeless and differently-abled students have lower pass rates after the pandemic years. There are variations across schools as students from these subgroups perform poorer in Sully, Sterling, and Guilford than other ES. Moreover, these students had a massive decline in pass rates suggesting possible opportunities to provide resources for these already vulnerable students.",style = "padding-top:15px;font-size: 14px;"),
+                                                     p(strong(em("Mathematics"))),
+                                                     p("Generally, White, and Asian students perform better than their Black and Hispanic counterparts. On average, Rolling Ridge, Sterling, Sugarland, and Sully had lower pass rates (below 80%) among all race/ethnic groups compared to Forest Grove, Guilford, and Rolling Ridge (above 80%) in 2018-2018. There is a decline in pass rates for all students in the academic year 2020-2021; however, the reduction is steeper for Black and Hispanic students.",style = "padding-top:15px;font-size: 14px;"),
+                                                     p("Males tend to have higher pass rates than females regardless of year or school. In general, homeless and differently-abled students have lower pass rates than their counterparts in 2018-2018. The pass rates for these students (homeless and differently-abled) also differ across schools. For instance, these students have a lower rate in Sully, Sterling, and Guilford compared to their peers in other ES. Moreover, there was a decline in pass rates for these students suggesting possible opportunities to provide resources for these already vulnerable students. ",style = "padding-top:15px;font-size: 14px;"),
                                                      br(),
-                                                     p(strong("English Reading")),
-                                                     p("Some trends in English Reading scores are not very different than the statistics in Mathematics. On average, Hispanic students in all schools perform poorer than the other racial subgroups. Guilford and Forest Grove had White and Black students performing better, whereas in the rest the White and Asian students have higher passing rates. Generally, Asian and White students’ pass rates have either remained steady or fallen marginally whereas Hispanic students seem to have been worst hit by the pandemic. ",style = "padding-top:15px;font-size: 14px;"),
-                                                     p("Females tend to do better than males on an average, especially after the pandemic.  Homeless students have lower pass rates after the pandemic years in all schools except in Sully. Students with disabilities do better after the pandemic in Guilford and Sully. However, the passing rates are still very low as compared to the average for these vulnerable groups, suggesting further potential opportunities. ",style = "padding-top:15px;font-size: 14px;"),
+                                                     p(strong(em("English Reading"))),
+                                                     p("The trends in English Reading performance are similar to those in Mathematics. On average, Hispanic students in all schools perform poorer than the other racial subgroups. White and Asian students typically have a higher pass rate usually over 80%. Surprisingly, the pass rate in English for Asian and White students remained steady or fallen marginally during the pandemic whereas Hispanic students seems to have a substantial negative impact by the pandemic.  ",style = "padding-top:15px;font-size: 14px;"),
                                                      
                                               )
                                      )),
@@ -2749,7 +2698,7 @@ ui <- navbarPage(title = "DSPG",
                                                       br(""),
                                                       h4(strong("Health and Social Services Availability")), 
                                                       p(("A key pillar essential to ensuring students thrive in school is access to quality health and social services. It is difficult for students to focus on academic needs if their non-academic needs are not met. Thus, providing nutritious food, weather-appropriate clothing, and medical care such as dental, vision, and preventative care can improve a student's performance. For many, barriers to these services are often a result of expense, transportation, and time availability, making it vital to provide access to these resources for all members of a community. "),align = "justify"),
-                                                      p(("Due to Sterling's unique location within Loudoun County and its proximity to Washington, D.C., Sterling residents have access to numerous health and social services. However, the number and accessibility of services decrease for residents that require free or reduced-cost services, with many options falling outside of a ten-minute drive. For instance, a wide variety of free food pantries are available within a ten-minute drive of Sterling Elementary. However, beyond that, access to medical care and clothing is not as readily open, with many resources falling within the 20- and 45-minute boundaries. "),align = "justify"),
+                                                      p(("Due to Sterling's unique location within Loudoun County and its proximity to Washington, D.C., Sterling residents have access to numerous health and social services. However, the number and accessibility of services decrease for residents that require free or reduced-cost services, with many options falling outside of a ten-minute drive. For instance, a wide variety of free food pantries are available within a ten-minute drive of Sterling Elementary. However, beyond that, access to medical care and clothing is not as readily open, with many resources falling within the 20- and 45-minute boundaries. It should be noted that although there may be resources in neighboring Fairfax County, close to Sterling, often these services are unavailable for out-of-county residents. "),align = "justify"),
                                                       
                                                )
                                      )),
