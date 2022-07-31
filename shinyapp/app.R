@@ -11,8 +11,8 @@
 #Nothing is calculated in the server. 
 
 #For the isochrones to run: install the following packages 
-install.packages("remotes")
-remotes::install_github("tlorusso/traveltimeR")
+#install.packages("remotes")
+#remotes::install_github("tlorusso/traveltimeR")
 
 
 #Load Packages ---------------------------------------------------------------
@@ -260,7 +260,7 @@ Numberpv=c(58,6,46,204,1137,4653,709,26)
 
 figpv <- dfpv %>% plot_ly(labels = ~`HOUSING OCCUPANCY`, values = ~dfpv$count, sort = FALSE, direction = "counterclockwise", marker = list(line = list(width = 1, pull = 3)), hoverinfo = 'text', text = ~paste('Number of Property Values:', Numberpv), textinfo = "percent")
 figpv <- figpv %>% add_pie(hole = 0.5, domain = list(x = c(0.25,1), y = c(0,0.9)))
-property <- figpv %>% layout(title = "Residential Property Value", showlegend = TRUE, 
+property <- figpv %>% layout(title = "Residential Property Value (PV)", showlegend = TRUE, 
                              legend=list(title=list(text='Select Value')),
                              xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
                              yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
@@ -270,7 +270,7 @@ property <- figpv %>% layout(title = "Residential Property Value", showlegend = 
 propcomparison <- plot_ly(
   domain = list(x = c(0, 1), y = c(0, 1)),
   value = 378700,
-  title = list(text = "Median PV Compared to Loudoun County Median PV"),
+  title = list(text = "Sterling & Loudoun Median PV"),
   type = "indicator",
   mode = "gauge+number+delta",
   delta = list(reference = 534600),
@@ -3006,7 +3006,7 @@ ui <- navbarPage(title = "DSPG",
                                                                      fluidRow(column(2,),
                                                                               (column(10,
                                                                                       
-                                                                                      withSpinner(plotlyOutput("PropComp", height = "70%", width = "80%"))
+                                                                                      withSpinner(plotlyOutput("PropComp", height = "500%", width = "70%"))
                                                                               ))
                                                                      ),
                                                                      
