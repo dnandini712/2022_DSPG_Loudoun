@@ -1606,7 +1606,7 @@ figFRL <- plot_ly(dataFRL,
                   hoverinfo = 'text')
 
 figFRL <- figFRL %>% layout(
-  title = "Free And Reduced Lunch",
+  title = "Free and Reduced-Price Lunch Overall Participation",
   yaxis = list(
     title = "Percentage",
     range = list(65,77),
@@ -1816,7 +1816,7 @@ plot_ly(data = subset_healthscrape, x = ~Year, y = ~Total, type = "scatter",mode
 subset_healthscrape2 <- healthscrape[c(2,4),c(2,4)]
 Year2 <- subset_healthscrape2$...2
 Total2 <- subset_healthscrape2$...4
-plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
+plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Families That Received Help with Clothing, Shoes, and Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
 
 #----------------------Collapsible Tree - Key Partners and Programs--------------------
 
