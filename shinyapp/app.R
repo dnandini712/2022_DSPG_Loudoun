@@ -1532,6 +1532,18 @@ figELS <- figELS %>% layout(
 
 figELS
 
+#breakfast
+breakfast_data <- read_excel(paste0(getwd(),"/data/Breakfast.xlsx"),skip=0,col_names=TRUE)
+breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Breakfast", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+
 #------------------------------IEP Status------------------------------------
 
 generaldata <- read_excel(paste0(getwd(),"/data/generaldata.xlsx"),skip=0,col_names=TRUE)
@@ -2256,7 +2268,7 @@ ui <- navbarPage(title = "DSPG",
                                                                           
                                                                           #br(""),
                                                                           p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
-                                                                          p("*Note: Data unavailable where missing bars.", style = "font-size:12px;"),
+                                                                          p("*Note: Data suppressed for missing bars which represents fewer than 20 students in the group and the pass rate is less than 50%. ", style = "font-size:12px;"),
                                                                    )
                                                                    
                                                                    
