@@ -1510,7 +1510,7 @@ figELS <- plot_ly(dataELS,
                   hoverinfo = 'text')
 
 figELS <- figELS %>% layout(
-  title = "English Learner Status",
+  title = "English Learners(ELs)",
   yaxis = list(
     title = "Percentage",
     zerolinewidth =60,
@@ -1582,8 +1582,6 @@ figIEP <- figIEP %>% layout(
   )
 )
 
-
-figIEP
 
 #--------------------------Free And Reduced Lunch----------------------------
 
@@ -2049,10 +2047,10 @@ ui <- navbarPage(title = "DSPG",
                                                                      ),     
                                                                      br(""),
                                                                      withSpinner(plotlyOutput("demo2", height = "500px", width ="100%")),
-                                                                     fluidRow(column(2,),
-                                                                              (column(10,
+                                                                     fluidRow(column(3,),
+                                                                              (column(9,
                                                                                       
-                                                                                      withSpinner(plotlyOutput("PropComp", height = "500%", width = "70%"))
+                                                                                      withSpinner(plotlyOutput("PropComp", height = "450%", width = "66%"))
                                                                               ))
                                                                      ),
                                                                      
@@ -2160,7 +2158,50 @@ ui <- navbarPage(title = "DSPG",
                                                                 ),
                                                                 
                                                                 
-                                                       ),
+                                                       ),      tabPanel("English Learners(ELs)",
+                                                                        fluidRow(style = "margin: 4px;",
+                                                                                 withSpinner(plotlyOutput("figELS", height = "500px", width = "100%")),
+                                                                                 br(""),
+                                                                                 
+                                                                                 column(12,align = "right",
+                                                                                        p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
+                                                                                 ),
+                                                                                 
+                                                                                 
+                                                                                 
+                                                                                 
+                                                                                 
+                                                                        )),
+                                                       
+                                                       tabPanel("IEP Status",
+                                                                fluidRow(style = "margin: 4px;",
+                                                                         withSpinner(plotlyOutput("figIEP", height = "500px", width = "100%")),
+                                                                         br(""),
+                                                                         
+                                                                         column(12,align = "right",
+                                                                                p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
+                                                                         ),
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                )),
+                                                       
+                                                       tabPanel("Homeless",
+                                                                fluidRow(style = "margin: 4px;",
+                                                                         withSpinner(plotlyOutput("figHOME", height = "500px", width = "100%")),
+                                                                         br(""),
+                                                                         
+                                                                         column(12,align = "right",
+                                                                                p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
+                                                                         ),
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                         
+                                                                )),
                                                      )
                                               ), 
                                               br(""),
@@ -2170,12 +2211,11 @@ ui <- navbarPage(title = "DSPG",
                                                      
                                                      h4(strong("What Do Community Schools Look Like?"), align = "left"),
                                                      p("Community schools are schools that are available in low-income areas that provide resources and accommodation for the students and families who attend their schools. These schools not only focus on students learning, but may provide free meals, health care services, tutoring, and counseling services, to those in need through partnerships with community, business, and governmental organizations. In Sterling, there are six Title 1 Community Schools. Those schools are Forest Grove Elementary, Guilford Elementary, Rolling Ridge Elementary, Sterling Elementary, Sugarland Elementary, and Sully Elementary."),
-                                                     
                                                      p("To understand the population of the six elementary schools, we looked at the demographics and compared them to one another. For the figure titled “Gender”, we can see the total number of students in each school as well as the gender split. Sterling Elementary has the lowest number of students. Guilford is the only school which has more females than male while Forest Grove like the Sterling area for the gender ratio has an almost equal split. Rolling Ridge and Sully have a similar trend: the female students are about 48% of the total. Sugarland and Rolling Ridge have slightly lesser females than them. Sterling Elementary has the most uneven distribution where there are 86 females for every 100 male students. ", style = "padding-top:15px;font-size: 14px;"),
                                                      p("The race and ethnicity demographics in 2019-2020 revealed that overall, Hispanic students, made up the greatest percentage of students attending the six elementary schools in Sterling, which differs from the general make-up of the Sterling area where White residents made up the majority of residents. There is a huge difference between Guilford and Forest Grove in terms of the ethnic groups of students, given that they both have similar number of total students: Guilford has higher Hispanic students while Forest Grove has a lot more White and Hispanic students. ",  style = "padding-top:15px;font-size: 14px;"),
                                                      p("The differences might be due to the Hispanic population density in the areas where these schools are located. Hence, we mapped the schools, and collected the total Hispanic population between the years 2016 to 2020. We found that the area where Rolling Ridge is located has the largest population of Hispanic identifying people. This is followed closely by Sterling Elementary and Forest Grove Elementary.",  style = "padding-top:15px;font-size: 14px;"),
-                                                     p("The high Hispanic population may explain the large percentage of English learners in these Community Schools. English Learners (EL) are students learning English in schools who generally come from diverse backgrounds and non-English speaking homes. The percentage of Els increases from 67% in 2018-2019 to a high of 70% in 2020-2021.  "),
-                                                     p("The Department of Education defines Individualized Educational Plan (IEP) as an individualized plan created by teachers, parents, school administrators, and service personnel to improve educational results for a child with a disability. From 2018-2019, approximately 11% of Sterling’s Community Schools students had an individualized educational plan. There is also a significant portion of students who are facing homelessness in these schools. 13% of students facing homelessness attended Community Schools in Sterling in 2018-2019. This number increased to over 15% in 2019-2020, with a noticeable two-year decline in 2020 -2021 and 2021-2022. ")
+                                                     p("The high Hispanic population may explain the large percentage of English learners in these Community Schools. English Learners (EL) are students learning English in schools who generally come from diverse backgrounds and non-English speaking homes. The percentage of Els increases from 67% in 2018-2019 to a high of 70% in 2020-2021.  ", style = "padding-top:15px;font-size: 14px;"),
+                                                     p("The Department of Education defines Individualized Educational Plan (IEP) as an individualized plan created by teachers, parents, school administrators, and service personnel to improve educational results for a child with a disability. From 2018-2019, approximately 11% of Sterling’s Community Schools students had an individualized educational plan. There is also a significant portion of students who are facing homelessness in these schools. 13% of students facing homelessness attended Community Schools in Sterling in 2018-2019. This number increased to over 15% in 2019-2020, with a noticeable two-year decline in 2020 -2021 and 2021-2022. ", style = "padding-top:15px;font-size: 14px;")
                                               ),
                                               
                                               
@@ -2602,29 +2642,6 @@ ui <- navbarPage(title = "DSPG",
                                             p(h1(strong("Elementary Community School Representatives ")), style = "padding-top:5px;"),
                                      ),
                                      tabsetPanel(
-                                       tabPanel("Some Facts",
-                                                column(6, align = "left",
-                                                       selectInput("generalDATA", "Select Data:", width = "100%", choices = c(
-                                                         "English Learner Status" = "figELS",
-                                                         "IEP Status" = "figIEP",
-                                                         "Free and Reduced Lunch" = "figFRL",
-                                                         "Homeless" = "figHOME",
-                                                         "Weekend meals" = "weekendmeals",
-                                                         "Basic Supplies" = "families",
-                                                         "Breakfast" = "breakfast"
-                                                       ),
-                                                       ),
-                                                       withSpinner(plotlyOutput("generaldatafilledlinegraphs", height = "500px", width = "100%")),
-                                                ),
-                                                column(6, align = "justify",
-                                                       p("For students attending Loudoun County Public Schools learning English as a second language, they are placed in the English Learners (EL) program. At the community schools, a slight increase in students participating in the EL program was seen from the years 2018 to 2021 going from 67% to just about 70%."),
-                                                       p("It is important for all students who needs special education to have a developed and credited Individual Education Plan (IEP). In the community schools, we see a positive increase in IEP status from the school year 2018-2019 to 2019-2020 rising from 10% to 11%. Noticeably, it falls again, this time to 9% in the 2021-2022 academic school year."),
-                                                       p("For most students, especially within community schools, their parents are not always able to afford school lunch prices. Throughout the academic school years of 2018 to 2022 in our community schools, we see the percentage of students receiving free and reduced lunch fluctuate, but primarily stay between the percentages of 72% and 74%."),
-                                                       p("For students attending the community schools, we see 13% are homeless in the 2018-2019 academic school year. After rising to a whopping 16% the following school year, we see a noticeably two-year decline in students facing homelessness. This is a great trend that we hope we can continue as a result of this project."),
-                                                       p("Over 800 families received weekend meals in 2020 and 2021, jumping from 600 in 2019 and only 135 in 2018"),
-                                                       p("538 families received basic supplies in 2018, 832 families received basic supplies in 2020. This increase in both basic supplies and weekend meals indicates a growing need for more resources"),
-                                                       p("About 80% of students at Guilford and Sully ate breakfast at school in 2020 – 2021, forest grove saw an increase from 23% to 65% of students who ate breakfast from 2019 to 2020. Over half of the students at Sugarland eat breakfast at school"),
-                                                )),
                                        tabPanel("Responses",
                                                 fluidPage(style = "margin: 2px;",
                                                           fluidRow(
@@ -2672,6 +2689,30 @@ ui <- navbarPage(title = "DSPG",
                                        )
                                        
                                        
+                                     )), 
+                            
+                            tabPanel("Usage of Schools Program",
+                                     column(6, align = "left",
+                                            selectInput("generalDATA", "Select Data:", width = "100%", choices = c(
+                                              # "English Learner Statu" = "figELS",
+                                              # "IEP Status" = "figIEP",
+                                              "Free and Reduced Lunch" = "figFRL",
+                                              # "Homeless" = "figHOME",
+                                              "Weekend meals" = "weekendmeals",
+                                              "Basic Supplies" = "families",
+                                              "Breakfast" = "breakfast"
+                                            ),
+                                            ),
+                                            withSpinner(plotlyOutput("generaldatafilledlinegraphs", height = "500px", width = "100%")),
+                                     ),
+                                     column(6, align = "justify",
+                                            p("For students attending Loudoun County Public Schools learning English as a second language, they are placed in the English Learners (EL) program. At the community schools, a slight increase in students participating in the EL program was seen from the years 2018 to 2021 going from 67% to just about 70%."),
+                                            p("It is important for all students who needs special education to have a developed and credited Individual Education Plan (IEP). In the community schools, we see a positive increase in IEP status from the school year 2018-2019 to 2019-2020 rising from 10% to 11%. Noticeably, it falls again, this time to 9% in the 2021-2022 academic school year."),
+                                            p("For most students, especially within community schools, their parents are not always able to afford school lunch prices. Throughout the academic school years of 2018 to 2022 in our community schools, we see the percentage of students receiving free and reduced lunch fluctuate, but primarily stay between the percentages of 72% and 74%."),
+                                            p("For students attending the community schools, we see 13% are homeless in the 2018-2019 academic school year. After rising to a whopping 16% the following school year, we see a noticeably two-year decline in students facing homelessness. This is a great trend that we hope we can continue as a result of this project."),
+                                            p("Over 800 families received weekend meals in 2020 and 2021, jumping from 600 in 2019 and only 135 in 2018"),
+                                            p("538 families received basic supplies in 2018, 832 families received basic supplies in 2020. This increase in both basic supplies and weekend meals indicates a growing need for more resources"),
+                                            p("About 80% of students at Guilford and Sully ate breakfast at school in 2020 – 2021, forest grove saw an increase from 23% to 65% of students who ate breakfast from 2019 to 2020. Over half of the students at Sugarland eat breakfast at school"),
                                      ))
                             
                             #tabPanel(h4("Weaknesses and biggest challenges")),
@@ -3319,6 +3360,30 @@ server <- function(input, output, session) {
     
   })
   
+  output$figHOME <- renderPlotly({
+    
+    figHOME
+    
+    
+  })
+  
+  
+  output$figIEP <- renderPlotly({
+    
+    figIEP
+    
+    
+  })
+  
+  
+  output$figELS <- renderPlotly({
+    
+    figELS
+    
+    
+  })
+  
+  
   
   output$racenine <- renderPlotly({
     
@@ -3900,10 +3965,7 @@ server <- function(input, output, session) {
       figFRL
     }
     
-    else if (gendad() == "figHOME") {
-      figHOME
-    }
-    
+
     else if (gendad() == "weekendmeals") {
       weekendmeals
     }
