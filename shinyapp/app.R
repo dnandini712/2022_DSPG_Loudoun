@@ -11,8 +11,8 @@
 #Nothing is calculated in the server. 
 
 #For the isochrones to run: install the following packages 
-##install.packages("remotes")
-#remotes::install_github("tlorusso/traveltimeR")
+install.packages("remotes")
+remotes::install_github("tlorusso/traveltimeR")
 
 
 #Load Packages ---------------------------------------------------------------
