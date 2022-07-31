@@ -1838,6 +1838,29 @@ Tree %>% collapsibleTree(hierarchy = c("Four Pillars", "Name", "Key Partners"),
                            
                          ))-> tree1
 
+#-----------------Suggestions Tree-----------------------------
+
+Treesuggestions <- read_excel(paste0(getwd(),"/data/treedata_communityschoolsrecommendations.xlsx")) 
+
+Treesuggestions %>% collapsibleTree(hierarchy = c("Four Pillars", "Resource", "Type of Help", "Action Plans"),
+                                    root="Pillar",
+                                    attribute = "Pillar",
+                                    width=1000,
+                                    zoomable=T, 
+                                    collapsed = T, nodeSize = 'leafCount',
+                                    
+                                    fill = c(
+                                      # The root
+                                      rep("white", 1),
+                                      # Unique Pillars
+                                      rep("firebrick", length(unique(Treesuggestions$`Four Pillars`))),
+                                      # Unique Names of schools
+                                      rep("steelblue", length(unique(Treesuggestions$`Resource`))),
+                                      rep("orange", length(unique(Treesuggestions$`Type of Help`))),
+                                      rep("purple", 95)
+                                      
+                                    ))-> tree2
+
 #--------------- teacherstudent ratio---------------------------
 
 #teacherstudentratio <- img(src = "StudentTeacherRatioPic.png", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;")
@@ -2623,6 +2646,8 @@ ui <- navbarPage(title = "DSPG",
                                                                        p("Managing Student Behavior comprises of the following questions:", dQuote("Students know how this school defines inappropriate behavior;"), dQuote("Students know there are consequences for breaking school rules;"), dQuote("Teachers and other adults at this school consistently enforce rules for student behavior;"), dQuote("Students are acknowledged for positive behavior;"), dQuote("There are supports to help a student who consistently misbehaves develop positive behavior;"), "and", dQuote("We use data to evaluate and, if needed, adjust this school’s student conduct policies."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
                                                                        p("Workplace Environment comprises of the following questions:", dQuote("The physical environment of my workspace supports my work responsibilities;"), dQuote("My school provides me with sufficient access to appropriate supplies and materials;"), "and", dQuote("I have the support I need to incorporate technology into my work responsibilities."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
                                                                        p("Instructional Environment comprises of the following questions:", dQuote("The physical environment of my classroom supports my teaching and my students’ learning;"), dQuote("My school provides me with sufficient access to appropriate instructional materials;"), "and", dQuote("I have the support I need to incorporate technology into my instruction."), style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                       p("Overall, educators seem to have a favorable view of the schools' environment. On average, over 90% of educators believe that the academic, instructional, and workplace environment was supportive and positive. Notably, although high, only 80% of educators thought positively about their schools' environment. Staff collegiality is also high, with almost all educators in Guilford, Rolling Ridge, Sterling, Sugarland, and Sully believing they have good support from fellow staff. ", style = "padding-top:15px;font-size: 14px;", align = "justify"),
+                                                                       p("There are some slight variations in beliefs about school leadership across schools. Over 85% of educators in Guilford, Rolling Ridge, Sterling, Sugarland, and Sully believe that school administrators are supportive, set high standards, and allow staff to raise issues and concerns, only 78% in Forest Grove agreed with the statements. There are also differences in managing student behavior which ranges from as high as 89% to a low of 75%.", style = "padding-top:15px;font-size: 14px;", align = "justify"),
                                                                        
                                                                 ),
                                                                 br(""),
@@ -2891,9 +2916,10 @@ ui <- navbarPage(title = "DSPG",
                                               )),
                                      
                             )),
+              #----------------Recommendations Tab-----------------------
                  
-                 
-                 tabPanel("Recommendations",
+              navbarMenu("Recommendations",
+                         tabPanel("Our Suggestions",
                           fluidRow(style = "margin: 6px;",
                                    p("", style = "padding-top:10px;"),
                                    column(12, align = "center",h1(strong("Recommendations for Improvement Opportunities")),
@@ -2969,6 +2995,26 @@ ui <- navbarPage(title = "DSPG",
                                                tags$li("Large proportion of Hispanic students "),
                                              )),
                                     ))),
+                         tabPanel("Example Solutions",
+                                  fluidRow(style = "margin: 6px;",
+                                           p("", style = "padding-top:10px;"),
+                                           column(12, align = "center",h1(strong("Used Recommendations for Improvement Opportunities")),
+                                                  p(""),
+                                                  br("")
+                                                  
+                                                  
+                                                  
+                                           )),
+                                  column(9, align = "left", 
+                                         
+                                         collapsibleTreeOutput("tree2",height = "600px", width = "300%") 
+                                         
+                                  ),
+                                         
+                                         
+                                         
+                                  )
+              ),
                  #----------------Data Tab------------------------------------------
                  tabPanel("Data ", value = "data",
                           fluidRow(style = "margin: 6px;",
@@ -4029,6 +4075,12 @@ server <- function(input, output, session) {
   output$tree1 <- renderCollapsibleTree({
     
     tree1
+    
+  })
+  
+  output$tree2 <- renderCollapsibleTree({
+    
+    tree2
     
   })
   
