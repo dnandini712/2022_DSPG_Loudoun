@@ -1487,6 +1487,30 @@ df3 <- data.frame(word = names(words3),freq=words3)
 
 cloud3<- wordcloud2(df3, size=0.5)
 
+#-------------------------Breakfast Data------------------------------------
+
+breakfast_data <- read_excel(paste0(getwd(),"/data/Breakfast.xlsx"),skip=0,col_names=TRUE)
+breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Breakfast", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#----------------------------Lunch Data--------------------------------------
+
+eligablelunch_data <- read_excel(paste0(getwd(),"/data/LunchParticipation.xlsx"),skip=1,col_names=TRUE)
+
+eligablelunch_data <- plot_ly(eligablelunch_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Lunch", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
 
 #---------------------General Data-------------------------------------------
 #--------------------English Learner Status----------------------------------
@@ -1531,18 +1555,6 @@ figELS <- figELS %>% layout(
 
 
 figELS
-
-#breakfast
-breakfast_data <- read_excel(paste0(getwd(),"/data/Breakfast.xlsx"),skip=0,col_names=TRUE)
-breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Breakfast", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
-
 
 #------------------------------IEP Status------------------------------------
 
@@ -2258,7 +2270,7 @@ ui <- navbarPage(title = "DSPG",
                                               
                                               "Breakfast" = "breakfast",
                                               "Overall Lunch" = "figFRL",
-                                              "Lunch" = "figERL",
+                                              "Lunch" = "eligablelunch_data",
                                               "Weekend meals" = "weekendmeals",
                                               "Clothing and Basic Supplies" = "families"
                                               
@@ -4031,6 +4043,10 @@ server <- function(input, output, session) {
     
     else if (gendad() == "breakfast") {
       breakfast
+    }
+    
+    else if (gendad() == "eligablelunch_data") {
+      eligablelunch_data
     }
   })
   
