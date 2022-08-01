@@ -1534,7 +1534,7 @@ figELS
 
 #breakfast
 breakfast_data <- read_excel(paste0(getwd(),"/data/Breakfast.xlsx"),skip=0,col_names=TRUE)
-breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Breakfast", xaxis = list(title = ""), yaxis = list(
+breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Free and Reduced - Price Breakfast Participation", xaxis = list(title = ""), yaxis = list(
   title = "Percentage",
   #zerolinewidth =60,
   #standoff = 25,
@@ -1814,7 +1814,7 @@ plot_ly(data = subset_healthscrape, x = ~Year, y = ~Total, type = "scatter",mode
 subset_healthscrape2 <- healthscrape[c(2,4),c(2,4)]
 Year2 <- subset_healthscrape2$...2
 Total2 <- subset_healthscrape2$...4
-plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Families That Received Help with Clothing, Shoes, and Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
+plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Families Received Help with Clothing, Shoes, and Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
 
 #----------------------Collapsible Tree - Key Partners and Programs--------------------
 
@@ -2248,7 +2248,7 @@ ui <- navbarPage(title = "DSPG",
                                               
                                               
                                      )), 
-                            tabPanel("Usage of Schools Program",
+                            tabPanel("Usage of School Programs",
                                      column(6, align = "left",
                                             selectInput("generalDATA", "Select Data:", width = "100%", choices = c(
                                               # "English Learner Statu" = "figELS",
@@ -2264,7 +2264,9 @@ ui <- navbarPage(title = "DSPG",
                                               
                                             ),
                                             ),
+                                            
                                             withSpinner(plotlyOutput("generaldatafilledlinegraphs", height = "500px", width = "100%")),
+                                            p("Source: Community Schools Annual Reports", style = "font-size:12px;", align = "right"),
                                      ),
                                      column(6, align = "justify",
                                             p("For students attending Loudoun County Public Schools learning English as a second language, they are placed in the English Learners (EL) program. At the community schools, a slight increase in students participating in the EL program was seen from the years 2018 to 2021 going from 67% to just about 70%."),
