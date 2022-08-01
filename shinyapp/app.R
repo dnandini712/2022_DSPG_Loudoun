@@ -866,7 +866,15 @@ forestgroverace <- plot_ly(assessmentraceForestGrove, x = ~Year, y = ~`Percent P
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #----------------Sugarland------------------------------------------------
 
@@ -881,7 +889,15 @@ sugarlandrace <- plot_ly(assessmentraceSugarland, x = ~Year, y = ~`Percent Pass`
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #-------------------Guilford------------------------------------
 
@@ -896,7 +912,15 @@ guilfordrace <- plot_ly(assessmentraceGuilford, x = ~Year, y = ~`Percent Pass`, 
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=.7,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #-------------------------------Rolling Ridge------------------
 
@@ -954,7 +978,7 @@ sullyrace <- plot_ly(assessmentraceSully, x = ~Year, y = ~`Percent Pass`, color 
   y=2,
   xref = "x",
   yref = "y",
-  text = "<",
+  text = ">",
   #xanchor = 'left',
   showarrow = F
 ) %>% add_annotations(
