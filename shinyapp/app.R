@@ -929,7 +929,7 @@ sterlingrace <- plot_ly(assessmentraceSterling, x = ~Year, y = ~`Percent Pass`, 
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
 ))%>% add_annotations(
-  x=.8,
+  x=.85,
   y=2,
   xref = "x",
   yref = "y",
