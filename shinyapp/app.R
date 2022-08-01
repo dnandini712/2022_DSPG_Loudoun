@@ -11,8 +11,8 @@
 #Nothing is calculated in the server. 
 
 #For the isochrones to run: install the following packages 
-#install.packages("remotes")
-#remotes::install_github("tlorusso/traveltimeR")
+install.packages("remotes")
+remotes::install_github("tlorusso/traveltimeR")
 
   
 #Load Packages ---------------------------------------------------------------
@@ -1347,6 +1347,14 @@ rrall <- plot_ly(assessmentallRollingRidge, x = ~Year, y = ~`Percent Pass`, colo
   text = "<",
   xanchor = 'left',
   showarrow = F
+) %>% add_annotations(
+  x=0.99,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
 )
 
 #-----------------------------Sterling--------------------
@@ -1410,7 +1418,7 @@ sugarlandalleng <- plot_ly(assessmentallSugarlandeng, x = ~Year, y = ~`Percent P
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+)) 
 
 #-------------------Guilford------------------------------------
 
@@ -1438,6 +1446,14 @@ rralleng <- plot_ly(assessmentallRollingRidgeeng, x = ~Year, y = ~`Percent Pass`
   #zeroline = F
 )) %>% add_annotations(
   x=0.1,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+) %>% add_annotations(
+  x=0.99,
   y=2,
   xref = "x",
   yref = "y",
