@@ -2445,7 +2445,8 @@ ui <- navbarPage(title = "DSPG",
                                                                           #br(""),
                                                                           
                                                                           #br(""),
-                                                                          p(strong("*Note: Data suppressed for missing bars represent either: i) fewer than 10 students in the group or ii) fewer than 20 students in the group and the pass rate is less than 50%", style = "font-size:14px;")),
+                                                                          p(strong("*Note: < represents either: i) fewer than 10 students in the group or ii) fewer than 20 students in the group and the pass rate is less than 50%", style = "font-size:14px;")),
+                                                                          p(strong("*Note: > represents either: i) fewer than 10 students in the group or ii) fewer than 20 students in the group and the pass rate is greater than 50%", style = "font-size:14px;")),
                                                                           p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                                                    )
                                                                    
