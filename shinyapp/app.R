@@ -3095,6 +3095,13 @@ ui <- navbarPage(title = "DSPG",
                                          collapsibleTreeOutput("tree2",height = "600px", width = "300%") 
                                          
                                   ),
+                                  column(3, align = "justify",
+                                         br(),
+                                         h4(strong("NYC Community School Program Pillars")),
+                                         br(),
+                                         br(),
+                                         p("New York City (NYC) initiated its Community Schools Program in Fall 2014 with 45 schools. It now has over 300 Community Schools across every district in NYC, funded through city, state, and federal dollars. Although New York City has a larger population and more available resources than Loudoun County, the NYC's Community Schools Program can be used to obtain ideas for different programs and initiatives the LCPS may implement for their Community School Initiative. The interactive tree visualizes each pillar's programs and partnerships in the NYC Community Schools.")
+                                  )
                                          
                                          
                                          
