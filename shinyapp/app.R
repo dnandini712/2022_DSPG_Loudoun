@@ -2274,6 +2274,8 @@ ui <- navbarPage(title = "DSPG",
                                               
                                      )), 
                             tabPanel("Usage of School Programs",
+                                     column(12, 
+                                            h1(strong("Utilization of Current School Programs"), align = "center")),
                                      column(6, align = "left",
                                             selectInput("generalDATA", "Select Data:", width = "100%", choices = c(
                                               # "English Learner Statu" = "figELS",
@@ -2294,13 +2296,11 @@ ui <- navbarPage(title = "DSPG",
                                             p("Source: Community Schools Annual Reports", style = "font-size:12px;", align = "right"),
                                      ),
                                      column(6, align = "justify",
-                                            p("For students attending Loudoun County Public Schools learning English as a second language, they are placed in the English Learners (EL) program. At the community schools, a slight increase in students participating in the EL program was seen from the years 2018 to 2021 going from 67% to just about 70%."),
-                                            p("It is important for all students who needs special education to have a developed and credited Individual Education Plan (IEP). In the community schools, we see a positive increase in IEP status from the school year 2018-2019 to 2019-2020 rising from 10% to 11%. Noticeably, it falls again, this time to 9% in the 2021-2022 academic school year."),
-                                            p("For most students, especially within community schools, their parents are not always able to afford school lunch prices. Throughout the academic school years of 2018 to 2022 in our community schools, we see the percentage of students receiving free and reduced lunch fluctuate, but primarily stay between the percentages of 72% and 74%."),
-                                            p("For students attending the community schools, we see 13% are homeless in the 2018-2019 academic school year. After rising to a whopping 16% the following school year, we see a noticeably two-year decline in students facing homelessness. This is a great trend that we hope we can continue as a result of this project."),
-                                            p("Over 800 families received weekend meals in 2020 and 2021, jumping from 600 in 2019 and only 135 in 2018"),
-                                            p("538 families received basic supplies in 2018, 832 families received basic supplies in 2020. This increase in both basic supplies and weekend meals indicates a growing need for more resources"),
-                                            p("About 80% of students at Guilford and Sully ate breakfast at school in 2020 – 2021, forest grove saw an increase from 23% to 65% of students who ate breakfast from 2019 to 2020. Over half of the students at Sugarland eat breakfast at school"),
+                                          
+                                            p("The School breakfast program is a federally assisted meal program that provides nutritious breakfast meals to students. The percentage of students participating in the Free and Reduced Breakfast Program is consistent across all years for Guilford, Sugarland, Sterling, and Rolling Ridge at about 80%, 65%, 45%, and 30%, respectively. Since joining the Community School Initiative, student participation in the Breakfast program increased for Forest Grove and Sully to 80% and 70%, respectively, in 2019-2020 and 2020-2021."),
+                                            p("The trends are similar for the Free and Reduced-Price program which is a U.S. Department of Agriculture assisted meal program that provides nutritionally balanced lunches. Participating schools receive USDA cash subsidies and donated food items for each meal that meets Federal nutrition standards and meal patterns.  On average, over 70% of students in Sterling’s community schools participate in this program. While participation rates are consistent across years, there are differences across schools ranging from as high as 85% in Sully and a low of 60% in Forest Grove Elementary. "),
+                                            p("Sterling’s Community Schools have increasingly assisted families with weekend meals growing from 135 families in 2018 to 808 in 2021. There is also an increase in families helped with clothing, shoes, and other essential supplies. In 2018, 538 families received clothing assistance from community schools, increasing to 832 families in 2020.")
+                                            
                                      )),
                             
                             tabPanel("Performance", 
