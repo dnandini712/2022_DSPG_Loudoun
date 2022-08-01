@@ -1022,7 +1022,15 @@ sugarlandraceeng <- plot_ly(assessmentraceSugarlandeng, x = ~Year, y = ~`Percent
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=0.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #-------------------Guilford------------------------------------
 
@@ -1068,11 +1076,11 @@ sterlingraceeng <- plot_ly(assessmentraceSterlingeng, x = ~Year, y = ~`Percent P
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
 ))%>% add_annotations(
-  x=.8,
+  x=.85,
   y=2,
   xref = "x",
   yref = "y",
-  text = "<",
+  text = ">",
   xanchor = 'left',
   showarrow = F
 )
