@@ -951,7 +951,23 @@ sullyrace <- plot_ly(assessmentraceSully, x = ~Year, y = ~`Percent Pass`, color 
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+)) %>% add_annotations(
+  x=-0.1,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  #xanchor = 'left',
+  showarrow = F
+) %>% add_annotations(
+  x=0.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #------------------English------------------
 
@@ -1050,7 +1066,24 @@ sullyraceeng <- plot_ly(assessmentraceSullyeng, x = ~Year, y = ~`Percent Pass`, 
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+)) %>% add_annotations(
+  x=-0.1,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  #xanchor = 'left',
+  showarrow = F
+) %>% add_annotations(
+  x=0.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
+
 
 
 #--------performance / assessment by School and Gender-----------------
@@ -1283,7 +1316,15 @@ rrall <- plot_ly(assessmentallRollingRidge, x = ~Year, y = ~`Percent Pass`, colo
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+)) %>% add_annotations(
+  x=0.1,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #-----------------------------Sterling--------------------
 
