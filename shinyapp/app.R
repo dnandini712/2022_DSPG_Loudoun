@@ -1396,7 +1396,15 @@ forestgrovealleng <- plot_ly(assessmentallForestGroveeng, x = ~Year, y = ~`Perce
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=1.0,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #----------------Sugarland------------------------------------------------
 
