@@ -853,7 +853,9 @@ list <- read_excel(paste0(getwd(),"/data/allresources.xlsx"))
 #------------------Mathematics-------------------------------
 
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+#assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
+assessment <- read_excel(paste0(getwd(),"/data/assessmentrace.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Forest Grove" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceForestGrove
 
@@ -864,11 +866,19 @@ forestgroverace <- plot_ly(assessmentraceForestGrove, x = ~Year, y = ~`Percent P
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #----------------Sugarland------------------------------------------------
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+#assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Sugarland" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSugarland
 
@@ -879,11 +889,19 @@ sugarlandrace <- plot_ly(assessmentraceSugarland, x = ~Year, y = ~`Percent Pass`
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #-------------------Guilford------------------------------------
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+#assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Guilford" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceGuilford
 
@@ -894,11 +912,19 @@ guilfordrace <- plot_ly(assessmentraceGuilford, x = ~Year, y = ~`Percent Pass`, 
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=.7,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #-------------------------------Rolling Ridge------------------
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+#assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Rolling Ridge" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceRollingRidge
 
@@ -913,7 +939,7 @@ rrrace <- plot_ly(assessmentraceRollingRidge, x = ~Year, y = ~`Percent Pass`, co
 
 #-----------------------------Sterling--------------------
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+#assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Sterling" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSterling
 
@@ -936,7 +962,7 @@ sterlingrace <- plot_ly(assessmentraceSterling, x = ~Year, y = ~`Percent Pass`, 
 
 #----------------------Sully--------------------------
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+#assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Sully" & Subject == "Mathematics") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSully
 
@@ -952,7 +978,7 @@ sullyrace <- plot_ly(assessmentraceSully, x = ~Year, y = ~`Percent Pass`, color 
   y=2,
   xref = "x",
   yref = "y",
-  text = "<",
+  text = ">",
   #xanchor = 'left',
   showarrow = F
 ) %>% add_annotations(
@@ -968,7 +994,9 @@ sullyrace <- plot_ly(assessmentraceSully, x = ~Year, y = ~`Percent Pass`, color 
 #------------------English------------------
 
 #-----------------Forest Grove-------------------------------------------
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+#assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+
+assessment <- read_excel(paste0(getwd(),"/data/assessmentrace.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Forest Grove" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceForestGroveeng
 
@@ -983,7 +1011,7 @@ forestgroveraceeng <- plot_ly(assessmentraceForestGroveeng, x = ~Year, y = ~`Per
 
 #----------------Sugarland------------------------------------------------
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+#assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Sugarland" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSugarlandeng
 
@@ -994,11 +1022,19 @@ sugarlandraceeng <- plot_ly(assessmentraceSugarlandeng, x = ~Year, y = ~`Percent
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=0.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #-------------------Guilford------------------------------------
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+#assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Guilford" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceGuilfordeng
 
@@ -1013,7 +1049,7 @@ guilfordraceeng <- plot_ly(assessmentraceGuilfordeng, x = ~Year, y = ~`Percent P
 
 #-------------------------------Rolling Ridge------------------
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+#assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Rolling Ridge" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceRollingRidgeeng
 
@@ -1028,7 +1064,7 @@ rrraceeng <- plot_ly(assessmentraceRollingRidgeeng, x = ~Year, y = ~`Percent Pas
 
 #-----------------------------Sterling--------------------
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+#assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Sterling" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSterlingeng
 
@@ -1040,18 +1076,18 @@ sterlingraceeng <- plot_ly(assessmentraceSterlingeng, x = ~Year, y = ~`Percent P
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
 ))%>% add_annotations(
-  x=.8,
+  x=.85,
   y=2,
   xref = "x",
   yref = "y",
-  text = "<",
+  text = ">",
   xanchor = 'left',
   showarrow = F
 )
 
 #----------------------Sully--------------------------
 
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+#assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Sully" & Subject == "English Reading") %>% filter(Subgroup == "Hispanic"| Subgroup == "White" |Subgroup == "Black"| Subgroup == "Asian") -> assessmentraceSullyeng
 
@@ -1085,7 +1121,7 @@ sullyraceeng <- plot_ly(assessmentraceSullyeng, x = ~Year, y = ~`Percent Pass`, 
 #--------performance / assessment by School and Gender-----------------
 
 #-------------Mathematics-------------------------------
-
+assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
 assessment %>% filter(School == "Forest Grove" & Subject == "Mathematics") %>% filter(Subgroup == "Male"| Subgroup == "Female") -> assessmentgenderForestGrove
 
 forestgrovegender <- plot_ly(assessmentgenderForestGrove, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
