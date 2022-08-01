@@ -2194,7 +2194,8 @@ ui <- navbarPage(title = "DSPG",
                                                                 ),
                                                                 
                                                                 
-                                                       ),      tabPanel("English Learners(ELs)",
+                                                       ),      tabPanel("English Learners (ELs)",
+                                                                        br(),
                                                                         fluidRow(style = "margin: 4px;",
                                                                                  withSpinner(plotlyOutput("figELS", height = "500px", width = "100%")),
                                                                                  br(""),
@@ -2209,7 +2210,8 @@ ui <- navbarPage(title = "DSPG",
                                                                                  
                                                                         )),
                                                        
-                                                       tabPanel("Individualized Educational Plan",
+                                                       tabPanel("Individualized Educational Plan (IEP)",
+                                                                br(),
                                                                 fluidRow(style = "margin: 4px;",
                                                                          withSpinner(plotlyOutput("figIEP", height = "500px", width = "100%")),
                                                                          br(""),
@@ -2224,7 +2226,8 @@ ui <- navbarPage(title = "DSPG",
                                                                          
                                                                 )),
                                                        
-                                                       tabPanel("Homeless",
+                                                       tabPanel("Homelessness",
+                                                                br(),
                                                                 fluidRow(style = "margin: 4px;",
                                                                          withSpinner(plotlyOutput("figHOME", height = "500px", width = "100%")),
                                                                          br(""),
@@ -2274,7 +2277,7 @@ ui <- navbarPage(title = "DSPG",
                                               "Breakfast" = "breakfast",
                                               "Overall Free and Reduced-Price Lunch" = "figFRL",
                                               "Free and Reduced-Price Lunch by Schools" = "eligablelunch_data",
-                                              "Weekend meals" = "weekendmeals",
+                                              "Weekend Meals" = "weekendmeals",
                                               "Clothing and Basic Supplies" = "families"
                                               
                                             ),
@@ -2284,6 +2287,7 @@ ui <- navbarPage(title = "DSPG",
                                             p("Source: Community Schools Annual Reports", style = "font-size:12px;", align = "right"),
                                      ),
                                      column(6, align = "justify",
+                                            br(),
                                           
                                             p("The School breakfast program is a federally assisted meal program that provides nutritious breakfast meals to students. The percentage of students participating in the Free and Reduced Breakfast Program is consistent across all years for Guilford, Sugarland, Sterling, and Rolling Ridge at about 80%, 65%, 45%, and 30%, respectively. Since joining the Community School Initiative, student participation in the Breakfast program increased for Forest Grove and Sully to 80% and 70%, respectively, in 2019-2020 and 2020-2021."),
                                             p("The trends are similar for the Free and Reduced-Price program which is a U.S. Department of Agriculture assisted meal program that provides nutritionally balanced lunches. Participating schools receive USDA cash subsidies and donated food items for each meal that meets Federal nutrition standards and meal patterns.  On average, over 70% of students in Sterling’s community schools participate in this program. While participation rates are consistent across years, there are differences across schools ranging from as high as 85% in Sully and a low of 60% in Forest Grove Elementary. "),
@@ -2372,8 +2376,8 @@ ui <- navbarPage(title = "DSPG",
                                                                           #br(""),
                                                                           
                                                                           #br(""),
+                                                                          p(strong("*Note: Data suppressed for missing bars which represents fewer than 20 students in the group and the pass rate is less than 50%. ", style = "font-size:14px;")),
                                                                           p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
-                                                                          p("*Note: Data suppressed for missing bars which represents fewer than 20 students in the group and the pass rate is less than 50%. ", style = "font-size:12px;"),
                                                                    )
                                                                    
                                                                    
@@ -3019,7 +3023,7 @@ ui <- navbarPage(title = "DSPG",
                          tabPanel("NYC Community Schools",
                                   fluidRow(style = "margin: 6px;",
                                            p("", style = "padding-top:10px;"),
-                                           column(12, align = "center",h1(strong("Used Recommendations for Improvement Opportunities")),
+                                           column(12, align = "center",h1(strong("NYC Community Schools Program")),
                                                   p(""),
                                                   br("")
                                                   
