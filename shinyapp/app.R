@@ -14,7 +14,7 @@
 #install.packages("remotes")
 #remotes::install_github("tlorusso/traveltimeR")
 
-  
+
 #Load Packages ---------------------------------------------------------------
 library(dplyr)
 library(tidycensus)
@@ -866,7 +866,15 @@ forestgroverace <- plot_ly(assessmentraceForestGrove, x = ~Year, y = ~`Percent P
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #----------------Sugarland------------------------------------------------
 
@@ -881,7 +889,15 @@ sugarlandrace <- plot_ly(assessmentraceSugarland, x = ~Year, y = ~`Percent Pass`
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #-------------------Guilford------------------------------------
 
@@ -896,7 +912,15 @@ guilfordrace <- plot_ly(assessmentraceGuilford, x = ~Year, y = ~`Percent Pass`, 
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=.7,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #-------------------------------Rolling Ridge------------------
 
@@ -926,7 +950,16 @@ sterlingrace <- plot_ly(assessmentraceSterling, x = ~Year, y = ~`Percent Pass`, 
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
+
 #----------------------Sully--------------------------
 
 #assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
@@ -940,7 +973,23 @@ sullyrace <- plot_ly(assessmentraceSully, x = ~Year, y = ~`Percent Pass`, color 
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+)) %>% add_annotations(
+  x=-0.1,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = ">",
+  #xanchor = 'left',
+  showarrow = F
+) %>% add_annotations(
+  x=0.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #------------------English------------------
 
@@ -973,7 +1022,15 @@ sugarlandraceeng <- plot_ly(assessmentraceSugarlandeng, x = ~Year, y = ~`Percent
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=0.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #-------------------Guilford------------------------------------
 
@@ -1018,7 +1075,15 @@ sterlingraceeng <- plot_ly(assessmentraceSterlingeng, x = ~Year, y = ~`Percent P
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = ">",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #----------------------Sully--------------------------
 
@@ -1033,7 +1098,23 @@ sullyraceeng <- plot_ly(assessmentraceSullyeng, x = ~Year, y = ~`Percent Pass`, 
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+)) %>% add_annotations(
+  x=-0.1,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  #xanchor = 'left',
+  showarrow = F
+) %>% add_annotations(
+  x=0.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 
 
@@ -1258,7 +1339,23 @@ rrall <- plot_ly(assessmentallRollingRidge, x = ~Year, y = ~`Percent Pass`, colo
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+)) %>% add_annotations(
+  x=0.1,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+) %>% add_annotations(
+  x=0.99,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #-----------------------------Sterling--------------------
 
@@ -1271,7 +1368,16 @@ sterlingall <- plot_ly(assessmentallSterling, x = ~Year, y = ~`Percent Pass`, co
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=1.3,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
+
 #----------------------Sully--------------------------
 
 assessment %>% filter(School == "Sully" & Subject == "Mathematics") %>% filter(Subgroup == "All Students"|Subgroup == "Homeless"|Subgroup == "Students with Disabilities"|Subgroup == "Economically Disadvantaged"|Subgroup == "English Learners") -> assessmentallSully
@@ -1298,7 +1404,15 @@ forestgrovealleng <- plot_ly(assessmentallForestGroveeng, x = ~Year, y = ~`Perce
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=1.0,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #----------------Sugarland------------------------------------------------
 
@@ -1312,7 +1426,15 @@ sugarlandalleng <- plot_ly(assessmentallSugarlandeng, x = ~Year, y = ~`Percent P
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+)) %>% add_annotations(
+  x=1.3,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #-------------------Guilford------------------------------------
 
@@ -1338,7 +1460,24 @@ rralleng <- plot_ly(assessmentallRollingRidgeeng, x = ~Year, y = ~`Percent Pass`
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-)) 
+)) %>% add_annotations(
+  x=0.1,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+) %>% add_annotations(
+  x=0.99,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
+
 #-----------------------------Sterling--------------------
 
 
@@ -1351,7 +1490,15 @@ sterlingalleng <- plot_ly(assessmentallSterlingeng, x = ~Year, y = ~`Percent Pas
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=1.3,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #----------------------Sully--------------------------
 
@@ -2277,7 +2424,7 @@ ui <- navbarPage(title = "DSPG",
                                      ),
                                      column(6, align = "justify",
                                             br(),
-                                          
+                                            
                                             p("The School breakfast program is a federally assisted meal program that provides nutritious breakfast meals to students. The percentage of students participating in the Free and Reduced Breakfast Program is consistent across all years for Guilford, Sugarland, Sterling, and Rolling Ridge at about 80%, 65%, 45%, and 30%, respectively. Since joining the Community School Initiative, student participation in the Breakfast program increased for Forest Grove and Sully to 80% and 70%, respectively, in 2019-2020 and 2020-2021."),
                                             p("The trends are similar for the Free and Reduced-Price program which is a U.S. Department of Agriculture assisted meal program that provides nutritionally balanced lunches. Participating schools receive USDA cash subsidies and donated food items for each meal that meets Federal nutrition standards and meal patterns.  On average, over 70% of students in Sterling’s community schools participate in this program. While participation rates are consistent across years, there are differences across schools ranging from as high as 85% in Sully and a low of 60% in Forest Grove Elementary. "),
                                             p("Sterling’s Community Schools have increasingly assisted families with weekend meals growing from 135 families in 2018 to 808 in 2021. There is also an increase in families helped with clothing, shoes, and other essential supplies. In 2018, 538 families received clothing assistance from community schools, increasing to 832 families in 2020.")
@@ -2744,7 +2891,7 @@ ui <- navbarPage(title = "DSPG",
                                                        h4(strong("Community Schools Programs Key Partners ")),
                                                        br(),
                                                        p("Community Schools Representatives were asked about key partners each school utilized for help with services in Health and Social Services, Mental Health, Family Engagement, and Youth Development. The interactive tree shows these key partners and programs for each school in 2020-2021 to assist in comparative analysis by schools to help find partnership possibilities for future activities. The node's size depends on the number of entries. Thus, the bigger circles indicate more school partnerships. For example, Sterling Elementary has the largest number of partners for Youth Development activities, as indicated by the more sizeable node (blue circle). Note, one should take caution when making conclusions as the tree is not exhaustive. There were a few schools with missing information, e.g., Forest Grove had no information on their critical partners for the Youth Development Pillar. ")
-                                                       )
+                                                )
                                                 
                                                 
                                        )
@@ -2752,7 +2899,7 @@ ui <- navbarPage(title = "DSPG",
                                        
                                      ))
                             
-                          
+                            
                             
                             #tabPanel(h4("Weaknesses and biggest challenges")),
                             
@@ -2926,111 +3073,111 @@ ui <- navbarPage(title = "DSPG",
                                               )),
                                      
                             )),
-              #----------------Recommendations Tab-----------------------
+                 #----------------Recommendations Tab-----------------------
                  
-              navbarMenu("Recommendations",
-                         tabPanel("Potential Improvement",
-                          fluidRow(style = "margin: 6px;",
-                                   p("", style = "padding-top:10px;"),
-                                   column(12, align = "center",h1(strong("Recommendations for Improvement Opportunities")),
-                                          p(""),
-                                          br("")
-                                          
-                                          
-                                          
-                                   )),
-                          fluidPage(style = "margin: 2px;", align = "justify",
-                                    
-                                    column(7,
-                                           h2(strong("Opportunities Within Pillars")),
-                                           p("We present sociodemographic characteristics and performance statistics visualization to understand the student population in the six Elementary Community Schools in Sterling, Loudoun. Information on students, educators, parents, and school representatives' perceptions was also included in our analysis to understand better these schools' environments and their strengths and challenges. Using these visualizations, we analyze the findings to recommend the following potential opportunities for improvement for each pillar of the Community School Program: "),
-                                           h4(strong("Health and Social Services")),
-                                           p("Community Schools address not only the needs of students but also those of family members. One recommendation is to increase the number of resources and services available to families in Health and Social Services. About 40% of Sterling residents are either uninsured or have public health insurance highlighting the need for affordable, inclusive medical care. This appears to be an important opportunity as Community Schools Liaisons highlighted “health,” “medial,” and “uninsured” as significant challenges and weaknesses facing families at these schools. Moreover, our maps show that most of these medical, dental, and vision services are within a 20-minute distance of Sterling ES (midpoint), which may prove difficult for families with unreliable transportation. The number of these resources drastically reduces if we examine only those that are free. As such, providing annual mobile medical, dental, and vision services can play a significant role for families at these community schools, which may also improve students' health and performance. Community schools could also partner with medical providers to help perform for free or at a reduced cost for preventative and restorative services.  "),
-                                           h4(strong("Mental Health")),
-                                           p("Our research shows a lack of mental health resources within a 10-minute drive for students and the community. There are also some schools where many students perceive bullying as a problem and a low level of social-emotional well-being. Thus, at such a tender age, it would be helpful to include more individual counseling and referral systems to helps students learn emotion management, communication, and self-discipline. Schools can also try to find community organizations and individuals who can provide such counseling services at no or reduced cost to families. This may strengthen families to implement early-intervention strategies to help students who display disruptive behavior and help with their emotional well-being. Engaging families may also help schools adjust any chronic absenteeism that is occurring during the semester."),
-                                           h4(strong("Youth Development")),
-                                           p("Students from low-income families tend to have less access to enrichment opportunities beyond the traditional classroom. Increasing after-school programs, such as athletic clubs, could provide opportunities for youth to build communication skills while remaining healthy and actively learning. Students and parents could also benefit from these programs as students expand their learning and interests while decreasing the time parents must juggle between work and childcare. The 2020-2021 academic school year saw a drop in academic performances for all six community schools. This was especially severe for Hispanic and Black students, that had a dramatic decline. Although this was following the COVID-19 pandemic, this could be an opportunity to provide extra tutoring hours at the local library or a study hall session during the school day to help alleviate the disruptions of online learning. "),
-                                           h4(strong("Family Development")),
-                                           p("There is a significantly large number of Hispanic students attending community schools. These students will require additional needs, such as multi-language resources for both students and parents, to ensure a clear line of communication for all involved in the learning process. Additionally, providing more opportunities for parent feedback forums and family events at the school may increase parents’ feelings of positive relationships and communication with the school as some of these parents are undocumented, as suggested by the Community School liaison.  "),
-                                           p("In our research, we found that there are few families engagement resources available within a 10-minute drive of Sterling Elementary, a possible opportunity to help reduce travel time for parents could be to host a resource fair at the schools allowing parents easy access to these resources. Community School Liaisons also indicate that “rent,” “internet,” “housing,” and “food” are also significant challenges for families at these community schools. This is also essential as some students have a large population of students who experience homelessness. Thus, helping families within these areas would be beneficial. ")
-                                    ),
-                                    column(5, align= "justify",
-                                           h2(strong("Individual School Key Takeaways")),
-                                           p("The following takeaways are conclusions from the school reports that each school representative submitted in the year 2020-2021 and the various visualizations in the previous tabs from the data collected from Virginia Department of Education and Loudoun Dashboard. "),
-                                           h4(strong("Forest Grove")),
-                                           tags$div(
-                                             tags$ul(
-                                               tags$li("Few key partners to support their four pillars"),
-                                               tags$li("School representatives view family engagement as a major challenge "),
-                                               tags$li("Decrease in enrollment rate "),
-                                               tags$li("Decrease in chronic absenteeism "),
-                                               tags$li("Strengthen Mental Health resources – meetings with Unified Mental Health Team"))),
-                                           h4(strong("Guilford")),
-                                           tags$div(
-                                             tags$ul(
-                                               tags$li("Few partners to support youth development pillar "),
-                                               tags$li("Community internet needs reported as a major challenge "),
-                                               tags$li("Good support in Health and Social Services and Family Engagement pillars "),
-                                               tags$li("Parents feel adept at using technology to aid in learning "),
-                                               tags$li("High proportion of Hispanic students  "),
-                                             ),
-                                           ),
-                                           h4(strong("Rolling Ridge")),
-                                           tags$div(
-                                             tags$ul(
-                                               tags$li("Increases in Mental Health resources"),
-                                               tags$li("High proportion of Hispanic students "),
-                                               tags$li("School reports to be well connected with families"),
-                                               tags$li("Lowest student to teacher ratio"),
-                                             )),
-                                           h4(strong("Sterling")),
-                                           tags$div(
-                                             tags$ul(
-                                               tags$li("Mental Health resources are a major challenge as reported by School representative "),
-                                               tags$li("Several partners in Health and Social Services and Youth Development pillar "),
-                                               tags$li("Maintained levels of chronic absenteeism during pandemic"),
-                                             )),
-                                           h4(strong("Sugarland")),
-                                           tags$div(
-                                             tags$ul(
-                                               tags$li("Representatives view Family Engagement as a key challenge "),
-                                               tags$li("Highest levels of chronic absenteeism  "),
-                                               tags$li("Appears to have least number of key partners"),
-                                             )),
-                                           h4(strong("Sully")),
-                                           tags$div(
-                                             tags$ul(
-                                               tags$li("Low performance on Math and English standardized exams "),
-                                               tags$li("Highest student to teacher ratio with the lowest enrollment "),
-                                               tags$li("Large proportion of Hispanic students "),
-                                             )),
-                                    ))),
-                         tabPanel("NYC Community Schools",
-                                  fluidRow(style = "margin: 6px;",
-                                           p("", style = "padding-top:10px;"),
-                                           column(12, align = "center",h1(strong("NYC Community Schools Program")),
-                                                  p(""),
-                                                  br("")
-                                                  
-                                                  
-                                                  
-                                           )),
-                                  column(9, align = "left", 
-                                         
-                                         collapsibleTreeOutput("tree2",height = "600px", width = "300%") 
-                                         
-                                  ),
-                                  column(3, align = "justify",
-                                         br(),
-                                         h4(strong("NYC Community School Program Pillars")),
-                                         br(),
-                                         p("New York City (NYC) initiated its Community Schools Program in Fall 2014 with 45 schools. It now has over 300 Community Schools across every district in NYC, funded through city, state, and federal dollars. Although New York City has a larger population and more available resources than Loudoun County, the NYC's Community Schools Program can be used to obtain ideas for different programs and initiatives the LCPS may implement for their Community School Initiative. The interactive tree visualizes each pillar's programs and partnerships in the NYC Community Schools.")
-                                  )
-                                         
-                                         
-                                         
-                                  )
-              ),
+                 navbarMenu("Recommendations",
+                            tabPanel("Potential Improvement",
+                                     fluidRow(style = "margin: 6px;",
+                                              p("", style = "padding-top:10px;"),
+                                              column(12, align = "center",h1(strong("Recommendations for Improvement Opportunities")),
+                                                     p(""),
+                                                     br("")
+                                                     
+                                                     
+                                                     
+                                              )),
+                                     fluidPage(style = "margin: 2px;", align = "justify",
+                                               
+                                               column(7,
+                                                      h2(strong("Opportunities Within Pillars")),
+                                                      p("We present sociodemographic characteristics and performance statistics visualization to understand the student population in the six Elementary Community Schools in Sterling, Loudoun. Information on students, educators, parents, and school representatives' perceptions was also included in our analysis to understand better these schools' environments and their strengths and challenges. Using these visualizations, we analyze the findings to recommend the following potential opportunities for improvement for each pillar of the Community School Program: "),
+                                                      h4(strong("Health and Social Services")),
+                                                      p("Community Schools address not only the needs of students but also those of family members. One recommendation is to increase the number of resources and services available to families in Health and Social Services. About 40% of Sterling residents are either uninsured or have public health insurance highlighting the need for affordable, inclusive medical care. This appears to be an important opportunity as Community Schools Liaisons highlighted “health,” “medial,” and “uninsured” as significant challenges and weaknesses facing families at these schools. Moreover, our maps show that most of these medical, dental, and vision services are within a 20-minute distance of Sterling ES (midpoint), which may prove difficult for families with unreliable transportation. The number of these resources drastically reduces if we examine only those that are free. As such, providing annual mobile medical, dental, and vision services can play a significant role for families at these community schools, which may also improve students' health and performance. Community schools could also partner with medical providers to help perform for free or at a reduced cost for preventative and restorative services.  "),
+                                                      h4(strong("Mental Health")),
+                                                      p("Our research shows a lack of mental health resources within a 10-minute drive for students and the community. There are also some schools where many students perceive bullying as a problem and a low level of social-emotional well-being. Thus, at such a tender age, it would be helpful to include more individual counseling and referral systems to helps students learn emotion management, communication, and self-discipline. Schools can also try to find community organizations and individuals who can provide such counseling services at no or reduced cost to families. This may strengthen families to implement early-intervention strategies to help students who display disruptive behavior and help with their emotional well-being. Engaging families may also help schools adjust any chronic absenteeism that is occurring during the semester."),
+                                                      h4(strong("Youth Development")),
+                                                      p("Students from low-income families tend to have less access to enrichment opportunities beyond the traditional classroom. Increasing after-school programs, such as athletic clubs, could provide opportunities for youth to build communication skills while remaining healthy and actively learning. Students and parents could also benefit from these programs as students expand their learning and interests while decreasing the time parents must juggle between work and childcare. The 2020-2021 academic school year saw a drop in academic performances for all six community schools. This was especially severe for Hispanic and Black students, that had a dramatic decline. Although this was following the COVID-19 pandemic, this could be an opportunity to provide extra tutoring hours at the local library or a study hall session during the school day to help alleviate the disruptions of online learning. "),
+                                                      h4(strong("Family Development")),
+                                                      p("There is a significantly large number of Hispanic students attending community schools. These students will require additional needs, such as multi-language resources for both students and parents, to ensure a clear line of communication for all involved in the learning process. Additionally, providing more opportunities for parent feedback forums and family events at the school may increase parents’ feelings of positive relationships and communication with the school as some of these parents are undocumented, as suggested by the Community School liaison.  "),
+                                                      p("In our research, we found that there are few families engagement resources available within a 10-minute drive of Sterling Elementary, a possible opportunity to help reduce travel time for parents could be to host a resource fair at the schools allowing parents easy access to these resources. Community School Liaisons also indicate that “rent,” “internet,” “housing,” and “food” are also significant challenges for families at these community schools. This is also essential as some students have a large population of students who experience homelessness. Thus, helping families within these areas would be beneficial. ")
+                                               ),
+                                               column(5, align= "justify",
+                                                      h2(strong("Individual School Key Takeaways")),
+                                                      p("The following takeaways are conclusions from the school reports that each school representative submitted in the year 2020-2021 and the various visualizations in the previous tabs from the data collected from Virginia Department of Education and Loudoun Dashboard. "),
+                                                      h4(strong("Forest Grove")),
+                                                      tags$div(
+                                                        tags$ul(
+                                                          tags$li("Few key partners to support their four pillars"),
+                                                          tags$li("School representatives view family engagement as a major challenge "),
+                                                          tags$li("Decrease in enrollment rate "),
+                                                          tags$li("Decrease in chronic absenteeism "),
+                                                          tags$li("Strengthen Mental Health resources – meetings with Unified Mental Health Team"))),
+                                                      h4(strong("Guilford")),
+                                                      tags$div(
+                                                        tags$ul(
+                                                          tags$li("Few partners to support youth development pillar "),
+                                                          tags$li("Community internet needs reported as a major challenge "),
+                                                          tags$li("Good support in Health and Social Services and Family Engagement pillars "),
+                                                          tags$li("Parents feel adept at using technology to aid in learning "),
+                                                          tags$li("High proportion of Hispanic students  "),
+                                                        ),
+                                                      ),
+                                                      h4(strong("Rolling Ridge")),
+                                                      tags$div(
+                                                        tags$ul(
+                                                          tags$li("Increases in Mental Health resources"),
+                                                          tags$li("High proportion of Hispanic students "),
+                                                          tags$li("School reports to be well connected with families"),
+                                                          tags$li("Lowest student to teacher ratio"),
+                                                        )),
+                                                      h4(strong("Sterling")),
+                                                      tags$div(
+                                                        tags$ul(
+                                                          tags$li("Mental Health resources are a major challenge as reported by School representative "),
+                                                          tags$li("Several partners in Health and Social Services and Youth Development pillar "),
+                                                          tags$li("Maintained levels of chronic absenteeism during pandemic"),
+                                                        )),
+                                                      h4(strong("Sugarland")),
+                                                      tags$div(
+                                                        tags$ul(
+                                                          tags$li("Representatives view Family Engagement as a key challenge "),
+                                                          tags$li("Highest levels of chronic absenteeism  "),
+                                                          tags$li("Appears to have least number of key partners"),
+                                                        )),
+                                                      h4(strong("Sully")),
+                                                      tags$div(
+                                                        tags$ul(
+                                                          tags$li("Low performance on Math and English standardized exams "),
+                                                          tags$li("Highest student to teacher ratio with the lowest enrollment "),
+                                                          tags$li("Large proportion of Hispanic students "),
+                                                        )),
+                                               ))),
+                            tabPanel("NYC Community Schools",
+                                     fluidRow(style = "margin: 6px;",
+                                              p("", style = "padding-top:10px;"),
+                                              column(12, align = "center",h1(strong("NYC Community Schools Program")),
+                                                     p(""),
+                                                     br("")
+                                                     
+                                                     
+                                                     
+                                              )),
+                                     column(9, align = "left", 
+                                            
+                                            collapsibleTreeOutput("tree2",height = "600px", width = "300%") 
+                                            
+                                     ),
+                                     column(3, align = "justify",
+                                            br(),
+                                            h4(strong("NYC Community School Program Pillars")),
+                                            br(),
+                                            p("New York City (NYC) initiated its Community Schools Program in Fall 2014 with 45 schools. It now has over 300 Community Schools across every district in NYC, funded through city, state, and federal dollars. Although New York City has a larger population and more available resources than Loudoun County, the NYC's Community Schools Program can be used to obtain ideas for different programs and initiatives the LCPS may implement for their Community School Initiative. The interactive tree visualizes each pillar's programs and partnerships in the NYC Community Schools.")
+                                     )
+                                     
+                                     
+                                     
+                            )
+                 ),
                  #----------------Data Tab------------------------------------------
                  tabPanel("Data ", value = "data",
                           fluidRow(style = "margin: 6px;",
@@ -3109,7 +3256,7 @@ ui <- navbarPage(title = "DSPG",
                                           p(a(href = 'https://www.linkedin.com/in/jontayvion-osborne-a3b7961a7', 'Jontayvion Osborne', target = '_blank'), "Austin Peay State University, Undergraduate in Business Management and Minor in Marketing) ;"),
                                           img(src = "Chaudhry Abdullah Rizwan.jpg", style = "display: inline; border: 1px solid #C0C0C0;", width = "200px"),
                                           p(a(href = 'https://www.linkedin.com/in/chaudhry-abdullah-rizwan-a1641522b/', 'Chaudhry Abdullah Rizwan', target = '_blank'), "(Virginia Tech, Undergraduate in Computational Modeling and Data Analytics and Economics, Minors in Computer Science and Mathematics)."),
- 
+                                          
                                    ),
                                    column(4, align = "center",
                                           h4(strong("Faculty Advisor")),
@@ -4031,7 +4178,7 @@ server <- function(input, output, session) {
       figFRL
     }
     
-
+    
     else if (gendad() == "weekendmeals") {
       weekendmeals
     }
