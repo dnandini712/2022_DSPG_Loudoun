@@ -641,7 +641,7 @@ popups3 <- lapply(
   htmltools::HTML
 )
 
-pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
+pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Other","Club","After School Program"))
 
 leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(data = va20_2,
@@ -676,7 +676,7 @@ popups4 <- lapply(
   htmltools::HTML
 )
 
-pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Resource","Club","After School Program"))
+pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Other","Club","After School Program"))
 
 leaflet(data = youthfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(data = va20_2,
