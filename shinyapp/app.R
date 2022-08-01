@@ -2196,7 +2196,7 @@ ui <- navbarPage(title = "DSPG",
                                                                                  
                                                                         )),
                                                        
-                                                       tabPanel("IEP Status",
+                                                       tabPanel("Individualized Educational Plan",
                                                                 fluidRow(style = "margin: 4px;",
                                                                          withSpinner(plotlyOutput("figIEP", height = "500px", width = "100%")),
                                                                          br(""),
@@ -2248,6 +2248,33 @@ ui <- navbarPage(title = "DSPG",
                                               
                                               
                                      )), 
+                            tabPanel("Usage of Schools Program",
+                                     column(6, align = "left",
+                                            selectInput("generalDATA", "Select Data:", width = "100%", choices = c(
+                                              # "English Learner Statu" = "figELS",
+                                              # "IEP Status" = "figIEP",
+                                              # "Homeless" = "figHOME",
+                                              
+                                              
+                                              "Breakfast" = "breakfast",
+                                              "Overall Lunch" = "figFRL",
+                                              "Lunch" = "figERL",
+                                              "Weekend meals" = "weekendmeals",
+                                              "Clothing and Basic Supplies" = "families"
+                                              
+                                            ),
+                                            ),
+                                            withSpinner(plotlyOutput("generaldatafilledlinegraphs", height = "500px", width = "100%")),
+                                     ),
+                                     column(6, align = "justify",
+                                            p("For students attending Loudoun County Public Schools learning English as a second language, they are placed in the English Learners (EL) program. At the community schools, a slight increase in students participating in the EL program was seen from the years 2018 to 2021 going from 67% to just about 70%."),
+                                            p("It is important for all students who needs special education to have a developed and credited Individual Education Plan (IEP). In the community schools, we see a positive increase in IEP status from the school year 2018-2019 to 2019-2020 rising from 10% to 11%. Noticeably, it falls again, this time to 9% in the 2021-2022 academic school year."),
+                                            p("For most students, especially within community schools, their parents are not always able to afford school lunch prices. Throughout the academic school years of 2018 to 2022 in our community schools, we see the percentage of students receiving free and reduced lunch fluctuate, but primarily stay between the percentages of 72% and 74%."),
+                                            p("For students attending the community schools, we see 13% are homeless in the 2018-2019 academic school year. After rising to a whopping 16% the following school year, we see a noticeably two-year decline in students facing homelessness. This is a great trend that we hope we can continue as a result of this project."),
+                                            p("Over 800 families received weekend meals in 2020 and 2021, jumping from 600 in 2019 and only 135 in 2018"),
+                                            p("538 families received basic supplies in 2018, 832 families received basic supplies in 2020. This increase in both basic supplies and weekend meals indicates a growing need for more resources"),
+                                            p("About 80% of students at Guilford and Sully ate breakfast at school in 2020 – 2021, forest grove saw an increase from 23% to 65% of students who ate breakfast from 2019 to 2020. Over half of the students at Sugarland eat breakfast at school"),
+                                     )),
                             
                             tabPanel("Performance", 
                                      fluidRow(style = "margin: 6px;",
@@ -2714,31 +2741,9 @@ ui <- navbarPage(title = "DSPG",
                                        )
                                        
                                        
-                                     )), 
-                            
-                            tabPanel("Usage of Schools Program",
-                                     column(6, align = "left",
-                                            selectInput("generalDATA", "Select Data:", width = "100%", choices = c(
-                                              # "English Learner Statu" = "figELS",
-                                              # "IEP Status" = "figIEP",
-                                              "Free and Reduced Lunch" = "figFRL",
-                                              # "Homeless" = "figHOME",
-                                              "Weekend meals" = "weekendmeals",
-                                              "Basic Supplies" = "families",
-                                              "Breakfast" = "breakfast"
-                                            ),
-                                            ),
-                                            withSpinner(plotlyOutput("generaldatafilledlinegraphs", height = "500px", width = "100%")),
-                                     ),
-                                     column(6, align = "justify",
-                                            p("For students attending Loudoun County Public Schools learning English as a second language, they are placed in the English Learners (EL) program. At the community schools, a slight increase in students participating in the EL program was seen from the years 2018 to 2021 going from 67% to just about 70%."),
-                                            p("It is important for all students who needs special education to have a developed and credited Individual Education Plan (IEP). In the community schools, we see a positive increase in IEP status from the school year 2018-2019 to 2019-2020 rising from 10% to 11%. Noticeably, it falls again, this time to 9% in the 2021-2022 academic school year."),
-                                            p("For most students, especially within community schools, their parents are not always able to afford school lunch prices. Throughout the academic school years of 2018 to 2022 in our community schools, we see the percentage of students receiving free and reduced lunch fluctuate, but primarily stay between the percentages of 72% and 74%."),
-                                            p("For students attending the community schools, we see 13% are homeless in the 2018-2019 academic school year. After rising to a whopping 16% the following school year, we see a noticeably two-year decline in students facing homelessness. This is a great trend that we hope we can continue as a result of this project."),
-                                            p("Over 800 families received weekend meals in 2020 and 2021, jumping from 600 in 2019 and only 135 in 2018"),
-                                            p("538 families received basic supplies in 2018, 832 families received basic supplies in 2020. This increase in both basic supplies and weekend meals indicates a growing need for more resources"),
-                                            p("About 80% of students at Guilford and Sully ate breakfast at school in 2020 – 2021, forest grove saw an increase from 23% to 65% of students who ate breakfast from 2019 to 2020. Over half of the students at Sugarland eat breakfast at school"),
                                      ))
+                            
+                          
                             
                             #tabPanel(h4("Weaknesses and biggest challenges")),
                             
