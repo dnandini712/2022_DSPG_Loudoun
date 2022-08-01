@@ -1507,7 +1507,7 @@ eligablelunch_data <- plot_ly(eligablelunch_data, x = ~Year, y = ~Percent, color
   title = "Percentage",
   #zerolinewidth =60,
   #standoff = 25,
-  range = list(60,90),
+  range = list(50,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
 ))
