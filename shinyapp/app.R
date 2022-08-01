@@ -1490,7 +1490,7 @@ cloud3<- wordcloud2(df3, size=0.5)
 #-------------------------Breakfast Data------------------------------------
 
 breakfast_data <- read_excel(paste0(getwd(),"/data/Breakfast.xlsx"),skip=0,col_names=TRUE)
-breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Breakfast", xaxis = list(title = ""), yaxis = list(
+breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Free and Reduced-Price Breakfast Participation  ", xaxis = list(title = ""), yaxis = list(
   title = "Percentage",
   #zerolinewidth =60,
   #standoff = 25,
@@ -2745,12 +2745,13 @@ ui <- navbarPage(title = "DSPG",
                                                 
                                                 column(3, align = "justify",
                                                        br(),
+                                                       h4(strong("Community Schools Programs Key Partners ")),
                                                        br(),
                                                        br(),
                                                        br(),
                                                        br(),
-                                                       p("The school representatives were also asked about the key partners which help support the activities for each of the pillars. This interactive tree shows these key partners and programs in each of these schools for the year 2020-2021. One can zoom in and out or scroll around the tree for visual ease. The tree has been categorised pillar-wise to help in conducting a school wise comparative analysis, to note the different partners and thus can help to find further partnership possibilities. The size of the node is determined by the number of entries it contains, hence bigger circles of the schools point to more partnerships. As an example, Sterling Elementary has the highest number of partners for Youth Development activities, hence the blue circle is the largest. This tree is however not exhaustive since there were a few missing information (for eg., Forest Grove has no information on their key partners for the Youth Development Pillar).")
-                                                )
+                                                       p("Community Schools Representatives were asked about key partners each school utilized for help with services in Health and Social Services, Mental Health, Family Engagement, and Youth Development. The interactive tree shows these key partners and programs for each school in 2020-2021 to assist in comparative analysis by schools to help find partnership possibilities for future activities. The node's size depends on the number of entries. Thus, the bigger circles indicate more school partnerships. For example, Sterling Elementary has the largest number of partners for Youth Development activities, as indicated by the more sizeable node (blue circle). Note, one should take caution when making conclusions as the tree is not exhaustive. There were a few schools with missing information, e.g., Forest Grove had no information on their critical partners for the Youth Development Pillar. ")
+                                                       )
                                                 
                                                 
                                        )
