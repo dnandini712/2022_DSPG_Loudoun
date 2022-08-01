@@ -1556,7 +1556,7 @@ figELS <- figELS %>% layout(
 
 figELS
 
-<<<<<<< HEAD
+
 #breakfast
 breakfast_data <- read_excel(paste0(getwd(),"/data/Breakfast.xlsx"),skip=0,col_names=TRUE)
 breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Free and Reduced - Price Breakfast Participation", xaxis = list(title = ""), yaxis = list(
@@ -1569,8 +1569,6 @@ breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, t
 ))
 
 
-=======
->>>>>>> c2f40ca48507ed75666801eae3ee8b78e4ffd150
 #------------------------------IEP Status------------------------------------
 
 generaldata <- read_excel(paste0(getwd(),"/data/generaldata.xlsx"),skip=0,col_names=TRUE)
