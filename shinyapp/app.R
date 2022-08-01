@@ -866,15 +866,7 @@ forestgroverace <- plot_ly(assessmentraceForestGrove, x = ~Year, y = ~`Percent P
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))%>% add_annotations(
-  x=.85,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = "<",
-  xanchor = 'left',
-  showarrow = F
-)
+))
 
 #----------------Sugarland------------------------------------------------
 
@@ -889,15 +881,7 @@ sugarlandrace <- plot_ly(assessmentraceSugarland, x = ~Year, y = ~`Percent Pass`
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))%>% add_annotations(
-  x=.85,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = "<",
-  xanchor = 'left',
-  showarrow = F
-)
+))
 
 #-------------------Guilford------------------------------------
 
@@ -912,15 +896,7 @@ guilfordrace <- plot_ly(assessmentraceGuilford, x = ~Year, y = ~`Percent Pass`, 
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))%>% add_annotations(
-  x=.7,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = "<",
-  xanchor = 'left',
-  showarrow = F
-)
+))
 
 #-------------------------------Rolling Ridge------------------
 
@@ -950,16 +926,7 @@ sterlingrace <- plot_ly(assessmentraceSterling, x = ~Year, y = ~`Percent Pass`, 
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))%>% add_annotations(
-  x=.85,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = "<",
-  xanchor = 'left',
-  showarrow = F
-)
-
+))
 #----------------------Sully--------------------------
 
 #assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
@@ -973,23 +940,7 @@ sullyrace <- plot_ly(assessmentraceSully, x = ~Year, y = ~`Percent Pass`, color 
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-)) %>% add_annotations(
-  x=-0.1,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = ">",
-  #xanchor = 'left',
-  showarrow = F
-) %>% add_annotations(
-  x=0.85,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = "<",
-  xanchor = 'left',
-  showarrow = F
-)
+))
 
 #------------------English------------------
 
@@ -1022,15 +973,7 @@ sugarlandraceeng <- plot_ly(assessmentraceSugarlandeng, x = ~Year, y = ~`Percent
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))%>% add_annotations(
-  x=0.85,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = "<",
-  xanchor = 'left',
-  showarrow = F
-)
+))
 
 #-------------------Guilford------------------------------------
 
@@ -1075,15 +1018,7 @@ sterlingraceeng <- plot_ly(assessmentraceSterlingeng, x = ~Year, y = ~`Percent P
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))%>% add_annotations(
-  x=.85,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = ">",
-  xanchor = 'left',
-  showarrow = F
-)
+))
 
 #----------------------Sully--------------------------
 
@@ -1098,23 +1033,7 @@ sullyraceeng <- plot_ly(assessmentraceSullyeng, x = ~Year, y = ~`Percent Pass`, 
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-)) %>% add_annotations(
-  x=-0.1,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = "<",
-  #xanchor = 'left',
-  showarrow = F
-) %>% add_annotations(
-  x=0.85,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = "<",
-  xanchor = 'left',
-  showarrow = F
-)
+))
 
 
 
@@ -1339,23 +1258,7 @@ rrall <- plot_ly(assessmentallRollingRidge, x = ~Year, y = ~`Percent Pass`, colo
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-)) %>% add_annotations(
-  x=0.1,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = "<",
-  xanchor = 'left',
-  showarrow = F
-) %>% add_annotations(
-  x=0.99,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = "<",
-  xanchor = 'left',
-  showarrow = F
-)
+))
 
 #-----------------------------Sterling--------------------
 
@@ -1368,16 +1271,7 @@ sterlingall <- plot_ly(assessmentallSterling, x = ~Year, y = ~`Percent Pass`, co
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))%>% add_annotations(
-  x=1.3,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = "<",
-  xanchor = 'left',
-  showarrow = F
-)
-
+))
 #----------------------Sully--------------------------
 
 assessment %>% filter(School == "Sully" & Subject == "Mathematics") %>% filter(Subgroup == "All Students"|Subgroup == "Homeless"|Subgroup == "Students with Disabilities"|Subgroup == "Economically Disadvantaged"|Subgroup == "English Learners") -> assessmentallSully
@@ -1404,15 +1298,7 @@ forestgrovealleng <- plot_ly(assessmentallForestGroveeng, x = ~Year, y = ~`Perce
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))%>% add_annotations(
-  x=1.0,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = "<",
-  xanchor = 'left',
-  showarrow = F
-)
+))
 
 #----------------Sugarland------------------------------------------------
 
@@ -1426,15 +1312,7 @@ sugarlandalleng <- plot_ly(assessmentallSugarlandeng, x = ~Year, y = ~`Percent P
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-)) %>% add_annotations(
-  x=1.3,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = "<",
-  xanchor = 'left',
-  showarrow = F
-)
+))
 
 #-------------------Guilford------------------------------------
 
@@ -1460,24 +1338,7 @@ rralleng <- plot_ly(assessmentallRollingRidgeeng, x = ~Year, y = ~`Percent Pass`
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-)) %>% add_annotations(
-  x=0.1,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = "<",
-  xanchor = 'left',
-  showarrow = F
-) %>% add_annotations(
-  x=0.99,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = "<",
-  xanchor = 'left',
-  showarrow = F
-)
-
+)) 
 #-----------------------------Sterling--------------------
 
 
@@ -1490,15 +1351,7 @@ sterlingalleng <- plot_ly(assessmentallSterlingeng, x = ~Year, y = ~`Percent Pas
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))%>% add_annotations(
-  x=1.3,
-  y=2,
-  xref = "x",
-  yref = "y",
-  text = "<",
-  xanchor = 'left',
-  showarrow = F
-)
+))
 
 #----------------------Sully--------------------------
 
