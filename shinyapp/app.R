@@ -288,10 +288,6 @@ propcomparison <- plot_ly(
 propcomparison <- propcomparison %>%
   layout(margin = list(l=20,r=30))
 
-
-#-----------Occupation/Work sub tab-----------------------------------------
-
-
 #------------------Employment-----------------
 sterling <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
 subset_sterling <- sterling[(4:5), c(1:2,4)]
@@ -2384,7 +2380,7 @@ ui <- navbarPage(title = "DSPG",
                                                                           #br(""),
                                                                           
                                                                           #br(""),
-                                                                          p(strong("*Note: Data suppressed for missing bars represent either: i) fewer than 20 students in the group and the pass rate is less (or greater) than 50% or ii) fewer than 10 students in the group and the pass rate is less (or greater) than 50%", style = "font-size:14px;")),
+                                                                          p(strong("*Note: Data suppressed for missing bars represent either: i) fewer than 10 students in the group or ii) fewer than 20 students in the group and the pass rate is less than 50%", style = "font-size:14px;")),
                                                                           p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                                                    )
                                                                    
@@ -2761,7 +2757,6 @@ ui <- navbarPage(title = "DSPG",
                                                        br(),
                                                        h4(strong("Community Schools Programs Key Partners ")),
                                                        br(),
-                                                       br(),
                                                        p("Community Schools Representatives were asked about key partners each school utilized for help with services in Health and Social Services, Mental Health, Family Engagement, and Youth Development. The interactive tree shows these key partners and programs for each school in 2020-2021 to assist in comparative analysis by schools to help find partnership possibilities for future activities. The node's size depends on the number of entries. Thus, the bigger circles indicate more school partnerships. For example, Sterling Elementary has the largest number of partners for Youth Development activities, as indicated by the more sizeable node (blue circle). Note, one should take caution when making conclusions as the tree is not exhaustive. There were a few schools with missing information, e.g., Forest Grove had no information on their critical partners for the Youth Development Pillar. ")
                                                        )
                                                 
@@ -3042,7 +3037,6 @@ ui <- navbarPage(title = "DSPG",
                                   column(3, align = "justify",
                                          br(),
                                          h4(strong("NYC Community School Program Pillars")),
-                                         br(),
                                          br(),
                                          p("New York City (NYC) initiated its Community Schools Program in Fall 2014 with 45 schools. It now has over 300 Community Schools across every district in NYC, funded through city, state, and federal dollars. Although New York City has a larger population and more available resources than Loudoun County, the NYC's Community Schools Program can be used to obtain ideas for different programs and initiatives the LCPS may implement for their Community School Initiative. The interactive tree visualizes each pillar's programs and partnerships in the NYC Community Schools.")
                                   )
