@@ -866,7 +866,15 @@ forestgroverace <- plot_ly(assessmentraceForestGrove, x = ~Year, y = ~`Percent P
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #----------------Sugarland------------------------------------------------
 
@@ -881,7 +889,15 @@ sugarlandrace <- plot_ly(assessmentraceSugarland, x = ~Year, y = ~`Percent Pass`
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #-------------------Guilford------------------------------------
 
@@ -896,7 +912,15 @@ guilfordrace <- plot_ly(assessmentraceGuilford, x = ~Year, y = ~`Percent Pass`, 
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=.7,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #-------------------------------Rolling Ridge------------------
 
@@ -954,7 +978,7 @@ sullyrace <- plot_ly(assessmentraceSully, x = ~Year, y = ~`Percent Pass`, color 
   y=2,
   xref = "x",
   yref = "y",
-  text = "<",
+  text = ">",
   #xanchor = 'left',
   showarrow = F
 ) %>% add_annotations(
@@ -998,7 +1022,15 @@ sugarlandraceeng <- plot_ly(assessmentraceSugarlandeng, x = ~Year, y = ~`Percent
   range = list(0,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
-))
+))%>% add_annotations(
+  x=0.85,
+  y=2,
+  xref = "x",
+  yref = "y",
+  text = "<",
+  xanchor = 'left',
+  showarrow = F
+)
 
 #-------------------Guilford------------------------------------
 
@@ -1044,11 +1076,11 @@ sterlingraceeng <- plot_ly(assessmentraceSterlingeng, x = ~Year, y = ~`Percent P
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
 ))%>% add_annotations(
-  x=.8,
+  x=.85,
   y=2,
   xref = "x",
   yref = "y",
-  text = "<",
+  text = ">",
   xanchor = 'left',
   showarrow = F
 )
@@ -2440,7 +2472,8 @@ ui <- navbarPage(title = "DSPG",
                                                                           #br(""),
                                                                           
                                                                           #br(""),
-                                                                          p(strong("*Note: Data suppressed for missing bars represent either: i) fewer than 10 students in the group or ii) fewer than 20 students in the group and the pass rate is less than 50%", style = "font-size:14px;")),
+                                                                          p(strong("*Note: < represents either: i) fewer than 10 students in the group or ii) fewer than 20 students in the group and the pass rate is less than 50%", style = "font-size:14px;")),
+                                                                          p(strong("*Note: > represents either: i) fewer than 10 students in the group or ii) fewer than 20 students in the group and the pass rate is greater than 50%", style = "font-size:14px;")),
                                                                           p("Source: Virginia Department of Education, Loudoun County Public Schools Dashboard and Staff directory", style = "font-size:12px;"),
                                                                    )
                                                                    
