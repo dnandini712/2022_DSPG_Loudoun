@@ -1503,11 +1503,11 @@ breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, t
 
 eligablelunch_data <- read_excel(paste0(getwd(),"/data/LunchParticipation.xlsx"),skip=1,col_names=TRUE)
 
-eligablelunch_data <- plot_ly(eligablelunch_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Lunch", xaxis = list(title = ""), yaxis = list(
+eligablelunch_data <- plot_ly(eligablelunch_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Free and Reduced-Price Lunch Participation by Schools", xaxis = list(title = ""), yaxis = list(
   title = "Percentage",
   #zerolinewidth =60,
   #standoff = 25,
-  range = list(0,90),
+  range = list(50,90),
   tickvals = list(0,10,20,30,40,50,60,70,80,90)
   #zeroline = F
 ))
@@ -1555,18 +1555,6 @@ figELS <- figELS %>% layout(
 
 
 figELS
-
-
-#breakfast
-breakfast_data <- read_excel(paste0(getwd(),"/data/Breakfast.xlsx"),skip=0,col_names=TRUE)
-breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Free and Reduced - Price Breakfast Participation", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
 
 
 #------------------------------IEP Status------------------------------------
@@ -2284,8 +2272,8 @@ ui <- navbarPage(title = "DSPG",
                                               
                                               
                                               "Breakfast" = "breakfast",
-                                              "Overall Lunch" = "figFRL",
-                                              "Lunch" = "eligablelunch_data",
+                                              "Overall Free and Reduced-Price Lunch" = "figFRL",
+                                              "Free and Reduced-Price Lunch by Schools" = "eligablelunch_data",
                                               "Weekend meals" = "weekendmeals",
                                               "Clothing and Basic Supplies" = "families"
                                               
