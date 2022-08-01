@@ -1089,7 +1089,7 @@ sullyraceeng <- plot_ly(assessmentraceSullyeng, x = ~Year, y = ~`Percent Pass`, 
 #--------performance / assessment by School and Gender-----------------
 
 #-------------Mathematics-------------------------------
-assessment <- read_excel(paste0(getwd(),"/data/Assessments.xlsx"),skip=0,col_names=TRUE)
+assessment <- read_excel(paste0(getwd(),"/data/assessmentgender.xlsx"),skip=0,col_names=TRUE)
 assessment %>% filter(School == "Forest Grove" & Subject == "Mathematics") %>% filter(Subgroup == "Male"| Subgroup == "Female") -> assessmentgenderForestGrove
 
 forestgrovegender <- plot_ly(assessmentgenderForestGrove, x = ~Year, y = ~`Percent Pass`, color = ~Subgroup, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "Mathematics Pass Rate", xaxis = list(title = ""), yaxis = list(
@@ -1250,23 +1250,14 @@ sullygendereng <- plot_ly(assessmentgenderSullyeng, x = ~Year, y = ~`Percent Pas
 ))
 
 
-assessment %>% filter(Subgroup == "Students with Disabilities" & Subject == "English Reading") -> assessmentdisenglish
-
-english_dis <- plot_ly(assessmentdisenglish, x = ~Year, y = ~`Percent Pass`, color = ~School, type = 'bar', mode = 'stack', hoverinfo = "text", text = ~paste("Percentage: ", `Percent Pass`, "%", "<br>", "School: ", School))%>% layout(title = "English Pass Rate", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
-
 #--------performance / assessment by Other Subgroups All Students, Homeless, Disabilities-----------------
 
 
 #-------------Mathematics-------------------------------
 
 #Forest Grove
+
+assessment <- read_excel(paste0(getwd(),"/data/assessmentsubgroup.xlsx"),skip=0,col_names=TRUE)
 
 assessment %>% filter(School == "Forest Grove" & Subject == "Mathematics") %>% filter(Subgroup == "All Students"|Subgroup == "Homeless"|Subgroup == "Students with Disabilities"|Subgroup == "Economically Disadvantaged"|Subgroup == "English Learners")-> assessmentallForestGrove
 
