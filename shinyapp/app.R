@@ -2,10 +2,10 @@
 
 #This dashboard is arranged in the following way:
 #1. Loading Packages which are required--------
-#2. Loading the data and making the visualizations-----------
+#2. Loading the data and making the visualizations-----------this is according to order in the shinyapp 
 #3. JSCODE 
 #4. USER INTERFACE    (Search for 'XXX Tab' and it will take you to the UI for that tab)
-#5. Server
+#5. Server (not in order of the shinyapp but the OutputIds from the UI will help to locate the code in server. )
 
 #For this repo, all the visualizations are made beforehand and in the server these graphs are just called. 
 #Nothing is calculated in the server. 
@@ -705,362 +705,8 @@ chronic <- plot_ly(absentieesm, x = ~Year, y = ~`Percent above 10`, color = ~Sch
 
 
 
-#--------------free or not free resources ---------------------------------------
-
-costs <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"))
-foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
-#---------------map_health and isochrones-----------------------------------------
-
-#install.packages("remotes")
-#remotes::install_github("tlorusso/traveltimeR")
-
-YourAPIKey <- "32f6ed99d0636fe05d01a5ff5a99c6e7"
-YourAppId <- "190b7348"
-
-traveltime10 <- read_sf("data/iso_10_sterling.shp")
-traveltime20 <- read_sf("data/iso_20_sterling.shp")
-traveltime45 <- read_sf("data/iso_45_sterling.shp")
-# traveltime10 <- traveltime_map(appId=YourAppId,
-#                                apiKey=YourAPIKey,
-#                                location=c(39.009006,-77.4029155),
-#                                traveltime=600,
-#                                type="driving",
-#                                departure="2022-08-09T08:00:00+01:00")
-# # ... and within 60 minutes?
-# traveltime20 <- traveltime_map(appId=YourAppId,
-#                                apiKey=YourAPIKey,
-#                                location=c(39.009006,-77.4029155),
-#                                traveltime=1200,
-#                                type="driving",
-#                                departure="2022-08-09T08:00:00+01:00")
-# traveltime45 <- traveltime_map(appId = YourAppId,
-#                                apiKey = YourAPIKey,
-#                                location = c(39.009006,-77.4029155),
-#                                traveltime= 2700,
-#                                type = "driving",
-#                                departure = "2022-08-09T08:00:00+01:00")
-map<- read_excel(paste0(getwd(),"/data/school_locations.xlsx"))
-
-subset_map <- map[1,c(1,4,5)]
-
-healthsep <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
-popups <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(healthsep$Name1),
-        "<br />",
-        "<strong>Description:</strong>",
-        healthsep$Description1 ,
-        "<br />",
-        "<strong>Serves:</strong>",
-        healthsep$Serves1, 
-        "<br />",
-        "<strong>Hours:</strong>",
-        healthsep$Hours1,
-        "<br />",
-        "<strong>Language:</strong>",
-        healthsep$Language,
-        "<br />",
-        "<strong>Address:</strong>",
-        healthsep$Address1,
-        "<a href = ",healthsep$Website1, "> Website </a>",
-        "<br />"),
-  
-  htmltools::HTML
-)
-
-popup <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(costs$Name),
-        "<br />",
-        "<strong>Description:</strong>",
-        costs$Description ,
-        "<br />",
-        "<strong>Serves:</strong>",
-        costs$Serves, 
-        "<br />",
-        "<strong>Hours:</strong>",
-        costs$Hours,
-        "<br />",
-        "<strong>Language:</strong>",
-        costs$Language,
-        "<br />",
-        "<strong>Address:</strong>",
-        costs$Address,
-        "<a href = ",costs$Website, "> Website </a>",
-        "<br />"),
-  
-  htmltools::HTML
-)
-
-healthfree <- read_excel(paste0(getwd(), "/data/resourcecost.xlsx"),sheet = "Health Free")
-
-
-
-pal <- colorFactor(c("#91003f", "#005824", "#d7301f","#CC6677","#DDCC77","#88419d"), domain = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"))
-pal1 <- colorFactor(c("#91003f","#005824","#d7301f","#88419d","#DDCC77","#CC6677","#AA4499","#882255"),domain = c("Food Pantry","Clothing","Counseling","Dental Care","Vision Care","Medical Services","Speech and Hearing Services","Physical Therapy"))
-
-
-leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=costs,~Longitude,~Latitude,popup = ~popup, label = ~as.character(Name),group = ~Resource,color = ~pal(Resource),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1) %>%
-  addLayersControl(overlayGroups = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"),options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
-  setView(-77.4029155,39.009006, zoom = 11) -> health_free
-
-
-
-leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=foods,~Longitude1,~Latitude1,popup=~popups,label=~as.character(Name1),color= ~pal1(Resource1),group = ~Resource1,weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> health_all
-#--------------youth development map --------------------------
-
-youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 3.xlsx"))
-popups3 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(youth$Name3),
-        "<br />",
-        "<strong>Description:</strong>",
-        youth$Description3 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        youth$Hours3, 
-        "<br />",
-        "<strong>Address:</strong>",
-        youth$Address3,
-        "<a href = ",youth$Website3, "> Website </a>",
-        "<br />"),
-  
-  
-  htmltools::HTML
-)
-
-pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Other","Club","After School Program"))
-
-leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=youth,~Longitude3,~Latitude3,popup=~popups3,label=~as.character(Name3),color= ~pal3(Type),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1,group = ~Type)%>%
-  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
-
-
-youthfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth Free")
-
-popups4 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(youthfree$Name4),
-        "<br />",
-        "<strong>Description:</strong>",
-        youthfree$Description4 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        youthfree$Hours4, 
-        "<br />",
-        "<strong>Address:</strong>",
-        youthfree$Address4,
-        "<a href = ",youthfree$Website4, "> Website </a>",
-        "<br />"),
-  htmltools::HTML
-)
-
-pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Other","Club","After School Program"))
-
-leaflet(data = youthfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=youthfree,~Longitude4,~Latitude4,popup=~popups4,label=~as.character(Name4),color= ~pal3(Type),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1,group = ~Type)%>%
-  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> youth_free
-
-
-#---------mental health resources map------------------------
-
-ment <- read_excel(paste0(getwd(),"/data/mentalhealthres.xlsx"),sheet = "Mental")
-
-popups2 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(ment$Name2),
-        "<br />",
-        "<strong>Description:</strong>",
-        ment$Description2 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        ment$Hours2, 
-        "<br />",
-        "<strong>Address:</strong>",
-        ment$Address2,
-        "<a href = ",ment$Website2, "> Website </a>",
-        "<br />"),
-  
-  
-  htmltools::HTML
-)
-
-pal2 <- colorFactor(c("red", "blue", "green"), domain = c("Family Therapy", "Family Counseling", "Bereavement"))
-
-leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=ment,~Longitude2,~Latitude2,popup=~popups2,label=~as.character(Name2),group=~Resources2,color=~pal2(Resources2),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resources2,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
-
-mentfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Mental Free")
-
-popups5 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(mentfree$Name5),
-        "<br />",
-        "<strong>Description:</strong>",
-        mentfree$Description5 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        mentfree$Hours5, 
-        "<br />",
-        "<strong>Address:</strong>",
-        mentfree$Address5,
-        "<a href = ",mentfree$Website5, "> Website </a>",
-        "<br />"),
-  
-  
-  htmltools::HTML
-)
-
-leaflet(data = mentfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data = mentfree, ~Longitude5,~Latitude5,popup = ~popups5,label = ~as.character(Name5),group = ~Resource5,color = ~pal2(Resource5),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resource5,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> mental_free
-
-
-#----------------------family engagement map-------------------
-
-familyengage <- read_excel(paste0(getwd(),"/data/ListOfResources.xlsx"),sheet = "Family Engagement")
-
-popups <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(familyengage$Name),
-        "<br />",
-        "<strong>Description:</strong>",
-        familyengage$Description ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        familyengage$Hours, 
-        "<br />",
-        "<strong>Address:</strong>",
-        familyengage$Address,
-        "<br />",
-        "<a href = ",familyengage$Website, "> Website </a>",
-        "<br />",
-        "<strong>Serves:</strong>",
-        familyengage$Serves),
-  
-  
-  htmltools::HTML
-)
-
-pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Housing", "Holiday Help", "Education", "Essentials supply", "Employment help", "Other"))
-
-leaflet(data = familyengage) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=familyengage,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal8(Resources),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_family
-
-famfree <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family Free")
-
-popups9 <- lapply(
-  paste("<strong>Name: </strong>",
-        str_to_title(famfree$Name8),
-        "<br />",
-        "<strong>Description:</strong>",
-        famfree$Description8 ,
-        "<br />",
-        "<strong>Hours:</strong>",
-        famfree$Hours8, 
-        "<br />",
-        "<strong>Address:</strong>",
-        famfree$Address8,
-        "<br />",
-        "<a href = ",famfree$Website8, "> Website </a>",
-        "<br />",
-        "<strong>Serves:</strong>",
-        famfree$Serves8),
-  
-  
-  htmltools::HTML
-)
-
-pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Education", "Employment help","Essentials Supply","Housing", "Holiday Help","Other"))
-
-leaflet(data = famfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
-  addPolygons(data = va20_2,
-              color="#5f308f",
-              weight = 0.5,
-              smoothFactor = 0.2,
-              fillOpacity = 0.5)  %>% 
-  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
-  setView(-77.4029155,39.009006, zoom = 11)%>%
-  addCircleMarkers(data=famfree,~Longitude8,~Latitude8,popup=~popups9,label=~as.character(Name8),group=~Resource8,color=~pal8(Resource8),weight = 7, radius=7, 
-                   stroke = F, fillOpacity = 1)%>%
-  addLayersControl(overlayGroups = ~Resource8,options = layersControlOptions(collapsed = FALSE)) %>% 
-  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> fam_free
-
-
-#resource table ----------------------------
-list <- read_excel(paste0(getwd(),"/data/allresources.xlsx")) 
-
-
-#-----------------Performance Graphs - assessment  --------------------------
+#-----------------Assessment sub sub tab -------------------------
 #----------------all students-------------------------------
-
 #-------------------students by race----------------------
 #------------------Mathematics-------------------------------
 
@@ -1330,7 +976,7 @@ sullyraceeng <- plot_ly(assessmentraceSullyeng, x = ~Year, y = ~`Percent Pass`, 
 
 
 
-#--------performance / assessment by School and Gender-----------------
+#--------assessment by School and Gender-----------------
 
 #-------------Mathematics-------------------------------
 assessment <- read_excel(paste0(getwd(),"/data/assessmentgender.xlsx"),skip=0,col_names=TRUE)
@@ -1727,116 +1373,7 @@ sullyalleng <- plot_ly(assessmentallSullyeng, x = ~Year, y = ~`Percent Pass`, co
 ))
 
 
-
-#-------------word clouds--------------------
-#------------cloud_1-------------------------
-
-#install.packages("tm")  # for text mining
-#install.packages("SnowballC") # for text stemming
-#install.packages("wordcloud") # word-cloud generator 
-#install.packages("RColorBrewer") # color palettes
-# Load
-library("tm")
-library("SnowballC")
-library("wordcloud")
-library("RColorBrewer")
-
-
-text1 <- "Internet needs were very overwhelming in our community, virtual presence of students created difficulties with individual telecounseling, student engagement in school an ongoing concern time to provide for the basic needs; finding mental health providers for elementary aged students (this was a huge challenge); medical care for undocumented and uninsured Parent involvement internet access; monetary stressors - rent, food, hygiene and cleanliness supplies needs and health (COVID) and mental health needs Maintaining the same level of connectedness with families in the DL model as those attending in person.parent engagement, parent attendance, finding medical care for undocumented and uninsured, finding housing assistance for undocumented Our challenge is the overall transiency of our student population turnover; community mental health and medical supports; undocumented and uninsured medical care parent involvement Youth development activities We would like to continue to diversify our community partner list community mental health and medical supports, undocumented and uninsured medical care"
-
-#docs <- Corpus(VectorSource(text))
-
-
-Clean_String <- function(string){
-  # Lowercase
-  temp <- tolower(string)
-  # Remove everything that is not a number or letter (may want to keep more 
-  # stuff in your actual analyses). 
-  temp <- stringr::str_replace_all(temp,"[^a-zA-Z\\s]", " ")
-  # Shrink down to just one white space
-  temp <- stringr::str_replace_all(temp,"[\\s]+", " ")
-  temp <- stringr::str_replace_all(temp,";", " ")
-  # Split it
-  temp <- stringr::str_split(temp, " ")[[1]]
-  # Get rid of trailing "" if necessary
-  indexes <- which(temp == "")
-  if(length(indexes) > 0){
-    temp <- temp[-indexes]
-  } 
-  return(temp)
-}
-
-clean1 <- Clean_String(text1)
-
-docs1 <- Corpus(VectorSource(clean1))
-
-docs1 <- tm_map(docs1, removeWords, c("to", "challenge", "concern", "level", "aged", "created", "elementary", "basic", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "continue", "provide"))
-
-
-dtm1 <- TermDocumentMatrix(docs1) 
-matrix1 <- as.matrix(dtm1) 
-words1 <- sort(rowSums(matrix1),decreasing=TRUE) 
-df1 <- data.frame(word = names(words1),freq=words1)
-
-
-
-set.seed(1234) # for reproducibility 
-cloud1 <- wordcloud2(df1, size=0.5)
-
-#---------Cloud 2-----------------------
-
-text2 <- "Many families attended our family outreach and engagement initiatives, teaching families how to operate Schoology.  Families are now very adept at using technology to help their students and support teachers and instruction
-student attendance and active engagement; virtual home visits
-Reduction of gaggle reports
-Virtual Home Visits and United Mental Health screening; hot spots, 1-1 technology
-Staying connected with families and working to empower families to be active in the school community. We offered support to families throughout the year and were responsive to needs as they arose. We worked together collaboratively.
-We have the Principal of the Year, School is a warm and welcoming place - Principal and VP tell students every day that they are loved and wanted, staff have risen to the occasion to offer quality instruction in this challenging time Excellent teachers and supportive and caring administration, cohesive working environment. positive climate, PEP, Parent Liaison always actively engaged and helping all families with many needs
-family involvement; welcoming environment
-Students feel safe and supported at school, equity is promoted throughout the school building, teamwork among staff 
-UMHT initiatives (MTSS tiered support)
-Collaboration and a warm atmosphere. Care for our community
-vision, teamwork, the people who work here "
-
-clean2 <- Clean_String(text2)
-
-docs2 <- Corpus(VectorSource(clean2))
-
-docs2 <- tm_map(docs2, removeWords, c("day", "now", "help", "pep", "people", "arose", "to", "risen", "offer", "offered", "warm", "spots", "their", "every", "they", "tell", "that", "who", "are", "all", "many", "here", "always", "among", "mtss", "umht", "how", "feel", "adept", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "hot","wanted", "tiered", "using", "staying", "excellent", "worked", "actively", "throughout"))
-
-
-dtm2 <- TermDocumentMatrix(docs2) 
-matrix2 <- as.matrix(dtm2) 
-words2 <- sort(rowSums(matrix2),decreasing=TRUE) 
-df2 <- data.frame(word = names(words2),freq=words2)
-
-
-cloud2 <- wordcloud2(df2, size=0.5)
-
-#---------------cloud3------------------
-
-text3 <- "Continue working with our excellent business partners and community agencies.  Utilize the support of many agencies and local people interested in supporting our students and families.   Provide in-person assistance to families and students
-seek resources for the areas listed above; streamline supports for the most needy
-Increase parent involvement, more youth development opportunities, and resuming after school clubs and programs 
-Continuation of services provided pre-COVID and expansion of Youth Development Activities
-I would like to increase opportunities for after-school youth development programs at Rolling Ridge. We also hope to continue to offer virtual opportunities in addition to our in-person programs to offer working parents flexibility. As always, we will seek feedback from families to better meet their needs.
-community partnerships, return to PEP, engage parents in meaningful and timely ways, create opportunities for stakeholder input 4 times per year.  "
-
-clean3 <- Clean_String(text3)
-
-docs3 <- Corpus(VectorSource(clean3))
-
-docs3 <- tm_map(docs3, removeWords, c("better","rolling","return", "above", "will", "covid", "areas", "listed", "input", "to", "per", "pre", "utilize", "most", "also", "more", "many", "ways", "local", "pep", "times", "ridge", "year", "needy", "people", "after", "person", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "umht", "hot", "to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "their", "from", "always"))
-
-
-dtm3 <- TermDocumentMatrix(docs3) 
-matrix3 <- as.matrix(dtm3) 
-words3 <- sort(rowSums(matrix3),decreasing=TRUE) 
-df3 <- data.frame(word = names(words3),freq=words3)
-
-cloud3<- wordcloud2(df3, size=0.5)
-
-
-
+#Climate Survey sub tab 
 
 #--------------Teacher/Staff Climate Surveys------------------------
 newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
@@ -1976,6 +1513,119 @@ studentquestion5percentage <- studentquestion5percentage*100
 sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer5 <- ggplotly(sixteen, tooltip = c("text"))
 
+#Representatives'Reports 
+
+#-------------word clouds--------------------
+#------------cloud_1-------------------------
+
+#install.packages("tm")  # for text mining
+#install.packages("SnowballC") # for text stemming
+#install.packages("wordcloud") # word-cloud generator 
+#install.packages("RColorBrewer") # color palettes
+# Load
+library("tm")
+library("SnowballC")
+library("wordcloud")
+library("RColorBrewer")
+
+
+text1 <- "Internet needs were very overwhelming in our community, virtual presence of students created difficulties with individual telecounseling, student engagement in school an ongoing concern time to provide for the basic needs; finding mental health providers for elementary aged students (this was a huge challenge); medical care for undocumented and uninsured Parent involvement internet access; monetary stressors - rent, food, hygiene and cleanliness supplies needs and health (COVID) and mental health needs Maintaining the same level of connectedness with families in the DL model as those attending in person.parent engagement, parent attendance, finding medical care for undocumented and uninsured, finding housing assistance for undocumented Our challenge is the overall transiency of our student population turnover; community mental health and medical supports; undocumented and uninsured medical care parent involvement Youth development activities We would like to continue to diversify our community partner list community mental health and medical supports, undocumented and uninsured medical care"
+
+#docs <- Corpus(VectorSource(text))
+
+
+Clean_String <- function(string){
+  # Lowercase
+  temp <- tolower(string)
+  # Remove everything that is not a number or letter (may want to keep more 
+  # stuff in your actual analyses). 
+  temp <- stringr::str_replace_all(temp,"[^a-zA-Z\\s]", " ")
+  # Shrink down to just one white space
+  temp <- stringr::str_replace_all(temp,"[\\s]+", " ")
+  temp <- stringr::str_replace_all(temp,";", " ")
+  # Split it
+  temp <- stringr::str_split(temp, " ")[[1]]
+  # Get rid of trailing "" if necessary
+  indexes <- which(temp == "")
+  if(length(indexes) > 0){
+    temp <- temp[-indexes]
+  } 
+  return(temp)
+}
+
+clean1 <- Clean_String(text1)
+
+docs1 <- Corpus(VectorSource(clean1))
+
+docs1 <- tm_map(docs1, removeWords, c("to", "challenge", "concern", "level", "aged", "created", "elementary", "basic", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "continue", "provide"))
+
+
+dtm1 <- TermDocumentMatrix(docs1) 
+matrix1 <- as.matrix(dtm1) 
+words1 <- sort(rowSums(matrix1),decreasing=TRUE) 
+df1 <- data.frame(word = names(words1),freq=words1)
+
+
+
+set.seed(1234) # for reproducibility 
+cloud1 <- wordcloud2(df1, size=0.5)
+
+#---------Cloud 2-----------------------
+
+text2 <- "Many families attended our family outreach and engagement initiatives, teaching families how to operate Schoology.  Families are now very adept at using technology to help their students and support teachers and instruction
+student attendance and active engagement; virtual home visits
+Reduction of gaggle reports
+Virtual Home Visits and United Mental Health screening; hot spots, 1-1 technology
+Staying connected with families and working to empower families to be active in the school community. We offered support to families throughout the year and were responsive to needs as they arose. We worked together collaboratively.
+We have the Principal of the Year, School is a warm and welcoming place - Principal and VP tell students every day that they are loved and wanted, staff have risen to the occasion to offer quality instruction in this challenging time Excellent teachers and supportive and caring administration, cohesive working environment. positive climate, PEP, Parent Liaison always actively engaged and helping all families with many needs
+family involvement; welcoming environment
+Students feel safe and supported at school, equity is promoted throughout the school building, teamwork among staff 
+UMHT initiatives (MTSS tiered support)
+Collaboration and a warm atmosphere. Care for our community
+vision, teamwork, the people who work here "
+
+clean2 <- Clean_String(text2)
+
+docs2 <- Corpus(VectorSource(clean2))
+
+docs2 <- tm_map(docs2, removeWords, c("day", "now", "help", "pep", "people", "arose", "to", "risen", "offer", "offered", "warm", "spots", "their", "every", "they", "tell", "that", "who", "are", "all", "many", "here", "always", "among", "mtss", "umht", "how", "feel", "adept", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "hot","wanted", "tiered", "using", "staying", "excellent", "worked", "actively", "throughout"))
+
+
+dtm2 <- TermDocumentMatrix(docs2) 
+matrix2 <- as.matrix(dtm2) 
+words2 <- sort(rowSums(matrix2),decreasing=TRUE) 
+df2 <- data.frame(word = names(words2),freq=words2)
+
+
+cloud2 <- wordcloud2(df2, size=0.5)
+
+#---------------cloud3------------------
+
+text3 <- "Continue working with our excellent business partners and community agencies.  Utilize the support of many agencies and local people interested in supporting our students and families.   Provide in-person assistance to families and students
+seek resources for the areas listed above; streamline supports for the most needy
+Increase parent involvement, more youth development opportunities, and resuming after school clubs and programs 
+Continuation of services provided pre-COVID and expansion of Youth Development Activities
+I would like to increase opportunities for after-school youth development programs at Rolling Ridge. We also hope to continue to offer virtual opportunities in addition to our in-person programs to offer working parents flexibility. As always, we will seek feedback from families to better meet their needs.
+community partnerships, return to PEP, engage parents in meaningful and timely ways, create opportunities for stakeholder input 4 times per year.  "
+
+clean3 <- Clean_String(text3)
+
+docs3 <- Corpus(VectorSource(clean3))
+
+docs3 <- tm_map(docs3, removeWords, c("better","rolling","return", "above", "will", "covid", "areas", "listed", "input", "to", "per", "pre", "utilize", "most", "also", "more", "many", "ways", "local", "pep", "times", "ridge", "year", "needy", "people", "after", "person", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "umht", "hot", "to", "in", "and", "the", "we", "of", "an", "is", "like", "for", "those", "were", "was", "list", "our", "with", "would", "very", "huge","this","same","ongoing","overall", "finding", "their", "from", "always"))
+
+
+dtm3 <- TermDocumentMatrix(docs3) 
+matrix3 <- as.matrix(dtm3) 
+words3 <- sort(rowSums(matrix3),decreasing=TRUE) 
+df3 <- data.frame(word = names(words3),freq=words3)
+
+cloud3<- wordcloud2(df3, size=0.5)
+
+
+
+
+
 #----------------------Collapsible Tree - Key Partners and Programs--------------------
 
 Tree <- read_excel(paste0(getwd(),"/data/treedata.xlsx")) 
@@ -1997,7 +1647,361 @@ Tree %>% collapsibleTree(hierarchy = c("Four Pillars", "Name", "Key Partners"),
                            rep("orange", 71)
                            
                          ))-> tree1
+#Resources Tab 
 
+#--------------free or not free resources ---------------------------------------
+
+costs <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"))
+foods <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
+#---------------map_health and isochrones-----------------------------------------
+
+#install.packages("remotes")
+#remotes::install_github("tlorusso/traveltimeR")
+
+YourAPIKey <- "32f6ed99d0636fe05d01a5ff5a99c6e7"
+YourAppId <- "190b7348"
+
+traveltime10 <- read_sf("data/iso_10_sterling.shp")
+traveltime20 <- read_sf("data/iso_20_sterling.shp")
+traveltime45 <- read_sf("data/iso_45_sterling.shp")
+# traveltime10 <- traveltime_map(appId=YourAppId,
+#                                apiKey=YourAPIKey,
+#                                location=c(39.009006,-77.4029155),
+#                                traveltime=600,
+#                                type="driving",
+#                                departure="2022-08-09T08:00:00+01:00")
+# # ... and within 60 minutes?
+# traveltime20 <- traveltime_map(appId=YourAppId,
+#                                apiKey=YourAPIKey,
+#                                location=c(39.009006,-77.4029155),
+#                                traveltime=1200,
+#                                type="driving",
+#                                departure="2022-08-09T08:00:00+01:00")
+# traveltime45 <- traveltime_map(appId = YourAppId,
+#                                apiKey = YourAPIKey,
+#                                location = c(39.009006,-77.4029155),
+#                                traveltime= 2700,
+#                                type = "driving",
+#                                departure = "2022-08-09T08:00:00+01:00")
+map<- read_excel(paste0(getwd(),"/data/school_locations.xlsx"))
+
+subset_map <- map[1,c(1,4,5)]
+
+healthsep <- read_excel(paste0(getwd(),"/data/healthsep.xlsx"))
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(healthsep$Name1),
+        "<br />",
+        "<strong>Description:</strong>",
+        healthsep$Description1 ,
+        "<br />",
+        "<strong>Serves:</strong>",
+        healthsep$Serves1, 
+        "<br />",
+        "<strong>Hours:</strong>",
+        healthsep$Hours1,
+        "<br />",
+        "<strong>Language:</strong>",
+        healthsep$Language,
+        "<br />",
+        "<strong>Address:</strong>",
+        healthsep$Address1,
+        "<a href = ",healthsep$Website1, "> Website </a>",
+        "<br />"),
+  
+  htmltools::HTML
+)
+
+popup <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(costs$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        costs$Description ,
+        "<br />",
+        "<strong>Serves:</strong>",
+        costs$Serves, 
+        "<br />",
+        "<strong>Hours:</strong>",
+        costs$Hours,
+        "<br />",
+        "<strong>Language:</strong>",
+        costs$Language,
+        "<br />",
+        "<strong>Address:</strong>",
+        costs$Address,
+        "<a href = ",costs$Website, "> Website </a>",
+        "<br />"),
+  
+  htmltools::HTML
+)
+
+healthfree <- read_excel(paste0(getwd(), "/data/resourcecost.xlsx"),sheet = "Health Free")
+
+
+
+pal <- colorFactor(c("#91003f", "#005824", "#d7301f","#CC6677","#DDCC77","#88419d"), domain = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"))
+pal1 <- colorFactor(c("#91003f","#005824","#d7301f","#88419d","#DDCC77","#CC6677","#AA4499","#882255"),domain = c("Food Pantry","Clothing","Counseling","Dental Care","Vision Care","Medical Services","Speech and Hearing Services","Physical Therapy"))
+
+
+leaflet(data = costs) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=costs,~Longitude,~Latitude,popup = ~popup, label = ~as.character(Name),group = ~Resource,color = ~pal(Resource),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1) %>%
+  addLayersControl(overlayGroups = c("Food Pantry", "Clothing", "Counseling","Medical Services","Vision Care","Dental Care"),options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time")%>%
+  setView(-77.4029155,39.009006, zoom = 11) -> health_free
+
+
+
+leaflet(data = foods) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=foods,~Longitude1,~Latitude1,popup=~popups,label=~as.character(Name1),color= ~pal1(Resource1),group = ~Resource1,weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resource1,options = layersControlOptions(collapsed = FALSE)) %>% addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> health_all
+#--------------youth development map --------------------------
+
+youth <- read_excel(paste0(getwd(),"/data/Sterling_Youth_Development 3.xlsx"))
+popups3 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(youth$Name3),
+        "<br />",
+        "<strong>Description:</strong>",
+        youth$Description3 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        youth$Hours3, 
+        "<br />",
+        "<strong>Address:</strong>",
+        youth$Address3,
+        "<a href = ",youth$Website3, "> Website </a>",
+        "<br />"),
+  
+  
+  htmltools::HTML
+)
+
+pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Other","Club","After School Program"))
+
+leaflet(data = youth) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=youth,~Longitude3,~Latitude3,popup=~popups3,label=~as.character(Name3),color= ~pal3(Type),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1,group = ~Type)%>%
+  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_youth
+
+
+youthfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Youth Free")
+
+popups4 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(youthfree$Name4),
+        "<br />",
+        "<strong>Description:</strong>",
+        youthfree$Description4 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        youthfree$Hours4, 
+        "<br />",
+        "<strong>Address:</strong>",
+        youthfree$Address4,
+        "<a href = ",youthfree$Website4, "> Website </a>",
+        "<br />"),
+  htmltools::HTML
+)
+
+pal3 <- colorFactor(c("red","blue","green","orange","purple"),domain = c("Activity","Athletics","Other","Club","After School Program"))
+
+leaflet(data = youthfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=youthfree,~Longitude4,~Latitude4,popup=~popups4,label=~as.character(Name4),color= ~pal3(Type),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1,group = ~Type)%>%
+  addLayersControl(overlayGroups = ~Type,options= layersControlOptions(collapsed = FALSE)) %>%
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> youth_free
+
+
+#---------mental health resources map------------------------
+
+ment <- read_excel(paste0(getwd(),"/data/mentalhealthres.xlsx"),sheet = "Mental")
+
+popups2 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(ment$Name2),
+        "<br />",
+        "<strong>Description:</strong>",
+        ment$Description2 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        ment$Hours2, 
+        "<br />",
+        "<strong>Address:</strong>",
+        ment$Address2,
+        "<a href = ",ment$Website2, "> Website </a>",
+        "<br />"),
+  
+  
+  htmltools::HTML
+)
+
+pal2 <- colorFactor(c("red", "blue", "green"), domain = c("Family Therapy", "Family Counseling", "Bereavement"))
+
+leaflet(data = ment) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=ment,~Longitude2,~Latitude2,popup=~popups2,label=~as.character(Name2),group=~Resources2,color=~pal2(Resources2),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resources2,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_mental
+
+mentfree <- read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Mental Free")
+
+popups5 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(mentfree$Name5),
+        "<br />",
+        "<strong>Description:</strong>",
+        mentfree$Description5 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        mentfree$Hours5, 
+        "<br />",
+        "<strong>Address:</strong>",
+        mentfree$Address5,
+        "<a href = ",mentfree$Website5, "> Website </a>",
+        "<br />"),
+  
+  
+  htmltools::HTML
+)
+
+leaflet(data = mentfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data = mentfree, ~Longitude5,~Latitude5,popup = ~popups5,label = ~as.character(Name5),group = ~Resource5,color = ~pal2(Resource5),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resource5,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> mental_free
+
+
+#----------------------family engagement map-------------------
+
+familyengage <- read_excel(paste0(getwd(),"/data/ListOfResources.xlsx"),sheet = "Family Engagement")
+
+popups <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(familyengage$Name),
+        "<br />",
+        "<strong>Description:</strong>",
+        familyengage$Description ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        familyengage$Hours, 
+        "<br />",
+        "<strong>Address:</strong>",
+        familyengage$Address,
+        "<br />",
+        "<a href = ",familyengage$Website, "> Website </a>",
+        "<br />",
+        "<strong>Serves:</strong>",
+        familyengage$Serves),
+  
+  
+  htmltools::HTML
+)
+
+pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Housing", "Holiday Help", "Education", "Essentials supply", "Employment help", "Other"))
+
+leaflet(data = familyengage) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=familyengage,~Longitude,~Latitude,popup=~popups,label=~as.character(Name),group=~Resources,color=~pal8(Resources),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resources,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> map_family
+
+famfree <-  read_excel(paste0(getwd(),"/data/resourcecost.xlsx"), sheet = "Family Free")
+
+popups9 <- lapply(
+  paste("<strong>Name: </strong>",
+        str_to_title(famfree$Name8),
+        "<br />",
+        "<strong>Description:</strong>",
+        famfree$Description8 ,
+        "<br />",
+        "<strong>Hours:</strong>",
+        famfree$Hours8, 
+        "<br />",
+        "<strong>Address:</strong>",
+        famfree$Address8,
+        "<br />",
+        "<a href = ",famfree$Website8, "> Website </a>",
+        "<br />",
+        "<strong>Serves:</strong>",
+        famfree$Serves8),
+  
+  
+  htmltools::HTML
+)
+
+pal8 <- colorFactor(c("red", "blue", "green", "orange","purple", "#2e850c"), domain = c("Education", "Employment help","Essentials Supply","Housing", "Holiday Help","Other"))
+
+leaflet(data = famfree) %>% addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(data = va20_2,
+              color="#5f308f",
+              weight = 0.5,
+              smoothFactor = 0.2,
+              fillOpacity = 0.5)  %>% 
+  addPolygons(data=traveltime20, color= "#21618C",opacity = 1,weight=2,fillColor = "white", fillOpacity = .1) %>% addPolygons(data=traveltime10,color="green",opacity=1,weight=2,fillColor = "white",fillOpacity = .1) %>%     addPolygons(data=traveltime45,color="#D98880",opacity = 1,weight = 2,fillColor = "white",fillOpacity = .1) %>%
+  setView(-77.4029155,39.009006, zoom = 11)%>%
+  addCircleMarkers(data=famfree,~Longitude8,~Latitude8,popup=~popups9,label=~as.character(Name8),group=~Resource8,color=~pal8(Resource8),weight = 7, radius=7, 
+                   stroke = F, fillOpacity = 1)%>%
+  addLayersControl(overlayGroups = ~Resource8,options = layersControlOptions(collapsed = FALSE)) %>% 
+  addMarkers(data=subset_map,~Longitude,~Latitude,popup = ~as.character("Sterling Elementary")) %>% addLegend("bottomright",colors=c("green","#21618C","#D98880"),labels=c("10 minutes","20 minutes","45 minutes"),title = "Travel Time") -> fam_free
+
+
+#List of Resources ----------------------------
+list <- read_excel(paste0(getwd(),"/data/allresources.xlsx")) 
+
+#Recommendations Tab
 #-----------------Suggestions Tree-----------------------------
 
 Treesuggestions <- read_excel(paste0(getwd(),"/data/treedata_communityschoolsrecommendations.xlsx")) 
@@ -2021,9 +2025,6 @@ Treesuggestions %>% collapsibleTree(hierarchy = c("Four Pillars", "Resource", "T
                                       
                                     ))-> tree2
 
-#--------------- teacherstudent ratio---------------------------
-
-#teacherstudentratio <- img(src = "StudentTeacherRatioPic.png", class = "topimage", width = "20%", style = "display: block; margin-left: auto; margin-right: auto;")
 
 
 # CODE TO DETECT ORIGIN OF LINK AND CHANGE LOGO ACCORDINGLY
