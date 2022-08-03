@@ -1,4 +1,4 @@
-#==========DSPG 2022============LOUDOUN========================================
+#==========DSPG 2022============LOUDOUN========================================#
 
 #This dashboard is arranged in the following way:
 #1. Loading Packages which are required--------
@@ -7,7 +7,7 @@
 #4. USER INTERFACE    (Search for 'XXX Tab' and it will take you to the UI for that tab)
 #5. Server
 
-#For this repo, all the visualisations are made beforehand and in the server these graphs are just called. 
+#For this repo, all the visualizations are made beforehand and in the server these graphs are just called. 
 #Nothing is calculated in the server. 
 
 #For the isochrones to run: install the following packages 
@@ -77,6 +77,7 @@ library(scales)
 library(ggwordcloud)
 library(wordcloud2)
 library(collapsibleTree)
+
 #---------------------------------------------------------------
 
 prettyblue <- "#232D4B"
@@ -190,6 +191,24 @@ race <- plot_ly(type='pie', labels=labelsR, values=valuesRACEPIE,
                 
                 insidetextorientation='radial') %>% layout(title ='Race/Ethnicity Composition 2019', legend=list(title=list(text='Select Race')))
 
+#------------Race/Ethnicity - Hispanic Percentage-------------
+
+labelsHispanicPIE = c('Hispanic or Latino','Not Hispanic or Latino')
+valuesHispanicPIE = c(12472, 17799)
+
+HispanicPercentagePIE <- plot_ly(type='pie', labels=labelsHispanicPIE, values=valuesHispanicPIE, 
+                                 textinfo='label+percent',
+                                 insidetextorientation='radial',
+                                 hoverinfo = 'text', 
+                                 
+                                 
+                                 text = ~paste('Total Population:', valuesHispanicPIE)) %>% layout(title ='Hispanic Population In Sterling 2019', legend=list(title=list(text='')))
+
+
+
+
+
+
 #Income Sub tab----
 
 #------------------educational attainment-------------------------
@@ -223,6 +242,53 @@ pop_nop <- subset_medianin$new_pop
 pop_num <- as.numeric(pop_nop)
 income <- plot_ly(subset_medianin,x=~mi_cat.fac,y=~pop_num,color = ~mi_cat.fac,type = "bar", hoverinfo = "text",text = ~paste("Percent:",pop_num,"%","<br>","Income Level:",mi_cat.fac)) %>% layout(title = "Median Income Distribution",xaxis = list(title="") ,yaxis= list(title = "Percentage"))
 
+
+#------------Housing Occupancy---------------------------
+
+lbls.HOUSING = c("Owners", "Renters")
+slices.HOUSING = c(6839, 2412)
+
+housing <- plot_ly(type='pie', labels=lbls.HOUSING, values=slices.HOUSING, 
+                   textinfo='label+percent',
+                   insidetextorientation='radial') %>% layout(title ='Housing Occupancy', legend=list(title=list(text='Occupants')))
+
+
+#---------Property Value---------------------------------
+
+dfpv <- read_excel(paste0(getwd(), "/data/Property_Value.xlsx"), col_names = TRUE)
+Numberpv=c(58,6,46,204,1137,4653,709,26)
+
+figpv <- dfpv %>% plot_ly(labels = ~`HOUSING OCCUPANCY`, values = ~dfpv$count, sort = FALSE, direction = "counterclockwise", marker = list(line = list(width = 1, pull = 3)), hoverinfo = 'text', text = ~paste('Number of Property Values:', Numberpv), textinfo = "percent")
+figpv <- figpv %>% add_pie(hole = 0.5, domain = list(x = c(0.25,1), y = c(0,0.9)))
+property <- figpv %>% layout(title = "Residential Property Value (PV)", showlegend = TRUE, 
+                             legend=list(title=list(text='Select Value')),
+                             xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+                             yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+#-------------Property Value  - Prop. Value Comparison---------------------
+
+propcomparison <- plot_ly(
+  domain = list(x = c(0, 1), y = c(0, 1)),
+  value = 378700,
+  title = list(text = "Sterling & Loudoun's Median PV"),
+  type = "indicator",
+  mode = "gauge+number+delta",
+  delta = list(reference = 534600),
+  gauge = list(
+    axis =list(range = list(NULL, 600000)),
+    steps = list(
+      list(range = c(0, 250000), color = "lightgray"),
+      list(range = c(250000, 350000), color = "gray"),
+      list(range = c(350000, 500000), color = "yellow"),
+      list(range = c(500000, 600000), color = "red")),
+    threshold = list(
+      line = list(color = "black", width = 4),
+      thickness = 0.75,
+      value = 534600))) 
+propcomparison <- propcomparison %>%
+  layout(margin = list(l=20,r=30))
+
+
 #------------------poverty status-------------------------------
 
 poverty_as1<- read_excel(paste0(getwd(),"/data/povertybyageandsexnewss.xlsx"), 
@@ -253,40 +319,7 @@ health <- ggplot(subset_sterling, aes(x =`EMPLOYMENT STATUS`,y = (subset_sterlin
 
 healthin <- ggplotly(health, tooltip = c("text"))
 
-#---------Property Value---------------------------------
-
-dfpv <- read_excel(paste0(getwd(), "/data/Property_Value.xlsx"), col_names = TRUE)
-Numberpv=c(58,6,46,204,1137,4653,709,26)
-
-figpv <- dfpv %>% plot_ly(labels = ~`HOUSING OCCUPANCY`, values = ~dfpv$count, sort = FALSE, direction = "counterclockwise", marker = list(line = list(width = 1, pull = 3)), hoverinfo = 'text', text = ~paste('Number of Property Values:', Numberpv), textinfo = "percent")
-figpv <- figpv %>% add_pie(hole = 0.5, domain = list(x = c(0.25,1), y = c(0,0.9)))
-property <- figpv %>% layout(title = "Residential Property Value (PV)", showlegend = TRUE, 
-                             legend=list(title=list(text='Select Value')),
-                             xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-                             yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
-
-#-------------Prop. Value Comparison---------------------
-
-propcomparison <- plot_ly(
-  domain = list(x = c(0, 1), y = c(0, 1)),
-  value = 378700,
-  title = list(text = "Sterling & Loudoun's Median PV"),
-  type = "indicator",
-  mode = "gauge+number+delta",
-  delta = list(reference = 534600),
-  gauge = list(
-    axis =list(range = list(NULL, 600000)),
-    steps = list(
-      list(range = c(0, 250000), color = "lightgray"),
-      list(range = c(250000, 350000), color = "gray"),
-      list(range = c(350000, 500000), color = "yellow"),
-      list(range = c(500000, 600000), color = "red")),
-    threshold = list(
-      line = list(color = "black", width = 4),
-      thickness = 0.75,
-      value = 534600))) 
-propcomparison <- propcomparison %>%
-  layout(margin = list(l=20,r=30))
+#Occupation/Work Subtab------------------------
 
 #------------------Employment-----------------
 sterling <- read_excel(paste0(getwd(),"/data/Employmentsterling.xlsx"),skip=2,col_names=TRUE)
@@ -345,30 +378,11 @@ perc <- round(valuesR / sum(valuesR)*100, 1)
 commutermode <- plot_ly(type='pie', labels=~labelsR, values=~valuesR, hoverinfo = "none", 
                         text = ~paste0(labelsR, "\n", perc, "%"), 
                         textinfo='text') %>% layout(title ='Mode of Transportation to Work', legend=list(title=list(text='')), hoverinfo = "none")
-#------------Hispanic Percentage-------------
-
-labelsHispanicPIE = c('Hispanic or Latino','Not Hispanic or Latino')
-valuesHispanicPIE = c(12472, 17799)
-
-HispanicPercentagePIE <- plot_ly(type='pie', labels=labelsHispanicPIE, values=valuesHispanicPIE, 
-                                 textinfo='label+percent',
-                                 insidetextorientation='radial',
-                                 hoverinfo = 'text', 
-                                 
-                                 
-                                 text = ~paste('Total Population:', valuesHispanicPIE)) %>% layout(title ='Hispanic Population In Sterling 2019', legend=list(title=list(text='')))
 
 
+#SCHOOLS TAB
 
-
-#------------Housing Occupancy---------------------------
-
-lbls.HOUSING = c("Owners", "Renters")
-slices.HOUSING = c(6839, 2412)
-
-housing <- plot_ly(type='pie', labels=lbls.HOUSING, values=slices.HOUSING, 
-                   textinfo='label+percent',
-                   insidetextorientation='radial') %>% layout(title ='Housing Occupancy', legend=list(title=list(text='Occupants')))
+#Demographics sub tab 
 
 
 #---------gender by school-------------------------------------------------
@@ -388,18 +402,8 @@ genders<- ggplot(data=genders, aes(x=School, y=Total, fill = forcats::fct_rev(Se
 genders <-ggplotly(genders, tooltip = c("text"))
 
 
-#attendance --------------
 
-attendance <- read_excel(paste0(getwd(),"/data/absencerate.xlsx"))
-att_per <- attendance$`Absence Rate`
-att_rate <- att_per*100
-quarter <- attendance$`School Quarter`
-School <- attendance$`School Name`
-attend <- ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
-
-
-
-#-------------------------------race by school ----------------------------
+#-------------------------------Race/Ethnicity -  race by school ----------------------------
 
 races <- read_excel(paste0(getwd(),"/data/racedems.xlsx"))
 
@@ -412,7 +416,7 @@ racenine <- ggplot(nineteensub,aes(x=School,y=Percentage,fill=Race, group=Race))
                                                                                                                                                                                                                                                                                                                                                           plot.caption = element_text(hjust = 1)) + guides(fill=guide_legend(title="Race/Ethnicity"))
 racenine <- ggplotly(racenine,tooltip=c("text"))
 
-#-----------hispanic population-----------------
+#-----------Race/Ethnicity - hispanic population-----------------
 
 map$Longitude <- as.numeric(map$Longitude)
 map$Latitude <- as.numeric(map$Latitude)
@@ -441,7 +445,210 @@ hispanicschool <- leaflet(data = total) %>%
             values = ~va20_2$estimate,
             opacity = 0.5, title = "Hispanic Population") %>%
   addMarkers( ~Longitude, ~Latitude, popup = popups, label = ~as.character(Name), labelOptions = FALSE) 
-#-----------enrollment-----------------
+#English Learners (EL)-------------
+
+generaldata <- read_excel(paste0(getwd(),"/data/generaldata.xlsx"),skip=0,col_names=TRUE)
+subset_englishlearnerstatus <- generaldata[3:6,1:2]
+
+xELS <- subset_englishlearnerstatus$`School Year`
+yELS <- subset_englishlearnerstatus$Percentage
+dataELS <- data.frame(xELS, yELS)
+
+figELS <- plot_ly(dataELS, 
+                  x = ~xELS, 
+                  y = ~yELS,
+                  type = 'scatter', 
+                  mode = 'lines',
+                  fill = 'tozeroy',
+                  fillcolor = 'rgba(114,186,59,0.5)',
+                  line = list(color = 'rgb(114,186,59)'),
+                  text = ~paste("Year:", subset_englishlearnerstatus$`School Year`, "<br>", "Percentage:", subset_englishlearnerstatus$Percentage,"%"),
+                  hoverinfo = 'text')
+
+figELS <- figELS %>% layout(
+  title = "English Learners(ELs)",
+  yaxis = list(
+    title = "Percentage",
+    zerolinewidth =60,
+    standoff = 25,
+    range = list(60,75),
+    tickvals = list(60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85),
+    zeroline = F
+  ),
+  xaxis = list(
+    title = "", 
+    zeroline = T, 
+    tickangle = 40,
+    zerolinewidth = 60,
+    standoff = 25,
+    showgrid = T
+  )
+)
+
+
+#------------------------------IEP Status------------------------------------
+
+generaldata <- read_excel(paste0(getwd(),"/data/generaldata.xlsx"),skip=0,col_names=TRUE)
+subset_IEPstatus <- generaldata[11:14,1:2]
+
+xIEP <- subset_IEPstatus$`School Year`
+yIEP <- subset_IEPstatus$Percentage
+dataIEP <- data.frame(xIEP, yIEP)
+
+figIEP <- plot_ly(dataIEP, 
+                  x = ~xIEP, 
+                  y = ~yIEP,
+                  type = 'scatter', 
+                  mode = 'lines',
+                  fill = 'tozeroy',
+                  fillcolor = 'rgba(114,186,59,0.5)',
+                  line = list(color = 'rgb(114,186,59)'),
+                  text = ~paste("Year:", subset_IEPstatus$`School Year`, "<br>", "Percentage:", subset_IEPstatus$Percentage,"%"),
+                  hoverinfo = 'text')
+
+figIEP <- figIEP %>% layout(
+  title = "Individual Education Plan (IEP) Status",
+  yaxis = list(
+    title = "Percentage",
+    range = list(8,13),
+    tickvals = list(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20),
+    zeroline = F
+  ),
+  xaxis = list(
+    title = "", 
+    zeroline = T, 
+    tickangle = 40, 
+    zerolinewidth = 60,
+    standoff = 25,
+    showgrid = T
+  )
+)
+
+
+#-------------------------Homelessness-------------------------------------------
+
+generaldata <- read_excel(paste0(getwd(),"/data/generaldata.xlsx"),skip=0,col_names=TRUE)
+subset_homeless <- generaldata[27:30,1:2]
+
+xHOME <- subset_homeless$`School Year`
+yHOME <- subset_homeless$Percentage
+dataHOME <- data.frame(xHOME, yHOME)
+
+figHOME <- plot_ly(dataHOME, 
+                   x = ~xHOME, 
+                   y = ~yHOME,
+                   type = 'scatter', 
+                   mode = 'lines',
+                   fill = 'tozeroy',
+                   fillcolor = 'rgba(114,186,59,0.5)',
+                   line = list(color = 'rgb(114,186,59)'),
+                   text = ~paste("Year:", subset_homeless$`School Year`, "<br>", "Percentage:", subset_homeless$Percentage, "%"))
+
+figHOME <- figHOME %>% layout(
+  title = "Students Facing Homelessness",
+  yaxis = list(
+    title = "Percentage",
+    range = list(6,17),
+    tickvals = list(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20),
+    zeroline = TRUE
+  ),
+  xaxis = list(
+    title = "", 
+    zeroline = T, 
+    tickangle = 40,
+    zerolinewidth = 60,
+    standoff = 25,
+    showgrid = T
+  )
+)
+
+#Usage of School Programs sub tab 
+
+#-------------------------Free and Reduced-Price Breakfast Data------------------------------------
+
+breakfast_data <- read_excel(paste0(getwd(),"/data/Breakfast.xlsx"),skip=0,col_names=TRUE)
+breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Free and Reduced-Price Breakfast Participation  ", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(0,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+#--------------------------Free And Reduced-Price Lunch----------------------------
+
+generaldata <- read_excel(paste0(getwd(),"/data/generaldata.xlsx"),skip=0,col_names=TRUE)
+subset_freereducedlunch <- generaldata[19:22,1:2]
+
+xFRL <- subset_freereducedlunch$`School Year`
+yFRL <- subset_freereducedlunch$Percentage
+dataFRL <- data.frame(xFRL, yFRL)
+
+figFRL <- plot_ly(dataFRL, 
+                  x = ~xFRL, 
+                  y = ~yFRL,
+                  type = 'scatter', 
+                  mode = 'lines',
+                  fill = 'tozeroy',
+                  fillcolor = 'rgba(114,186,59,0.5)',
+                  line = list(color = 'rgb(114,186,59)'),
+                  text = ~paste("Year:", subset_freereducedlunch$`School Year`, "<br>",  "Percentage:", subset_freereducedlunch$Percentage, "%"),
+                  hoverinfo = 'text')
+
+figFRL <- figFRL %>% layout(
+  title = "Free and Reduced-Price Lunch Overall Participation",
+  yaxis = list(
+    title = "Percentage",
+    range = list(65,77),
+    tickvals = list(65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80),
+    zeroline = F
+  ),
+  xaxis = list(
+    title = "", 
+    zeroline = T, 
+    tickangle = 40,
+    zerolinewidth = 60,
+    standoff = 25,
+    showgrid = T
+  )
+)
+
+
+#----------------------------Free And Reduced-Price Lunch by Schools-------------------------------------
+
+eligablelunch_data <- read_excel(paste0(getwd(),"/data/LunchParticipation.xlsx"),skip=1,col_names=TRUE)
+
+eligablelunch_data <- plot_ly(eligablelunch_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Free and Reduced-Price Lunch Participation by Schools", xaxis = list(title = ""), yaxis = list(
+  title = "Percentage",
+  #zerolinewidth =60,
+  #standoff = 25,
+  range = list(50,90),
+  tickvals = list(0,10,20,30,40,50,60,70,80,90)
+  #zeroline = F
+))
+
+# weekend meals --------------------------------
+
+healthscrape <- read_excel(paste0(getwd(),"/data/manualscrappingdata.xlsx"))
+subset_healthscrape <- healthscrape[2:5,c(2,5)]
+Total <- subset_healthscrape$...5
+Year <- subset_healthscrape$...2
+plot_ly(data = subset_healthscrape, x = ~Year, y = ~Total, type = "scatter",mode="line",hoverinfo = "text",text = ~paste("Year:",Year,"Total:",Total)) %>% layout(yaxis = list(tickvals = list(100,200,300,400,500,600,700,800,900)),title = "Families Who Received Weekend Meals") -> weekendmeals
+
+
+#clothing and basic supplies---
+subset_healthscrape2 <- healthscrape[c(2,4),c(2,4)]
+Year2 <- subset_healthscrape2$...2
+Total2 <- subset_healthscrape2$...4
+plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Families Received Help with Clothing, Shoes, and Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
+
+#Performance sub tab 
+
+# Size sub sub tab 
+
+
+#-------------------enrollment-----------------
 
 enrollment <- read_excel(paste0(getwd(),"/data/Enrollment16-20.xlsx"))
 enr_total <- enrollment$Total
@@ -449,17 +656,8 @@ School <- enrollment$Schools
 Year <- enrollment$Year
 enroll <- plot_ly(enrollment, x = ~Year,y = ~Total, color = ~School, type = 'scatter',mode = 'lines', hoverinfo="text", text = ~paste("Total:", Total, "<br>", "School:",School)) %>% layout(title= "Enrollment", xaxis = list(title = ""), yaxis = list(title = "Total Students"), legend=list(title=list(text='Select School')))
 
-#-------------------attendance --------------
 
-att_per <- attendance$`Absence Rate`
-Percent <- att_per*100
-Quarter <- attendance$`School Quarter`
-School <- attendance$`School Name`
-ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(title = "Student Absences by 2020-2021 Quarter",caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",
-                                                                                                                                                                                                                                      plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
-attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("Percent:",Percent, "%","<br>","School:",School)) %>% layout(title = "Student Absences by 2020-2021 Quarter", legend=list(title=list(text='Select School')), yaxis = list(title = "Percentage"), xaxis = list(title = ""))
-
-#---------------Number of Teachers/Staff--------------------------
+#---------------Educators--------------------------
 
 Schools <- c("Sterling", "Sugarland", "Rolling Ridge", "Forest Grove", "Guilford", "Sully")
 Teachers <- c(32, 52, 66, 55, 59, 35)
@@ -472,6 +670,20 @@ figSTM <- plot_ly(dataSTAFF, x = ~Schools, y = ~Teachers, type = 'bar', name = '
 
 figSTM <- figSTM %>% add_trace(y = ~Staff, name = 'Staff', marker = list(color = 'rgb(253, 151, 12 )'))
 cteacher <- figSTM %>% layout(title = "Total Teachers and Staff 2021-2022", yaxis = list(title = 'Total Educators'), xaxis = list(title = ''), barmode = 'stack')
+
+#Absences
+#-------------------Absences --------------
+
+attendance <- read_excel(paste0(getwd(),"/data/absencerate.xlsx"))
+att_per <- attendance$`Absence Rate`
+Percent <- att_per*100
+Quarter <- attendance$`School Quarter`
+School <- attendance$`School Name`
+ggplot(attendance,aes(x=quarter,y=att_rate,group=School,color=School))+geom_point()+geom_line() +labs(title = "Student Absences by 2020-2021 Quarter",caption= "Source: LCPS Dashboard 2021-2022",x="Quarter",y="Percentage") + theme(plot.caption.position = "plot",
+                                                                                                                                                                                                                                      plot.caption = element_text(hjust = 1)) + scale_fill_brewer(palette = "Set1")
+attend <- plot_ly(attendance,x = ~Quarter, y = ~Percent, color  = ~School, type = 'scatter',mode = 'lines',hoverinfo = "text",text = ~paste("Percent:",Percent, "%","<br>","School:",School)) %>% layout(title = "Student Absences by 2020-2021 Quarter", legend=list(title=list(text='Select School')), yaxis = list(title = "Percentage"), xaxis = list(title = ""))
+
+
 
 ##--------Chronic absenteeism------------------
 
@@ -1623,196 +1835,8 @@ df3 <- data.frame(word = names(words3),freq=words3)
 
 cloud3<- wordcloud2(df3, size=0.5)
 
-#-------------------------Breakfast Data------------------------------------
-
-breakfast_data <- read_excel(paste0(getwd(),"/data/Breakfast.xlsx"),skip=0,col_names=TRUE)
-breakfast <- plot_ly(breakfast_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Free and Reduced-Price Breakfast Participation  ", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(0,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
-
-#----------------------------Lunch Data--------------------------------------
-
-eligablelunch_data <- read_excel(paste0(getwd(),"/data/LunchParticipation.xlsx"),skip=1,col_names=TRUE)
-
-eligablelunch_data <- plot_ly(eligablelunch_data, x = ~Year, y = ~Percent, color = ~School, type = 'scatter', mode = 'bars', hoverinfo = "text", text = ~paste("School:", School, "<br>", "Percentage: ", Percent, "%"))%>% layout(title = "Free and Reduced-Price Lunch Participation by Schools", xaxis = list(title = ""), yaxis = list(
-  title = "Percentage",
-  #zerolinewidth =60,
-  #standoff = 25,
-  range = list(50,90),
-  tickvals = list(0,10,20,30,40,50,60,70,80,90)
-  #zeroline = F
-))
-
-#---------------------General Data-------------------------------------------
-#--------------------English Learner Status----------------------------------
-
-generaldata <- read_excel(paste0(getwd(),"/data/generaldata.xlsx"),skip=0,col_names=TRUE)
-subset_englishlearnerstatus <- generaldata[3:6,1:2]
-
-xELS <- subset_englishlearnerstatus$`School Year`
-yELS <- subset_englishlearnerstatus$Percentage
-dataELS <- data.frame(xELS, yELS)
-
-figELS <- plot_ly(dataELS, 
-                  x = ~xELS, 
-                  y = ~yELS,
-                  type = 'scatter', 
-                  mode = 'lines',
-                  fill = 'tozeroy',
-                  fillcolor = 'rgba(114,186,59,0.5)',
-                  line = list(color = 'rgb(114,186,59)'),
-                  text = ~paste("Year:", subset_englishlearnerstatus$`School Year`, "<br>", "Percentage:", subset_englishlearnerstatus$Percentage,"%"),
-                  hoverinfo = 'text')
-
-figELS <- figELS %>% layout(
-  title = "English Learners(ELs)",
-  yaxis = list(
-    title = "Percentage",
-    zerolinewidth =60,
-    standoff = 25,
-    range = list(60,75),
-    tickvals = list(60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85),
-    zeroline = F
-  ),
-  xaxis = list(
-    title = "", 
-    zeroline = T, 
-    tickangle = 40,
-    zerolinewidth = 60,
-    standoff = 25,
-    showgrid = T
-  )
-)
 
 
-figELS
-
-
-#------------------------------IEP Status------------------------------------
-
-generaldata <- read_excel(paste0(getwd(),"/data/generaldata.xlsx"),skip=0,col_names=TRUE)
-subset_IEPstatus <- generaldata[11:14,1:2]
-
-xIEP <- subset_IEPstatus$`School Year`
-yIEP <- subset_IEPstatus$Percentage
-dataIEP <- data.frame(xIEP, yIEP)
-
-figIEP <- plot_ly(dataIEP, 
-                  x = ~xIEP, 
-                  y = ~yIEP,
-                  type = 'scatter', 
-                  mode = 'lines',
-                  fill = 'tozeroy',
-                  fillcolor = 'rgba(114,186,59,0.5)',
-                  line = list(color = 'rgb(114,186,59)'),
-                  text = ~paste("Year:", subset_IEPstatus$`School Year`, "<br>", "Percentage:", subset_IEPstatus$Percentage,"%"),
-                  hoverinfo = 'text')
-
-figIEP <- figIEP %>% layout(
-  title = "Individual Education Plan (IEP) Status",
-  yaxis = list(
-    title = "Percentage",
-    range = list(8,13),
-    tickvals = list(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20),
-    zeroline = F
-  ),
-  xaxis = list(
-    title = "", 
-    zeroline = T, 
-    tickangle = 40, 
-    zerolinewidth = 60,
-    standoff = 25,
-    showgrid = T
-  )
-)
-
-
-#--------------------------Free And Reduced Lunch----------------------------
-
-generaldata <- read_excel(paste0(getwd(),"/data/generaldata.xlsx"),skip=0,col_names=TRUE)
-subset_freereducedlunch <- generaldata[19:22,1:2]
-
-xFRL <- subset_freereducedlunch$`School Year`
-yFRL <- subset_freereducedlunch$Percentage
-dataFRL <- data.frame(xFRL, yFRL)
-
-figFRL <- plot_ly(dataFRL, 
-                  x = ~xFRL, 
-                  y = ~yFRL,
-                  type = 'scatter', 
-                  mode = 'lines',
-                  fill = 'tozeroy',
-                  fillcolor = 'rgba(114,186,59,0.5)',
-                  line = list(color = 'rgb(114,186,59)'),
-                  text = ~paste("Year:", subset_freereducedlunch$`School Year`, "<br>",  "Percentage:", subset_freereducedlunch$Percentage, "%"),
-                  hoverinfo = 'text')
-
-figFRL <- figFRL %>% layout(
-  title = "Free and Reduced-Price Lunch Overall Participation",
-  yaxis = list(
-    title = "Percentage",
-    range = list(65,77),
-    tickvals = list(65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80),
-    zeroline = F
-  ),
-  xaxis = list(
-    title = "", 
-    zeroline = T, 
-    tickangle = 40,
-    zerolinewidth = 60,
-    standoff = 25,
-    showgrid = T
-  )
-)
-
-
-figFRL
-
-
-#-------------------------Homeless-------------------------------------------
-
-generaldata <- read_excel(paste0(getwd(),"/data/generaldata.xlsx"),skip=0,col_names=TRUE)
-subset_homeless <- generaldata[27:30,1:2]
-
-xHOME <- subset_homeless$`School Year`
-yHOME <- subset_homeless$Percentage
-dataHOME <- data.frame(xHOME, yHOME)
-
-figHOME <- plot_ly(dataHOME, 
-                   x = ~xHOME, 
-                   y = ~yHOME,
-                   type = 'scatter', 
-                   mode = 'lines',
-                   fill = 'tozeroy',
-                   fillcolor = 'rgba(114,186,59,0.5)',
-                   line = list(color = 'rgb(114,186,59)'),
-                   text = ~paste("Year:", subset_homeless$`School Year`, "<br>", "Percentage:", subset_homeless$Percentage, "%"))
-
-figHOME <- figHOME %>% layout(
-  title = "Students Facing Homelessness",
-  yaxis = list(
-    title = "Percentage",
-    range = list(6,17),
-    tickvals = list(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20),
-    zeroline = TRUE
-  ),
-  xaxis = list(
-    title = "", 
-    zeroline = T, 
-    tickangle = 40,
-    zerolinewidth = 60,
-    standoff = 25,
-    showgrid = T
-  )
-)
-
-
-figHOME
 
 #--------------Teacher/Staff Climate Surveys------------------------
 newsurveydata <- read_excel(paste0(getwd(), "/data/NewSurveyData.xlsx"),skip=0,col_names=TRUE)
@@ -1951,19 +1975,6 @@ studentquestion5percentage <- as.numeric(studentquestion5percentage)
 studentquestion5percentage <- studentquestion5percentage*100
 sixteen <- ggplot(studentquestion5,aes(x=question16,y=studentquestion5percentage,fill=question16, width = 0.70)) +geom_col(hoverinfo = "text", aes(text = paste("",studentquestion5$SCHOOLS)))+labs(title="Bullying",x="",y="Percentage") + scale_fill_discrete(name = "") + geom_text(aes(label = studentquestion5percentage, y = studentquestion5percentage), size = 3, position = position_stack(vjust = 1.02))
 studentanswer5 <- ggplotly(sixteen, tooltip = c("text"))
-
-# manually scraped health and social services --------------------------------
-
-healthscrape <- read_excel(paste0(getwd(),"/data/manualscrappingdata.xlsx"))
-subset_healthscrape <- healthscrape[2:5,c(2,5)]
-Total <- subset_healthscrape$...5
-Year <- subset_healthscrape$...2
-plot_ly(data = subset_healthscrape, x = ~Year, y = ~Total, type = "scatter",mode="line",hoverinfo = "text",text = ~paste("Year:",Year,"Total:",Total)) %>% layout(yaxis = list(tickvals = list(100,200,300,400,500,600,700,800,900)),title = "Families Who Received Weekend Meals") -> weekendmeals
-
-subset_healthscrape2 <- healthscrape[c(2,4),c(2,4)]
-Year2 <- subset_healthscrape2$...2
-Total2 <- subset_healthscrape2$...4
-plot_ly(data = subset_healthscrape2,x = ~Year2,y = ~Total2,type = "bar", hoverinfo = "text", text = ~paste("Year:",Year2,"Total:",Total2)) %>% layout(yaxis = list(tickvals = list(400,450,500,550,600,650,700,750,800,850,900),title = "Total"),title = "Families Received Help with Clothing, Shoes, and Basic Supplies",xaxis = list(title = "Year")) -> basicsupplies
 
 #----------------------Collapsible Tree - Key Partners and Programs--------------------
 
