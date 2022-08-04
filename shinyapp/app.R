@@ -632,10 +632,9 @@ eligablelunch_data <- plot_ly(eligablelunch_data, x = ~Year, y = ~Percent, color
 
 healthscrape <- read_excel(paste0(getwd(),"/data/manualscrappingdata.xlsx"))
 subset_healthscrape <- healthscrape[2:5,c(2,5)]
-Total <- subset_healthscrape$...5
-Year <- subset_healthscrape$...2
-plot_ly(data = subset_healthscrape, x = ~Year, y = ~Total, type = "scatter",mode="line",hoverinfo = "text",text = ~paste("Year:",Year,"Total:",Total)) %>% layout(yaxis = list(tickvals = list(100,200,300,400,500,600,700,800,900)),title = "Families Who Received Weekend Meals") -> weekendmeals
-
+Totalw <- subset_healthscrape$...5
+Yearw <- subset_healthscrape$...2
+plot_ly(data = subset_healthscrape, x = ~Yearw, y = ~Totalw, type = "scatter",mode="line",hoverinfo = "text",text = ~paste("Year:",Yearw,"Total:",Totalw)) %>% layout(yaxis = list(tickvals = list(100,200,300,400,500,600,700,800,900)),title = "Families Who Received Weekend Meals") -> weekendmeals
 
 #clothing and basic supplies---
 subset_healthscrape2 <- healthscrape[c(2,4),c(2,4)]
@@ -3109,7 +3108,7 @@ ui <- navbarPage(title = "DSPG",
                                                       p("Our research shows a lack of mental health resources within a 10-minute drive for students and the community. There are also some schools where many students perceive bullying as a problem and a low level of social-emotional well-being. Thus, at such a tender age, it would be helpful to include more individual counseling and referral systems to helps students learn emotion management, communication, and self-discipline. Schools can also try to find community organizations and individuals who can provide such counseling services at no or reduced cost to families. This may strengthen families to implement early-intervention strategies to help students who display disruptive behavior and help with their emotional well-being. Engaging families may also help schools adjust any chronic absenteeism that is occurring during the semester."),
                                                       h4(strong("Youth Development")),
                                                       p("Students from low-income families tend to have less access to enrichment opportunities beyond the traditional classroom. Increasing after-school programs, such as athletic clubs, could provide opportunities for youth to build communication skills while remaining healthy and actively learning. Students and parents could also benefit from these programs as students expand their learning and interests while decreasing the time parents must juggle between work and childcare. The 2020-2021 academic school year saw a drop in academic performances for all six community schools. This was especially severe for Hispanic and Black students, that had a dramatic decline. Although this was following the COVID-19 pandemic, this could be an opportunity to provide extra tutoring hours at the local library or a study hall session during the school day to help alleviate the disruptions of online learning. "),
-                                                      h4(strong("Family Development")),
+                                                      h4(strong("Family Engagement")),
                                                       p("There is a significantly large number of Hispanic students attending community schools. These students will require additional needs, such as multi-language resources for both students and parents, to ensure a clear line of communication for all involved in the learning process. Additionally, providing more opportunities for parent feedback forums and family events at the school may increase parents’ feelings of positive relationships and communication with the school as some of these parents are undocumented, as suggested by the Community School liaison.  "),
                                                       p("In our research, we found that there are few families engagement resources available within a 10-minute drive of Sterling Elementary, a possible opportunity to help reduce travel time for parents could be to host a resource fair at the schools allowing parents easy access to these resources. Community School Liaisons also indicate that “rent,” “internet,” “housing,” and “food” are also significant challenges for families at these community schools. This is also essential as some students have a large population of students who experience homelessness. Thus, helping families within these areas would be beneficial. ")
                                                ),
@@ -3304,11 +3303,7 @@ server <- function(input, output, session) {
   })
   
   
-  
-  
-  output$weekendmeals <- renderPlotly({
-    weekendmeals
-  })
+
   
   output$basicsupplies <- renderPlotly({
     basicsupplies
